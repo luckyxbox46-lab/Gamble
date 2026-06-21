@@ -9,6 +9,8 @@ import { execute as coinflipExecute } from "./commands/coinflip.js";
 import { execute as chooseExecute } from "./commands/choose.js";
 
 const PREFIX = "-";
+const RECONNECT_DELAY_MS = 5_000;
+const MAX_RECONNECT_DELAY_MS = 60_000;
 
 type CommandHandler = (msg: Message, args: string[]) => Promise<void>;
 
@@ -18,6 +20,76 @@ const commands = new Map<string, CommandHandler>([
   ["choose", chooseExecute],
 ]);
 
+function createClient() {
+  return new Client({
+    intents: [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.MessageContent,
+    ],
+  });
+}
+
+async function connectWithRetry(token: string) {
+  let delay = RECONNECT_DELAY_MS;
+
+  while (true) {
+    const client = createClient();
+
+    client.once("clientReady", (c) => {
+      logger.info({ tag: c.user.tag }, "Discord bot ready");
+      delay = RECONNECT_DELAY_MS;
+    });
+
+    client.on("error", (err) => {
+      logger.error({ err }, "Discord client error");
+    });
+
+    client.on("warn", (info) => {
+      logger.warn({ info }, "Discord client warning");
+    });
+
+    client.on("messageCreate", async (message: Message) => {
+      if (message.author.bot) return;
+      if (!message.content.startsWith(PREFIX)) return;
+
+      const [rawCommand, ...args] = message.content
+        .slice(PREFIX.length)
+        .trim()
+        .split(/\s+/);
+      const commandName = rawCommand?.toLowerCase();
+      if (!commandName) return;
+
+      const handler = commands.get(commandName);
+      if (!handler) return;
+
+      try {
+        await handler(message, args);
+      } catch (err) {
+        logger.error({ err }, "Error handling Discord command");
+        await message.reply("Something went wrong.").catch(() => undefined);
+      }
+    });
+
+    try {
+      await client.login(token);
+
+      await new Promise<void>((resolve) => {
+        client.once("shardDisconnect" as Parameters<typeof client.once>[0], resolve);
+      });
+
+      logger.warn("Discord connection closed — reconnecting...");
+    } catch (err) {
+      logger.error({ err, retryInMs: delay }, "Discord login failed — retrying");
+    } finally {
+      client.destroy();
+    }
+
+    await new Promise((res) => setTimeout(res, delay));
+    delay = Math.min(delay * 2, MAX_RECONNECT_DELAY_MS);
+  }
+}
+
 export async function startBot() {
   const token = process.env["DISCORD_BOT_TOKEN"];
 
@@ -26,36 +98,15 @@ export async function startBot() {
     return;
   }
 
-  const client = new Client({
-    intents: [
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildMessages,
-      GatewayIntentBits.MessageContent,
-    ],
+  process.on("unhandledRejection", (reason) => {
+    logger.error({ reason }, "Unhandled promise rejection — bot staying up");
   });
 
-  client.once("clientReady", (c) => {
-    logger.info({ tag: c.user.tag }, "Discord bot ready");
+  process.on("uncaughtException", (err) => {
+    logger.error({ err }, "Uncaught exception — bot staying up");
   });
 
-  client.on("messageCreate", async (message: Message) => {
-    if (message.author.bot) return;
-    if (!message.content.startsWith(PREFIX)) return;
-
-    const [rawCommand, ...args] = message.content.slice(PREFIX.length).trim().split(/\s+/);
-    const commandName = rawCommand?.toLowerCase();
-    if (!commandName) return;
-
-    const handler = commands.get(commandName);
-    if (!handler) return;
-
-    try {
-      await handler(message, args);
-    } catch (err) {
-      logger.error({ err }, "Error handling Discord command");
-      await message.reply("Something went wrong.").catch(() => undefined);
-    }
+  connectWithRetry(token).catch((err) => {
+    logger.error({ err }, "Fatal error in reconnect loop");
   });
-
-  await client.login(token);
 }
