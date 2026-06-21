@@ -1,10 +1,10 @@
 import { Message } from "discord.js";
 
 export async function execute(message: Message, args: string[]) {
-  const max = parseInt(args[0] ?? "", 10);
+  const max = args[0] ? parseInt(args[0], 10) : 100;
 
   if (isNaN(max) || max < 1) {
-    await message.reply("Usage: `-roll <max>` — e.g. `-roll 100`");
+    await message.reply("Usage: `-d [max]` — e.g. `-d 50` (defaults to 100)");
     return;
   }
 
