@@ -8,6 +8,6 @@ export async function execute(message: Message, args: string[]) {
     return;
   }
 
-  const result = Math.floor(Math.random() * max) + 1;
+  const result = (crypto.getRandomValues(new Uint32Array(1))[0]! % max) + 1;
   await message.reply(`🎲 Rolling between **1** and **${max}**... you got **${result}**!`);
 }
