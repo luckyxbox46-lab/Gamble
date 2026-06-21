@@ -14,8 +14,8 @@ type CommandHandler = (msg: Message, args: string[]) => Promise<void>;
 
 const commands = new Map<string, CommandHandler>([
   ["roll", rollExecute],
-  ["rolldice", rolldiceExecute],
-  ["coinflip", coinflipExecute],
+  ["d", rolldiceExecute],
+  ["cf", coinflipExecute],
 ]);
 
 export async function startBot() {
