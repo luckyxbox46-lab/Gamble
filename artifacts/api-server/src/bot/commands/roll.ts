@@ -8,6 +8,6 @@ export async function execute(message: Message, args: string[]) {
     return;
   }
 
-  const result = Math.floor(Math.random() * (max + 1));
-  await message.reply(`🎲 Rolling between **0** and **${max}**... you got **${result}**!`);
+  const result = Math.floor(Math.random() * max) + 1;
+  await message.reply(`🎲 Rolling between **1** and **${max}**... you got **${result}**!`);
 }

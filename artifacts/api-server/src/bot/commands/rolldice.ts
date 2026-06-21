@@ -32,7 +32,7 @@ export async function execute(message: Message, args: string[]) {
 
   const rolls: number[] = [];
   for (let i = 0; i < count; i++) {
-    rolls.push(Math.floor(Math.random() * sides));
+    rolls.push(Math.floor(Math.random() * sides) + 1);
   }
 
   const total = rolls.reduce((sum, n) => sum + n, 0);
