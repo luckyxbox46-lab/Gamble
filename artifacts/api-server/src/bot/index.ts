@@ -6,6 +6,7 @@ import {
 import { logger } from "../lib/logger.js";
 import { execute as rollExecute } from "./commands/roll.js";
 import { execute as coinflipExecute } from "./commands/coinflip.js";
+import { execute as chooseExecute } from "./commands/choose.js";
 
 const PREFIX = "-";
 
@@ -14,6 +15,7 @@ type CommandHandler = (msg: Message, args: string[]) => Promise<void>;
 const commands = new Map<string, CommandHandler>([
   ["d", rollExecute],
   ["cf", coinflipExecute],
+  ["choose", chooseExecute],
 ]);
 
 export async function startBot() {
