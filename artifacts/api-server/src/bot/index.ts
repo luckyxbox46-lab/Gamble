@@ -9,6 +9,7 @@ import { execute as coinflipExecute } from "./commands/coinflip.js";
 import { execute as chooseExecute } from "./commands/choose.js";
 import { execute as disableExecute } from "./commands/disable.js";
 import { execute as enableExecute } from "./commands/enable.js";
+import { execute as stfuExecute } from "./commands/stfu.js";
 import { disabledChannels } from "./channelState.js";
 
 const PREFIX = "-";
@@ -23,6 +24,7 @@ const commands = new Map<string, CommandHandler>([
   ["choose", chooseExecute],
   ["disable", disableExecute],
   ["enable", enableExecute],
+  ["stfu", stfuExecute],
 ]);
 
 function createClient() {
