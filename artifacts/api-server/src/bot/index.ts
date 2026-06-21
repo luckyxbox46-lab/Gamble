@@ -5,7 +5,6 @@ import {
 } from "discord.js";
 import { logger } from "../lib/logger.js";
 import { execute as rollExecute } from "./commands/roll.js";
-import { execute as rolldiceExecute } from "./commands/rolldice.js";
 import { execute as coinflipExecute } from "./commands/coinflip.js";
 
 const PREFIX = "-";
@@ -14,7 +13,6 @@ type CommandHandler = (msg: Message, args: string[]) => Promise<void>;
 
 const commands = new Map<string, CommandHandler>([
   ["roll", rollExecute],
-  ["d", rolldiceExecute],
   ["cf", coinflipExecute],
 ]);
 
