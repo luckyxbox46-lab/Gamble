@@ -1,19 +1,21 @@
 import {
   Client,
   GatewayIntentBits,
-  Interaction,
-  ChatInputCommandInteraction,
+  Message,
 } from "discord.js";
 import { logger } from "../lib/logger.js";
-import { data as rollData, execute as rollExecute } from "./commands/roll.js";
-import { data as rolldiceData, execute as rolldiceExecute } from "./commands/rolldice.js";
-import { data as coinflipData, execute as coinflipExecute } from "./commands/coinflip.js";
-import { registerCommands } from "./register.js";
+import { execute as rollExecute } from "./commands/roll.js";
+import { execute as rolldiceExecute } from "./commands/rolldice.js";
+import { execute as coinflipExecute } from "./commands/coinflip.js";
 
-const commands = new Map([
-  [rollData.name, rollExecute],
-  [rolldiceData.name, rolldiceExecute],
-  [coinflipData.name, coinflipExecute],
+const PREFIX = "-";
+
+type CommandHandler = (msg: Message, args: string[]) => Promise<void>;
+
+const commands = new Map<string, CommandHandler>([
+  ["roll", rollExecute],
+  ["rolldice", rolldiceExecute],
+  ["coinflip", coinflipExecute],
 ]);
 
 export async function startBot() {
@@ -24,30 +26,34 @@ export async function startBot() {
     return;
   }
 
-  await registerCommands();
+  const client = new Client({
+    intents: [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.MessageContent,
+    ],
+  });
 
-  const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-
-  client.once("ready", (c) => {
+  client.once("clientReady", (c) => {
     logger.info({ tag: c.user.tag }, "Discord bot ready");
   });
 
-  client.on("interactionCreate", async (interaction: Interaction) => {
-    if (!interaction.isChatInputCommand()) return;
+  client.on("messageCreate", async (message: Message) => {
+    if (message.author.bot) return;
+    if (!message.content.startsWith(PREFIX)) return;
 
-    const handler = commands.get((interaction as ChatInputCommandInteraction).commandName);
+    const [rawCommand, ...args] = message.content.slice(PREFIX.length).trim().split(/\s+/);
+    const commandName = rawCommand?.toLowerCase();
+    if (!commandName) return;
+
+    const handler = commands.get(commandName);
     if (!handler) return;
 
     try {
-      await handler(interaction as ChatInputCommandInteraction);
+      await handler(message, args);
     } catch (err) {
-      logger.error({ err }, "Error handling Discord interaction");
-      const reply = { content: "Something went wrong.", ephemeral: true };
-      if (interaction.replied || interaction.deferred) {
-        await (interaction as ChatInputCommandInteraction).followUp(reply);
-      } else {
-        await (interaction as ChatInputCommandInteraction).reply(reply);
-      }
+      logger.error({ err }, "Error handling Discord command");
+      await message.reply("Something went wrong.").catch(() => undefined);
     }
   });
 

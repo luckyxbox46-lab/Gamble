@@ -1,10 +1,7 @@
-import {
-  SlashCommandBuilder,
-  ChatInputCommandInteraction,
-} from "discord.js";
+import { Message } from "discord.js";
 
-const DICE_FACES = [4, 6, 8, 10, 12, 20, 100] as const;
-type DieFace = (typeof DICE_FACES)[number];
+const VALID_SIDES = [4, 6, 8, 10, 12, 20, 100] as const;
+type DieFace = (typeof VALID_SIDES)[number];
 
 const DICE_EMOJI: Record<DieFace, string> = {
   4:   "🔺",
@@ -16,36 +13,22 @@ const DICE_EMOJI: Record<DieFace, string> = {
   100: "💯",
 };
 
-export const data = new SlashCommandBuilder()
-  .setName("rolldice")
-  .setDescription("Roll one or more standard RPG dice")
-  .addIntegerOption((option) =>
-    option
-      .setName("sides")
-      .setDescription("Type of die to roll (d4, d6, d8, d10, d12, d20, d100)")
-      .setRequired(true)
-      .addChoices(
-        { name: "d4",   value: 4   },
-        { name: "d6",   value: 6   },
-        { name: "d8",   value: 8   },
-        { name: "d10",  value: 10  },
-        { name: "d12",  value: 12  },
-        { name: "d20",  value: 20  },
-        { name: "d100", value: 100 }
-      )
-  )
-  .addIntegerOption((option) =>
-    option
-      .setName("count")
-      .setDescription("How many dice to roll (1–20, default 1)")
-      .setRequired(false)
-      .setMinValue(1)
-      .setMaxValue(20)
-  );
+export async function execute(message: Message, args: string[]) {
+  const raw = (args[0] ?? "").toLowerCase().replace("d", "");
+  const sides = parseInt(raw, 10) as DieFace;
+  const count = args[1] ? parseInt(args[1], 10) : 1;
 
-export async function execute(interaction: ChatInputCommandInteraction) {
-  const sides = interaction.options.getInteger("sides", true) as DieFace;
-  const count = interaction.options.getInteger("count") ?? 1;
+  if (!VALID_SIDES.includes(sides as DieFace)) {
+    await message.reply(
+      `Usage: \`-rolldice <sides> [count]\` — sides must be one of: ${VALID_SIDES.map((s) => `d${s}`).join(", ")}\nExample: \`-rolldice d20 3\``
+    );
+    return;
+  }
+
+  if (isNaN(count) || count < 1 || count > 20) {
+    await message.reply("Count must be a number between 1 and 20.");
+    return;
+  }
 
   const rolls: number[] = [];
   for (let i = 0; i < count; i++) {
@@ -60,9 +43,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   if (count === 1) {
     response = `${emoji} **${diceLabel}** → **${rolls[0]}**`;
   } else {
-    const rollList = rolls.join(", ");
-    response = `${emoji} **${diceLabel}** → [${rollList}] = **${total}**`;
+    response = `${emoji} **${diceLabel}** → [${rolls.join(", ")}] = **${total}**`;
   }
 
-  await interaction.reply(response);
+  await message.reply(response);
 }

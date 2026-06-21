@@ -1,14 +1,7 @@
-import {
-  SlashCommandBuilder,
-  ChatInputCommandInteraction,
-} from "discord.js";
+import { Message } from "discord.js";
 
-export const data = new SlashCommandBuilder()
-  .setName("coinflip")
-  .setDescription("Flip a coin — heads or tails");
-
-export async function execute(interaction: ChatInputCommandInteraction) {
+export async function execute(message: Message, _args: string[]) {
   const result = Math.random() < 0.5 ? "Heads" : "Tails";
   const emoji = result === "Heads" ? "🪙" : "🔵";
-  await interaction.reply(`${emoji} **${result}!**`);
+  await message.reply(`${emoji} **${result}!**`);
 }
