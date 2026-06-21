@@ -5,35 +5,20 @@ import {
 
 export const data = new SlashCommandBuilder()
   .setName("roll")
-  .setDescription("Roll a random number between two values")
-  .addIntegerOption((option) =>
-    option
-      .setName("min")
-      .setDescription("Minimum value (inclusive)")
-      .setRequired(true)
-  )
+  .setDescription("Roll a random number from 0 up to a maximum value")
   .addIntegerOption((option) =>
     option
       .setName("max")
       .setDescription("Maximum value (inclusive)")
       .setRequired(true)
+      .setMinValue(1)
   );
 
 export async function execute(interaction: ChatInputCommandInteraction) {
-  const min = interaction.options.getInteger("min", true);
   const max = interaction.options.getInteger("max", true);
-
-  if (min >= max) {
-    await interaction.reply({
-      content: `❌ **min** must be less than **max**. You provided min=${min}, max=${max}.`,
-      ephemeral: true,
-    });
-    return;
-  }
-
-  const result = Math.floor(Math.random() * (max - min + 1)) + min;
+  const result = Math.floor(Math.random() * (max + 1));
 
   await interaction.reply(
-    `🎲 Rolling between **${min}** and **${max}**... you got **${result}**!`
+    `🎲 Rolling between **0** and **${max}**... you got **${result}**!`
   );
 }

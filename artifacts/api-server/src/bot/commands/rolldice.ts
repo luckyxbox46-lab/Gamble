@@ -49,7 +49,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const rolls: number[] = [];
   for (let i = 0; i < count; i++) {
-    rolls.push(Math.floor(Math.random() * sides) + 1);
+    rolls.push(Math.floor(Math.random() * sides));
   }
 
   const total = rolls.reduce((sum, n) => sum + n, 0);
