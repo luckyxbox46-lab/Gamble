@@ -59,7 +59,6 @@ async function connectWithRetry(token: string) {
     client.on("messageCreate", async (message: Message) => {
       if (message.author.bot) return;
       if (!message.content.startsWith(PREFIX)) return;
-      if (disabledChannels.has(message.channelId)) return;
 
       const [rawCommand, ...args] = message.content
         .slice(PREFIX.length)
@@ -70,6 +69,9 @@ async function connectWithRetry(token: string) {
 
       const handler = commands.get(commandName);
       if (!handler) return;
+
+      const adminOnlyCommands = new Set(["disable", "enable"]);
+      if (disabledChannels.has(message.channelId) && !adminOnlyCommands.has(commandName)) return;
 
       try {
         await handler(message, args);
