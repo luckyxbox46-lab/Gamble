@@ -1,5 +1,6 @@
 import { REST, Routes } from "discord.js";
 import { data as rollCommand } from "./commands/roll.js";
+import { data as rolldiceCommand } from "./commands/rolldice.js";
 import { logger } from "../lib/logger.js";
 
 export async function registerCommands() {
@@ -13,7 +14,7 @@ export async function registerCommands() {
     return;
   }
 
-  const commands = [rollCommand.toJSON()];
+  const commands = [rollCommand.toJSON(), rolldiceCommand.toJSON()];
 
   const rest = new REST().setToken(token);
 

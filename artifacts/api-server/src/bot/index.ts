@@ -6,10 +6,12 @@ import {
 } from "discord.js";
 import { logger } from "../lib/logger.js";
 import { data as rollData, execute as rollExecute } from "./commands/roll.js";
+import { data as rolldiceData, execute as rolldiceExecute } from "./commands/rolldice.js";
 import { registerCommands } from "./register.js";
 
 const commands = new Map([
   [rollData.name, rollExecute],
+  [rolldiceData.name, rolldiceExecute],
 ]);
 
 export async function startBot() {
