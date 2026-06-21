@@ -12,7 +12,7 @@ const PREFIX = "-";
 type CommandHandler = (msg: Message, args: string[]) => Promise<void>;
 
 const commands = new Map<string, CommandHandler>([
-  ["roll", rollExecute],
+  ["d", rollExecute],
   ["cf", coinflipExecute],
 ]);
 
