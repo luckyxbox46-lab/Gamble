@@ -7,11 +7,13 @@ import {
 import { logger } from "../lib/logger.js";
 import { data as rollData, execute as rollExecute } from "./commands/roll.js";
 import { data as rolldiceData, execute as rolldiceExecute } from "./commands/rolldice.js";
+import { data as coinflipData, execute as coinflipExecute } from "./commands/coinflip.js";
 import { registerCommands } from "./register.js";
 
 const commands = new Map([
   [rollData.name, rollExecute],
   [rolldiceData.name, rolldiceExecute],
+  [coinflipData.name, coinflipExecute],
 ]);
 
 export async function startBot() {
