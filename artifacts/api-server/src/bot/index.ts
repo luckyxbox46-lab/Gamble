@@ -7,6 +7,9 @@ import { logger } from "../lib/logger.js";
 import { execute as rollExecute } from "./commands/roll.js";
 import { execute as coinflipExecute } from "./commands/coinflip.js";
 import { execute as chooseExecute } from "./commands/choose.js";
+import { execute as disableExecute } from "./commands/disable.js";
+import { execute as enableExecute } from "./commands/enable.js";
+import { disabledChannels } from "./channelState.js";
 
 const PREFIX = "-";
 const RECONNECT_DELAY_MS = 5_000;
@@ -18,6 +21,8 @@ const commands = new Map<string, CommandHandler>([
   ["d", rollExecute],
   ["cf", coinflipExecute],
   ["choose", chooseExecute],
+  ["disable", disableExecute],
+  ["enable", enableExecute],
 ]);
 
 function createClient() {
@@ -52,6 +57,7 @@ async function connectWithRetry(token: string) {
     client.on("messageCreate", async (message: Message) => {
       if (message.author.bot) return;
       if (!message.content.startsWith(PREFIX)) return;
+      if (disabledChannels.has(message.channelId)) return;
 
       const [rawCommand, ...args] = message.content
         .slice(PREFIX.length)
