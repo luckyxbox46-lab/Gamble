@@ -8,8 +8,8 @@ function roll(max: number): number {
 
 export async function execute(message: Message, args: string[]) {
   const target = message.mentions.users.first();
-  const rounds = parseInt(args[1] ?? "");
-  const sides = parseInt(args[2] ?? "");
+  const rounds = parseInt(args[0] ?? "");
+  const sides = parseInt(args[1] ?? "");
 
   if (!target || isNaN(rounds) || isNaN(sides) || rounds < 1 || sides < 2) {
     await message.reply("Usage: `-dw @user (rounds) (dice size)` e.g. `-dw @user 3 6`");
