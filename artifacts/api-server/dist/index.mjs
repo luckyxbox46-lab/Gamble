@@ -107841,8 +107841,8 @@ async function execute14(message, args) {
   const numericArgs = args.filter((a) => !isNaN(parseInt(a)));
   const rounds = parseInt(numericArgs[0] ?? "");
   const sides = parseInt(numericArgs[1] ?? "");
-  if (!target || isNaN(rounds) || isNaN(sides) || rounds < 1 || sides < 2) {
-    await message.reply("Usage: `-dw @user (rounds) (dice size)` e.g. `-dw @user 3 6`");
+  if (!target || isNaN(rounds) || isNaN(sides) || rounds < 1 || rounds > 10 || sides < 2) {
+    await message.reply("Usage: `-dw @user (rounds) (dice size)` e.g. `-dw @user 3 6` (max 10 rounds)");
     return;
   }
   if (target.id === message.author.id) {
