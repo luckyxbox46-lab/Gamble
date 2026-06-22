@@ -15,6 +15,8 @@ import {execute as ignoreExecute} from "./commands/ignore.js";
 import {execute as unignoreExecute} from "./commands/unignore.js";
 import {execute as dicewarExecute} from "./commands/dicewar.js";
 import {execute as silenceExecute,isSilenced} from "./commands/silence.js";
+import { execute as nukeExecute } from "./commands/nuke.js";
+
 import {disabledChannels,ignoredUsers} from "./channelState.js";
 
 const PREFIX="-",RECONNECT_DELAY_MS=5000,MAX_RECONNECT_DELAY_MS=60000;
@@ -27,7 +29,10 @@ const commands=new Map<string,CommandHandler>([
 ["disable",disableExecute],["enable",enableExecute],["stfu",stfuExecute],
 ["stats",statsExecute],["bully",bullyExecute],["cw",coinwarExecute],
 ["help",helpExecute],["ship",shipExecute],["ignore",ignoreExecute],
-["unignore",unignoreExecute],["dw",dicewarExecute],["silence",silenceExecute]
+["unignore",unignoreExecute],["dw",dicewarExecute],
+["nuke", nukeExecute],
+
+["silence",silenceExecute]
 ]);
 
 async function clearSlash(t:string,c:string){try{const r=new REST({version:"10"}).setToken(t);await r.put(Routes.applicationCommands(c),{body:[]})}catch(e){logger.error({e},"clear slash err")}}
