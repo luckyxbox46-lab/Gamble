@@ -1,18 +1,20 @@
 import { Message } from "discord.js";
 
-export async function execute(message: Message, _args: string[]) {
-  await message.reply(
-    `📖 **Bot Commands** (prefix: \`-\`)\n\n` +
-    `🎲 \`-d [max]\` — Roll a number from 1 to max (default 100)\n` +
-    `🪙 \`-cf\` — Flip a coin\n` +
-    `🎯 \`-choose option1 option2 ...\` — Pick randomly from your options\n` +
-    `⚔️ \`-coinwar @user heads/tails\` — Coin flip battle, pick your side\n` +
-    `💘 \`-ship @user1 @user2\` — Rate the compatibility of two people 1-10\n` +
-    `📊 \`-stats\` — Show session stats (rolls, flips, chooses, uptime)\n` +
-    `🔇 \`-stfu @user\` — Tell someone to shut up\n\n` +
-    `**Admin only:**\n` +
-    `🚫 \`-disable\` — Disable bot commands in this channel\n` +
-    `✅ \`-enable\` — Re-enable bot commands in this channel\n` +
-    `👊 \`-bully @user\` — Ping someone 20 times in a row`
-  );
+export async function execute(message: Message) {
+  await message.reply(`
+📖 **Bot Commands**
+• 🎲 **-d [max]** — Roll 1 to max (default 100)
+• 🪙 **-cf** — Flip a coin
+• 🎯 **-choose opt1 opt2 ...** — Pick one randomly
+• ⚔️ **-dw @user rounds sides** — Dice War battle
+• 🪙 **-cw @user heads/tails** — Coin War battle
+• 💞 **-ship @user1 @user2** — Compatibility rating 1–10
+• 📊 **-stats** — Show rolls, flips, uptime
+• 🔇 **-silence** — Toggle bot quiet (owner only)
+
+👑 **Admin Only**
+• ❌ **-disable** — Stop commands in this channel
+• ✅ **-enable** — Re-enable commands
+• 👊 **-bully @user** — Spam ping someone
+  `);
 }

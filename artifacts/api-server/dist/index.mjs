@@ -107691,23 +107691,23 @@ Flipping...`
 }
 
 // src/bot/commands/help.ts
-async function execute10(message, _args) {
-  await message.reply(
-    `\u{1F4D6} **Bot Commands** (prefix: \`-\`)
+async function execute10(message) {
+  await message.reply(`
+\u{1F4D6} **Bot Commands**
+\u2022 \u{1F3B2} **-d [max]** \u2014 Roll 1 to max (default 100)
+\u2022 \u{1FA99} **-cf** \u2014 Flip a coin
+\u2022 \u{1F3AF} **-choose opt1 opt2 ...** \u2014 Pick one randomly
+\u2022 \u2694\uFE0F **-dw @user rounds sides** \u2014 Dice War battle
+\u2022 \u{1FA99} **-cw @user heads/tails** \u2014 Coin War battle
+\u2022 \u{1F49E} **-ship @user1 @user2** \u2014 Compatibility rating 1\u201310
+\u2022 \u{1F4CA} **-stats** \u2014 Show rolls, flips, uptime
+\u2022 \u{1F507} **-silence** \u2014 Toggle bot quiet (owner only)
 
-\u{1F3B2} \`-d [max]\` \u2014 Roll a number from 1 to max (default 100)
-\u{1FA99} \`-cf\` \u2014 Flip a coin
-\u{1F3AF} \`-choose option1 option2 ...\` \u2014 Pick randomly from your options
-\u2694\uFE0F \`-coinwar @user heads/tails\` \u2014 Coin flip battle, pick your side
-\u{1F498} \`-ship @user1 @user2\` \u2014 Rate the compatibility of two people 1-10
-\u{1F4CA} \`-stats\` \u2014 Show session stats (rolls, flips, chooses, uptime)
-\u{1F507} \`-stfu @user\` \u2014 Tell someone to shut up
-
-**Admin only:**
-\u{1F6AB} \`-disable\` \u2014 Disable bot commands in this channel
-\u2705 \`-enable\` \u2014 Re-enable bot commands in this channel
-\u{1F44A} \`-bully @user\` \u2014 Ping someone 20 times in a row`
-  );
+\u{1F451} **Admin Only**
+\u2022 \u274C **-disable** \u2014 Stop commands in this channel
+\u2022 \u2705 **-enable** \u2014 Re-enable commands
+\u2022 \u{1F44A} **-bully @user** \u2014 Spam ping someone
+  `);
 }
 
 // src/bot/commands/ship.ts
