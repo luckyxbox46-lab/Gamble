@@ -107908,8 +107908,9 @@ var PREFIX = "-";
 var RECONNECT_DELAY_MS = 5e3;
 var MAX_RECONNECT_DELAY_MS = 6e4;
 var userCd = /* @__PURE__ */ new Map();
-var CD = 3e4;
+var CD = 2e4;
 var OWNER3 = ".luckyyy_";
+var NO_CD_CMDS = /* @__PURE__ */ new Set(["d", "cf"]);
 var commands = /* @__PURE__ */ new Map([
   ["d", execute],
   ["cf", execute2],
@@ -107954,19 +107955,20 @@ async function connectLoop(t) {
       if (isSilenced() && m.author.username !== OWNER3) return;
       if (ignoredUsers.has(m.author.id)) return;
       if (!m.content.startsWith(PREFIX)) return;
-      if (m.author.username !== OWNER3) {
+      const [cmd, ...args] = m.content.slice(PREFIX.length).trim().split(/\s+/).filter(Boolean);
+      const cmdLow = cmd?.toLowerCase() || "";
+      if (m.author.username !== OWNER3 && !NO_CD_CMDS.has(cmdLow)) {
         const n = Date.now(), l = userCd.get(m.author.id) || 0;
         if (n - l < CD) {
           const w = Math.ceil((CD - (n - l)) / 1e3);
-          return m.reply(`\u23F3 Wait ${w}s`).catch(() => {
+          return m.reply(`\u23F3 Wait ${w}s before next command`).catch(() => {
           });
         }
         userCd.set(m.author.id, n);
       }
-      const [cmd, ...args] = m.content.slice(PREFIX.length).trim().split(/\s+/).filter(Boolean);
-      const h = commands.get(cmd?.toLowerCase() || "");
+      const h = commands.get(cmdLow);
       if (!h) return;
-      if (disabledChannels.has(m.channelId) && !["disable", "enable"].includes(cmd || "")) return;
+      if (disabledChannels.has(m.channelId) && !["disable", "enable"].includes(cmdLow)) return;
       try {
         await h(m, args);
       } catch (e) {
