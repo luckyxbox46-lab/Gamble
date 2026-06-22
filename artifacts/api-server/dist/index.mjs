@@ -107907,6 +107907,9 @@ async function execute15(message, _args) {
 var PREFIX = "-";
 var RECONNECT_DELAY_MS = 5e3;
 var MAX_RECONNECT_DELAY_MS = 6e4;
+var userCd = /* @__PURE__ */ new Map();
+var CD = 3e4;
+var OWNER3 = ".luckyyy_";
 var commands = /* @__PURE__ */ new Map([
   ["d", execute],
   ["cf", execute2],
@@ -107916,7 +107919,7 @@ var commands = /* @__PURE__ */ new Map([
   ["stfu", execute6],
   ["stats", execute7],
   ["bully", execute8],
-  ["coinwar", execute9],
+  ["cw", execute9],
   ["help", execute10],
   ["ship", execute11],
   ["ignore", execute12],
@@ -107924,88 +107927,73 @@ var commands = /* @__PURE__ */ new Map([
   ["dw", execute14],
   ["silence", execute15]
 ]);
-async function clearSlashCommands(token, clientId) {
+async function clearSlash(t, c) {
   try {
-    const rest = new import_discord4.REST({ version: "10" }).setToken(token);
-    await rest.put(import_discord4.Routes.applicationCommands(clientId), { body: [] });
-    logger.info("Cleared all global slash commands");
-  } catch (err) {
-    logger.error({ err }, "Failed to clear slash commands");
+    const r = new import_discord4.REST({ version: "10" }).setToken(t);
+    await r.put(import_discord4.Routes.applicationCommands(c), { body: [] });
+  } catch (e) {
+    logger.error({ e }, "clear slash err");
   }
 }
 function createClient() {
-  return new import_discord4.Client({
-    intents: [
-      import_discord4.GatewayIntentBits.Guilds,
-      import_discord4.GatewayIntentBits.GuildMessages,
-      import_discord4.GatewayIntentBits.MessageContent
-    ]
-  });
+  return new import_discord4.Client({ intents: [import_discord4.GatewayIntentBits.Guilds, import_discord4.GatewayIntentBits.GuildMessages, import_discord4.GatewayIntentBits.MessageContent] });
 }
-async function connectWithRetry(token) {
-  let delay = RECONNECT_DELAY_MS;
-  while (true) {
-    const client = createClient();
-    client.once("clientReady", async (c) => {
-      logger.info({ tag: c.user.tag }, "Discord bot ready");
-      delay = RECONNECT_DELAY_MS;
-      await clearSlashCommands(token, c.user.id);
+async function connectLoop(t) {
+  let d = RECONNECT_DELAY_MS;
+  for (; ; ) {
+    const c = createClient();
+    c.once("clientReady", async (cl) => {
+      logger.info({ tag: cl.user.tag }, "bot ready");
+      d = RECONNECT_DELAY_MS;
+      await clearSlash(t, cl.user.id);
     });
-    client.on("error", (err) => {
-      logger.error({ err }, "Discord client error");
-    });
-    client.on("warn", (info) => {
-      logger.warn({ info }, "Discord client warning");
-    });
-    client.on("messageCreate", async (message) => {
-      if (message.author.bot) return;
-      if (isSilenced() && message.author.username !== ".luckyyy_") return;
-      if (ignoredUsers.has(message.author.id)) return;
-      if (!message.content.startsWith(PREFIX)) return;
-      const [rawCommand, ...args] = message.content.slice(PREFIX.length).trim().split(/\s+/);
-      const commandName = rawCommand?.toLowerCase();
-      if (!commandName) return;
-      const handler = commands.get(commandName);
-      if (!handler) return;
-      const adminOnlyCommands = /* @__PURE__ */ new Set(["disable", "enable"]);
-      if (disabledChannels.has(message.channelId) && !adminOnlyCommands.has(commandName)) return;
+    c.on("error", (e) => logger.error({ e }, "client err"));
+    c.on("warn", (i) => logger.warn({ i }, "warn"));
+    c.on("messageCreate", async (m) => {
+      if (m.author.bot) return;
+      if (isSilenced() && m.author.username !== OWNER3) return;
+      if (ignoredUsers.has(m.author.id)) return;
+      if (!m.content.startsWith(PREFIX)) return;
+      if (m.author.username !== OWNER3) {
+        const n = Date.now(), l = userCd.get(m.author.id) || 0;
+        if (n - l < CD) {
+          const w = Math.ceil((CD - (n - l)) / 1e3);
+          return m.reply(`\u23F3 Wait ${w}s`).catch(() => {
+          });
+        }
+        userCd.set(m.author.id, n);
+      }
+      const [cmd, ...args] = m.content.slice(PREFIX.length).trim().split(/\s+/).filter(Boolean);
+      const h = commands.get(cmd?.toLowerCase() || "");
+      if (!h) return;
+      if (disabledChannels.has(m.channelId) && !["disable", "enable"].includes(cmd || "")) return;
       try {
-        await handler(message, args);
-      } catch (err) {
-        logger.error({ err }, "Error handling Discord command");
-        await message.reply("Something went wrong.").catch(() => void 0);
+        await h(m, args);
+      } catch (e) {
+        logger.error({ e }, "cmd err");
+        m.reply("Something went wrong.").catch(() => {
+        });
       }
     });
     try {
-      await client.login(token);
-      await new Promise((resolve) => {
-        client.once("shardDisconnect", resolve);
-      });
-      logger.warn("Discord connection closed \u2014 reconnecting...");
-    } catch (err) {
-      logger.error({ err, retryInMs: delay }, "Discord login failed \u2014 retrying");
+      await c.login(t);
+      await new Promise((r) => c.once("shardDisconnect", r));
+      logger.warn("reconnecting...");
+    } catch (e) {
+      logger.error({ e, wait: d }, "login failed");
     } finally {
-      client.destroy();
+      c.destroy();
     }
-    await new Promise((res) => setTimeout(res, delay));
-    delay = Math.min(delay * 2, MAX_RECONNECT_DELAY_MS);
+    await new Promise((r) => setTimeout(r, d));
+    d = Math.min(d * 2, MAX_RECONNECT_DELAY_MS);
   }
 }
 async function startBot() {
-  const token = process.env["DISCORD_BOT_TOKEN"];
-  if (!token) {
-    logger.warn("DISCORD_BOT_TOKEN not set \u2014 Discord bot will not start");
-    return;
-  }
-  process.on("unhandledRejection", (reason) => {
-    logger.error({ reason }, "Unhandled promise rejection \u2014 bot staying up");
-  });
-  process.on("uncaughtException", (err) => {
-    logger.error({ err }, "Uncaught exception \u2014 bot staying up");
-  });
-  connectWithRetry(token).catch((err) => {
-    logger.error({ err }, "Fatal error in reconnect loop");
-  });
+  const t = process.env.DISCORD_BOT_TOKEN;
+  if (!t) return logger.warn("No token");
+  process.on("unhandledRejection", (r) => logger.error({ r }, "unhandled rejection"));
+  process.on("uncaughtException", (e) => logger.error({ e }, "uncaught exception"));
+  connectLoop(t).catch((e) => logger.error({ e }, "fatal"));
 }
 
 // src/index.ts
