@@ -56276,7 +56276,7 @@ var require_dist6 = __commonJS({
       DiscordAPIError: () => DiscordAPIError,
       HTTPError: () => HTTPError,
       OverwrittenMimeTypes: () => OverwrittenMimeTypes,
-      REST: () => REST,
+      REST: () => REST2,
       RESTEvents: () => RESTEvents,
       RateLimitError: () => RateLimitError,
       RequestMethod: () => RequestMethod,
@@ -57386,7 +57386,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
         }
       }
     };
-    var REST = class _REST extends import_async_event_emitter.AsyncEventEmitter {
+    var REST2 = class _REST extends import_async_event_emitter.AsyncEventEmitter {
       static {
         __name(this, "REST");
       }
@@ -59979,7 +59979,7 @@ var require_BaseChannel = __commonJS({
     "use strict";
     var { channelLink, channelMention } = require_dist8();
     var { DiscordSnowflake } = require_cjs3();
-    var { ChannelType, Routes: Routes2 } = require_v106();
+    var { ChannelType, Routes: Routes3 } = require_v106();
     var Base = require_Base();
     var ChannelFlagsBitField = require_ChannelFlagsBitField();
     var { ThreadChannelTypes } = require_Constants();
@@ -60050,7 +60050,7 @@ var require_BaseChannel = __commonJS({
        *   .catch(console.error);
        */
       async delete() {
-        await this.client.rest.delete(Routes2.channel(this.id));
+        await this.client.rest.delete(Routes3.channel(this.id));
         return this;
       }
       /**
@@ -60880,7 +60880,7 @@ var require_PermissionOverwriteManager = __commonJS({
     "use strict";
     var process2 = __require("node:process");
     var { Collection: Collection2 } = require_dist7();
-    var { OverwriteType, Routes: Routes2 } = require_v106();
+    var { OverwriteType, Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var PermissionOverwrites = require_PermissionOverwrites();
@@ -60961,7 +60961,7 @@ var require_PermissionOverwriteManager = __commonJS({
           type = userOrRole instanceof Role ? OverwriteType.Role : OverwriteType.Member;
         }
         const { allow, deny } = PermissionOverwrites.resolveOverwriteOptions(options, existing);
-        await this.client.rest.put(Routes2.channelPermission(this.channel.id, userOrRoleId), {
+        await this.client.rest.put(Routes3.channelPermission(this.channel.id, userOrRoleId), {
           body: { id: userOrRoleId, type, allow, deny },
           reason
         });
@@ -61013,7 +61013,7 @@ var require_PermissionOverwriteManager = __commonJS({
       async delete(userOrRole, reason) {
         const userOrRoleId = this.channel.guild.roles.resolveId(userOrRole) ?? this.client.users.resolveId(userOrRole);
         if (!userOrRoleId) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "parameter", "User nor a Role");
-        await this.client.rest.delete(Routes2.channelPermission(this.channel.id, userOrRoleId), { reason });
+        await this.client.rest.delete(Routes3.channelPermission(this.channel.id, userOrRoleId), { reason });
         return this.channel;
       }
     };
@@ -61422,7 +61422,7 @@ var require_Util = __commonJS({
     var { parse } = __require("node:path");
     var process2 = __require("node:process");
     var { Collection: Collection2 } = require_dist7();
-    var { ChannelType, RouteBases, Routes: Routes2 } = require_v106();
+    var { ChannelType, RouteBases, Routes: Routes3 } = require_v106();
     var { fetch: fetch2 } = require_undici();
     var Colors = require_Colors();
     var { DiscordjsError: DiscordjsError2, DiscordjsRangeError: DiscordjsRangeError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -61453,7 +61453,7 @@ var require_Util = __commonJS({
     }
     async function fetchRecommendedShardCount(token, { guildsPerShard = 1e3, multipleOf = 1 } = {}) {
       if (!token) throw new DiscordjsError2(ErrorCodes2.TokenMissing);
-      const response = await fetch2(RouteBases.api + Routes2.gatewayBot(), {
+      const response = await fetch2(RouteBases.api + Routes3.gatewayBot(), {
         method: "GET",
         headers: { Authorization: `Bot ${token.replace(/^Bot\s*/i, "")}` }
       });
@@ -62064,8 +62064,8 @@ var require_BaseClient = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/BaseClient.js"(exports2, module2) {
     "use strict";
     var EventEmitter = __require("node:events");
-    var { REST } = require_dist6();
-    var { Routes: Routes2 } = require_v106();
+    var { REST: REST2 } = require_dist6();
+    var { Routes: Routes3 } = require_v106();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var Options2 = require_Options();
     var { flatten } = require_Util();
@@ -62097,7 +62097,7 @@ var require_BaseClient = __commonJS({
             userAgentAppendix: options.rest?.userAgentAppendix ? `${Options2.userAgentAppendix} ${options.rest.userAgentAppendix}` : Options2.userAgentAppendix
           }
         };
-        this.rest = new REST(this.options.rest);
+        this.rest = new REST2(this.options.rest);
       }
       /**
        * Destroys all assets used by the base client.
@@ -62120,7 +62120,7 @@ var require_BaseClient = __commonJS({
        * @returns {Promise<void>}
        */
       async deleteWebhook(id, { token, reason } = {}) {
-        await this.rest.delete(Routes2.webhook(id, token), { auth: !token, reason });
+        await this.rest.delete(Routes3.webhook(id, token), { auth: !token, reason });
       }
       /**
        * Increments max listeners by one, if they are not zero.
@@ -63438,7 +63438,7 @@ var require_BaseGuild = __commonJS({
     "use strict";
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
     var { DiscordSnowflake } = require_cjs3();
-    var { Routes: Routes2, GuildFeature } = require_v106();
+    var { Routes: Routes3, GuildFeature } = require_v106();
     var Base = require_Base();
     var BaseGuild = class extends Base {
       constructor(client, data) {
@@ -63501,7 +63501,7 @@ var require_BaseGuild = __commonJS({
        * @returns {Promise<Guild>}
        */
       async fetch() {
-        const data = await this.client.rest.get(Routes2.guild(this.id), {
+        const data = await this.client.rest.get(Routes3.guild(this.id), {
           query: makeURLSearchParams2({ with_counts: true })
         });
         return this.client.guilds._add(data);
@@ -63662,7 +63662,7 @@ var require_InviteGuild = __commonJS({
 var require_Invite = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/Invite.js"(exports2, module2) {
     "use strict";
-    var { RouteBases, Routes: Routes2, PermissionFlagsBits: PermissionFlagsBits4 } = require_v106();
+    var { RouteBases, Routes: Routes3, PermissionFlagsBits: PermissionFlagsBits4 } = require_v106();
     var Base = require_Base();
     var { GuildScheduledEvent } = require_GuildScheduledEvent();
     var IntegrationApplication = require_IntegrationApplication();
@@ -63837,7 +63837,7 @@ var require_Invite = __commonJS({
        * @returns {Promise<Invite>}
        */
       async delete(reason) {
-        await this.client.rest.delete(Routes2.invite(this.code), { reason });
+        await this.client.rest.delete(Routes3.invite(this.code), { reason });
         return this;
       }
       /**
@@ -63875,7 +63875,7 @@ var require_GuildTemplate = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/GuildTemplate.js"(exports2, module2) {
     "use strict";
     var { setTimeout: setTimeout2, clearTimeout: clearTimeout2 } = __require("node:timers");
-    var { RouteBases, Routes: Routes2 } = require_v106();
+    var { RouteBases, Routes: Routes3 } = require_v106();
     var Base = require_Base();
     var { resolveImage } = require_DataResolver();
     var Events2 = require_Events();
@@ -63935,7 +63935,7 @@ var require_GuildTemplate = __commonJS({
        */
       async createGuild(name, icon) {
         const { client } = this;
-        const data = await client.rest.post(Routes2.template(this.code), {
+        const data = await client.rest.post(Routes3.template(this.code), {
           body: {
             name,
             icon: await resolveImage(icon)
@@ -63971,7 +63971,7 @@ var require_GuildTemplate = __commonJS({
        * @returns {Promise<GuildTemplate>}
        */
       async edit({ name, description } = {}) {
-        const data = await this.client.rest.patch(Routes2.guildTemplate(this.guildId, this.code), {
+        const data = await this.client.rest.patch(Routes3.guildTemplate(this.guildId, this.code), {
           body: { name, description }
         });
         return this._patch(data);
@@ -63981,7 +63981,7 @@ var require_GuildTemplate = __commonJS({
        * @returns {Promise<GuildTemplate>}
        */
       async delete() {
-        await this.client.rest.delete(Routes2.guildTemplate(this.guildId, this.code));
+        await this.client.rest.delete(Routes3.guildTemplate(this.guildId, this.code));
         return this;
       }
       /**
@@ -63989,7 +63989,7 @@ var require_GuildTemplate = __commonJS({
        * @returns {Promise<GuildTemplate>}
        */
       async sync() {
-        const data = await this.client.rest.put(Routes2.guildTemplate(this.guildId, this.code));
+        const data = await this.client.rest.put(Routes3.guildTemplate(this.guildId, this.code));
         return this._patch(data);
       }
       /**
@@ -64495,7 +64495,7 @@ var require_ApplicationCommandPermissionsManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/ApplicationCommandPermissionsManager.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection2 } = require_dist7();
-    var { ApplicationCommandPermissionType, RESTJSONErrorCodes, Routes: Routes2 } = require_v106();
+    var { ApplicationCommandPermissionType, RESTJSONErrorCodes, Routes: Routes3 } = require_v106();
     var BaseManager = require_BaseManager();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ApplicationCommandPermissionsManager = class extends BaseManager {
@@ -64515,9 +64515,9 @@ var require_ApplicationCommandPermissionsManager = __commonJS({
        */
       permissionsPath(guildId, commandId) {
         if (commandId) {
-          return Routes2.applicationCommandPermissions(this.client.application.id, guildId, commandId);
+          return Routes3.applicationCommandPermissions(this.client.application.id, guildId, commandId);
         }
-        return Routes2.guildApplicationCommandsPermissions(this.client.application.id, guildId);
+        return Routes3.guildApplicationCommandsPermissions(this.client.application.id, guildId);
       }
       /* eslint-disable max-len */
       /**
@@ -65343,7 +65343,7 @@ var require_ApplicationCommandManager = __commonJS({
     var { Collection: Collection2 } = require_dist7();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
     var { isJSONEncodable } = require_dist2();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var ApplicationCommandPermissionsManager = require_ApplicationCommandPermissionsManager();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -65373,14 +65373,14 @@ var require_ApplicationCommandManager = __commonJS({
       commandPath({ id, guildId } = {}) {
         if (this.guild ?? guildId) {
           if (id) {
-            return Routes2.applicationGuildCommand(this.client.application.id, this.guild?.id ?? guildId, id);
+            return Routes3.applicationGuildCommand(this.client.application.id, this.guild?.id ?? guildId, id);
           }
-          return Routes2.applicationGuildCommands(this.client.application.id, this.guild?.id ?? guildId);
+          return Routes3.applicationGuildCommands(this.client.application.id, this.guild?.id ?? guildId);
         }
         if (id) {
-          return Routes2.applicationCommand(this.client.application.id, id);
+          return Routes3.applicationCommand(this.client.application.id, id);
         }
-        return Routes2.applicationCommands(this.client.application.id);
+        return Routes3.applicationCommands(this.client.application.id);
       }
       /**
        * Data that resolves to give an ApplicationCommand object. This can be:
@@ -65658,7 +65658,7 @@ var require_ApplicationEmojiManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/ApplicationEmojiManager.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection2 } = require_dist7();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ApplicationEmoji = require_ApplicationEmoji();
@@ -65696,7 +65696,7 @@ var require_ApplicationEmojiManager = __commonJS({
         attachment = await resolveImage(attachment);
         if (!attachment) throw new DiscordjsTypeError2(ErrorCodes2.ReqResourceType);
         const body = { image: attachment, name };
-        const emoji = await this.client.rest.post(Routes2.applicationEmojis(this.application.id), { body });
+        const emoji = await this.client.rest.post(Routes3.applicationEmojis(this.application.id), { body });
         return this._add(emoji);
       }
       /**
@@ -65721,10 +65721,10 @@ var require_ApplicationEmojiManager = __commonJS({
             const existing = this.cache.get(id);
             if (existing) return existing;
           }
-          const emoji = await this.client.rest.get(Routes2.applicationEmoji(this.application.id, id));
+          const emoji = await this.client.rest.get(Routes3.applicationEmoji(this.application.id, id));
           return this._add(emoji, cache);
         }
-        const { items: data } = await this.client.rest.get(Routes2.applicationEmojis(this.application.id));
+        const { items: data } = await this.client.rest.get(Routes3.applicationEmojis(this.application.id));
         const emojis = new Collection2();
         for (const emoji of data) emojis.set(emoji.id, this._add(emoji, cache));
         return emojis;
@@ -65737,7 +65737,7 @@ var require_ApplicationEmojiManager = __commonJS({
       async delete(emoji) {
         const id = this.resolveId(emoji);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "emoji", "EmojiResolvable", true);
-        await this.client.rest.delete(Routes2.applicationEmoji(this.application.id, id));
+        await this.client.rest.delete(Routes3.applicationEmoji(this.application.id, id));
       }
       /**
        * Edits an emoji.
@@ -65748,7 +65748,7 @@ var require_ApplicationEmojiManager = __commonJS({
       async edit(emoji, options) {
         const id = this.resolveId(emoji);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "emoji", "EmojiResolvable", true);
-        const newData = await this.client.rest.patch(Routes2.applicationEmoji(this.application.id, id), {
+        const newData = await this.client.rest.patch(Routes3.applicationEmoji(this.application.id, id), {
           body: {
             name: options.name
           }
@@ -65768,7 +65768,7 @@ var require_ApplicationEmojiManager = __commonJS({
       async fetchAuthor(emoji) {
         const id = this.resolveId(emoji);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "emoji", "EmojiResolvable", true);
-        const data = await this.client.rest.get(Routes2.applicationEmoji(this.application.id, id));
+        const data = await this.client.rest.get(Routes3.applicationEmoji(this.application.id, id));
         return this._add(data).author;
       }
     };
@@ -65900,7 +65900,7 @@ var require_EntitlementManager = __commonJS({
     "use strict";
     var { Collection: Collection2 } = require_dist7();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
-    var { Routes: Routes2, EntitlementOwnerType } = require_v106();
+    var { Routes: Routes3, EntitlementOwnerType } = require_v106();
     var CachedManager = require_CachedManager();
     var { ErrorCodes: ErrorCodes2, DiscordjsTypeError: DiscordjsTypeError2 } = require_errors2();
     var { Entitlement } = require_Entitlement();
@@ -65967,7 +65967,7 @@ var require_EntitlementManager = __commonJS({
             return existing;
           }
         }
-        const data = await this.client.rest.get(Routes2.entitlement(this.client.application.id, entitlement));
+        const data = await this.client.rest.get(Routes3.entitlement(this.client.application.id, entitlement));
         return this._add(data, cache);
       }
       async _fetchMany({ limit, guild, user, skus, excludeEnded, excludeDeleted, cache, before, after } = {}) {
@@ -65981,7 +65981,7 @@ var require_EntitlementManager = __commonJS({
           before,
           after
         });
-        const entitlements = await this.client.rest.get(Routes2.entitlements(this.client.application.id), { query });
+        const entitlements = await this.client.rest.get(Routes3.entitlements(this.client.application.id), { query });
         return entitlements.reduce(
           (coll, entitlement) => coll.set(entitlement.id, this._add(entitlement, cache)),
           new Collection2()
@@ -66012,7 +66012,7 @@ var require_EntitlementManager = __commonJS({
           const type = guild ? "GuildResolvable" : "UserResolvable";
           throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, name, type);
         }
-        const entitlement = await this.client.rest.post(Routes2.entitlements(this.client.application.id), {
+        const entitlement = await this.client.rest.post(Routes3.entitlements(this.client.application.id), {
           body: {
             sku_id: skuId,
             owner_id: resolved,
@@ -66029,7 +66029,7 @@ var require_EntitlementManager = __commonJS({
       async deleteTest(entitlement) {
         const resolved = this.resolveId(entitlement);
         if (!resolved) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "entitlement", "EntitlementResolvable");
-        await this.client.rest.delete(Routes2.entitlement(this.client.application.id, resolved));
+        await this.client.rest.delete(Routes3.entitlement(this.client.application.id, resolved));
       }
       /**
        * Marks an entitlement as consumed
@@ -66038,7 +66038,7 @@ var require_EntitlementManager = __commonJS({
        * @returns {Promise<void>}
        */
       async consume(entitlementId) {
-        await this.client.rest.post(Routes2.consumeEntitlement(this.client.application.id, entitlementId));
+        await this.client.rest.post(Routes3.consumeEntitlement(this.client.application.id, entitlementId));
       }
     };
     exports2.EntitlementManager = EntitlementManager;
@@ -66112,7 +66112,7 @@ var require_SubscriptionManager = __commonJS({
     "use strict";
     var { Collection: Collection2 } = require_dist7();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { Subscription } = require_Subscription();
@@ -66153,7 +66153,7 @@ var require_SubscriptionManager = __commonJS({
         const skuId = resolveSKUId(sku);
         if (!skuId) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "sku", "SKUResolvable");
         if (subscriptionId) {
-          const subscription = await this.client.rest.get(Routes2.skuSubscription(skuId, subscriptionId));
+          const subscription = await this.client.rest.get(Routes3.skuSubscription(skuId, subscriptionId));
           return this._add(subscription, cache);
         }
         const query = makeURLSearchParams2({
@@ -66163,7 +66163,7 @@ var require_SubscriptionManager = __commonJS({
           before,
           after
         });
-        const subscriptions = await this.client.rest.get(Routes2.skuSubscriptions(skuId), { query });
+        const subscriptions = await this.client.rest.get(Routes3.skuSubscriptions(skuId), { query });
         return subscriptions.reduce(
           (coll, subscription) => coll.set(subscription.id, this._add(subscription, cache)),
           new Collection2()
@@ -66197,7 +66197,7 @@ var require_ClientApplication = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/ClientApplication.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection2 } = require_dist7();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var { ApplicationRoleConnectionMetadata } = require_ApplicationRoleConnectionMetadata();
     var { SKU } = require_SKU();
     var Team = require_Team();
@@ -66370,7 +66370,7 @@ var require_ClientApplication = __commonJS({
         eventWebhooksTypes,
         tags
       } = {}) {
-        const data = await this.client.rest.patch(Routes2.currentApplication(), {
+        const data = await this.client.rest.patch(Routes3.currentApplication(), {
           body: {
             custom_install_url: customInstallURL,
             description,
@@ -66394,7 +66394,7 @@ var require_ClientApplication = __commonJS({
        * @returns {Promise<ClientApplication>}
        */
       async fetch() {
-        const data = await this.client.rest.get(Routes2.currentApplication());
+        const data = await this.client.rest.get(Routes3.currentApplication());
         this._patch(data);
         return this;
       }
@@ -66403,7 +66403,7 @@ var require_ClientApplication = __commonJS({
        * @returns {Promise<ApplicationRoleConnectionMetadata[]>}
        */
       async fetchRoleConnectionMetadataRecords() {
-        const metadata = await this.client.rest.get(Routes2.applicationRoleConnectionMetadata(this.client.user.id));
+        const metadata = await this.client.rest.get(Routes3.applicationRoleConnectionMetadata(this.client.user.id));
         return metadata.map((data) => new ApplicationRoleConnectionMetadata(data));
       }
       /**
@@ -66422,7 +66422,7 @@ var require_ClientApplication = __commonJS({
        * @returns {Promise<ApplicationRoleConnectionMetadata[]>}
        */
       async editRoleConnectionMetadataRecords(records) {
-        const newRecords = await this.client.rest.put(Routes2.applicationRoleConnectionMetadata(this.client.user.id), {
+        const newRecords = await this.client.rest.put(Routes3.applicationRoleConnectionMetadata(this.client.user.id), {
           body: records.map((record) => ({
             type: record.type,
             key: record.key,
@@ -66439,7 +66439,7 @@ var require_ClientApplication = __commonJS({
        * @returns {Promise<Collection<Snowflake, SKU>>}
        */
       async fetchSKUs() {
-        const skus = await this.client.rest.get(Routes2.skus(this.id));
+        const skus = await this.client.rest.get(Routes3.skus(this.id));
         return skus.reduce((coll, sku) => coll.set(sku.id, new SKU(this.client, sku)), new Collection2());
       }
     };
@@ -76194,7 +76194,7 @@ var require_Sticker = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/Sticker.js"(exports2) {
     "use strict";
     var { DiscordSnowflake } = require_cjs3();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { StickerFormatExtensionMap } = require_Constants();
@@ -76299,7 +76299,7 @@ var require_Sticker = __commonJS({
        * @returns {Promise<Sticker>}
        */
       async fetch() {
-        const data = await this.client.rest.get(Routes2.sticker(this.id));
+        const data = await this.client.rest.get(Routes3.sticker(this.id));
         this._patch(data);
         return this;
       }
@@ -76644,7 +76644,7 @@ var require_ReactionUserManager = __commonJS({
     "use strict";
     var { Collection: Collection2 } = require_dist7();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
-    var { ReactionType, Routes: Routes2 } = require_v106();
+    var { ReactionType, Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var User = require_User();
@@ -76674,7 +76674,7 @@ var require_ReactionUserManager = __commonJS({
         const message = this.reaction.message;
         const query = makeURLSearchParams2({ limit, after, type });
         const data = await this.client.rest.get(
-          Routes2.channelMessageReaction(message.channelId, message.id, this.reaction.emoji.identifier),
+          Routes3.channelMessageReaction(message.channelId, message.id, this.reaction.emoji.identifier),
           { query }
         );
         const users = new Collection2();
@@ -76694,7 +76694,7 @@ var require_ReactionUserManager = __commonJS({
         const userId = this.client.users.resolveId(user);
         if (!userId) throw new DiscordjsError2(ErrorCodes2.ReactionResolveUser);
         const message = this.reaction.message;
-        const route = userId === this.client.user.id ? Routes2.channelMessageOwnReaction(message.channelId, message.id, this.reaction.emoji.identifier) : Routes2.channelMessageUserReaction(message.channelId, message.id, this.reaction.emoji.identifier, userId);
+        const route = userId === this.client.user.id ? Routes3.channelMessageOwnReaction(message.channelId, message.id, this.reaction.emoji.identifier) : Routes3.channelMessageUserReaction(message.channelId, message.id, this.reaction.emoji.identifier, userId);
         await this.client.rest.delete(route);
         return this.reaction;
       }
@@ -76707,7 +76707,7 @@ var require_ReactionUserManager = __commonJS({
 var require_MessageReaction = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/MessageReaction.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var ApplicationEmoji = require_ApplicationEmoji();
     var GuildEmoji = require_GuildEmoji();
     var ReactionEmoji = require_ReactionEmoji();
@@ -76753,7 +76753,7 @@ var require_MessageReaction = __commonJS({
        */
       async remove() {
         await this.client.rest.delete(
-          Routes2.channelMessageReaction(this.message.channelId, this.message.id, this._emoji.identifier)
+          Routes3.channelMessageReaction(this.message.channelId, this.message.id, this._emoji.identifier)
         );
         return this;
       }
@@ -76846,7 +76846,7 @@ var require_MessageReaction = __commonJS({
 var require_ReactionManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/ReactionManager.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var MessageReaction = require_MessageReaction();
     var ReactionManager = class extends CachedManager {
@@ -76890,7 +76890,7 @@ var require_ReactionManager = __commonJS({
        * @returns {Promise<Message>}
        */
       async removeAll() {
-        await this.client.rest.delete(Routes2.channelMessageAllReactions(this.message.channelId, this.message.id));
+        await this.client.rest.delete(Routes3.channelMessageAllReactions(this.message.channelId, this.message.id));
         return this.message;
       }
     };
@@ -78657,7 +78657,7 @@ var require_Webhook = __commonJS({
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
     var { lazy } = require_dist2();
     var { DiscordSnowflake } = require_cjs3();
-    var { Routes: Routes2, WebhookType } = require_v106();
+    var { Routes: Routes3, WebhookType } = require_v106();
     var MessagePayload = require_MessagePayload();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { resolveImage } = require_DataResolver();
@@ -78802,7 +78802,7 @@ var require_Webhook = __commonJS({
           thread_id: messagePayload.options.threadId,
           with_components: messagePayload.options.withComponents
         });
-        const d = await this.client.rest.post(Routes2.webhook(this.id, this.token), {
+        const d = await this.client.rest.post(Routes3.webhook(this.id, this.token), {
           body,
           files,
           query,
@@ -78831,7 +78831,7 @@ var require_Webhook = __commonJS({
        */
       async sendSlackMessage(body) {
         if (!this.token) throw new DiscordjsError2(ErrorCodes2.WebhookTokenUnavailable);
-        const data = await this.client.rest.post(Routes2.webhookPlatform(this.id, this.token, "slack"), {
+        const data = await this.client.rest.post(Routes3.webhookPlatform(this.id, this.token, "slack"), {
           query: makeURLSearchParams2({ wait: true }),
           auth: false,
           body
@@ -78857,7 +78857,7 @@ var require_Webhook = __commonJS({
           avatar = await resolveImage(avatar);
         }
         channel &&= channel.id ?? channel;
-        const data = await this.client.rest.patch(Routes2.webhook(this.id, channel ? void 0 : this.token), {
+        const data = await this.client.rest.patch(Routes3.webhook(this.id, channel ? void 0 : this.token), {
           body: { name, avatar, channel_id: channel },
           reason,
           auth: !this.token || Boolean(channel)
@@ -78884,7 +78884,7 @@ var require_Webhook = __commonJS({
        */
       async fetchMessage(message, { threadId } = {}) {
         if (!this.token) throw new DiscordjsError2(ErrorCodes2.WebhookTokenUnavailable);
-        const data = await this.client.rest.get(Routes2.webhookMessage(this.id, this.token, message), {
+        const data = await this.client.rest.get(Routes3.webhookMessage(this.id, this.token, message), {
           query: threadId ? makeURLSearchParams2({ thread_id: threadId }) : void 0,
           auth: false
         });
@@ -78908,7 +78908,7 @@ var require_Webhook = __commonJS({
           with_components: messagePayload.options.withComponents
         });
         const d = await this.client.rest.patch(
-          Routes2.webhookMessage(this.id, this.token, typeof message === "string" ? message : message.id),
+          Routes3.webhookMessage(this.id, this.token, typeof message === "string" ? message : message.id),
           {
             body,
             files,
@@ -78943,7 +78943,7 @@ var require_Webhook = __commonJS({
       async deleteMessage(message, threadId) {
         if (!this.token) throw new DiscordjsError2(ErrorCodes2.WebhookTokenUnavailable);
         await this.client.rest.delete(
-          Routes2.webhookMessage(this.id, this.token, typeof message === "string" ? message : message.id),
+          Routes3.webhookMessage(this.id, this.token, typeof message === "string" ? message : message.id),
           {
             query: threadId ? makeURLSearchParams2({ thread_id: threadId }) : void 0,
             auth: false
@@ -78972,7 +78972,7 @@ var require_Webhook = __commonJS({
        * @readonly
        */
       get url() {
-        return this.client.options.rest.api + Routes2.webhook(this.id, this.token);
+        return this.client.options.rest.api + Routes3.webhook(this.id, this.token);
       }
       /**
        * A link to the webhook's avatar.
@@ -79134,7 +79134,7 @@ var require_WebhookClient = __commonJS({
 var require_VoiceState = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/VoiceState.js"(exports2, module2) {
     "use strict";
-    var { ChannelType, Routes: Routes2 } = require_v106();
+    var { ChannelType, Routes: Routes3 } = require_v106();
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var VoiceState = class extends Base {
@@ -79289,7 +79289,7 @@ var require_VoiceState = __commonJS({
         if (!["boolean", "undefined"].includes(typeof options.suppressed)) {
           throw new DiscordjsTypeError2(ErrorCodes2.VoiceStateInvalidType, "suppressed");
         }
-        await this.client.rest.patch(Routes2.guildVoiceState(this.guild.id, target), {
+        await this.client.rest.patch(Routes3.guildVoiceState(this.guild.id, target), {
           body: {
             channel_id: this.channelId,
             request_to_speak_timestamp: options.requestToSpeak ? (/* @__PURE__ */ new Date()).toISOString() : options.requestToSpeak === false ? null : void 0,
@@ -79362,7 +79362,7 @@ var require_GuildMemberRoleManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/GuildMemberRoleManager.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection2 } = require_dist7();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var DataManager = require_DataManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { Role } = require_Role();
@@ -79473,7 +79473,7 @@ var require_GuildMemberRoleManager = __commonJS({
               "Role, Snowflake or Array or Collection of Roles or Snowflakes"
             );
           }
-          await this.client.rest.put(Routes2.guildMemberRole(this.guild.id, this.member.id, roleOrRoles), { reason });
+          await this.client.rest.put(Routes3.guildMemberRole(this.guild.id, this.member.id, roleOrRoles), { reason });
           const clone = this.member._clone();
           clone._roles = [...this.cache.keys(), roleOrRoles];
           return clone;
@@ -79508,7 +79508,7 @@ var require_GuildMemberRoleManager = __commonJS({
               "Role, Snowflake or Array or Collection of Roles or Snowflakes"
             );
           }
-          await this.client.rest.delete(Routes2.guildMemberRole(this.guild.id, this.member.id, roleOrRoles), { reason });
+          await this.client.rest.delete(Routes3.guildMemberRole(this.guild.id, this.member.id, roleOrRoles), { reason });
           const clone = this.member._clone();
           const newRoles = this.cache.filter((role) => role.id !== roleOrRoles);
           clone._roles = [...newRoles.keys()];
@@ -80012,7 +80012,7 @@ var require_MessageManager = __commonJS({
     var process2 = __require("node:process");
     var { Collection: Collection2 } = require_dist7();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { Message: Message5 } = require_Message();
@@ -80095,11 +80095,11 @@ var require_MessageManager = __commonJS({
           const existing = this.cache.get(message);
           if (existing && !existing.partial) return existing;
         }
-        const data = await this.client.rest.get(Routes2.channelMessage(this.channel.id, message));
+        const data = await this.client.rest.get(Routes3.channelMessage(this.channel.id, message));
         return this._add(data, cache);
       }
       async _fetchMany({ cache, ...apiOptions } = {}) {
-        const data = await this.client.rest.get(Routes2.channelMessages(this.channel.id), {
+        const data = await this.client.rest.get(Routes3.channelMessages(this.channel.id), {
           query: makeURLSearchParams2(apiOptions)
         });
         return data.reduce((_data, message) => _data.set(message.id, this._add(message, cache)), new Collection2());
@@ -80141,7 +80141,7 @@ var require_MessageManager = __commonJS({
        *   .catch(console.error);
        */
       async fetchPins({ cache, ...apiOptions } = {}) {
-        const data = await this.client.rest.get(Routes2.channelMessagesPins(this.channel.id), {
+        const data = await this.client.rest.get(Routes3.channelMessagesPins(this.channel.id), {
           query: makeURLSearchParams2({
             ...apiOptions,
             before: apiOptions.before && new Date(apiOptions.before).toISOString()
@@ -80174,7 +80174,7 @@ var require_MessageManager = __commonJS({
           );
           deprecationEmittedForFetchPinned = true;
         }
-        const data = await this.client.rest.get(Routes2.channelPins(this.channel.id));
+        const data = await this.client.rest.get(Routes3.channelPins(this.channel.id));
         const messages = new Collection2();
         for (const message of data) messages.set(message.id, this._add(message, cache));
         return messages;
@@ -80218,7 +80218,7 @@ var require_MessageManager = __commonJS({
         const messageId = this.resolveId(message);
         if (!messageId) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "message", "MessageResolvable");
         const { body, files } = await (options instanceof MessagePayload ? options : MessagePayload.create(message instanceof Message5 ? message : this, options)).resolveBody().resolveFiles();
-        const d = await this.client.rest.patch(Routes2.channelMessage(this.channel.id, messageId), { body, files });
+        const d = await this.client.rest.patch(Routes3.channelMessage(this.channel.id, messageId), { body, files });
         const existing = this.cache.get(messageId);
         if (existing) {
           const clone = existing._clone();
@@ -80235,7 +80235,7 @@ var require_MessageManager = __commonJS({
       async crosspost(message) {
         message = this.resolveId(message);
         if (!message) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "message", "MessageResolvable");
-        const data = await this.client.rest.post(Routes2.channelMessageCrosspost(this.channel.id, message));
+        const data = await this.client.rest.post(Routes3.channelMessageCrosspost(this.channel.id, message));
         return this.cache.get(data.id) ?? this._add(data);
       }
       /**
@@ -80247,7 +80247,7 @@ var require_MessageManager = __commonJS({
       async pin(message, reason) {
         message = this.resolveId(message);
         if (!message) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "message", "MessageResolvable");
-        await this.client.rest.put(Routes2.channelMessagesPin(this.channel.id, message), { reason });
+        await this.client.rest.put(Routes3.channelMessagesPin(this.channel.id, message), { reason });
       }
       /**
        * Unpins a message from the channel's pinned messages, even if it's not cached.
@@ -80258,7 +80258,7 @@ var require_MessageManager = __commonJS({
       async unpin(message, reason) {
         message = this.resolveId(message);
         if (!message) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "message", "MessageResolvable");
-        await this.client.rest.delete(Routes2.channelMessagesPin(this.channel.id, message), { reason });
+        await this.client.rest.delete(Routes3.channelMessagesPin(this.channel.id, message), { reason });
       }
       /**
        * Adds a reaction to a message, even if it's not cached.
@@ -80272,7 +80272,7 @@ var require_MessageManager = __commonJS({
         emoji = resolvePartialEmoji(emoji);
         if (!emoji) throw new DiscordjsTypeError2(ErrorCodes2.EmojiType, "emoji", "EmojiIdentifierResolvable");
         const emojiId = emoji.id ? `${emoji.animated ? "a:" : ""}${emoji.name}:${emoji.id}` : encodeURIComponent(emoji.name);
-        await this.client.rest.put(Routes2.channelMessageOwnReaction(this.channel.id, message, emojiId));
+        await this.client.rest.put(Routes3.channelMessageOwnReaction(this.channel.id, message, emojiId));
       }
       /**
        * Deletes a message, even if it's not cached.
@@ -80282,7 +80282,7 @@ var require_MessageManager = __commonJS({
       async delete(message) {
         message = this.resolveId(message);
         if (!message) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "message", "MessageResolvable");
-        await this.client.rest.delete(Routes2.channelMessage(this.channel.id, message));
+        await this.client.rest.delete(Routes3.channelMessage(this.channel.id, message));
       }
       /**
        * Ends a poll.
@@ -80290,7 +80290,7 @@ var require_MessageManager = __commonJS({
        * @returns {Promise<Message>}
        */
       async endPoll(messageId) {
-        const message = await this.client.rest.post(Routes2.expirePoll(this.channel.id, messageId));
+        const message = await this.client.rest.post(Routes3.expirePoll(this.channel.id, messageId));
         return this._add(message, false);
       }
       /**
@@ -80305,7 +80305,7 @@ var require_MessageManager = __commonJS({
        * @returns {Promise<Collection<Snowflake, User>>}
        */
       async fetchPollAnswerVoters({ messageId, answerId, after, limit }) {
-        const voters = await this.client.rest.get(Routes2.pollAnswerVoters(this.channel.id, messageId, answerId), {
+        const voters = await this.client.rest.get(Routes3.pollAnswerVoters(this.channel.id, messageId, answerId), {
           query: makeURLSearchParams2({ limit, after })
         });
         return voters.users.reduce((acc, user) => acc.set(user.id, this.client.users._add(user, false)), new Collection2());
@@ -80653,7 +80653,7 @@ var require_TextBasedChannel = __commonJS({
     "use strict";
     var { Collection: Collection2 } = require_dist7();
     var { DiscordSnowflake } = require_cjs3();
-    var { InteractionType, Routes: Routes2 } = require_v106();
+    var { InteractionType, Routes: Routes3 } = require_v106();
     var { DiscordjsTypeError: DiscordjsTypeError2, DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { MaxBulkDeletableMessageAge } = require_Constants();
     var InteractionCollector = require_InteractionCollector();
@@ -80807,7 +80807,7 @@ var require_TextBasedChannel = __commonJS({
           messagePayload = MessagePayload.create(this, options).resolveBody();
         }
         const { body, files } = await messagePayload.resolveFiles();
-        const d = await this.client.rest.post(Routes2.channelMessages(this.id), { body, files });
+        const d = await this.client.rest.post(Routes3.channelMessages(this.id), { body, files });
         return this.messages.cache.get(d.id) ?? this.messages._add(d);
       }
       /**
@@ -80818,7 +80818,7 @@ var require_TextBasedChannel = __commonJS({
        * channel.sendTyping();
        */
       async sendTyping() {
-        await this.client.rest.post(Routes2.channelTyping(this.id));
+        await this.client.rest.post(Routes3.channelTyping(this.id));
       }
       /**
        * Creates a Message Collector.
@@ -80933,10 +80933,10 @@ var require_TextBasedChannel = __commonJS({
               },
               this
             );
-            await this.client.rest.delete(Routes2.channelMessage(this.id, messageIds[0]));
+            await this.client.rest.delete(Routes3.channelMessage(this.id, messageIds[0]));
             return message ? new Collection2([[message.id, message]]) : new Collection2();
           }
-          await this.client.rest.post(Routes2.channelBulkDelete(this.id), { body: { messages: messageIds } });
+          await this.client.rest.post(Routes3.channelBulkDelete(this.id), { body: { messages: messageIds } });
           return messageIds.reduce(
             (col, id) => col.set(
               id,
@@ -81368,7 +81368,7 @@ var require_PollAnswerVoterManager = __commonJS({
     "use strict";
     var { Collection: Collection2 } = require_dist7();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var User = require_User();
     var PollAnswerVoterManager = class extends CachedManager {
@@ -81389,7 +81389,7 @@ var require_PollAnswerVoterManager = __commonJS({
       async fetch({ after, limit } = {}) {
         const poll = this.answer.poll;
         const query = makeURLSearchParams2({ limit, after });
-        const data = await this.client.rest.get(Routes2.pollAnswerVoters(poll.channelId, poll.messageId, this.answer.id), {
+        const data = await this.client.rest.get(Routes3.pollAnswerVoters(poll.channelId, poll.messageId, this.answer.id), {
           query
         });
         return data.users.reduce((coll, rawUser) => {
@@ -82180,7 +82180,7 @@ var require_DMChannel = __commonJS({
 var require_GuildForumThreadManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/GuildForumThreadManager.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var ThreadManager = require_ThreadManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var MessagePayload = require_MessagePayload();
@@ -82232,7 +82232,7 @@ var require_GuildForumThreadManager = __commonJS({
           throw new DiscordjsTypeError2(ErrorCodes2.GuildForumMessageRequired);
         }
         const { body, files } = await (message instanceof MessagePayload ? message : MessagePayload.create(this, message)).resolveBody().resolveFiles();
-        const data = await this.client.rest.post(Routes2.threads(this.channel.id), {
+        const data = await this.client.rest.post(Routes3.threads(this.channel.id), {
           body: {
             name,
             auto_archive_duration: autoArchiveDuration,
@@ -82520,7 +82520,7 @@ var require_ThreadMemberManager = __commonJS({
     var process2 = __require("node:process");
     var { Collection: Collection2 } = require_dist7();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ThreadMember = require_ThreadMember();
@@ -82607,7 +82607,7 @@ var require_ThreadMemberManager = __commonJS({
         }
         const id = member === "@me" ? member : this.client.users.resolveId(member);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "member", "UserResolvable");
-        await this.client.rest.put(Routes2.threadMembers(this.thread.id, id), { reason });
+        await this.client.rest.put(Routes3.threadMembers(this.thread.id, id), { reason });
         return id;
       }
       /**
@@ -82623,7 +82623,7 @@ var require_ThreadMemberManager = __commonJS({
         }
         const id = member === "@me" ? member : this.client.users.resolveId(member);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "member", "UserResolvable");
-        await this.client.rest.delete(Routes2.threadMembers(this.thread.id, id), { reason });
+        await this.client.rest.delete(Routes3.threadMembers(this.thread.id, id), { reason });
         return id;
       }
       /**
@@ -82671,13 +82671,13 @@ var require_ThreadMemberManager = __commonJS({
           const existing = this.cache.get(member);
           if (existing) return existing;
         }
-        const data = await this.client.rest.get(Routes2.threadMembers(this.thread.id, member), {
+        const data = await this.client.rest.get(Routes3.threadMembers(this.thread.id, member), {
           query: makeURLSearchParams2({ with_member: withMember })
         });
         return this._add(data, cache);
       }
       async _fetchMany({ withMember, after, limit, cache } = {}) {
-        const data = await this.client.rest.get(Routes2.threadMembers(this.thread.id), {
+        const data = await this.client.rest.get(Routes3.threadMembers(this.thread.id), {
           query: makeURLSearchParams2({ with_member: withMember, after, limit })
         });
         return data.reduce((col, member) => col.set(member.user_id, this._add(member, cache)), new Collection2());
@@ -82693,7 +82693,7 @@ var require_ThreadChannel = __commonJS({
     "use strict";
     var { DiscordAPIError } = require_dist6();
     var { lazy } = require_dist2();
-    var { RESTJSONErrorCodes, ChannelFlags, ChannelType, PermissionFlagsBits: PermissionFlagsBits4, Routes: Routes2 } = require_v106();
+    var { RESTJSONErrorCodes, ChannelFlags, ChannelType, PermissionFlagsBits: PermissionFlagsBits4, Routes: Routes3 } = require_v106();
     var { BaseChannel } = require_BaseChannel();
     var getThreadOnlyChannel = lazy(() => require_ThreadOnlyChannel());
     var TextBasedChannel = require_TextBasedChannel();
@@ -82907,7 +82907,7 @@ var require_ThreadChannel = __commonJS({
        *   .catch(console.error);
        */
       async edit(options) {
-        const newData = await this.client.rest.patch(Routes2.channel(this.id), {
+        const newData = await this.client.rest.patch(Routes3.channel(this.id), {
           body: {
             name: options.name,
             archived: options.archived,
@@ -83146,7 +83146,7 @@ var require_ThreadManager = __commonJS({
     "use strict";
     var { Collection: Collection2 } = require_dist7();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ThreadChannel = require_ThreadChannel();
@@ -83250,9 +83250,9 @@ var require_ThreadManager = __commonJS({
        * @returns {Promise<FetchedThreadsMore>}
        */
       async fetchArchived({ type = "public", fetchAll = false, before, limit } = {}, cache = true) {
-        let path = Routes2.channelThreads(this.channel.id, type);
+        let path = Routes3.channelThreads(this.channel.id, type);
         if (type === "private" && !fetchAll) {
-          path = Routes2.channelJoinedArchivedThreads(this.channel.id);
+          path = Routes3.channelJoinedArchivedThreads(this.channel.id);
         }
         let timestamp;
         let id;
@@ -83311,7 +83311,7 @@ var require_ThreadManager = __commonJS({
 var require_GuildTextThreadManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/GuildTextThreadManager.js"(exports2, module2) {
     "use strict";
-    var { ChannelType, Routes: Routes2 } = require_v106();
+    var { ChannelType, Routes: Routes3 } = require_v106();
     var ThreadManager = require_ThreadManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var GuildTextThreadManager = class extends ThreadManager {
@@ -83375,7 +83375,7 @@ var require_GuildTextThreadManager = __commonJS({
         } else if (this.channel.type !== ChannelType.GuildAnnouncement) {
           resolvedType = type ?? resolvedType;
         }
-        const data = await this.client.rest.post(Routes2.threads(this.channel.id, startMessageId), {
+        const data = await this.client.rest.post(Routes3.threads(this.channel.id, startMessageId), {
           body: {
             name,
             auto_archive_duration: autoArchiveDuration,
@@ -83550,7 +83550,7 @@ var require_BaseGuildTextChannel = __commonJS({
 var require_NewsChannel = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/NewsChannel.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var BaseGuildTextChannel = require_BaseGuildTextChannel();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var NewsChannel = class extends BaseGuildTextChannel {
@@ -83569,7 +83569,7 @@ var require_NewsChannel = __commonJS({
       async addFollower(channel, reason) {
         const channelId = this.guild.channels.resolveId(channel);
         if (!channelId) throw new DiscordjsError2(ErrorCodes2.GuildChannelResolve);
-        await this.client.rest.post(Routes2.channelFollowers(this.id), { body: { webhook_channel_id: channelId }, reason });
+        await this.client.rest.post(Routes3.channelFollowers(this.id), { body: { webhook_channel_id: channelId }, reason });
         return this;
       }
     };
@@ -83838,7 +83838,7 @@ var require_TextChannel = __commonJS({
 var require_VoiceChannel = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/VoiceChannel.js"(exports2, module2) {
     "use strict";
-    var { PermissionFlagsBits: PermissionFlagsBits4, Routes: Routes2 } = require_v106();
+    var { PermissionFlagsBits: PermissionFlagsBits4, Routes: Routes3 } = require_v106();
     var BaseGuildVoiceChannel = require_BaseGuildVoiceChannel();
     var VoiceChannel = class extends BaseGuildVoiceChannel {
       /**
@@ -83873,7 +83873,7 @@ var require_VoiceChannel = __commonJS({
        * @returns {Promise<void>}
        */
       async sendSoundboardSound(sound) {
-        await this.client.rest.post(Routes2.sendSoundboardSound(this.id), {
+        await this.client.rest.post(Routes3.sendSoundboardSound(this.id), {
           body: {
             sound_id: sound.soundId,
             source_guild_id: sound.guildId ?? void 0
@@ -84517,7 +84517,7 @@ var require_GuildOnboardingPrompt = __commonJS({
 var require_Integration = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/Integration.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var Base = require_Base();
     var IntegrationApplication = require_IntegrationApplication();
     var Integration = class extends Base {
@@ -84611,7 +84611,7 @@ var require_Integration = __commonJS({
        * @param {string} [reason] Reason for deleting this integration
        */
       async delete(reason) {
-        await this.client.rest.delete(Routes2.guildIntegration(this.guild.id, this.id), { reason });
+        await this.client.rest.delete(Routes3.guildIntegration(this.guild.id, this.id), { reason });
         return this;
       }
       toJSON() {
@@ -86026,7 +86026,7 @@ var require_CommandInteractionOptionResolver = __commonJS({
 var require_AutocompleteInteraction = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/AutocompleteInteraction.js"(exports2, module2) {
     "use strict";
-    var { InteractionResponseType, Routes: Routes2 } = require_v106();
+    var { InteractionResponseType, Routes: Routes3 } = require_v106();
     var BaseInteraction = require_BaseInteraction();
     var CommandInteractionOptionResolver = require_CommandInteractionOptionResolver();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -86065,7 +86065,7 @@ var require_AutocompleteInteraction = __commonJS({
        */
       async respond(options) {
         if (this.responded) throw new DiscordjsError2(ErrorCodes2.InteractionAlreadyReplied);
-        await this.client.rest.post(Routes2.interactionCallback(this.id, this.token), {
+        await this.client.rest.post(Routes3.interactionCallback(this.id, this.token), {
           body: {
             type: InteractionResponseType.ApplicationCommandAutocompleteResult,
             data: {
@@ -86253,7 +86253,7 @@ var require_InteractionResponses = __commonJS({
     var { deprecate } = __require("node:util");
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
     var { isJSONEncodable } = require_dist2();
-    var { InteractionResponseType, MessageFlags, Routes: Routes2, InteractionType } = require_v106();
+    var { InteractionResponseType, MessageFlags, Routes: Routes3, InteractionType } = require_v106();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var MessageFlagsBitField = require_MessageFlagsBitField();
     var InteractionCallbackResponse = require_InteractionCallbackResponse();
@@ -86349,7 +86349,7 @@ var require_InteractionResponses = __commonJS({
         if (options.ephemeral) {
           flags.add(MessageFlags.Ephemeral);
         }
-        const response = await this.client.rest.post(Routes2.interactionCallback(this.id, this.token), {
+        const response = await this.client.rest.post(Routes3.interactionCallback(this.id, this.token), {
           body: {
             type: InteractionResponseType.DeferredChannelMessageWithSource,
             data: {
@@ -86406,7 +86406,7 @@ var require_InteractionResponses = __commonJS({
         if (options instanceof MessagePayload) messagePayload = options;
         else messagePayload = MessagePayload.create(this, options);
         const { body: data, files } = await messagePayload.resolveBody().resolveFiles();
-        const response = await this.client.rest.post(Routes2.interactionCallback(this.id, this.token), {
+        const response = await this.client.rest.post(Routes3.interactionCallback(this.id, this.token), {
           body: {
             type: InteractionResponseType.ChannelMessageWithSource,
             data
@@ -86502,7 +86502,7 @@ var require_InteractionResponses = __commonJS({
             deprecationEmittedForFetchReplyOption = true;
           }
         }
-        const response = await this.client.rest.post(Routes2.interactionCallback(this.id, this.token), {
+        const response = await this.client.rest.post(Routes3.interactionCallback(this.id, this.token), {
           body: {
             type: InteractionResponseType.DeferredMessageUpdate
           },
@@ -86540,7 +86540,7 @@ var require_InteractionResponses = __commonJS({
         if (options instanceof MessagePayload) messagePayload = options;
         else messagePayload = MessagePayload.create(this, options);
         const { body: data, files } = await messagePayload.resolveBody().resolveFiles();
-        const response = await this.client.rest.post(Routes2.interactionCallback(this.id, this.token), {
+        const response = await this.client.rest.post(Routes3.interactionCallback(this.id, this.token), {
           body: {
             type: InteractionResponseType.UpdateMessage,
             data
@@ -86559,7 +86559,7 @@ var require_InteractionResponses = __commonJS({
        */
       async launchActivity({ withResponse } = {}) {
         if (this.deferred || this.replied) throw new DiscordjsError2(ErrorCodes2.InteractionAlreadyReplied);
-        const response = await this.client.rest.post(Routes2.interactionCallback(this.id, this.token), {
+        const response = await this.client.rest.post(Routes3.interactionCallback(this.id, this.token), {
           query: makeURLSearchParams2({ with_response: withResponse ?? false }),
           body: {
             type: InteractionResponseType.LaunchActivity
@@ -86577,7 +86577,7 @@ var require_InteractionResponses = __commonJS({
        */
       async showModal(modal, options = {}) {
         if (this.deferred || this.replied) throw new DiscordjsError2(ErrorCodes2.InteractionAlreadyReplied);
-        const response = await this.client.rest.post(Routes2.interactionCallback(this.id, this.token), {
+        const response = await this.client.rest.post(Routes3.interactionCallback(this.id, this.token), {
           body: {
             type: InteractionResponseType.Modal,
             data: isJSONEncodable(modal) ? modal.toJSON() : this.client.options.jsonTransformer(modal)
@@ -86596,7 +86596,7 @@ var require_InteractionResponses = __commonJS({
        */
       async sendPremiumRequired() {
         if (this.deferred || this.replied) throw new DiscordjsError2(ErrorCodes2.InteractionAlreadyReplied);
-        await this.client.rest.post(Routes2.interactionCallback(this.id, this.token), {
+        await this.client.rest.post(Routes3.interactionCallback(this.id, this.token), {
           body: {
             type: InteractionResponseType.PremiumRequired
           },
@@ -94455,7 +94455,7 @@ var require_RATE_LIMITED = __commonJS({
 var require_ClientUser = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/ClientUser.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var User = require_User();
     var { resolveImage } = require_DataResolver();
     var ClientUser = class extends User {
@@ -94492,7 +94492,7 @@ var require_ClientUser = __commonJS({
        * @returns {Promise<ClientUser>}
        */
       async edit({ username, avatar, banner }) {
-        const data = await this.client.rest.patch(Routes2.user(), {
+        const data = await this.client.rest.patch(Routes3.user(), {
           body: {
             username,
             avatar: avatar && await resolveImage(avatar),
@@ -95371,7 +95371,7 @@ var require_ChannelManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/ChannelManager.js"(exports2, module2) {
     "use strict";
     var process2 = __require("node:process");
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { BaseChannel } = require_BaseChannel();
     var { createChannel } = require_Channels();
@@ -95472,7 +95472,7 @@ var require_ChannelManager = __commonJS({
           const existing = this.cache.get(id);
           if (existing && !existing.partial) return existing;
         }
-        const data = await this.client.rest.get(Routes2.channel(id));
+        const data = await this.client.rest.get(Routes3.channel(id));
         return this._add(data, null, { cache, allowUnknownGuild });
       }
     };
@@ -95848,7 +95848,7 @@ var require_GuildPreview = __commonJS({
     "use strict";
     var { Collection: Collection2 } = require_dist7();
     var { DiscordSnowflake } = require_cjs3();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var Base = require_Base();
     var GuildPreviewEmoji = require_GuildPreviewEmoji();
     var { Sticker: Sticker2 } = require_Sticker();
@@ -95944,7 +95944,7 @@ var require_GuildPreview = __commonJS({
        * @returns {Promise<GuildPreview>}
        */
       async fetch() {
-        const data = await this.client.rest.get(Routes2.guildPreview(this.id));
+        const data = await this.client.rest.get(Routes3.guildPreview(this.id));
         this._patch(data);
         return this;
       }
@@ -95974,7 +95974,7 @@ var require_AutoModerationRuleManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/AutoModerationRuleManager.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection2 } = require_dist7();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var AutoModerationRule = require_AutoModerationRule();
     var AutoModerationRuleManager = class extends CachedManager {
@@ -96073,7 +96073,7 @@ var require_AutoModerationRuleManager = __commonJS({
         exemptChannels,
         reason
       }) {
-        const data = await this.client.rest.post(Routes2.guildAutoModerationRules(this.guild.id), {
+        const data = await this.client.rest.post(Routes3.guildAutoModerationRules(this.guild.id), {
           body: {
             name,
             event_type: eventType,
@@ -96125,7 +96125,7 @@ var require_AutoModerationRuleManager = __commonJS({
        */
       async edit(autoModerationRule, { name, eventType, triggerMetadata, actions, enabled, exemptRoles, exemptChannels, reason }) {
         const autoModerationRuleId = this.resolveId(autoModerationRule);
-        const data = await this.client.rest.patch(Routes2.guildAutoModerationRule(this.guild.id, autoModerationRuleId), {
+        const data = await this.client.rest.patch(Routes3.guildAutoModerationRule(this.guild.id, autoModerationRuleId), {
           body: {
             name,
             event_type: eventType,
@@ -96204,11 +96204,11 @@ var require_AutoModerationRuleManager = __commonJS({
           const existing = this.cache.get(autoModerationRule);
           if (existing) return existing;
         }
-        const data = await this.client.rest.get(Routes2.guildAutoModerationRule(this.guild.id, autoModerationRule));
+        const data = await this.client.rest.get(Routes3.guildAutoModerationRule(this.guild.id, autoModerationRule));
         return this._add(data, cache);
       }
       async _fetchMany(options = {}) {
-        const data = await this.client.rest.get(Routes2.guildAutoModerationRules(this.guild.id));
+        const data = await this.client.rest.get(Routes3.guildAutoModerationRules(this.guild.id));
         return data.reduce(
           (col, autoModerationRule) => col.set(autoModerationRule.id, this._add(autoModerationRule, options.cache)),
           new Collection2()
@@ -96222,7 +96222,7 @@ var require_AutoModerationRuleManager = __commonJS({
        */
       async delete(autoModerationRule, reason) {
         const autoModerationRuleId = this.resolveId(autoModerationRule);
-        await this.client.rest.delete(Routes2.guildAutoModerationRule(this.guild.id, autoModerationRuleId), { reason });
+        await this.client.rest.delete(Routes3.guildAutoModerationRule(this.guild.id, autoModerationRuleId), { reason });
       }
     };
     module2.exports = AutoModerationRuleManager;
@@ -96253,7 +96253,7 @@ var require_GuildBanManager = __commonJS({
     var process2 = __require("node:process");
     var { Collection: Collection2 } = require_dist7();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var GuildBan = require_GuildBan();
@@ -96344,11 +96344,11 @@ var require_GuildBanManager = __commonJS({
           const existing = this.cache.get(user);
           if (existing && !existing.partial) return existing;
         }
-        const data = await this.client.rest.get(Routes2.guildBan(this.guild.id, user));
+        const data = await this.client.rest.get(Routes3.guildBan(this.guild.id, user));
         return this._add(data, cache);
       }
       async _fetchMany({ cache, ...apiOptions } = {}) {
-        const data = await this.client.rest.get(Routes2.guildBans(this.guild.id), {
+        const data = await this.client.rest.get(Routes3.guildBans(this.guild.id), {
           query: makeURLSearchParams2(apiOptions)
         });
         return data.reduce((col, ban) => col.set(ban.user.id, this._add(ban, cache)), new Collection2());
@@ -96387,7 +96387,7 @@ var require_GuildBanManager = __commonJS({
           );
           deprecationEmittedForDeleteMessageDays = true;
         }
-        await this.client.rest.put(Routes2.guildBan(this.guild.id, id), {
+        await this.client.rest.put(Routes3.guildBan(this.guild.id, id), {
           body: {
             delete_message_seconds: options.deleteMessageSeconds ?? (options.deleteMessageDays ? options.deleteMessageDays * 24 * 60 * 60 : void 0)
           },
@@ -96414,7 +96414,7 @@ var require_GuildBanManager = __commonJS({
       async remove(user, reason) {
         const id = this.client.users.resolveId(user);
         if (!id) throw new DiscordjsError2(ErrorCodes2.BanResolveId);
-        await this.client.rest.delete(Routes2.guildBan(this.guild.id, id), { reason });
+        await this.client.rest.delete(Routes3.guildBan(this.guild.id, id), { reason });
         return this.client.users.resolve(user);
       }
       /**
@@ -96451,7 +96451,7 @@ var require_GuildBanManager = __commonJS({
         if (typeof options !== "object") throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "options", "object", true);
         const userIds = users.map((user) => this.client.users.resolveId(user));
         if (userIds.length === 0) throw new DiscordjsError2(ErrorCodes2.BulkBanUsersOptionEmpty);
-        const result = await this.client.rest.post(Routes2.guildBulkBan(this.guild.id), {
+        const result = await this.client.rest.post(Routes3.guildBulkBan(this.guild.id), {
           body: { delete_message_seconds: options.deleteMessageSeconds, user_ids: userIds },
           reason: options.reason
         });
@@ -96468,7 +96468,7 @@ var require_GuildChannelManager = __commonJS({
     "use strict";
     var process2 = __require("node:process");
     var { Collection: Collection2 } = require_dist7();
-    var { ChannelType, Routes: Routes2 } = require_v106();
+    var { ChannelType, Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var GuildTextThreadManager = require_GuildTextThreadManager();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -96565,7 +96565,7 @@ var require_GuildChannelManager = __commonJS({
         if (!targetChannelId) {
           throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "targetChannel", "TextChannelResolvable");
         }
-        const { webhook_id } = await this.client.rest.post(Routes2.channelFollowers(channelId), {
+        const { webhook_id } = await this.client.rest.post(Routes3.channelFollowers(channelId), {
           body: { webhook_channel_id: targetChannelId },
           reason
         });
@@ -96621,7 +96621,7 @@ var require_GuildChannelManager = __commonJS({
       }) {
         parent &&= this.client.channels.resolveId(parent);
         permissionOverwrites &&= permissionOverwrites.map((overwrite) => PermissionOverwrites.resolve(overwrite, this.guild));
-        const data = await this.client.rest.post(Routes2.guildChannels(this.guild.id), {
+        const data = await this.client.rest.post(Routes3.guildChannels(this.guild.id), {
           body: {
             name,
             topic,
@@ -96670,7 +96670,7 @@ var require_GuildChannelManager = __commonJS({
         const id = this.resolveId(channel);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "channel", "GuildChannelResolvable");
         const resolvedImage = await resolveImage(avatar);
-        const data = await this.client.rest.post(Routes2.channelWebhooks(id), {
+        const data = await this.client.rest.post(Routes3.channelWebhooks(id), {
           body: {
             name,
             avatar: resolvedImage
@@ -96742,7 +96742,7 @@ var require_GuildChannelManager = __commonJS({
             );
           }
         }
-        const newData = await this.client.rest.patch(Routes2.channel(resolvedChannel.id), {
+        const newData = await this.client.rest.patch(Routes3.channel(resolvedChannel.id), {
           body: {
             name: options.name,
             type: options.type,
@@ -96789,7 +96789,7 @@ var require_GuildChannelManager = __commonJS({
           relative,
           this.guild._sortedChannels(channel),
           this.client,
-          Routes2.guildChannels(this.guild.id),
+          Routes3.guildChannels(this.guild.id),
           reason
         );
         this.client.actions.GuildChannelsPositionUpdate.handle({
@@ -96820,11 +96820,11 @@ var require_GuildChannelManager = __commonJS({
           if (existing) return existing;
         }
         if (id) {
-          const data2 = await this.client.rest.get(Routes2.channel(id));
+          const data2 = await this.client.rest.get(Routes3.channel(id));
           if (this.guild.id !== data2.guild_id) throw new DiscordjsError2(ErrorCodes2.GuildChannelUnowned);
           return this.client.channels._add(data2, this.guild, { cache });
         }
-        const data = await this.client.rest.get(Routes2.guildChannels(this.guild.id));
+        const data = await this.client.rest.get(Routes3.guildChannels(this.guild.id));
         const channels = new Collection2();
         for (const channel of data) channels.set(channel.id, this.client.channels._add(channel, this.guild, { cache }));
         return channels;
@@ -96842,7 +96842,7 @@ var require_GuildChannelManager = __commonJS({
       async fetchWebhooks(channel) {
         const id = this.resolveId(channel);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "channel", "GuildChannelResolvable");
-        const data = await this.client.rest.get(Routes2.channelWebhooks(id));
+        const data = await this.client.rest.get(Routes3.channelWebhooks(id));
         return data.reduce((hooks, hook) => hooks.set(hook.id, new Webhook2(this.client, hook)), new Collection2());
       }
       /**
@@ -96876,7 +96876,7 @@ var require_GuildChannelManager = __commonJS({
           lock_permissions: channelPosition.lockPermissions,
           parent_id: channelPosition.parent !== void 0 ? this.resolveId(channelPosition.parent) : void 0
         }));
-        await this.client.rest.patch(Routes2.guildChannels(this.guild.id), { body: channelPositions });
+        await this.client.rest.patch(Routes3.guildChannels(this.guild.id), { body: channelPositions });
         return this.client.actions.GuildChannelsPositionUpdate.handle({
           guild_id: this.guild.id,
           channels: channelPositions
@@ -96908,7 +96908,7 @@ var require_GuildChannelManager = __commonJS({
        * @returns {Promise<RESTGetAPIGuildThreadsResult>}
        */
       rawFetchGuildActiveThreads() {
-        return this.client.rest.get(Routes2.guildActiveThreads(this.guild.id));
+        return this.client.rest.get(Routes3.guildActiveThreads(this.guild.id));
       }
       /**
        * Deletes the channel.
@@ -96924,7 +96924,7 @@ var require_GuildChannelManager = __commonJS({
       async delete(channel, reason) {
         const id = this.resolveId(channel);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "channel", "GuildChannelResolvable");
-        await this.client.rest.delete(Routes2.channel(id), { reason });
+        await this.client.rest.delete(Routes3.channel(id), { reason });
         this.client.actions.ChannelDelete.handle({ id });
       }
     };
@@ -96937,7 +96937,7 @@ var require_GuildEmojiManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/GuildEmojiManager.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection2 } = require_dist7();
-    var { Routes: Routes2, PermissionFlagsBits: PermissionFlagsBits4 } = require_v106();
+    var { Routes: Routes3, PermissionFlagsBits: PermissionFlagsBits4 } = require_v106();
     var BaseGuildEmojiManager2 = require_BaseGuildEmojiManager();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { resolveImage } = require_DataResolver();
@@ -96994,7 +96994,7 @@ var require_GuildEmojiManager = __commonJS({
             body.roles.push(resolvedRole);
           }
         }
-        const emoji = await this.client.rest.post(Routes2.guildEmojis(this.guild.id), { body, reason });
+        const emoji = await this.client.rest.post(Routes3.guildEmojis(this.guild.id), { body, reason });
         return this.client.actions.GuildEmojiCreate.handle(this.guild, emoji).emoji;
       }
       /**
@@ -97019,10 +97019,10 @@ var require_GuildEmojiManager = __commonJS({
             const existing = this.cache.get(id);
             if (existing) return existing;
           }
-          const emoji = await this.client.rest.get(Routes2.guildEmoji(this.guild.id, id));
+          const emoji = await this.client.rest.get(Routes3.guildEmoji(this.guild.id, id));
           return this._add(emoji, cache);
         }
-        const data = await this.client.rest.get(Routes2.guildEmojis(this.guild.id));
+        const data = await this.client.rest.get(Routes3.guildEmojis(this.guild.id));
         const emojis = new Collection2();
         for (const emoji of data) emojis.set(emoji.id, this._add(emoji, cache));
         return emojis;
@@ -97036,7 +97036,7 @@ var require_GuildEmojiManager = __commonJS({
       async delete(emoji, reason) {
         const id = this.resolveId(emoji);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "emoji", "EmojiResolvable", true);
-        await this.client.rest.delete(Routes2.guildEmoji(this.guild.id, id), { reason });
+        await this.client.rest.delete(Routes3.guildEmoji(this.guild.id, id), { reason });
       }
       /**
        * Edits an emoji.
@@ -97048,7 +97048,7 @@ var require_GuildEmojiManager = __commonJS({
         const id = this.resolveId(emoji);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "emoji", "EmojiResolvable", true);
         const roles = options.roles?.map((role) => this.guild.roles.resolveId(role));
-        const newData = await this.client.rest.patch(Routes2.guildEmoji(this.guild.id, id), {
+        const newData = await this.client.rest.patch(Routes3.guildEmoji(this.guild.id, id), {
           body: {
             name: options.name,
             roles
@@ -97079,7 +97079,7 @@ var require_GuildEmojiManager = __commonJS({
         if (!me.permissions.any(PermissionFlagsBits4.CreateGuildExpressions | PermissionFlagsBits4.ManageGuildExpressions)) {
           throw new DiscordjsError2(ErrorCodes2.MissingManageGuildExpressionsPermission, this.guild);
         }
-        const data = await this.client.rest.get(Routes2.guildEmoji(this.guild.id, emoji.id));
+        const data = await this.client.rest.get(Routes3.guildEmoji(this.guild.id, emoji.id));
         emoji._patch(data);
         return emoji.author;
       }
@@ -97093,7 +97093,7 @@ var require_GuildInviteManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/GuildInviteManager.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection2 } = require_dist7();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var Invite2 = require_Invite();
@@ -97226,11 +97226,11 @@ var require_GuildInviteManager = __commonJS({
         return invite;
       }
       async _fetchMany(cache) {
-        const data = await this.client.rest.get(Routes2.guildInvites(this.guild.id));
+        const data = await this.client.rest.get(Routes3.guildInvites(this.guild.id));
         return data.reduce((col, invite) => col.set(invite.code, this._add(invite, cache)), new Collection2());
       }
       async _fetchChannelMany(channelId, cache) {
-        const data = await this.client.rest.get(Routes2.channelInvites(channelId));
+        const data = await this.client.rest.get(Routes3.channelInvites(channelId));
         return data.reduce((col, invite) => col.set(invite.code, this._add(invite, cache)), new Collection2());
       }
       /**
@@ -97247,7 +97247,7 @@ var require_GuildInviteManager = __commonJS({
       async create(channel, { temporary, maxAge, maxUses, unique, targetUser, targetApplication, targetType, reason } = {}) {
         const id = this.guild.channels.resolveId(channel);
         if (!id) throw new DiscordjsError2(ErrorCodes2.GuildChannelResolve);
-        const invite = await this.client.rest.post(Routes2.channelInvites(id), {
+        const invite = await this.client.rest.post(Routes3.channelInvites(id), {
           body: {
             temporary,
             max_age: maxAge,
@@ -97269,7 +97269,7 @@ var require_GuildInviteManager = __commonJS({
        */
       async delete(invite, reason) {
         const code = resolveInviteCode2(invite);
-        await this.client.rest.delete(Routes2.invite(code), { reason });
+        await this.client.rest.delete(Routes3.invite(code), { reason });
       }
     };
     module2.exports = GuildInviteManager;
@@ -97286,7 +97286,7 @@ var require_GuildMemberManager = __commonJS({
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
     var { GatewayRateLimitError } = require_dist2();
     var { DiscordSnowflake } = require_cjs3();
-    var { Routes: Routes2, GatewayOpcodes, GatewayDispatchEvents } = require_v106();
+    var { Routes: Routes3, GatewayOpcodes, GatewayDispatchEvents } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, DiscordjsRangeError: DiscordjsRangeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var BaseGuildVoiceChannel = require_BaseGuildVoiceChannel();
@@ -97394,7 +97394,7 @@ var require_GuildMemberManager = __commonJS({
           }
           resolvedOptions.roles = resolvedRoles;
         }
-        const data = await this.client.rest.put(Routes2.guildMember(this.guild.id, userId), { body: resolvedOptions });
+        const data = await this.client.rest.put(Routes3.guildMember(this.guild.id, userId), { body: resolvedOptions });
         return data instanceof ArrayBuffer ? options.fetchWhenExisting === false ? null : this.fetch(userId) : this._add(data);
       }
       /**
@@ -97469,7 +97469,7 @@ var require_GuildMemberManager = __commonJS({
           const existing = this.cache.get(user);
           if (existing && !existing.partial) return existing;
         }
-        const data = await this.client.rest.get(Routes2.guildMember(this.guild.id, user));
+        const data = await this.client.rest.get(Routes3.guildMember(this.guild.id, user));
         return this._add(data, cache);
       }
       async _fetchMany({
@@ -97553,7 +97553,7 @@ var require_GuildMemberManager = __commonJS({
        * @returns {Promise<Collection<Snowflake, GuildMember>>}
        */
       async search({ query, limit, cache = true } = {}) {
-        const data = await this.client.rest.get(Routes2.guildMembersSearch(this.guild.id), {
+        const data = await this.client.rest.get(Routes3.guildMembersSearch(this.guild.id), {
           query: makeURLSearchParams2({ query, limit })
         });
         return data.reduce((col, member) => col.set(member.user.id, this._add(member, cache)), new Collection2());
@@ -97572,7 +97572,7 @@ var require_GuildMemberManager = __commonJS({
        */
       async list({ after, limit, cache = true } = {}) {
         const query = makeURLSearchParams2({ limit, after });
-        const data = await this.client.rest.get(Routes2.guildMembers(this.guild.id), { query });
+        const data = await this.client.rest.get(Routes3.guildMembers(this.guild.id), { query });
         return data.reduce((col, member) => col.set(member.user.id, this._add(member, cache)), new Collection2());
       }
       /**
@@ -97622,7 +97622,7 @@ var require_GuildMemberManager = __commonJS({
         if (id === this.client.user.id) {
           const keys = Object.keys(options);
           if (keys.length === 1 && keys[0] === "nick") {
-            endpoint = Routes2.guildMember(this.guild.id, "@me");
+            endpoint = Routes3.guildMember(this.guild.id, "@me");
             if (!deprecatedEmittedForEditSoleNickname) {
               process2.emitWarning(
                 // eslint-disable-next-line max-len
@@ -97633,7 +97633,7 @@ var require_GuildMemberManager = __commonJS({
             }
           }
         }
-        endpoint ??= Routes2.guildMember(this.guild.id, id);
+        endpoint ??= Routes3.guildMember(this.guild.id, id);
         const d = await this.client.rest.patch(endpoint, { body: options, reason });
         const clone = this.cache.get(id)?._clone();
         clone?._patch(d);
@@ -97656,7 +97656,7 @@ var require_GuildMemberManager = __commonJS({
        * @returns {Promise<GuildMember>}
        */
       async editMe({ reason, ...options }) {
-        const data = await this.client.rest.patch(Routes2.guildMember(this.guild.id, "@me"), {
+        const data = await this.client.rest.patch(Routes3.guildMember(this.guild.id, "@me"), {
           body: {
             ...options,
             banner: options.banner && await resolveImage(options.banner),
@@ -97713,7 +97713,7 @@ var require_GuildMemberManager = __commonJS({
         if (resolvedRoles.length) {
           query.include_roles = dry ? resolvedRoles.join(",") : resolvedRoles;
         }
-        const endpoint = Routes2.guildPrune(this.guild.id);
+        const endpoint = Routes3.guildPrune(this.guild.id);
         const { pruned } = await (dry ? this.client.rest.get(endpoint, { query: makeURLSearchParams2(query), reason }) : this.client.rest.post(endpoint, { body: { ...query, compute_prune_count }, reason }));
         return pruned;
       }
@@ -97734,7 +97734,7 @@ var require_GuildMemberManager = __commonJS({
       async kick(user, reason) {
         const id = this.client.users.resolveId(user);
         if (!id) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "user", "UserResolvable");
-        await this.client.rest.delete(Routes2.guildMember(this.guild.id, id), { reason });
+        await this.client.rest.delete(Routes3.guildMember(this.guild.id, id), { reason });
         return this.resolve(user) ?? this.client.users.resolve(user) ?? id;
       }
       /**
@@ -97802,7 +97802,7 @@ var require_GuildMemberManager = __commonJS({
         const { user, role, reason } = options;
         const userId = this.resolveId(user);
         const roleId = this.guild.roles.resolveId(role);
-        await this.client.rest.put(Routes2.guildMemberRole(this.guild.id, userId, roleId), { reason });
+        await this.client.rest.put(Routes3.guildMemberRole(this.guild.id, userId, roleId), { reason });
         return this.resolve(user) ?? this.client.users.resolve(user) ?? userId;
       }
       /**
@@ -97814,7 +97814,7 @@ var require_GuildMemberManager = __commonJS({
         const { user, role, reason } = options;
         const userId = this.resolveId(user);
         const roleId = this.guild.roles.resolveId(role);
-        await this.client.rest.delete(Routes2.guildMemberRole(this.guild.id, userId, roleId), { reason });
+        await this.client.rest.delete(Routes3.guildMemberRole(this.guild.id, userId, roleId), { reason });
         return this.resolve(user) ?? this.client.users.resolve(user) ?? userId;
       }
     };
@@ -97828,7 +97828,7 @@ var require_GuildScheduledEventManager = __commonJS({
     "use strict";
     var { Collection: Collection2 } = require_dist7();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
-    var { GuildScheduledEventEntityType, Routes: Routes2 } = require_v106();
+    var { GuildScheduledEventEntityType, Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { GuildScheduledEvent } = require_GuildScheduledEvent();
@@ -97917,7 +97917,7 @@ var require_GuildScheduledEventManager = __commonJS({
           if (!channel_id) throw new DiscordjsError2(ErrorCodes2.GuildVoiceChannelResolve);
           entity_metadata = entityMetadata === void 0 ? entityMetadata : null;
         }
-        const data = await this.client.rest.post(Routes2.guildScheduledEvents(this.guild.id), {
+        const data = await this.client.rest.post(Routes3.guildScheduledEvents(this.guild.id), {
           body: {
             channel_id,
             name,
@@ -97960,12 +97960,12 @@ var require_GuildScheduledEventManager = __commonJS({
             const existing = this.cache.get(id);
             if (existing) return existing;
           }
-          const data2 = await this.client.rest.get(Routes2.guildScheduledEvent(this.guild.id, id), {
+          const data2 = await this.client.rest.get(Routes3.guildScheduledEvent(this.guild.id, id), {
             query: makeURLSearchParams2({ with_user_count: options.withUserCount ?? true })
           });
           return this._add(data2, options.cache);
         }
-        const data = await this.client.rest.get(Routes2.guildScheduledEvents(this.guild.id), {
+        const data = await this.client.rest.get(Routes3.guildScheduledEvents(this.guild.id), {
           query: makeURLSearchParams2({ with_user_count: options.withUserCount ?? true })
         });
         return data.reduce(
@@ -98023,7 +98023,7 @@ var require_GuildScheduledEventManager = __commonJS({
             location: entityMetadata.location
           };
         }
-        const data = await this.client.rest.patch(Routes2.guildScheduledEvent(this.guild.id, guildScheduledEventId), {
+        const data = await this.client.rest.patch(Routes3.guildScheduledEvent(this.guild.id, guildScheduledEventId), {
           body: {
             channel_id: channel === void 0 ? channel : this.guild.channels.resolveId(channel),
             name,
@@ -98049,7 +98049,7 @@ var require_GuildScheduledEventManager = __commonJS({
       async delete(guildScheduledEvent) {
         const guildScheduledEventId = this.resolveId(guildScheduledEvent);
         if (!guildScheduledEventId) throw new DiscordjsError2(ErrorCodes2.GuildScheduledEventResolve);
-        await this.client.rest.delete(Routes2.guildScheduledEvent(this.guild.id, guildScheduledEventId));
+        await this.client.rest.delete(Routes3.guildScheduledEvent(this.guild.id, guildScheduledEventId));
       }
       /**
        * Options used to fetch subscribers of a guild scheduled event
@@ -98082,7 +98082,7 @@ var require_GuildScheduledEventManager = __commonJS({
           before: options.before,
           after: options.after
         });
-        const data = await this.client.rest.get(Routes2.guildScheduledEventUsers(this.guild.id, guildScheduledEventId), {
+        const data = await this.client.rest.get(Routes3.guildScheduledEventUsers(this.guild.id, guildScheduledEventId), {
           query
         });
         return data.reduce(
@@ -98240,7 +98240,7 @@ var require_GuildSoundboardSoundManager = __commonJS({
     "use strict";
     var { Collection: Collection2 } = require_dist7();
     var { lazy } = require_dist2();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { SoundboardSound: SoundboardSound2 } = require_SoundboardSound();
@@ -98309,7 +98309,7 @@ var require_GuildSoundboardSoundManager = __commonJS({
         const resolvedContentType = contentType ?? resolvedFile.contentType ?? fileTypeMime()(resolvedFile.data)[0];
         const sound = resolveBase64(resolvedFile.data, resolvedContentType);
         const body = { emoji_id: emojiId, emoji_name: emojiName, name, sound, volume };
-        const soundboardSound = await this.client.rest.post(Routes2.guildSoundboardSounds(this.guild.id), {
+        const soundboardSound = await this.client.rest.post(Routes3.guildSoundboardSounds(this.guild.id), {
           body,
           reason
         });
@@ -98335,7 +98335,7 @@ var require_GuildSoundboardSoundManager = __commonJS({
         if (!soundId) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "soundboardSound", "SoundboardSoundResolvable");
         const { emojiId, emojiName, name, reason, volume } = options;
         const body = { emoji_id: emojiId, emoji_name: emojiName, name, volume };
-        const data = await this.client.rest.patch(Routes2.guildSoundboardSound(this.guild.id, soundId), {
+        const data = await this.client.rest.patch(Routes3.guildSoundboardSound(this.guild.id, soundId), {
           body,
           reason
         });
@@ -98356,7 +98356,7 @@ var require_GuildSoundboardSoundManager = __commonJS({
       async delete(soundboardSound, reason) {
         const soundId = this.resolveId(soundboardSound);
         if (!soundId) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "soundboardSound", "SoundboardSoundResolvable");
-        await this.client.rest.delete(Routes2.guildSoundboardSound(this.guild.id, soundId), { reason });
+        await this.client.rest.delete(Routes3.guildSoundboardSound(this.guild.id, soundId), { reason });
       }
       /**
        * Options used to fetch a soundboard sound.
@@ -98397,11 +98397,11 @@ var require_GuildSoundboardSoundManager = __commonJS({
           const existing = this.cache.get(soundboardSound);
           if (existing) return existing;
         }
-        const data = await this.client.rest.get(Routes2.guildSoundboardSound(this.guild.id, soundboardSound));
+        const data = await this.client.rest.get(Routes3.guildSoundboardSound(this.guild.id, soundboardSound));
         return this._add(data, cache);
       }
       async _fetchMany({ cache } = {}) {
-        const data = await this.client.rest.get(Routes2.guildSoundboardSounds(this.guild.id));
+        const data = await this.client.rest.get(Routes3.guildSoundboardSounds(this.guild.id));
         return data.items.reduce((coll, sound) => coll.set(sound.sound_id, this._add(sound, cache)), new Collection2());
       }
     };
@@ -98414,7 +98414,7 @@ var require_GuildStickerManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/GuildStickerManager.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection2 } = require_dist7();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var MessagePayload = require_MessagePayload();
@@ -98461,7 +98461,7 @@ var require_GuildStickerManager = __commonJS({
         if (!resolvedFile) throw new DiscordjsTypeError2(ErrorCodes2.ReqResourceType);
         file = { ...resolvedFile, key: "file" };
         const body = { name, tags, description: description ?? "" };
-        const sticker = await this.client.rest.post(Routes2.guildStickers(this.guild.id), {
+        const sticker = await this.client.rest.post(Routes3.guildStickers(this.guild.id), {
           appendToFormData: true,
           body,
           files: [file],
@@ -98500,7 +98500,7 @@ var require_GuildStickerManager = __commonJS({
       async edit(sticker, options = {}) {
         const stickerId = this.resolveId(sticker);
         if (!stickerId) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "sticker", "StickerResolvable");
-        const d = await this.client.rest.patch(Routes2.guildSticker(this.guild.id, stickerId), {
+        const d = await this.client.rest.patch(Routes3.guildSticker(this.guild.id, stickerId), {
           body: options,
           reason: options.reason
         });
@@ -98521,7 +98521,7 @@ var require_GuildStickerManager = __commonJS({
       async delete(sticker, reason) {
         sticker = this.resolveId(sticker);
         if (!sticker) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "sticker", "StickerResolvable");
-        await this.client.rest.delete(Routes2.guildSticker(this.guild.id, sticker), { reason });
+        await this.client.rest.delete(Routes3.guildSticker(this.guild.id, sticker), { reason });
       }
       /**
        * Obtains one or more stickers from Discord, or the sticker cache if they're already available.
@@ -98545,10 +98545,10 @@ var require_GuildStickerManager = __commonJS({
             const existing = this.cache.get(id);
             if (existing) return existing;
           }
-          const sticker = await this.client.rest.get(Routes2.guildSticker(this.guild.id, id));
+          const sticker = await this.client.rest.get(Routes3.guildSticker(this.guild.id, id));
           return this._add(sticker, cache);
         }
-        const data = await this.client.rest.get(Routes2.guildStickers(this.guild.id));
+        const data = await this.client.rest.get(Routes3.guildStickers(this.guild.id));
         return new Collection2(data.map((sticker) => [sticker.id, this._add(sticker, cache)]));
       }
       /**
@@ -98559,7 +98559,7 @@ var require_GuildStickerManager = __commonJS({
       async fetchUser(sticker) {
         sticker = this.resolve(sticker);
         if (!sticker) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "sticker", "StickerResolvable");
-        const data = await this.client.rest.get(Routes2.guildSticker(this.guild.id, sticker.id));
+        const data = await this.client.rest.get(Routes3.guildSticker(this.guild.id, sticker.id));
         sticker._patch(data);
         return sticker.user;
       }
@@ -98816,7 +98816,7 @@ var require_RoleManager = __commonJS({
     var process2 = __require("node:process");
     var { Collection: Collection2 } = require_dist7();
     var { DiscordAPIError } = require_dist6();
-    var { RESTJSONErrorCodes, Routes: Routes2 } = require_v106();
+    var { RESTJSONErrorCodes, Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { Role } = require_Role();
@@ -98864,7 +98864,7 @@ var require_RoleManager = __commonJS({
        */
       async fetch(id, { cache = true, force = false } = {}) {
         if (!id) {
-          const data = await this.client.rest.get(Routes2.guildRoles(this.guild.id));
+          const data = await this.client.rest.get(Routes3.guildRoles(this.guild.id));
           const roles = new Collection2();
           for (const role of data) roles.set(role.id, this._add(role, cache));
           return roles;
@@ -98874,7 +98874,7 @@ var require_RoleManager = __commonJS({
           if (existing) return existing;
         }
         try {
-          const data = await this.client.rest.get(Routes2.guildRole(this.guild.id, id));
+          const data = await this.client.rest.get(Routes3.guildRole(this.guild.id, id));
           return this._add(data, cache);
         } catch (error) {
           if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownRole) {
@@ -98992,7 +98992,7 @@ var require_RoleManager = __commonJS({
             tertiary_color: null
           };
         }
-        const data = await this.client.rest.post(Routes2.guildRoles(this.guild.id), {
+        const data = await this.client.rest.post(Routes3.guildRoles(this.guild.id), {
           body: {
             name,
             colors,
@@ -99064,7 +99064,7 @@ var require_RoleManager = __commonJS({
           icon,
           unicode_emoji: options.unicodeEmoji
         };
-        const d = await this.client.rest.patch(Routes2.guildRole(this.guild.id, role.id), { body, reason: options.reason });
+        const d = await this.client.rest.patch(Routes3.guildRole(this.guild.id, role.id), { body, reason: options.reason });
         const clone = role._clone();
         clone._patch(d);
         return clone;
@@ -99082,7 +99082,7 @@ var require_RoleManager = __commonJS({
        */
       async delete(role, reason) {
         const id = this.resolveId(role);
-        await this.client.rest.delete(Routes2.guildRole(this.guild.id, id), { reason });
+        await this.client.rest.delete(Routes3.guildRole(this.guild.id, id), { reason });
         this.client.actions.GuildRoleDelete.handle({ guild_id: this.guild.id, role_id: id });
       }
       /**
@@ -99106,7 +99106,7 @@ var require_RoleManager = __commonJS({
           relative,
           this.guild._sortedRoles(),
           this.client,
-          Routes2.guildRoles(this.guild.id),
+          Routes3.guildRoles(this.guild.id),
           reason
         );
         this.client.actions.GuildRolesPositionUpdate.handle({
@@ -99135,7 +99135,7 @@ var require_RoleManager = __commonJS({
           id: this.resolveId(rolePosition.role),
           position: rolePosition.position
         }));
-        await this.client.rest.patch(Routes2.guildRoles(this.guild.id), { body: rolePositions });
+        await this.client.rest.patch(Routes3.guildRoles(this.guild.id), { body: rolePositions });
         return this.client.actions.GuildRolesPositionUpdate.handle({
           guild_id: this.guild.id,
           roles: rolePositions
@@ -99205,7 +99205,7 @@ var require_RoleManager = __commonJS({
 var require_StageInstanceManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/StageInstanceManager.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { StageInstance } = require_StageInstance();
@@ -99254,7 +99254,7 @@ var require_StageInstanceManager = __commonJS({
         if (typeof options !== "object") throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "options", "object", true);
         const { guildScheduledEvent, topic, privacyLevel, sendStartNotification } = options;
         const guildScheduledEventId = guildScheduledEvent && this.resolveId(guildScheduledEvent);
-        const data = await this.client.rest.post(Routes2.stageInstances(), {
+        const data = await this.client.rest.post(Routes3.stageInstances(), {
           body: {
             channel_id: channelId,
             topic,
@@ -99283,7 +99283,7 @@ var require_StageInstanceManager = __commonJS({
           const existing = this.cache.find((stageInstance) => stageInstance.channelId === channelId);
           if (existing) return existing;
         }
-        const data = await this.client.rest.get(Routes2.stageInstance(channelId));
+        const data = await this.client.rest.get(Routes3.stageInstance(channelId));
         return this._add(data, cache);
       }
       /**
@@ -99308,7 +99308,7 @@ var require_StageInstanceManager = __commonJS({
         const channelId = this.guild.channels.resolveId(channel);
         if (!channelId) throw new DiscordjsError2(ErrorCodes2.StageChannelResolve);
         let { topic, privacyLevel } = options;
-        const data = await this.client.rest.patch(Routes2.stageInstance(channelId), {
+        const data = await this.client.rest.patch(Routes3.stageInstance(channelId), {
           body: {
             topic,
             privacy_level: privacyLevel
@@ -99329,7 +99329,7 @@ var require_StageInstanceManager = __commonJS({
       async delete(channel) {
         const channelId = this.guild.channels.resolveId(channel);
         if (!channelId) throw new DiscordjsError2(ErrorCodes2.StageChannelResolve);
-        await this.client.rest.delete(Routes2.stageInstance(channelId));
+        await this.client.rest.delete(Routes3.stageInstance(channelId));
       }
     };
     module2.exports = StageInstanceManager;
@@ -99340,7 +99340,7 @@ var require_StageInstanceManager = __commonJS({
 var require_VoiceStateManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/VoiceStateManager.js"(exports2, module2) {
     "use strict";
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var VoiceState = require_VoiceState();
     var VoiceStateManager = class extends CachedManager {
@@ -99377,7 +99377,7 @@ var require_VoiceStateManager = __commonJS({
           const existing = this.cache.get(id === "@me" ? this.client.user.id : id);
           if (existing) return existing;
         }
-        const data = await this.client.rest.get(Routes2.guildVoiceState(this.guild.id, id));
+        const data = await this.client.rest.get(Routes3.guildVoiceState(this.guild.id, id));
         return this._add(data, cache);
       }
     };
@@ -99410,7 +99410,7 @@ var require_Guild = __commonJS({
     var { Collection: Collection2 } = require_dist7();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
     var { DiscordSnowflake } = require_cjs3();
-    var { ChannelType, GuildPremiumTier, Routes: Routes2, GuildFeature } = require_v106();
+    var { ChannelType, GuildPremiumTier, Routes: Routes3, GuildFeature } = require_v106();
     var AnonymousGuild = require_AnonymousGuild();
     var GuildAuditLogs = require_GuildAuditLogs();
     var { GuildOnboarding } = require_GuildOnboarding();
@@ -99761,7 +99761,7 @@ var require_Guild = __commonJS({
        *   .catch(console.error);
        */
       async fetchIntegrations() {
-        const data = await this.client.rest.get(Routes2.guildIntegrations(this.id));
+        const data = await this.client.rest.get(Routes3.guildIntegrations(this.id));
         return data.reduce(
           (collection, integration) => collection.set(integration.id, new Integration(this.client, integration, this)),
           new Collection2()
@@ -99773,7 +99773,7 @@ var require_Guild = __commonJS({
        * @returns {Promise<Collection<string, GuildTemplate>>}
        */
       async fetchTemplates() {
-        const templates = await this.client.rest.get(Routes2.guildTemplates(this.id));
+        const templates = await this.client.rest.get(Routes3.guildTemplates(this.id));
         return templates.reduce((col, data) => col.set(data.code, new GuildTemplate2(this.client, data)), new Collection2());
       }
       /**
@@ -99781,7 +99781,7 @@ var require_Guild = __commonJS({
        * @returns {Promise<WelcomeScreen>}
        */
       async fetchWelcomeScreen() {
-        const data = await this.client.rest.get(Routes2.guildWelcomeScreen(this.id));
+        const data = await this.client.rest.get(Routes3.guildWelcomeScreen(this.id));
         return new WelcomeScreen(this, data);
       }
       /**
@@ -99791,7 +99791,7 @@ var require_Guild = __commonJS({
        * @returns {Promise<GuildTemplate>}
        */
       async createTemplate(name, description) {
-        const data = await this.client.rest.post(Routes2.guildTemplates(this.id), { body: { name, description } });
+        const data = await this.client.rest.post(Routes3.guildTemplates(this.id), { body: { name, description } });
         return new GuildTemplate2(this.client, data);
       }
       /**
@@ -99799,7 +99799,7 @@ var require_Guild = __commonJS({
        * @returns {Promise<GuildPreview>}
        */
       async fetchPreview() {
-        const data = await this.client.rest.get(Routes2.guildPreview(this.id));
+        const data = await this.client.rest.get(Routes3.guildPreview(this.id));
         return new GuildPreview2(this.client, data);
       }
       /**
@@ -99821,7 +99821,7 @@ var require_Guild = __commonJS({
        *   .catch(console.error);
        */
       async fetchVanityData() {
-        const data = await this.client.rest.get(Routes2.guildVanityUrl(this.id));
+        const data = await this.client.rest.get(Routes3.guildVanityUrl(this.id));
         this.vanityURLCode = data.code;
         this.vanityURLUses = data.uses;
         return data;
@@ -99836,7 +99836,7 @@ var require_Guild = __commonJS({
        *   .catch(console.error);
        */
       async fetchWebhooks() {
-        const apiHooks = await this.client.rest.get(Routes2.guildWebhooks(this.id));
+        const apiHooks = await this.client.rest.get(Routes3.guildWebhooks(this.id));
         const hooks = new Collection2();
         for (const hook of apiHooks) hooks.set(hook.id, new Webhook2(this.client, hook));
         return hooks;
@@ -99877,7 +99877,7 @@ var require_Guild = __commonJS({
        *   .catch(console.error);
        */
       async fetchWidgetSettings() {
-        const data = await this.client.rest.get(Routes2.guildWidgetSettings(this.id));
+        const data = await this.client.rest.get(Routes3.guildWidgetSettings(this.id));
         this.widgetEnabled = data.enabled;
         this.widgetChannelId = data.channel_id;
         return {
@@ -99924,7 +99924,7 @@ var require_Guild = __commonJS({
           if (!userId) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "user", "UserResolvable");
           query.set("user_id", userId);
         }
-        const data = await this.client.rest.get(Routes2.guildAuditLog(this.id), { query });
+        const data = await this.client.rest.get(Routes3.guildAuditLog(this.id), { query });
         return new GuildAuditLogs(this, data);
       }
       /**
@@ -99932,7 +99932,7 @@ var require_Guild = __commonJS({
        * @returns {Promise<GuildOnboarding>}
        */
       async fetchOnboarding() {
-        const data = await this.client.rest.get(Routes2.guildOnboarding(this.id));
+        const data = await this.client.rest.get(Routes3.guildOnboarding(this.id));
         return new GuildOnboarding(this.client, data);
       }
       /**
@@ -100006,7 +100006,7 @@ var require_Guild = __commonJS({
         safetyAlertsChannel,
         ...options
       }) {
-        const data = await this.client.rest.patch(Routes2.guild(this.id), {
+        const data = await this.client.rest.patch(Routes3.guild(this.id), {
           body: {
             ...options,
             verification_level: verificationLevel,
@@ -100072,7 +100072,7 @@ var require_Guild = __commonJS({
        * @returns {Promise<GuildOnboarding>}
        */
       async editOnboarding(options) {
-        const newData = await this.client.rest.put(Routes2.guildOnboarding(this.id), {
+        const newData = await this.client.rest.put(Routes3.guildOnboarding(this.id), {
           body: {
             prompts: options.prompts?.map((prompt) => ({
               // Currently, the prompt ids are required even for new ones (which won't be used)
@@ -100160,7 +100160,7 @@ var require_Guild = __commonJS({
             description: welcomeChannelData.description
           };
         });
-        const patchData = await this.client.rest.patch(Routes2.guildWelcomeScreen(this.id), {
+        const patchData = await this.client.rest.patch(Routes3.guildWelcomeScreen(this.id), {
           body: {
             welcome_channels,
             description,
@@ -100404,7 +100404,7 @@ var require_Guild = __commonJS({
        * @returns {Promise<Guild>}
        */
       async setWidgetSettings(settings, reason) {
-        await this.client.rest.patch(Routes2.guildWidgetSettings(this.id), {
+        await this.client.rest.patch(Routes3.guildWidgetSettings(this.id), {
           body: {
             enabled: settings.enabled,
             channel_id: this.channels.resolveId(settings.channel)
@@ -100422,7 +100422,7 @@ var require_Guild = __commonJS({
        * @deprecated API related to guild ownership may no longer be used.
        */
       async setMFALevel(level, reason) {
-        await this.client.rest.post(Routes2.guildMFA(this.id), {
+        await this.client.rest.post(Routes3.guildMFA(this.id), {
           body: {
             level
           },
@@ -100441,7 +100441,7 @@ var require_Guild = __commonJS({
        */
       async leave() {
         if (this.ownerId === this.client.user.id) throw new DiscordjsError2(ErrorCodes2.GuildOwned);
-        await this.client.rest.delete(Routes2.userGuild(this.id));
+        await this.client.rest.delete(Routes3.userGuild(this.id));
         return this;
       }
       /**
@@ -100455,7 +100455,7 @@ var require_Guild = __commonJS({
        *   .catch(console.error);
        */
       async delete() {
-        await this.client.rest.delete(Routes2.guild(this.id));
+        await this.client.rest.delete(Routes3.guild(this.id));
         return this;
       }
       /**
@@ -100574,7 +100574,7 @@ var require_GuildManager = __commonJS({
     var { setTimeout: setTimeout2, clearTimeout: clearTimeout2 } = __require("node:timers");
     var { Collection: Collection2 } = require_dist7();
     var { makeURLSearchParams: makeURLSearchParams2 } = require_dist6();
-    var { GatewayOpcodes, Routes: Routes2, RouteBases } = require_v106();
+    var { GatewayOpcodes, Routes: Routes3, RouteBases } = require_v106();
     var CachedManager = require_CachedManager();
     var { ErrorCodes: ErrorCodes2, DiscordjsError: DiscordjsError2 } = require_errors2();
     var ShardClientUtil2 = require_ShardClientUtil();
@@ -100722,7 +100722,7 @@ var require_GuildManager = __commonJS({
         systemChannelId,
         systemChannelFlags
       }) {
-        const data = await this.client.rest.post(Routes2.guilds(), {
+        const data = await this.client.rest.post(Routes3.guilds(), {
           body: {
             name,
             icon: icon && await resolveImage(icon),
@@ -100805,13 +100805,13 @@ var require_GuildManager = __commonJS({
             const existing = this.cache.get(id);
             if (existing) return existing;
           }
-          const data2 = await this.client.rest.get(Routes2.guild(id), {
+          const data2 = await this.client.rest.get(Routes3.guild(id), {
             query: makeURLSearchParams2({ with_counts: options.withCounts ?? true })
           });
           data2.shardId = ShardClientUtil2.shardIdForGuildId(id, this.client.options.shardCount);
           return this._add(data2, options.cache);
         }
-        const data = await this.client.rest.get(Routes2.userGuilds(), { query: makeURLSearchParams2(options) });
+        const data = await this.client.rest.get(Routes3.userGuilds(), { query: makeURLSearchParams2(options) });
         return data.reduce((coll, guild) => coll.set(guild.id, new OAuth2Guild(this.client, guild)), new Collection2());
       }
       /**
@@ -100886,7 +100886,7 @@ var require_GuildManager = __commonJS({
        */
       async setIncidentActions(guild, { invitesDisabledUntil, dmsDisabledUntil }) {
         const guildId = this.resolveId(guild);
-        const data = await this.client.rest.put(Routes2.guildIncidentActions(guildId), {
+        const data = await this.client.rest.put(Routes3.guildIncidentActions(guildId), {
           body: {
             invites_disabled_until: invitesDisabledUntil && new Date(invitesDisabledUntil).toISOString(),
             dms_disabled_until: dmsDisabledUntil && new Date(dmsDisabledUntil).toISOString()
@@ -100907,7 +100907,7 @@ var require_GuildManager = __commonJS({
        */
       widgetImageURL(guild, style) {
         const urlSearchParams = String(makeURLSearchParams2({ style }));
-        return `${RouteBases.api}${Routes2.guildWidgetImage(this.resolveId(guild))}${urlSearchParams ? `?${urlSearchParams}` : ""}`;
+        return `${RouteBases.api}${Routes3.guildWidgetImage(this.resolveId(guild))}${urlSearchParams ? `?${urlSearchParams}` : ""}`;
       }
     };
     module2.exports = GuildManager2;
@@ -100918,7 +100918,7 @@ var require_GuildManager = __commonJS({
 var require_UserManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/UserManager.js"(exports2, module2) {
     "use strict";
-    var { ChannelType, Routes: Routes2 } = require_v106();
+    var { ChannelType, Routes: Routes3 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { GuildMember } = require_GuildMember();
@@ -100968,7 +100968,7 @@ var require_UserManager = __commonJS({
           const dmChannel = this.dmChannel(id);
           if (dmChannel && !dmChannel.partial) return dmChannel;
         }
-        const data = await this.client.rest.post(Routes2.userChannels(), { body: { recipient_id: id } });
+        const data = await this.client.rest.post(Routes3.userChannels(), { body: { recipient_id: id } });
         return this.client.channels._add(data, null, { cache });
       }
       /**
@@ -100980,7 +100980,7 @@ var require_UserManager = __commonJS({
         const id = this.resolveId(user);
         const dmChannel = this.dmChannel(id);
         if (!dmChannel) throw new DiscordjsError2(ErrorCodes2.UserNoDMChannel);
-        await this.client.rest.delete(Routes2.channel(dmChannel.id));
+        await this.client.rest.delete(Routes3.channel(dmChannel.id));
         this.client.channels._remove(dmChannel.id);
         return dmChannel;
       }
@@ -100996,7 +100996,7 @@ var require_UserManager = __commonJS({
           const existing = this.cache.get(id);
           if (existing && !existing.partial) return existing;
         }
-        const data = await this.client.rest.get(Routes2.user(id));
+        const data = await this.client.rest.get(Routes3.user(id));
         return this._add(data, cache);
       }
       /**
@@ -101237,7 +101237,7 @@ var require_Widget = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/Widget.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection2 } = require_dist7();
-    var { Routes: Routes2 } = require_v106();
+    var { Routes: Routes3 } = require_v106();
     var Base = require_Base();
     var WidgetMember = require_WidgetMember();
     var Widget2 = class extends Base {
@@ -101277,7 +101277,7 @@ var require_Widget = __commonJS({
        * @returns {Promise<Widget>}
        */
       async fetch() {
-        const data = await this.client.rest.get(Routes2.guildWidgetJSON(this.id));
+        const data = await this.client.rest.get(Routes3.guildWidgetJSON(this.id));
         this._patch(data);
         return this;
       }
@@ -107831,6 +107831,60 @@ async function execute13(message, _args) {
   await message.reply(`\u2705 I'll listen to **${target.username}** again.`);
 }
 
+// src/bot/commands/dicewar.ts
+var DELAY_MS3 = 800;
+function roll(max) {
+  return crypto.getRandomValues(new Uint32Array(1))[0] % max + 1;
+}
+async function execute14(message, args) {
+  const target = message.mentions.users.first();
+  const rounds = parseInt(args[0] ?? "");
+  const sides = parseInt(args[1] ?? "");
+  if (!target || isNaN(rounds) || isNaN(sides) || rounds < 1 || sides < 2) {
+    await message.reply("Usage: `-dw @user (rounds) (dice size)` e.g. `-dw @user 3 6`");
+    return;
+  }
+  if (target.id === message.author.id) {
+    await message.reply("You can't dice war yourself.");
+    return;
+  }
+  if (target.bot) {
+    await message.reply("You can't war against a bot.");
+    return;
+  }
+  await message.channel.send(
+    `\u{1F3B2} **Dice War!**
+${message.author} vs ${target}
+**${rounds} rounds** \u2014 rolling a **d${sides}**
+
+Rolling...`
+  );
+  let challengerWins = 0;
+  let targetWins = 0;
+  for (let round = 1; round <= rounds; round++) {
+    await new Promise((res) => setTimeout(res, DELAY_MS3));
+    const challengerRoll = roll(sides);
+    const targetRoll = roll(sides);
+    if (challengerRoll > targetRoll) {
+      challengerWins++;
+      await message.channel.send(`Round ${round}: \u{1F3B2} **${challengerRoll}** vs \u{1F3B2} ${targetRoll} \u2014 **${message.author.username} takes the round!**`);
+    } else if (targetRoll > challengerRoll) {
+      targetWins++;
+      await message.channel.send(`Round ${round}: \u{1F3B2} ${challengerRoll} vs \u{1F3B2} **${targetRoll}** \u2014 **${target.username} takes the round!**`);
+    } else {
+      await message.channel.send(`Round ${round}: \u{1F3B2} ${challengerRoll} vs \u{1F3B2} ${targetRoll} \u2014 **Tie! No point awarded.**`);
+    }
+  }
+  await new Promise((res) => setTimeout(res, DELAY_MS3));
+  if (challengerWins > targetWins) {
+    await message.channel.send(`\u{1F3C6} **${message.author.username} wins the Dice War ${challengerWins}-${targetWins}!** ${target} L + ratio`);
+  } else if (targetWins > challengerWins) {
+    await message.channel.send(`\u{1F3C6} **${target.username} wins the Dice War ${targetWins}-${challengerWins}!** ${message.author} L + ratio`);
+  } else {
+    await message.channel.send(`\u{1F91D} **It's a draw! ${challengerWins}-${targetWins}** \u2014 no L's today.`);
+  }
+}
+
 // src/bot/index.ts
 var PREFIX = "-";
 var RECONNECT_DELAY_MS = 5e3;
@@ -107848,8 +107902,18 @@ var commands = /* @__PURE__ */ new Map([
   ["help", execute10],
   ["ship", execute11],
   ["ignore", execute12],
-  ["unignore", execute13]
+  ["unignore", execute13],
+  ["dw", execute14]
 ]);
+async function clearSlashCommands(token, clientId) {
+  try {
+    const rest = new import_discord4.REST({ version: "10" }).setToken(token);
+    await rest.put(import_discord4.Routes.applicationCommands(clientId), { body: [] });
+    logger.info("Cleared all global slash commands");
+  } catch (err) {
+    logger.error({ err }, "Failed to clear slash commands");
+  }
+}
 function createClient() {
   return new import_discord4.Client({
     intents: [
@@ -107863,9 +107927,10 @@ async function connectWithRetry(token) {
   let delay = RECONNECT_DELAY_MS;
   while (true) {
     const client = createClient();
-    client.once("clientReady", (c) => {
+    client.once("clientReady", async (c) => {
       logger.info({ tag: c.user.tag }, "Discord bot ready");
       delay = RECONNECT_DELAY_MS;
+      await clearSlashCommands(token, c.user.id);
     });
     client.on("error", (err) => {
       logger.error({ err }, "Discord client error");
