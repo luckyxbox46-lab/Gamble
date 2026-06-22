@@ -107838,8 +107838,9 @@ function roll(max) {
 }
 async function execute14(message, args) {
   const target = message.mentions.users.first();
-  const rounds = parseInt(args[0] ?? "");
-  const sides = parseInt(args[1] ?? "");
+  const numericArgs = args.filter((a) => !isNaN(parseInt(a)));
+  const rounds = parseInt(numericArgs[0] ?? "");
+  const sides = parseInt(numericArgs[1] ?? "");
   if (!target || isNaN(rounds) || isNaN(sides) || rounds < 1 || sides < 2) {
     await message.reply("Usage: `-dw @user (rounds) (dice size)` e.g. `-dw @user 3 6`");
     return;
