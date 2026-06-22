@@ -19,6 +19,7 @@ import { execute as helpExecute } from "./commands/help.js";
 import { execute as shipExecute } from "./commands/ship.js";
 import { execute as ignoreExecute } from "./commands/ignore.js";
 import { execute as unignoreExecute } from "./commands/unignore.js";
+import { execute as dicewarExecute } from "./commands/dicewar.js";
 import { disabledChannels, ignoredUsers } from "./channelState.js";
 
 const PREFIX = "-";
@@ -41,6 +42,7 @@ const commands = new Map<string, CommandHandler>([
   ["ship", shipExecute],
   ["ignore", ignoreExecute],
   ["unignore", unignoreExecute],
+  ["dw", dicewarExecute],
 ]);
 
 async function clearSlashCommands(token: string, clientId: string) {
