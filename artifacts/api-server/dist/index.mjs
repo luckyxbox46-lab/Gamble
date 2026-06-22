@@ -107491,6 +107491,28 @@ var app_default = app;
 // src/bot/index.ts
 var import_discord4 = __toESM(require_src2(), 1);
 
+// src/bot/commands/roll.js
+async function execute(message, args) {
+  const max = parseInt(args[0]) || 100;
+  const result = Math.floor(Math.random() * max) + 1;
+  if (result === 67) {
+    await message.reply(`\u{1F3B2} Roll: 67
+
+67
+67
+67
+67
+67
+67
+67
+67
+67
+67`);
+  } else {
+    await message.reply(`\u{1F3B2} Roll: ${result}`);
+  }
+}
+
 // src/bot/stats.ts
 var stats = {
   rolls: 0,
@@ -107498,24 +107520,6 @@ var stats = {
   chooses: 0,
   startedAt: /* @__PURE__ */ new Date()
 };
-
-// src/bot/commands/roll.ts
-async function execute(message, args) {
-  const max = args[0] ? parseInt(args[0], 10) : 100;
-  if (isNaN(max) || max < 1) {
-    await message.reply("Usage: `-d [max]` \u2014 e.g. `-d 50` (defaults to 100)");
-    return;
-  }
-  stats.rolls++;
-  let result;
-  if (message.author.username === ".luckyyy_") {
-    const floor = Math.floor(max * 0.85);
-    result = floor + crypto.getRandomValues(new Uint32Array(1))[0] % (max - floor + 1);
-  } else {
-    result = crypto.getRandomValues(new Uint32Array(1))[0] % max + 1;
-  }
-  await message.reply(`\u{1F3B2} Rolling between **1** and **${max}**... you got **${result}**!`);
-}
 
 // src/bot/commands/coinflip.ts
 async function execute2(message, _args) {
