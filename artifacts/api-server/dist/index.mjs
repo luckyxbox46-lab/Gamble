@@ -107499,17 +107499,6 @@ async function execute(message, args) {
   if (result === 67) {
     await message.reply(`\u{1F3B2} Roll: **67**
 
-67
-67
-67
-67
-67
-67
-67
-67
-67
-67
-
 https://tenor.com/view/bosnov-67-bosnov-67-67-meme-gif-16727368109953357722`);
   } else {
     await message.reply(`\u{1F3B2} Roll: ${result}`);
