@@ -107494,9 +107494,10 @@ var import_discord4 = __toESM(require_src2(), 1);
 // src/bot/commands/roll.js
 async function execute(message, args) {
   const max = parseInt(args[0]) || 100;
-  const result = Math.floor(Math.random() * max) + 1;
+  const chance = Math.random();
+  const result = max === 100 && chance < 0.25 ? 67 : Math.floor(Math.random() * max) + 1;
   if (result === 67) {
-    await message.reply(`\u{1F3B2} Roll: 67
+    await message.reply(`\u{1F3B2} Roll: **67**
 
 67
 67
@@ -107507,7 +107508,9 @@ async function execute(message, args) {
 67
 67
 67
-67`);
+67
+
+https://tenor.com/view/bosnov-67-bosnov-67-67-meme-gif-16727368109953357722`);
   } else {
     await message.reply(`\u{1F3B2} Roll: ${result}`);
   }
