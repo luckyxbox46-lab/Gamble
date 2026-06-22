@@ -7,6 +7,7 @@ export async function execute(message: Message, _args: string[]) {
     `🪙 \`-cf\` — Flip a coin\n` +
     `🎯 \`-choose option1 option2 ...\` — Pick randomly from your options\n` +
     `⚔️ \`-coinwar @user heads/tails\` — Coin flip battle, pick your side\n` +
+    `💘 \`-ship @user1 @user2\` — Rate the compatibility of two people 1-10\n` +
     `📊 \`-stats\` — Show session stats (rolls, flips, chooses, uptime)\n` +
     `🔇 \`-stfu @user\` — Tell someone to shut up\n\n` +
     `**Admin only:**\n` +
