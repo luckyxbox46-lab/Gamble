@@ -71,7 +71,11 @@ autoInstallPeers: false
 onlyBuiltDependencies:
   - '@swc/core'
   - esbuild
+  - esbuild-plugin-pino
   - msw
+  - pino
+  - pino-pretty
+  - thread-stream
   - unrs-resolver
 
 overrides:
