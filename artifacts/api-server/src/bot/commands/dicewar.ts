@@ -74,4 +74,4 @@ export async function execute(message: Message, args: string[]) {
       `🤝 **It's a draw! ${challengerWins}-${targetWins}** — no L's today.`
     );
   }
-}
+} 
