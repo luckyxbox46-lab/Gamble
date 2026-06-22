@@ -107624,6 +107624,71 @@ async function execute8(message, _args) {
   }
 }
 
+// src/bot/commands/coinwar.ts
+var DELAY_MS2 = 800;
+function flip() {
+  return crypto.getRandomValues(new Uint8Array(1))[0] % 2 === 0 ? "Heads" : "Tails";
+}
+async function execute9(message, args) {
+  const target = message.mentions.users.first();
+  const sideArg = args.find((a) => /^(heads|tails)$/i.test(a))?.toLowerCase();
+  if (!target || !sideArg) {
+    await message.reply("Usage: `-coinwar @user heads` or `-coinwar @user tails`");
+    return;
+  }
+  if (target.id === message.author.id) {
+    await message.reply("You can't coinwar yourself.");
+    return;
+  }
+  if (target.bot) {
+    await message.reply("You can't war against a bot.");
+    return;
+  }
+  const challengerSide = sideArg === "heads" ? "Heads" : "Tails";
+  const targetSide = challengerSide === "Heads" ? "Tails" : "Heads";
+  await message.channel.send(
+    `\u2694\uFE0F **Coin War!**
+${message.author} is betting on **${challengerSide}**
+${target} is betting on **${targetSide}**
+
+Flipping...`
+  );
+  let round = 1;
+  while (true) {
+    await new Promise((res) => setTimeout(res, DELAY_MS2));
+    const challengerFlip = flip();
+    const targetFlip = flip();
+    const c1 = challengerFlip === "Heads" ? "\u{1FA99}" : "\u{1F535}";
+    const c2 = targetFlip === "Heads" ? "\u{1FA99}" : "\u{1F535}";
+    const challengerWon = challengerFlip === challengerSide;
+    const targetWon = targetFlip === targetSide;
+    if (challengerWon && targetWon) {
+      await message.channel.send(
+        `Round ${round}: ${c1} ${challengerFlip} vs ${c2} ${targetFlip} \u2014 **Both hit! No winner, flipping again...**`
+      );
+    } else if (challengerWon) {
+      await message.channel.send(
+        `Round ${round}: ${c1} **${challengerFlip}** vs ${c2} ${targetFlip}
+
+\u{1F3C6} **${message.author.username} wins the coin war!** ${target} L + ratio`
+      );
+      break;
+    } else if (targetWon) {
+      await message.channel.send(
+        `Round ${round}: ${c1} ${challengerFlip} vs ${c2} **${targetFlip}**
+
+\u{1F3C6} **${target.username} wins the coin war!** ${message.author} L + ratio`
+      );
+      break;
+    } else {
+      await message.channel.send(
+        `Round ${round}: ${c1} ${challengerFlip} vs ${c2} ${targetFlip} \u2014 neither hit, flipping again...`
+      );
+    }
+    round++;
+  }
+}
+
 // src/bot/index.ts
 var PREFIX = "-";
 var RECONNECT_DELAY_MS = 5e3;
@@ -107636,7 +107701,8 @@ var commands = /* @__PURE__ */ new Map([
   ["enable", execute5],
   ["stfu", execute6],
   ["stats", execute7],
-  ["bully", execute8]
+  ["bully", execute8],
+  ["coinwar", execute9]
 ]);
 function createClient() {
   return new import_discord4.Client({

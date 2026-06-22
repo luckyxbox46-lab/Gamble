@@ -12,6 +12,7 @@ import { execute as enableExecute } from "./commands/enable.js";
 import { execute as stfuExecute } from "./commands/stfu.js";
 import { execute as statsExecute } from "./commands/stats.js";
 import { execute as bullyExecute } from "./commands/bully.js";
+import { execute as coinwarExecute } from "./commands/coinwar.js";
 import { disabledChannels } from "./channelState.js";
 
 const PREFIX = "-";
@@ -29,6 +30,7 @@ const commands = new Map<string, CommandHandler>([
   ["stfu", stfuExecute],
   ["stats", statsExecute],
   ["bully", bullyExecute],
+  ["coinwar", coinwarExecute],
 ]);
 
 function createClient() {
