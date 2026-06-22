@@ -15,7 +15,9 @@ import { execute as bullyExecute } from "./commands/bully.js";
 import { execute as coinwarExecute } from "./commands/coinwar.js";
 import { execute as helpExecute } from "./commands/help.js";
 import { execute as shipExecute } from "./commands/ship.js";
-import { disabledChannels } from "./channelState.js";
+import { execute as ignoreExecute } from "./commands/ignore.js";
+import { execute as unignoreExecute } from "./commands/unignore.js";
+import { disabledChannels, ignoredUsers } from "./channelState.js";
 
 const PREFIX = "-";
 const RECONNECT_DELAY_MS = 5_000;
@@ -35,6 +37,8 @@ const commands = new Map<string, CommandHandler>([
   ["coinwar", coinwarExecute],
   ["help", helpExecute],
   ["ship", shipExecute],
+  ["ignore", ignoreExecute],
+  ["unignore", unignoreExecute],
 ]);
 
 function createClient() {
@@ -68,6 +72,7 @@ async function connectWithRetry(token: string) {
 
     client.on("messageCreate", async (message: Message) => {
       if (message.author.bot) return;
+      if (ignoredUsers.has(message.author.id)) return;
       if (!message.content.startsWith(PREFIX)) return;
 
       const [rawCommand, ...args] = message.content

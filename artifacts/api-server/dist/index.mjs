@@ -107542,6 +107542,7 @@ var import_discord = __toESM(require_src2(), 1);
 
 // src/bot/channelState.ts
 var disabledChannels = /* @__PURE__ */ new Set();
+var ignoredUsers = /* @__PURE__ */ new Set();
 
 // src/bot/commands/disable.ts
 async function execute4(message, args) {
@@ -107800,6 +107801,36 @@ ${bar}
   );
 }
 
+// src/bot/commands/ignore.ts
+var OWNER = ".luckyyy_";
+async function execute12(message, _args) {
+  if (message.author.username !== OWNER) return;
+  const target = message.mentions.users.first();
+  if (!target) {
+    await message.reply("Usage: `-ignore @user`");
+    return;
+  }
+  if (target.id === message.author.id) {
+    await message.reply("You can't ignore yourself.");
+    return;
+  }
+  ignoredUsers.add(target.id);
+  await message.reply(`\u{1F507} I'll stop listening to **${target.username}**.`);
+}
+
+// src/bot/commands/unignore.ts
+var OWNER2 = ".luckyyy_";
+async function execute13(message, _args) {
+  if (message.author.username !== OWNER2) return;
+  const target = message.mentions.users.first();
+  if (!target) {
+    await message.reply("Usage: `-unignore @user`");
+    return;
+  }
+  ignoredUsers.delete(target.id);
+  await message.reply(`\u2705 I'll listen to **${target.username}** again.`);
+}
+
 // src/bot/index.ts
 var PREFIX = "-";
 var RECONNECT_DELAY_MS = 5e3;
@@ -107815,7 +107846,9 @@ var commands = /* @__PURE__ */ new Map([
   ["bully", execute8],
   ["coinwar", execute9],
   ["help", execute10],
-  ["ship", execute11]
+  ["ship", execute11],
+  ["ignore", execute12],
+  ["unignore", execute13]
 ]);
 function createClient() {
   return new import_discord4.Client({
@@ -107842,6 +107875,7 @@ async function connectWithRetry(token) {
     });
     client.on("messageCreate", async (message) => {
       if (message.author.bot) return;
+      if (ignoredUsers.has(message.author.id)) return;
       if (!message.content.startsWith(PREFIX)) return;
       const [rawCommand, ...args] = message.content.slice(PREFIX.length).trim().split(/\s+/);
       const commandName = rawCommand?.toLowerCase();
