@@ -2,6 +2,8 @@ import {
   Client,
   GatewayIntentBits,
   Message,
+  REST,
+  Routes,
 } from "discord.js";
 import { logger } from "../lib/logger.js";
 import { execute as rollExecute } from "./commands/roll.js";
@@ -41,6 +43,16 @@ const commands = new Map<string, CommandHandler>([
   ["unignore", unignoreExecute],
 ]);
 
+async function clearSlashCommands(token: string, clientId: string) {
+  try {
+    const rest = new REST({ version: "10" }).setToken(token);
+    await rest.put(Routes.applicationCommands(clientId), { body: [] });
+    logger.info("Cleared all global slash commands");
+  } catch (err) {
+    logger.error({ err }, "Failed to clear slash commands");
+  }
+}
+
 function createClient() {
   return new Client({
     intents: [
@@ -57,9 +69,10 @@ async function connectWithRetry(token: string) {
   while (true) {
     const client = createClient();
 
-    client.once("clientReady", (c) => {
+    client.once("clientReady", async (c) => {
       logger.info({ tag: c.user.tag }, "Discord bot ready");
       delay = RECONNECT_DELAY_MS;
+      await clearSlashCommands(token, c.user.id);
     });
 
     client.on("error", (err) => {
@@ -98,11 +111,9 @@ async function connectWithRetry(token: string) {
 
     try {
       await client.login(token);
-
       await new Promise<void>((resolve) => {
         client.once("shardDisconnect" as Parameters<typeof client.once>[0], resolve);
       });
-
       logger.warn("Discord connection closed — reconnecting...");
     } catch (err) {
       logger.error({ err, retryInMs: delay }, "Discord login failed — retrying");
