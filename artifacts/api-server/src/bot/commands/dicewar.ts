@@ -3,7 +3,8 @@ import { Message } from "discord.js";
 const DELAY_MS = 800;
 
 function roll(max: number): number {
-  return (crypto.getRandomValues(new Uint32Array(1))[0]! % max) + 1;
+  return (crypto.getRandomValues(new Uint32Array(1))[
+
 }
 
 export async function execute(message: Message, args: string[]) {
