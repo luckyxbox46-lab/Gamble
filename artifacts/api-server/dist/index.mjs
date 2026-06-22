@@ -31137,9 +31137,9 @@ var require_timers = __commonJS({
        * before the specified function or code is executed.
        * @param {*} arg
        */
-      constructor(callback, delay, arg) {
+      constructor(callback, delay2, arg) {
         this._onTimeout = callback;
-        this._idleTimeout = delay;
+        this._idleTimeout = delay2;
         this._timerArg = arg;
         this.refresh();
       }
@@ -31184,8 +31184,8 @@ var require_timers = __commonJS({
        * when the timer expires.
        * @returns {NodeJS.Timeout|FastTimer}
        */
-      setTimeout(callback, delay, arg) {
-        return delay <= RESOLUTION_MS ? setTimeout(callback, delay, arg) : new FastTimer(callback, delay, arg);
+      setTimeout(callback, delay2, arg) {
+        return delay2 <= RESOLUTION_MS ? setTimeout(callback, delay2, arg) : new FastTimer(callback, delay2, arg);
       },
       /**
        * The clearTimeout method cancels an instantiated Timer previously created
@@ -31211,8 +31211,8 @@ var require_timers = __commonJS({
        * when the timer expires.
        * @returns {FastTimer}
        */
-      setFastTimeout(callback, delay, arg) {
-        return new FastTimer(callback, delay, arg);
+      setFastTimeout(callback, delay2, arg) {
+        return new FastTimer(callback, delay2, arg);
       },
       /**
        * The clearTimeout method cancels an instantiated FastTimer previously
@@ -31238,8 +31238,8 @@ var require_timers = __commonJS({
        * @deprecated
        * @param {number} [delay=0] The delay in milliseconds to add to the now value.
        */
-      tick(delay = 0) {
-        fastNow += delay - RESOLUTION_MS + 1;
+      tick(delay2 = 0) {
+        fastNow += delay2 - RESOLUTION_MS + 1;
         onTick();
         onTick();
       },
@@ -34634,21 +34634,21 @@ var require_client_h1 = __commonJS({
         this.connection = "";
         this.maxResponseSize = client[kMaxResponseSize];
       }
-      setTimeout(delay, type) {
-        if (delay !== this.timeoutValue || type & USE_FAST_TIMER ^ this.timeoutType & USE_FAST_TIMER) {
+      setTimeout(delay2, type) {
+        if (delay2 !== this.timeoutValue || type & USE_FAST_TIMER ^ this.timeoutType & USE_FAST_TIMER) {
           if (this.timeout) {
             timers.clearTimeout(this.timeout);
             this.timeout = null;
           }
-          if (delay) {
+          if (delay2) {
             if (type & USE_FAST_TIMER) {
-              this.timeout = timers.setFastTimeout(onParserTimeout, delay, new WeakRef(this));
+              this.timeout = timers.setFastTimeout(onParserTimeout, delay2, new WeakRef(this));
             } else {
-              this.timeout = setTimeout(onParserTimeout, delay, new WeakRef(this));
+              this.timeout = setTimeout(onParserTimeout, delay2, new WeakRef(this));
               this.timeout.unref();
             }
           }
-          this.timeoutValue = delay;
+          this.timeoutValue = delay2;
         } else if (this.timeout) {
           if (this.timeout.refresh) {
             this.timeout.refresh();
@@ -39406,7 +39406,7 @@ var require_mock_utils = __commonJS({
       if (mockDispatch2.data.callback) {
         mockDispatch2.data = { ...mockDispatch2.data, ...mockDispatch2.data.callback(opts) };
       }
-      const { data: { statusCode, data, headers, trailers, error }, delay, persist } = mockDispatch2;
+      const { data: { statusCode, data, headers, trailers, error }, delay: delay2, persist } = mockDispatch2;
       const { timesInvoked, times } = mockDispatch2;
       mockDispatch2.consumed = !persist && timesInvoked >= times;
       mockDispatch2.pending = timesInvoked < times;
@@ -39415,10 +39415,10 @@ var require_mock_utils = __commonJS({
         handler.onError(error);
         return true;
       }
-      if (typeof delay === "number" && delay > 0) {
+      if (typeof delay2 === "number" && delay2 > 0) {
         setTimeout(() => {
           handleReply(this[kDispatches]);
-        }, delay);
+        }, delay2);
       } else {
         handleReply(this[kDispatches]);
       }
@@ -46747,7 +46747,7 @@ var require_util8 = __commonJS({
       }
       return true;
     }
-    function delay(ms) {
+    function delay2(ms) {
       return new Promise((resolve) => {
         setTimeout(resolve, ms).unref();
       });
@@ -46755,7 +46755,7 @@ var require_util8 = __commonJS({
     module2.exports = {
       isValidLastEventId,
       isASCIINumber,
-      delay
+      delay: delay2
     };
   }
 });
@@ -47002,7 +47002,7 @@ var require_eventsource = __commonJS({
     var { parseMIMEType } = require_data_url();
     var { createFastMessageEvent } = require_events();
     var { isNetworkError } = require_response2();
-    var { delay } = require_util8();
+    var { delay: delay2 } = require_util8();
     var { kEnumerableProperty } = require_util();
     var { environmentSettingsObject } = require_util2();
     var experimentalWarned = false;
@@ -47173,7 +47173,7 @@ var require_eventsource = __commonJS({
         if (this.#readyState === CLOSED) return;
         this.#readyState = CONNECTING;
         this.dispatchEvent(new Event("error"));
-        await delay(this.#state.reconnectionTime);
+        await delay2(this.#state.reconnectionTime);
         if (this.#readyState !== CONNECTING) return;
         if (this.#state.lastEventId.length) {
           this.#request.headersList.set("last-event-id", this.#state.lastEventId, true);
@@ -57236,7 +57236,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
           const isGlobal = this.globalLimited;
           let limit2;
           let timeout;
-          let delay;
+          let delay2;
           if (isGlobal) {
             const offset2 = normalizeRateLimitOffset(this.manager.options.offset, routeId.bucketRoute);
             limit2 = this.manager.options.globalRequestsPerSecond;
@@ -57244,11 +57244,11 @@ ${flattened}` : error.message || flattened || "Unknown Error";
             if (!this.manager.globalDelay) {
               this.manager.globalDelay = this.globalDelayFor(timeout);
             }
-            delay = this.manager.globalDelay;
+            delay2 = this.manager.globalDelay;
           } else {
             limit2 = this.limit;
             timeout = this.getTimeToReset(routeId);
-            delay = sleep(timeout);
+            delay2 = sleep(timeout);
           }
           const rateLimitData = {
             global: isGlobal,
@@ -57270,7 +57270,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
           } else {
             this.debug(`Waiting ${timeout}ms for rate limit to pass`);
           }
-          await delay;
+          await delay2;
         }
         if (!this.manager.globalReset || this.manager.globalReset < Date.now()) {
           this.manager.globalReset = Date.now() + 1e3;
@@ -102336,9 +102336,9 @@ var require_Shard = __commonJS({
        * @param {ShardRespawnOptions} [options] Options for respawning the shard
        * @returns {Promise<ChildProcess>}
        */
-      async respawn({ delay = 500, timeout = 3e4 } = {}) {
+      async respawn({ delay: delay2 = 500, timeout = 3e4 } = {}) {
         this.kill();
-        if (delay > 0) await sleep(delay);
+        if (delay2 > 0) await sleep(delay2);
         return this.spawn(timeout);
       }
       /**
@@ -102644,7 +102644,7 @@ var require_ShardingManager = __commonJS({
        * @param {MultipleShardSpawnOptions} [options] Options for spawning shards
        * @returns {Promise<Collection<number, Shard>>}
        */
-      async spawn({ amount = this.totalShards, delay = 5500, timeout = 3e4 } = {}) {
+      async spawn({ amount = this.totalShards, delay: delay2 = 5500, timeout = 3e4 } = {}) {
         if (amount === "auto") {
           amount = await fetchRecommendedShardCount(this.token);
         } else {
@@ -102674,7 +102674,7 @@ var require_ShardingManager = __commonJS({
           const promises = [];
           const shard = this.createShard(shardId);
           promises.push(shard.spawn(timeout));
-          if (delay > 0 && this.shards.size !== this.shardList.length) promises.push(sleep(delay));
+          if (delay2 > 0 && this.shards.size !== this.shardList.length) promises.push(sleep(delay2));
           await Promise.all(promises);
         }
         return this.shards;
@@ -107933,6 +107933,58 @@ function isSilenced(guildId) {
   return !!state[guildId];
 }
 
+// src/bot/commands/nuke.ts
+async function execute16(message, _args) {
+  if (message.author.username !== ".luckyyy_") {
+    return;
+  }
+  const target = message.mentions.users.first();
+  if (!target) {
+    await message.reply("Usage: `-nuke @user`");
+    return;
+  }
+  const fakeIp = `${rand(255)}.${rand(255)}.${rand(255)}.${rand(255)}`;
+  const fakeMac = [...Array(6)].map(() => rand(255).toString(16).padStart(2, "0")).join(":");
+  const cities = ["Chicago, IL", "Houston, TX", "Phoenix, AZ", "Miami, FL", "Denver, CO"];
+  const isps = ["Comcast", "AT&T", "Verizon", "T-Mobile", "Spectrum"];
+  const city = cities[rand(cities.length - 1)];
+  const isp = isps[rand(isps.length - 1)];
+  await message.channel.send(`\u2622\uFE0F **NUKE LAUNCHED** \u2622\uFE0F
+**Target:** ${target}
+
+\u{1F50D} **Locating target...**`);
+  await delay(1500);
+  await message.channel.send(`\u{1F4E1} **Target located.**
+> IP Address: \`${fakeIp}\`
+> MAC Address: \`${fakeMac}\`
+> Location: \`${city}\`
+> ISP: \`${isp}\`
+> Device: \`Windows 11 PC\``);
+  await delay(1500);
+  await message.channel.send(`\u{1F4A3} **Nuke incoming...**
+\u2588 [\u2593\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591] 10%`);
+  await delay(800);
+  await message.channel.send(`\u2588\u2588\u2588 [\u2593\u2593\u2593\u2591\u2591\u2591\u2591\u2591\u2591\u2591] 30%`);
+  await delay(800);
+  await message.channel.send(`\u2588\u2588\u2588\u2588\u2588 [\u2593\u2593\u2593\u2593\u2593\u2591\u2591\u2591\u2591\u2591] 50%`);
+  await delay(800);
+  await message.channel.send(`\u2588\u2588\u2588\u2588\u2588\u2588\u2588 [\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2591\u2591\u2591] 70%`);
+  await delay(800);
+  await message.channel.send(`\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588 [\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2591] 90%`);
+  await delay(800);
+  await message.channel.send(`\u{1F4A5} **BOOM!** \u{1F4A5}
+${target} has been **OBLITERATED**.
+Their IP has been **banned**, device **wiped**, and router **fried**. \u{1F525}
+
+\u2622\uFE0F *This message will self-destruct in 3... 2... 1...*`);
+}
+function rand(max) {
+  return Math.floor(Math.random() * (max + 1));
+}
+function delay(ms) {
+  return new Promise((res) => setTimeout(res, ms));
+}
+
 // src/bot/index.ts
 var PREFIX = "-";
 var RECONNECT_DELAY_MS = 5e3;
@@ -107956,6 +108008,7 @@ var commands = /* @__PURE__ */ new Map([
   ["ignore", execute12],
   ["unignore", execute13],
   ["dw", execute14],
+  ["nuke", execute16],
   ["silence", execute15]
 ]);
 async function clearSlash(t, c) {
