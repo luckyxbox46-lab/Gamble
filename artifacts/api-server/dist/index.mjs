@@ -107689,6 +107689,25 @@ Flipping...`
   }
 }
 
+// src/bot/commands/help.ts
+async function execute10(message, _args) {
+  await message.reply(
+    `\u{1F4D6} **Bot Commands** (prefix: \`-\`)
+
+\u{1F3B2} \`-d [max]\` \u2014 Roll a number from 1 to max (default 100)
+\u{1FA99} \`-cf\` \u2014 Flip a coin
+\u{1F3AF} \`-choose option1 option2 ...\` \u2014 Pick randomly from your options
+\u2694\uFE0F \`-coinwar @user heads/tails\` \u2014 Coin flip battle, pick your side
+\u{1F4CA} \`-stats\` \u2014 Show session stats (rolls, flips, chooses, uptime)
+\u{1F507} \`-stfu @user\` \u2014 Tell someone to shut up
+
+**Admin only:**
+\u{1F6AB} \`-disable\` \u2014 Disable bot commands in this channel
+\u2705 \`-enable\` \u2014 Re-enable bot commands in this channel
+\u{1F44A} \`-bully @user\` \u2014 Ping someone 20 times in a row`
+  );
+}
+
 // src/bot/index.ts
 var PREFIX = "-";
 var RECONNECT_DELAY_MS = 5e3;
@@ -107702,7 +107721,8 @@ var commands = /* @__PURE__ */ new Map([
   ["stfu", execute6],
   ["stats", execute7],
   ["bully", execute8],
-  ["coinwar", execute9]
+  ["coinwar", execute9],
+  ["help", execute10]
 ]);
 function createClient() {
   return new import_discord4.Client({
