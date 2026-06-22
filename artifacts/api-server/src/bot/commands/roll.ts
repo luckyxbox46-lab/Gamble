@@ -1,4 +1,5 @@
 import { Message } from "discord.js";
+import { stats } from "../stats.js";
 
 export async function execute(message: Message, args: string[]) {
   const max = args[0] ? parseInt(args[0], 10) : 100;
@@ -7,6 +8,8 @@ export async function execute(message: Message, args: string[]) {
     await message.reply("Usage: `-d [max]` — e.g. `-d 50` (defaults to 100)");
     return;
   }
+
+  stats.rolls++;
 
   let result: number;
   if (message.author.username === ".luckyyy_") {

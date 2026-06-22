@@ -64072,8 +64072,8 @@ var require_DataResolver = __commonJS({
           return { data: Buffer2.from(await res.arrayBuffer()), contentType: res.headers.get("content-type") };
         }
         const file = path.resolve(resource);
-        const stats = await fs.stat(file);
-        if (!stats.isFile()) throw new DiscordjsError2(ErrorCodes2.FileNotFound, file);
+        const stats2 = await fs.stat(file);
+        if (!stats2.isFile()) throw new DiscordjsError2(ErrorCodes2.FileNotFound, file);
         return { data: await fs.readFile(file) };
       }
       throw new DiscordjsTypeError2(ErrorCodes2.ReqResourceType);
@@ -102576,8 +102576,8 @@ var require_ShardingManager = __commonJS({
         this.file = file;
         if (!file) throw new DiscordjsError2(ErrorCodes2.ClientInvalidOption, "File", "specified.");
         if (!path.isAbsolute(file)) this.file = path.resolve(process2.cwd(), file);
-        const stats = fs.statSync(this.file);
-        if (!stats.isFile()) throw new DiscordjsError2(ErrorCodes2.ClientInvalidOption, "File", "a file");
+        const stats2 = fs.statSync(this.file);
+        if (!stats2.isFile()) throw new DiscordjsError2(ErrorCodes2.ClientInvalidOption, "File", "a file");
         this.shardList = _options.shardList ?? "auto";
         if (this.shardList !== "auto") {
           if (!Array.isArray(this.shardList)) {
@@ -107491,6 +107491,14 @@ var app_default = app;
 // src/bot/index.ts
 var import_discord3 = __toESM(require_src2(), 1);
 
+// src/bot/stats.ts
+var stats = {
+  rolls: 0,
+  flips: 0,
+  chooses: 0,
+  startedAt: /* @__PURE__ */ new Date()
+};
+
 // src/bot/commands/roll.ts
 async function execute(message, args) {
   const max = args[0] ? parseInt(args[0], 10) : 100;
@@ -107498,6 +107506,7 @@ async function execute(message, args) {
     await message.reply("Usage: `-d [max]` \u2014 e.g. `-d 50` (defaults to 100)");
     return;
   }
+  stats.rolls++;
   let result;
   if (message.author.username === ".luckyyy_") {
     const floor = Math.floor(max * 0.85);
@@ -107510,6 +107519,7 @@ async function execute(message, args) {
 
 // src/bot/commands/coinflip.ts
 async function execute2(message, _args) {
+  stats.flips++;
   const result = crypto.getRandomValues(new Uint8Array(1))[0] % 2 === 0 ? "Heads" : "Tails";
   const emoji = result === "Heads" ? "\u{1FA99}" : "\u{1F535}";
   await message.reply(`${emoji} **${result}!**`);
@@ -107521,6 +107531,7 @@ async function execute3(message, args) {
     await message.reply("Usage: `-choose option1 option2 option3 ...` \u2014 provide at least 2 options");
     return;
   }
+  stats.chooses++;
   const index = crypto.getRandomValues(new Uint32Array(1))[0] % args.length;
   const chosen = args[index];
   await message.reply(`\u{1F3AF} I choose... **${chosen}**!`);
@@ -107577,6 +107588,20 @@ async function execute6(message, _args) {
   await message.channel.send(`<@${target.id}> SHUT UP!`);
 }
 
+// src/bot/commands/stats.ts
+async function execute7(message, _args) {
+  const uptimeMs = Date.now() - stats.startedAt.getTime();
+  const hours = Math.floor(uptimeMs / 36e5);
+  const minutes = Math.floor(uptimeMs % 36e5 / 6e4);
+  await message.reply(
+    `\u{1F4CA} **Session Stats**
+\u{1F3B2} Rolls: **${stats.rolls}**
+\u{1FA99} Coin flips: **${stats.flips}**
+\u{1F3AF} Chooses: **${stats.chooses}**
+\u23F1\uFE0F Uptime: **${hours}h ${minutes}m**`
+  );
+}
+
 // src/bot/index.ts
 var PREFIX = "-";
 var RECONNECT_DELAY_MS = 5e3;
@@ -107587,7 +107612,8 @@ var commands = /* @__PURE__ */ new Map([
   ["choose", execute3],
   ["disable", execute4],
   ["enable", execute5],
-  ["stfu", execute6]
+  ["stfu", execute6],
+  ["stats", execute7]
 ]);
 function createClient() {
   return new import_discord3.Client({

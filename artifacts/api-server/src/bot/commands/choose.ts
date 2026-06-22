@@ -1,4 +1,5 @@
 import { Message } from "discord.js";
+import { stats } from "../stats.js";
 
 export async function execute(message: Message, args: string[]) {
   if (args.length < 2) {
@@ -6,6 +7,7 @@ export async function execute(message: Message, args: string[]) {
     return;
   }
 
+  stats.chooses++;
   const index = crypto.getRandomValues(new Uint32Array(1))[0]! % args.length;
   const chosen = args[index];
 
