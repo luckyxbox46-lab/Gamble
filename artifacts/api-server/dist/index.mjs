@@ -107886,6 +107886,23 @@ Rolling...`
   }
 }
 
+// src/bot/commands/silence.ts
+var silenced = false;
+function isSilenced() {
+  return silenced;
+}
+async function execute15(message, _args) {
+  if (message.author.username !== ".luckyyy_") {
+    return;
+  }
+  silenced = !silenced;
+  if (silenced) {
+    await message.reply("\u{1F507} I'll be quiet.");
+  } else {
+    await message.reply("\u{1F50A} I'm back!");
+  }
+}
+
 // src/bot/index.ts
 var PREFIX = "-";
 var RECONNECT_DELAY_MS = 5e3;
@@ -107904,7 +107921,8 @@ var commands = /* @__PURE__ */ new Map([
   ["ship", execute11],
   ["ignore", execute12],
   ["unignore", execute13],
-  ["dw", execute14]
+  ["dw", execute14],
+  ["silence", execute15]
 ]);
 async function clearSlashCommands(token, clientId) {
   try {
@@ -107941,6 +107959,7 @@ async function connectWithRetry(token) {
     });
     client.on("messageCreate", async (message) => {
       if (message.author.bot) return;
+      if (isSilenced() && message.author.username !== ".luckyyy_") return;
       if (ignoredUsers.has(message.author.id)) return;
       if (!message.content.startsWith(PREFIX)) return;
       const [rawCommand, ...args] = message.content.slice(PREFIX.length).trim().split(/\s+/);

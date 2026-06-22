@@ -20,8 +20,7 @@ import { execute as shipExecute } from "./commands/ship.js";
 import { execute as ignoreExecute } from "./commands/ignore.js";
 import { execute as unignoreExecute } from "./commands/unignore.js";
 import { execute as dicewarExecute } from "./commands/dicewar.js";
-import { execute as silenceExecute, isSilenced } from "./commands/silence.js";
-
+import { execute as silenceExecute, isSilenced } from"./commands/silence.js";
 import { disabledChannels, ignoredUsers } from "./channelState.js";
 
 const PREFIX = "-";
@@ -45,9 +44,8 @@ const commands = new Map<string, CommandHandler>([
   ["ignore", ignoreExecute],
   ["unignore", unignoreExecute],
   ["dw", dicewarExecute],
-   ["silence", silenceExecute],
+ ["silence", silenceExecute],
 ]);
-
 async function clearSlashCommands(token: string, clientId: string) {
   try {
     const rest = new REST({ version: "10" }).setToken(token);
@@ -90,8 +88,8 @@ async function connectWithRetry(token: string) {
 
     client.on("messageCreate", async (message: Message) => {
       if (message.author.bot) return;
+  if (isSilenced() && message.author.username !== ".luckyyy_") return;
       if (ignoredUsers.has(message.author.id)) return;
-      if (isSilenced() && message.author.username !== ".luckyyy_") return;
 
       if (!message.content.startsWith(PREFIX)) return;
 
