@@ -11,6 +11,7 @@ import { execute as disableExecute } from "./commands/disable.js";
 import { execute as enableExecute } from "./commands/enable.js";
 import { execute as stfuExecute } from "./commands/stfu.js";
 import { execute as statsExecute } from "./commands/stats.js";
+import { execute as bullyExecute } from "./commands/bully.js";
 import { disabledChannels } from "./channelState.js";
 
 const PREFIX = "-";
@@ -27,6 +28,7 @@ const commands = new Map<string, CommandHandler>([
   ["enable", enableExecute],
   ["stfu", stfuExecute],
   ["stats", statsExecute],
+  ["bully", bullyExecute],
 ]);
 
 function createClient() {

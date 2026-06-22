@@ -60233,7 +60233,7 @@ var require_CachedManager = __commonJS({
 var require_PermissionsBitField = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/util/PermissionsBitField.js"(exports2, module2) {
     "use strict";
-    var { PermissionFlagsBits: PermissionFlagsBits3 } = require_v106();
+    var { PermissionFlagsBits: PermissionFlagsBits4 } = require_v106();
     var BitField = require_BitField();
     var PermissionsBitField2 = class extends BitField {
       /**
@@ -60242,13 +60242,13 @@ var require_PermissionsBitField = __commonJS({
        * @memberof PermissionsBitField
        * @see {@link https://discord.com/developers/docs/topics/permissions#permissions-bitwise-permission-flags}
        */
-      static Flags = PermissionFlagsBits3;
+      static Flags = PermissionFlagsBits4;
       /**
        * Bitfield representing every permission combined
        * @type {bigint}
        * @memberof PermissionsBitField
        */
-      static All = Object.values(PermissionFlagsBits3).reduce((all, p) => all | p, 0n);
+      static All = Object.values(PermissionFlagsBits4).reduce((all, p) => all | p, 0n);
       /**
        * Bitfield representing the default permissions for users
        * @type {bigint}
@@ -60260,7 +60260,7 @@ var require_PermissionsBitField = __commonJS({
        * @type {bigint}
        * @memberof PermissionsBitField
        */
-      static StageModerator = PermissionFlagsBits3.ManageChannels | PermissionFlagsBits3.MuteMembers | PermissionFlagsBits3.MoveMembers;
+      static StageModerator = PermissionFlagsBits4.ManageChannels | PermissionFlagsBits4.MuteMembers | PermissionFlagsBits4.MoveMembers;
       /**
        * @type {bigint}
        * @memberof PermissionsBitField
@@ -60287,7 +60287,7 @@ var require_PermissionsBitField = __commonJS({
        * @returns {string[]}
        */
       missing(bits, checkAdmin = true) {
-        return checkAdmin && this.has(PermissionFlagsBits3.Administrator) ? [] : super.missing(bits);
+        return checkAdmin && this.has(PermissionFlagsBits4.Administrator) ? [] : super.missing(bits);
       }
       /**
        * Checks whether the bitfield has a permission, or any of multiple permissions.
@@ -60296,7 +60296,7 @@ var require_PermissionsBitField = __commonJS({
        * @returns {boolean}
        */
       any(permission, checkAdmin = true) {
-        return checkAdmin && super.has(PermissionFlagsBits3.Administrator) || super.any(permission);
+        return checkAdmin && super.has(PermissionFlagsBits4.Administrator) || super.any(permission);
       }
       /**
        * Checks whether the bitfield has a permission, or multiple permissions.
@@ -60305,7 +60305,7 @@ var require_PermissionsBitField = __commonJS({
        * @returns {boolean}
        */
       has(permission, checkAdmin = true) {
-        return checkAdmin && super.has(PermissionFlagsBits3.Administrator) || super.has(permission);
+        return checkAdmin && super.has(PermissionFlagsBits4.Administrator) || super.has(permission);
       }
       /**
        * Gets an {@link Array} of bitfield names based on the permissions available.
@@ -60343,7 +60343,7 @@ var require_Role = __commonJS({
     "use strict";
     var { roleMention } = require_dist8();
     var { DiscordSnowflake } = require_cjs3();
-    var { PermissionFlagsBits: PermissionFlagsBits3 } = require_v106();
+    var { PermissionFlagsBits: PermissionFlagsBits4 } = require_v106();
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var PermissionsBitField2 = require_PermissionsBitField();
@@ -60455,7 +60455,7 @@ var require_Role = __commonJS({
       get editable() {
         if (this.managed) return false;
         const clientMember = this.guild.members.resolve(this.client.user);
-        if (!clientMember.permissions.has(PermissionFlagsBits3.ManageRoles)) return false;
+        if (!clientMember.permissions.has(PermissionFlagsBits4.ManageRoles)) return false;
         return clientMember.roles.highest.comparePositionTo(this) > 0;
       }
       /**
@@ -61026,7 +61026,7 @@ var require_GuildChannel = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/GuildChannel.js"(exports2, module2) {
     "use strict";
     var { Snowflake } = require_cjs3();
-    var { PermissionFlagsBits: PermissionFlagsBits3, ChannelType } = require_v106();
+    var { PermissionFlagsBits: PermissionFlagsBits4, ChannelType } = require_v106();
     var { BaseChannel } = require_BaseChannel();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var PermissionOverwriteManager = require_PermissionOverwriteManager();
@@ -61166,7 +61166,7 @@ var require_GuildChannel = __commonJS({
         }
         const roles = member.roles.cache;
         const permissions = new PermissionsBitField2(roles.map((role) => role.permissions));
-        if (checkAdmin && permissions.has(PermissionFlagsBits3.Administrator)) {
+        if (checkAdmin && permissions.has(PermissionFlagsBits4.Administrator)) {
           return new PermissionsBitField2(PermissionsBitField2.All).freeze();
         }
         const overwrites = this.overwritesFor(member, true, roles);
@@ -61181,7 +61181,7 @@ var require_GuildChannel = __commonJS({
        * @private
        */
       rolePermissions(role, checkAdmin) {
-        if (checkAdmin && role.permissions.has(PermissionFlagsBits3.Administrator)) {
+        if (checkAdmin && role.permissions.has(PermissionFlagsBits4.Administrator)) {
           return new PermissionsBitField2(PermissionsBitField2.All).freeze();
         }
         const basePermissions = new PermissionsBitField2([role.permissions, role.guild.roles.everyone.permissions]);
@@ -61207,7 +61207,7 @@ var require_GuildChannel = __commonJS({
        */
       get members() {
         return this.guild.members.cache.filter(
-          (member) => this.permissionsFor(member).has(PermissionFlagsBits3.ViewChannel, false)
+          (member) => this.permissionsFor(member).has(PermissionFlagsBits4.ViewChannel, false)
         );
       }
       /**
@@ -61341,9 +61341,9 @@ var require_GuildChannel = __commonJS({
         if (this.client.user.id === this.guild.ownerId) return true;
         const permissions = this.permissionsFor(this.client.user);
         if (!permissions) return false;
-        if (permissions.has(PermissionFlagsBits3.Administrator, false)) return true;
+        if (permissions.has(PermissionFlagsBits4.Administrator, false)) return true;
         if (this.guild.members.me.communicationDisabledUntilTimestamp > Date.now()) return false;
-        const bitfield = VoiceBasedChannelTypes.includes(this.type) ? PermissionFlagsBits3.ManageChannels | PermissionFlagsBits3.Connect : PermissionFlagsBits3.ViewChannel | PermissionFlagsBits3.ManageChannels;
+        const bitfield = VoiceBasedChannelTypes.includes(this.type) ? PermissionFlagsBits4.ManageChannels | PermissionFlagsBits4.Connect : PermissionFlagsBits4.ViewChannel | PermissionFlagsBits4.ManageChannels;
         return permissions.has(bitfield, false);
       }
       /**
@@ -61355,7 +61355,7 @@ var require_GuildChannel = __commonJS({
         if (this.client.user.id === this.guild.ownerId) return true;
         const permissions = this.permissionsFor(this.client.user);
         if (!permissions) return false;
-        return permissions.has(PermissionFlagsBits3.ViewChannel, false);
+        return permissions.has(PermissionFlagsBits4.ViewChannel, false);
       }
       /**
        * Deletes this channel.
@@ -63662,7 +63662,7 @@ var require_InviteGuild = __commonJS({
 var require_Invite = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/Invite.js"(exports2, module2) {
     "use strict";
-    var { RouteBases, Routes: Routes2, PermissionFlagsBits: PermissionFlagsBits3 } = require_v106();
+    var { RouteBases, Routes: Routes2, PermissionFlagsBits: PermissionFlagsBits4 } = require_v106();
     var Base = require_Base();
     var { GuildScheduledEvent } = require_GuildScheduledEvent();
     var IntegrationApplication = require_IntegrationApplication();
@@ -63796,7 +63796,7 @@ var require_Invite = __commonJS({
         if (!guild || !this.client.guilds.cache.has(guild.id)) return false;
         if (!guild.members.me) throw new DiscordjsError2(ErrorCodes2.GuildUncachedMe);
         return Boolean(
-          this.channel?.permissionsFor(this.client.user).has(PermissionFlagsBits3.ManageChannels, false) || guild.members.me.permissions.has(PermissionFlagsBits3.ManageGuild)
+          this.channel?.permissionsFor(this.client.user).has(PermissionFlagsBits4.ManageChannels, false) || guild.members.me.permissions.has(PermissionFlagsBits4.ManageGuild)
         );
       }
       /**
@@ -76511,7 +76511,7 @@ var require_GuildEmojiRoleManager = __commonJS({
 var require_GuildEmoji = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/GuildEmoji.js"(exports2, module2) {
     "use strict";
-    var { PermissionFlagsBits: PermissionFlagsBits3 } = require_v106();
+    var { PermissionFlagsBits: PermissionFlagsBits4 } = require_v106();
     var BaseGuildEmoji = require_BaseGuildEmoji();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var GuildEmojiRoleManager = require_GuildEmojiRoleManager();
@@ -76544,7 +76544,7 @@ var require_GuildEmoji = __commonJS({
        */
       get deletable() {
         if (!this.guild.members.me) throw new DiscordjsError2(ErrorCodes2.GuildUncachedMe);
-        return !this.managed && this.guild.members.me.permissions.has(PermissionFlagsBits3.ManageGuildExpressions);
+        return !this.managed && this.guild.members.me.permissions.has(PermissionFlagsBits4.ManageGuildExpressions);
       }
       /**
        * A manager for roles this emoji is active for.
@@ -77863,7 +77863,7 @@ var require_Message = __commonJS({
       ChannelType,
       MessageType,
       MessageFlags,
-      PermissionFlagsBits: PermissionFlagsBits3,
+      PermissionFlagsBits: PermissionFlagsBits4,
       MessageReferenceType
     } = require_v106();
     var Attachment = require_Attachment();
@@ -77884,7 +77884,7 @@ var require_Message = __commonJS({
     var PermissionsBitField2 = require_PermissionsBitField();
     var { _transformAPIMessageInteractionMetadata } = require_Transformers();
     var { cleanContent, resolvePartialEmoji, transformResolved } = require_Util();
-    var Message4 = class extends Base {
+    var Message5 = class extends Base {
       constructor(client, data) {
         super(client);
         this.channelId = data.channel_id;
@@ -78307,7 +78307,7 @@ var require_Message = __commonJS({
           if (this.channel.archived) return false;
           if (this.channel.locked) {
             const permissions = this.channel.permissionsFor(this.client.user);
-            if (!permissions?.has(PermissionFlagsBits3.ManageThreads, true)) return false;
+            if (!permissions?.has(PermissionFlagsBits4.ManageThreads, true)) return false;
           }
         }
         return precheck;
@@ -78327,8 +78327,8 @@ var require_Message = __commonJS({
         }
         const permissions = this.channel?.permissionsFor(this.client.user);
         if (!permissions) return false;
-        if (permissions.has(PermissionFlagsBits3.Administrator, false)) return true;
-        return this.type !== MessageType.AutoModerationAction && this.author.id === this.client.user.id || permissions.has(PermissionFlagsBits3.ManageMessages, false) && !this.guild.members.me.isCommunicationDisabled();
+        if (permissions.has(PermissionFlagsBits4.Administrator, false)) return true;
+        return this.type !== MessageType.AutoModerationAction && this.author.id === this.client.user.id || permissions.has(PermissionFlagsBits4.ManageMessages, false) && !this.guild.members.me.isCommunicationDisabled();
       }
       /**
        * Whether the message is bulk deletable by the client user
@@ -78339,7 +78339,7 @@ var require_Message = __commonJS({
        * channel.bulkDelete(messages.filter(message => message.bulkDeletable));
        */
       get bulkDeletable() {
-        return (this.inGuild() && Date.now() - this.createdTimestamp < MaxBulkDeletableMessageAge && this.deletable && this.channel?.permissionsFor(this.client.user).has(PermissionFlagsBits3.ManageMessages, false)) ?? false;
+        return (this.inGuild() && Date.now() - this.createdTimestamp < MaxBulkDeletableMessageAge && this.deletable && this.channel?.permissionsFor(this.client.user).has(PermissionFlagsBits4.ManageMessages, false)) ?? false;
       }
       /**
        * Whether the message is pinnable by the client user
@@ -78353,7 +78353,7 @@ var require_Message = __commonJS({
         if (!channel || channel.isVoiceBased() || !channel.viewable) return false;
         const permissions = channel?.permissionsFor(this.client.user);
         if (!permissions) return false;
-        return permissions.has(PermissionFlagsBits3.ReadMessageHistory | PermissionFlagsBits3.PinMessages);
+        return permissions.has(PermissionFlagsBits4.ReadMessageHistory | PermissionFlagsBits4.PinMessages);
       }
       /**
        * Fetches the Message this crosspost/reply/pin-add references, if available to the client
@@ -78374,7 +78374,7 @@ var require_Message = __commonJS({
        * @readonly
        */
       get crosspostable() {
-        const bitfield = PermissionFlagsBits3.SendMessages | (this.author.id === this.client.user.id ? PermissionsBitField2.DefaultBit : PermissionFlagsBits3.ManageMessages);
+        const bitfield = PermissionFlagsBits4.SendMessages | (this.author.id === this.client.user.id ? PermissionsBitField2.DefaultBit : PermissionFlagsBits4.ManageMessages);
         const { channel } = this;
         return Boolean(
           channel?.type === ChannelType.GuildAnnouncement && !this.flags.has(MessageFlags.Crossposted) && this.reference?.type !== MessageReferenceType.Forward && this.type === MessageType.Default && !this.poll && channel.viewable && channel.permissionsFor(this.client.user)?.has(bitfield, false)
@@ -78646,7 +78646,7 @@ var require_Message = __commonJS({
         });
       }
     };
-    exports2.Message = Message4;
+    exports2.Message = Message5;
   }
 });
 
@@ -79567,7 +79567,7 @@ var require_GuildMemberFlagsBitField = __commonJS({
 var require_GuildMember = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/GuildMember.js"(exports2) {
     "use strict";
-    var { PermissionFlagsBits: PermissionFlagsBits3 } = require_v106();
+    var { PermissionFlagsBits: PermissionFlagsBits4 } = require_v106();
     var Base = require_Base();
     var VoiceState = require_VoiceState();
     var TextBasedChannel = require_TextBasedChannel();
@@ -79813,7 +79813,7 @@ var require_GuildMember = __commonJS({
        */
       get kickable() {
         if (!this.guild.members.me) throw new DiscordjsError2(ErrorCodes2.GuildUncachedMe);
-        return this.manageable && this.guild.members.me.permissions.has(PermissionFlagsBits3.KickMembers);
+        return this.manageable && this.guild.members.me.permissions.has(PermissionFlagsBits4.KickMembers);
       }
       /**
        * Whether this member is bannable by the client user
@@ -79822,7 +79822,7 @@ var require_GuildMember = __commonJS({
        */
       get bannable() {
         if (!this.guild.members.me) throw new DiscordjsError2(ErrorCodes2.GuildUncachedMe);
-        return this.manageable && this.guild.members.me.permissions.has(PermissionFlagsBits3.BanMembers);
+        return this.manageable && this.guild.members.me.permissions.has(PermissionFlagsBits4.BanMembers);
       }
       /**
        * Whether this member is moderatable by the client user
@@ -79830,7 +79830,7 @@ var require_GuildMember = __commonJS({
        * @readonly
        */
       get moderatable() {
-        return !this.permissions.has(PermissionFlagsBits3.Administrator) && this.manageable && (this.guild.members.me?.permissions.has(PermissionFlagsBits3.ModerateMembers) ?? false);
+        return !this.permissions.has(PermissionFlagsBits4.Administrator) && this.manageable && (this.guild.members.me?.permissions.has(PermissionFlagsBits4.ModerateMembers) ?? false);
       }
       /**
        * Whether this member is currently timed out
@@ -80015,7 +80015,7 @@ var require_MessageManager = __commonJS({
     var { Routes: Routes2 } = require_v106();
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
-    var { Message: Message4 } = require_Message();
+    var { Message: Message5 } = require_Message();
     var MessagePayload = require_MessagePayload();
     var { MakeCacheOverrideSymbol } = require_Symbols();
     var { resolvePartialEmoji } = require_Util();
@@ -80023,7 +80023,7 @@ var require_MessageManager = __commonJS({
     var MessageManager = class _MessageManager extends CachedManager {
       static [MakeCacheOverrideSymbol] = _MessageManager;
       constructor(channel, iterable) {
-        super(channel.client, Message4, iterable);
+        super(channel.client, Message5, iterable);
         this.channel = channel;
       }
       /**
@@ -80217,7 +80217,7 @@ var require_MessageManager = __commonJS({
       async edit(message, options) {
         const messageId = this.resolveId(message);
         if (!messageId) throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "message", "MessageResolvable");
-        const { body, files } = await (options instanceof MessagePayload ? options : MessagePayload.create(message instanceof Message4 ? message : this, options)).resolveBody().resolveFiles();
+        const { body, files } = await (options instanceof MessagePayload ? options : MessagePayload.create(message instanceof Message5 ? message : this, options)).resolveBody().resolveFiles();
         const d = await this.client.rest.patch(Routes2.channelMessage(this.channel.id, messageId), { body, files });
         const existing = this.cache.get(messageId);
         if (existing) {
@@ -80415,8 +80415,8 @@ var require_MessagePayload = __commonJS({
        * @readonly
        */
       get isMessage() {
-        const { Message: Message4 } = require_Message();
-        return this.target instanceof Message4;
+        const { Message: Message5 } = require_Message();
+        return this.target instanceof Message5;
       }
       /**
        * Whether or not the target is a {@link MessageManager}
@@ -82693,7 +82693,7 @@ var require_ThreadChannel = __commonJS({
     "use strict";
     var { DiscordAPIError } = require_dist6();
     var { lazy } = require_dist2();
-    var { RESTJSONErrorCodes, ChannelFlags, ChannelType, PermissionFlagsBits: PermissionFlagsBits3, Routes: Routes2 } = require_v106();
+    var { RESTJSONErrorCodes, ChannelFlags, ChannelType, PermissionFlagsBits: PermissionFlagsBits4, Routes: Routes2 } = require_v106();
     var { BaseChannel } = require_BaseChannel();
     var getThreadOnlyChannel = lazy(() => require_ThreadOnlyChannel());
     var TextBasedChannel = require_TextBasedChannel();
@@ -83053,7 +83053,7 @@ var require_ThreadChannel = __commonJS({
        */
       get joinable() {
         return !this.archived && !this.joined && this.permissionsFor(this.client.user)?.has(
-          this.type === ChannelType.PrivateThread ? PermissionFlagsBits3.ManageThreads : PermissionFlagsBits3.ViewChannel,
+          this.type === ChannelType.PrivateThread ? PermissionFlagsBits4.ManageThreads : PermissionFlagsBits4.ViewChannel,
           false
         );
       }
@@ -83065,8 +83065,8 @@ var require_ThreadChannel = __commonJS({
       get manageable() {
         const permissions = this.permissionsFor(this.client.user);
         if (!permissions) return false;
-        if (permissions.has(PermissionFlagsBits3.Administrator, false)) return true;
-        return this.guild.members.me.communicationDisabledUntilTimestamp < Date.now() && permissions.has(PermissionFlagsBits3.ManageThreads, false);
+        if (permissions.has(PermissionFlagsBits4.Administrator, false)) return true;
+        return this.guild.members.me.communicationDisabledUntilTimestamp < Date.now() && permissions.has(PermissionFlagsBits4.ManageThreads, false);
       }
       /**
        * Whether the thread is viewable by the client user
@@ -83077,7 +83077,7 @@ var require_ThreadChannel = __commonJS({
         if (this.client.user.id === this.guild.ownerId) return true;
         const permissions = this.permissionsFor(this.client.user);
         if (!permissions) return false;
-        return permissions.has(PermissionFlagsBits3.ViewChannel, false);
+        return permissions.has(PermissionFlagsBits4.ViewChannel, false);
       }
       /**
        * Whether the client user can send messages in this thread
@@ -83087,8 +83087,8 @@ var require_ThreadChannel = __commonJS({
       get sendable() {
         const permissions = this.permissionsFor(this.client.user);
         if (!permissions) return false;
-        if (permissions.has(PermissionFlagsBits3.Administrator, false)) return true;
-        return !(this.archived && this.locked && !this.manageable) && (this.type !== ChannelType.PrivateThread || this.joined || this.manageable) && permissions.has(PermissionFlagsBits3.SendMessagesInThreads, false) && this.guild.members.me.communicationDisabledUntilTimestamp < Date.now();
+        if (permissions.has(PermissionFlagsBits4.Administrator, false)) return true;
+        return !(this.archived && this.locked && !this.manageable) && (this.type !== ChannelType.PrivateThread || this.joined || this.manageable) && permissions.has(PermissionFlagsBits4.SendMessagesInThreads, false) && this.guild.members.me.communicationDisabledUntilTimestamp < Date.now();
       }
       /**
        * Whether the thread is unarchivable by the client user
@@ -83582,7 +83582,7 @@ var require_BaseGuildVoiceChannel = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/BaseGuildVoiceChannel.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection2 } = require_dist7();
-    var { PermissionFlagsBits: PermissionFlagsBits3 } = require_v106();
+    var { PermissionFlagsBits: PermissionFlagsBits4 } = require_v106();
     var GuildChannel = require_GuildChannel();
     var TextBasedChannel = require_TextBasedChannel();
     var GuildMessageManager = require_GuildMessageManager();
@@ -83653,8 +83653,8 @@ var require_BaseGuildVoiceChannel = __commonJS({
         if (!this.viewable) return false;
         const permissions = this.permissionsFor(this.client.user);
         if (!permissions) return false;
-        if (permissions.has(PermissionFlagsBits3.Administrator, false)) return true;
-        return this.guild.members.me.communicationDisabledUntilTimestamp < Date.now() && permissions.has(PermissionFlagsBits3.Connect, false);
+        if (permissions.has(PermissionFlagsBits4.Administrator, false)) return true;
+        return this.guild.members.me.communicationDisabledUntilTimestamp < Date.now() && permissions.has(PermissionFlagsBits4.Connect, false);
       }
       /**
        * Creates an invite to this guild channel.
@@ -83838,7 +83838,7 @@ var require_TextChannel = __commonJS({
 var require_VoiceChannel = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/VoiceChannel.js"(exports2, module2) {
     "use strict";
-    var { PermissionFlagsBits: PermissionFlagsBits3, Routes: Routes2 } = require_v106();
+    var { PermissionFlagsBits: PermissionFlagsBits4, Routes: Routes2 } = require_v106();
     var BaseGuildVoiceChannel = require_BaseGuildVoiceChannel();
     var VoiceChannel = class extends BaseGuildVoiceChannel {
       /**
@@ -83848,7 +83848,7 @@ var require_VoiceChannel = __commonJS({
        */
       get joinable() {
         if (!super.joinable) return false;
-        if (this.full && !this.permissionsFor(this.client.user).has(PermissionFlagsBits3.MoveMembers, false)) return false;
+        if (this.full && !this.permissionsFor(this.client.user).has(PermissionFlagsBits4.MoveMembers, false)) return false;
         return true;
       }
       /**
@@ -83859,8 +83859,8 @@ var require_VoiceChannel = __commonJS({
       get speakable() {
         const permissions = this.permissionsFor(this.client.user);
         if (!permissions) return false;
-        if (permissions.has(PermissionFlagsBits3.Administrator, false)) return true;
-        return this.guild.members.me.communicationDisabledUntilTimestamp < Date.now() && permissions.has(PermissionFlagsBits3.Speak, false);
+        if (permissions.has(PermissionFlagsBits4.Administrator, false)) return true;
+        return this.guild.members.me.communicationDisabledUntilTimestamp < Date.now() && permissions.has(PermissionFlagsBits4.Speak, false);
       }
       /**
        * @typedef {Object} SendSoundboardSoundOptions
@@ -96937,7 +96937,7 @@ var require_GuildEmojiManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/GuildEmojiManager.js"(exports2, module2) {
     "use strict";
     var { Collection: Collection2 } = require_dist7();
-    var { Routes: Routes2, PermissionFlagsBits: PermissionFlagsBits3 } = require_v106();
+    var { Routes: Routes2, PermissionFlagsBits: PermissionFlagsBits4 } = require_v106();
     var BaseGuildEmojiManager2 = require_BaseGuildEmojiManager();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { resolveImage } = require_DataResolver();
@@ -97076,7 +97076,7 @@ var require_GuildEmojiManager = __commonJS({
         }
         const { me } = this.guild.members;
         if (!me) throw new DiscordjsError2(ErrorCodes2.GuildUncachedMe);
-        if (!me.permissions.any(PermissionFlagsBits3.CreateGuildExpressions | PermissionFlagsBits3.ManageGuildExpressions)) {
+        if (!me.permissions.any(PermissionFlagsBits4.CreateGuildExpressions | PermissionFlagsBits4.ManageGuildExpressions)) {
           throw new DiscordjsError2(ErrorCodes2.MissingManageGuildExpressionsPermission, this.guild);
         }
         const data = await this.client.rest.get(Routes2.guildEmoji(this.guild.id, emoji.id));
@@ -100922,7 +100922,7 @@ var require_UserManager = __commonJS({
     var CachedManager = require_CachedManager();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { GuildMember } = require_GuildMember();
-    var { Message: Message4 } = require_Message();
+    var { Message: Message5 } = require_Message();
     var ThreadMember = require_ThreadMember();
     var User = require_User();
     var { emitDeprecationWarningForUserFetchFlags } = require_Util();
@@ -101027,7 +101027,7 @@ var require_UserManager = __commonJS({
        */
       resolve(user) {
         if (user instanceof GuildMember || user instanceof ThreadMember) return user.user;
-        if (user instanceof Message4) return user.author;
+        if (user instanceof Message5) return user.author;
         return super.resolve(user);
       }
       /**
@@ -101038,7 +101038,7 @@ var require_UserManager = __commonJS({
       resolveId(user) {
         if (user instanceof ThreadMember) return user.id;
         if (user instanceof GuildMember) return user.user.id;
-        if (user instanceof Message4) return user.author.id;
+        if (user instanceof Message5) return user.author.id;
         return super.resolveId(user);
       }
     };
@@ -107489,7 +107489,7 @@ app.use("/api", routes_default);
 var app_default = app;
 
 // src/bot/index.ts
-var import_discord3 = __toESM(require_src2(), 1);
+var import_discord4 = __toESM(require_src2(), 1);
 
 // src/bot/stats.ts
 var stats = {
@@ -107602,6 +107602,28 @@ async function execute7(message, _args) {
   );
 }
 
+// src/bot/commands/bully.ts
+var import_discord3 = __toESM(require_src2(), 1);
+var PING_COUNT = 20;
+var DELAY_MS = 500;
+async function execute8(message, _args) {
+  const member = message.guild?.members.cache.get(message.author.id);
+  const isAdmin = member?.permissions.has(import_discord3.PermissionFlagsBits.Administrator);
+  if (!isAdmin) {
+    await message.reply("\u274C Admins only.");
+    return;
+  }
+  const target = message.mentions.users.first();
+  if (!target) {
+    await message.reply("Usage: `-bully @user`");
+    return;
+  }
+  for (let i = 0; i < PING_COUNT; i++) {
+    await message.channel.send(`${target}`);
+    await new Promise((res) => setTimeout(res, DELAY_MS));
+  }
+}
+
 // src/bot/index.ts
 var PREFIX = "-";
 var RECONNECT_DELAY_MS = 5e3;
@@ -107613,14 +107635,15 @@ var commands = /* @__PURE__ */ new Map([
   ["disable", execute4],
   ["enable", execute5],
   ["stfu", execute6],
-  ["stats", execute7]
+  ["stats", execute7],
+  ["bully", execute8]
 ]);
 function createClient() {
-  return new import_discord3.Client({
+  return new import_discord4.Client({
     intents: [
-      import_discord3.GatewayIntentBits.Guilds,
-      import_discord3.GatewayIntentBits.GuildMessages,
-      import_discord3.GatewayIntentBits.MessageContent
+      import_discord4.GatewayIntentBits.Guilds,
+      import_discord4.GatewayIntentBits.GuildMessages,
+      import_discord4.GatewayIntentBits.MessageContent
     ]
   });
 }
