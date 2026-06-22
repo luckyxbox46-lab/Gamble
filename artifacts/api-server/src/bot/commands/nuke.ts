@@ -1,7 +1,8 @@
 import { Message } from "discord.js";
 
 export async function execute(message: Message, _args: string[]) {
-  if (message.author.username !== ".luckyyy_") {
+    if (!message.member?.permissions.has("Administrator")) {
+
     return;
   }
 
