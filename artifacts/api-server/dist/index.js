@@ -36730,8 +36730,8 @@ var require_DataResolver = __commonJS({
           return { data: Buffer2.from(await res.arrayBuffer()), contentType: res.headers.get("content-type") };
         }
         const file = path.resolve(resource);
-        const stats2 = await fs2.stat(file);
-        if (!stats2.isFile()) throw new DiscordjsError2(ErrorCodes2.FileNotFound, file);
+        const stats = await fs2.stat(file);
+        if (!stats.isFile()) throw new DiscordjsError2(ErrorCodes2.FileNotFound, file);
         return { data: await fs2.readFile(file) };
       }
       throw new DiscordjsTypeError2(ErrorCodes2.ReqResourceType);
@@ -44801,8 +44801,8 @@ var require_dist8 = __commonJS({
        *
        * @param disabled - Whether to disable this button
        */
-      setDisabled(disabled2 = true) {
-        this.data.disabled = disabledValidator.parse(disabled2);
+      setDisabled(disabled = true) {
+        this.data.disabled = disabledValidator.parse(disabled);
         return this;
       }
       /**
@@ -45579,8 +45579,8 @@ var require_dist8 = __commonJS({
        *
        * @param disabled - Whether this select menu is disabled
        */
-      setDisabled(disabled2 = true) {
-        this.data.disabled = disabledValidator.parse(disabled2);
+      setDisabled(disabled = true) {
+        this.data.disabled = disabledValidator.parse(disabled);
         return this;
       }
       /**
@@ -74420,9 +74420,9 @@ var require_Guild = __commonJS({
        * @param {boolean} [disabled=true] Whether the invites are disabled
        * @returns {Promise<Guild>}
        */
-      async disableInvites(disabled2 = true) {
+      async disableInvites(disabled = true) {
         const features = this.features.filter((feature) => feature !== GuildFeature.InvitesDisabled);
-        if (disabled2) features.push(GuildFeature.InvitesDisabled);
+        if (disabled) features.push(GuildFeature.InvitesDisabled);
         return this.edit({ features });
       }
       /**
@@ -76572,8 +76572,8 @@ var require_ShardingManager = __commonJS({
         this.file = file;
         if (!file) throw new DiscordjsError2(ErrorCodes2.ClientInvalidOption, "File", "specified.");
         if (!path.isAbsolute(file)) this.file = path.resolve(process2.cwd(), file);
-        const stats2 = fs2.statSync(this.file);
-        if (!stats2.isFile()) throw new DiscordjsError2(ErrorCodes2.ClientInvalidOption, "File", "a file");
+        const stats = fs2.statSync(this.file);
+        if (!stats.isFile()) throw new DiscordjsError2(ErrorCodes2.ClientInvalidOption, "File", "a file");
         this.shardList = _options.shardList ?? "auto";
         if (this.shardList !== "auto") {
           if (!Array.isArray(this.shardList)) {
@@ -77576,23 +77576,28 @@ var CD = 2e4;
 var REWARD_THRESH = 1e4;
 var REWARD_AMT = 2;
 var userCd = /* @__PURE__ */ new Map();
-var disabled = /* @__PURE__ */ new Set();
-var stats = { r: 0, f: 0, start: Date.now() };
-var silence = /* @__PURE__ */ new Map();
 var lastMsg = /* @__PURE__ */ new Map();
 var msgCd = /* @__PURE__ */ new Map();
-var rewardActive = /* @__PURE__ */ new Map();
 var delay = /* @__PURE__ */ __name((ms) => new Promise((r) => setTimeout(r, ms)), "delay");
-var dataFile = "./messageData.json";
-var messageData = {};
-if (fs.existsSync(dataFile)) {
+var dataPath = "./botData.json";
+var botData = {
+  stats: { r: 0, f: 0, start: Date.now() },
+  disabledChannels: [],
+  silenceGuilds: {},
+  rewardActiveGuilds: {},
+  messageData: {}
+};
+if (fs.existsSync(dataPath)) {
   try {
-    messageData = JSON.parse(fs.readFileSync(dataFile, "utf8"));
+    const loaded = JSON.parse(fs.readFileSync(dataPath, "utf8"));
+    botData = { ...botData, ...loaded };
   } catch (e) {
-    messageData = {};
+    console.warn("Failed to load saved data, starting fresh");
   }
 }
-var save = /* @__PURE__ */ __name(() => fs.writeFileSync(dataFile, JSON.stringify(messageData, null, 2), "utf8"), "save");
+var saveAll = /* @__PURE__ */ __name(() => {
+  fs.writeFileSync(dataPath, JSON.stringify(botData, null, 2), "utf8");
+}, "saveAll");
 var isAdmin = /* @__PURE__ */ __name((m) => m.user.username === OWNER || m.permissions.has(PermissionsBitField2.Flags.Administrator), "isAdmin");
 var canSilence = /* @__PURE__ */ __name((m, g) => m.user.username === OWNER || m.id === g.ownerId, "canSilence");
 client.once("ready", () => console.log("Bot online: " + client.user.tag));
@@ -77600,26 +77605,26 @@ client.on("messageCreate", async (m) => {
   if (m.author.bot || !m.guild) return;
   const g = m.guild.id;
   if (!m.content.startsWith(PREFIX)) {
-    if (!rewardActive.get(g)) return;
+    if (!botData.rewardActiveGuilds[g]) return;
     const uid = m.author.id, now = Date.now();
     const lastT = msgCd.get(uid) || 0, lastC = lastMsg.get(uid) || "";
     if (now - lastT > 2e3 && m.content.trim() !== lastC.trim()) {
-      if (!messageData[uid]) messageData[uid] = { count: 0, earned: 0 };
-      messageData[uid].count++;
+      if (!botData.messageData[uid]) botData.messageData[uid] = { count: 0, earned: 0 };
+      botData.messageData[uid].count++;
       lastMsg.set(uid, m.content);
       msgCd.set(uid, now);
-      save();
-      const c = messageData[uid].count, e = Math.floor(c / REWARD_THRESH) * REWARD_AMT;
-      if (e > messageData[uid].earned) {
-        messageData[uid].earned = e;
-        save();
-        await m.channel.send(`\u{1F389} ${m.author}: ${c.toLocaleString()} msgs \u2192 earned $${e.toFixed(2)}`);
+      const c = botData.messageData[uid].count;
+      const earned = Math.floor(c / REWARD_THRESH) * REWARD_AMT;
+      if (earned > botData.messageData[uid].earned) {
+        botData.messageData[uid].earned = earned;
+        saveAll();
+        await m.channel.send(`\u{1F389} ${m.author}: ${c.toLocaleString()} msgs \u2192 earned $${earned.toFixed(2)}`);
       }
     }
     return;
   }
-  if (silence.get(g) && !canSilence(m.member, m.guild)) return;
-  if (disabled.has(m.channelId) && !isAdmin(m.member)) return;
+  if (botData.silenceGuilds[g] && !canSilence(m.member, m.guild)) return;
+  if (botData.disabledChannels.includes(m.channelId) && !isAdmin(m.member)) return;
   const p = m.content.slice(PREFIX.length).trim().split(/\s+/);
   const cmd = p[0]?.toLowerCase() || "", a = p.slice(1);
   if (!["d", "cf", "choose"].includes(cmd) && !isAdmin(m.member)) {
@@ -77631,12 +77636,14 @@ client.on("messageCreate", async (m) => {
   switch (cmd) {
     case "d": {
       const max = parseInt(a[0]) || 100, r = Math.floor(Math.random() * max) + 1;
-      stats.r++;
+      botData.stats.r++;
+      saveAll();
       return m.reply(`\u{1F3B2} Roll: ${r}`);
     }
     case "cf": {
       const res = Math.random() < 0.5 ? "Heads" : "Tails";
-      stats.f++;
+      botData.stats.f++;
+      saveAll();
       return m.reply(`\u{1FA99} Flip: ${res}`);
     }
     case "choose": {
@@ -77648,28 +77655,29 @@ client.on("messageCreate", async (m) => {
       return m.reply(`\u{1F49E} Compatibility: ${Math.floor(Math.random() * 10) + 1}/10`);
     }
     case "stats": {
-      const min = Math.floor((Date.now() - stats.start) / 6e4);
+      const min = Math.floor((Date.now() - botData.stats.start) / 6e4);
       return m.reply(`\u{1F4CA} Stats
-\u{1F3B2} Rolls: ${stats.r}
-\u{1FA99} Flips: ${stats.f}
+\u{1F3B2} Rolls: ${botData.stats.r}
+\u{1FA99} Flips: ${botData.stats.f}
 \u23F1\uFE0F Uptime: ${min}m`);
     }
     case "rewardtoggle": {
       if (m.author.username !== OWNER) return m.reply("\u274C Only .luckyyy_");
-      const s = !rewardActive.get(g);
-      rewardActive.set(g, s);
-      return m.reply(s ? "\u2705 Rewards ON for this server" : "\u274C Rewards OFF");
+      const newState = !botData.rewardActiveGuilds[g];
+      botData.rewardActiveGuilds[g] = newState;
+      saveAll();
+      return m.reply(newState ? "\u2705 Rewards ON for this server" : "\u274C Rewards OFF");
     }
     case "balance": {
-      const d = messageData[m.author.id] || { count: 0, earned: 0 };
+      const d = botData.messageData[m.author.id] || { count: 0, earned: 0 };
       return m.reply(`\u{1F4B0} Your Stats
 Msgs: ${d.count.toLocaleString()}
 Earned: $${d.earned.toFixed(2)}
 Next: ${((Math.floor(d.count / REWARD_THRESH) + 1) * REWARD_THRESH).toLocaleString()}`);
     }
     case "earningslb": {
-      if (!rewardActive.get(g)) return m.reply("\u274C Rewards not active here");
-      const list = Object.entries(messageData).sort((x, y) => y[1].earned - x[1].earned).slice(0, 10);
+      if (!botData.rewardActiveGuilds[g]) return m.reply("\u274C Rewards not active here");
+      const list = Object.entries(botData.messageData).sort((x, y) => y[1].earned - x[1].earned).slice(0, 10);
       if (!list.length) return m.reply("\u{1F4CA} No data yet");
       let txt = "\u{1F3C6} Top Earners\n";
       for (let i = 0; i < list.length; i++) {
@@ -77681,18 +77689,23 @@ Next: ${((Math.floor(d.count / REWARD_THRESH) + 1) * REWARD_THRESH).toLocaleStri
     }
     case "silence": {
       if (!canSilence(m.member, m.guild)) return m.reply("\u274C Only Bot/Server Owner");
-      const st = silence.get(g) || false;
-      silence.set(g, !st);
-      return m.reply(st ? "\u{1F50A} Bot active" : "\u{1F507} Bot silenced");
+      const newState = !botData.silenceGuilds[g];
+      botData.silenceGuilds[g] = newState;
+      saveAll();
+      return m.reply(newState ? "\u{1F507} Bot silenced" : "\u{1F50A} Bot active");
     }
     case "disable": {
       if (!isAdmin(m.member)) return m.reply("\u274C Requires Administrator");
-      disabled.add(m.channelId);
+      if (!botData.disabledChannels.includes(m.channelId)) {
+        botData.disabledChannels.push(m.channelId);
+        saveAll();
+      }
       return m.reply("\u{1F6AB} Commands disabled here");
     }
     case "enable": {
       if (!isAdmin(m.member)) return m.reply("\u274C Requires Administrator");
-      disabled.delete(m.channelId);
+      botData.disabledChannels = botData.disabledChannels.filter((id) => id !== m.channelId);
+      saveAll();
       return m.reply("\u2705 Commands enabled here");
     }
     case "bully": {

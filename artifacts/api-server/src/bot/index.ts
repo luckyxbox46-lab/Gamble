@@ -4,66 +4,85 @@ const token = process.env.DISCORD_BOT_TOKEN;
 if(!token){console.error('No token');process.exit(1);}
 const client = new Client({intents:[GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent]});
 const PREFIX='-',OWNER='.luckyyy_',CD=20000,REWARD_THRESH=10000,REWARD_AMT=2;
-const userCd=new Map(),disabled=new Set(),stats={r:0,f:0,start:Date.now()};
-const silence=new Map(),lastMsg=new Map(),msgCd=new Map(),rewardActive=new Map();
+const userCd=new Map(),lastMsg=new Map(),msgCd=new Map();
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 
-const dataFile='./messageData.json';
-let messageData={};
-if(fs.existsSync(dataFile)){try{messageData=JSON.parse(fs.readFileSync(dataFile,'utf8'));}catch(e){messageData={};}}
-const save=()=>fs.writeFileSync(dataFile,JSON.stringify(messageData,null,2),'utf8');
+// --- PERSISTENT DATA FILES ---
+const dataPath = './botData.json';
+let botData = {
+  stats: {r:0, f:0, start: Date.now()},
+  disabledChannels: [],
+  silenceGuilds: {},
+  rewardActiveGuilds: {},
+  messageData: {}
+};
 
+// Load saved data on startup
+if(fs.existsSync(dataPath)){
+  try{
+    const loaded = JSON.parse(fs.readFileSync(dataPath,'utf8'));
+    botData = {...botData, ...loaded};
+  }catch(e){console.warn('Failed to load saved data, starting fresh');}
+}
+
+// Save all data to file
+const saveAll = () => {
+  fs.writeFileSync(dataPath, JSON.stringify(botData, null, 2), 'utf8');
+};
+
+// Helper checks
 const isAdmin=m=>m.user.username===OWNER||m.permissions.has(PermissionsBitField.Flags.Administrator);
 const canSilence=(m,g)=>m.user.username===OWNER||m.id===g.ownerId;
 
 client.once('ready',()=>console.log('Bot online: '+client.user.tag));
 client.on('messageCreate',async m=>{
   if(m.author.bot||!m.guild)return;
-  const g=m.guild.id;
+  const g = m.guild.id;
 
-  // --------------------------
-  // ONLY NORMAL MESSAGES HERE
-  // --------------------------
+  // --- NORMAL MESSAGES (no cooldown/wait replies) ---
   if(!m.content.startsWith(PREFIX)){
-    if(!rewardActive.get(g))return;
-    const uid=m.author.id,now=Date.now();
-    const lastT=msgCd.get(uid)||0,lastC=lastMsg.get(uid)||'';
-    if(now-lastT>2000&&m.content.trim()!==lastC.trim()){
-      if(!messageData[uid])messageData[uid]={count:0,earned:0};
-      messageData[uid].count++;lastMsg.set(uid,m.content);msgCd.set(uid,now);save();
-      const c=messageData[uid].count,e=Math.floor(c/REWARD_THRESH)*REWARD_AMT;
-      if(e>messageData[uid].earned){
-        messageData[uid].earned=e;save();
-        await m.channel.send(`🎉 ${m.author}: ${c.toLocaleString()} msgs → earned $${e.toFixed(2)}`);
+    if(!botData.rewardActiveGuilds[g]) return;
+    const uid = m.author.id, now = Date.now();
+    const lastT = msgCd.get(uid) || 0, lastC = lastMsg.get(uid) || '';
+    if(now - lastT > 2000 && m.content.trim() !== lastC.trim()){
+      if(!botData.messageData[uid]) botData.messageData[uid] = {count:0, earned:0};
+      botData.messageData[uid].count++;
+      lastMsg.set(uid, m.content); msgCd.set(uid, now);
+      const c = botData.messageData[uid].count;
+      const earned = Math.floor(c / REWARD_THRESH) * REWARD_AMT;
+      if(earned > botData.messageData[uid].earned){
+        botData.messageData[uid].earned = earned;
+        saveAll();
+        await m.channel.send(`🎉 ${m.author}: ${c.toLocaleString()} msgs → earned $${earned.toFixed(2)}`);
       }
     }
-    return; // EXIT HERE — NO COOLDOWN CHECK FOR CHAT
+    return;
   }
 
-  // --------------------------
-  // ONLY COMMANDS FROM HERE
-  // --------------------------
-  if(silence.get(g)&&!canSilence(m.member,m.guild))return;
-  if(disabled.has(m.channelId)&&!isAdmin(m.member))return;
+  // --- COMMAND PROCESSING ---
+  if(botData.silenceGuilds[g] && !canSilence(m.member, m.guild)) return;
+  if(botData.disabledChannels.includes(m.channelId) && !isAdmin(m.member)) return;
 
-  const p=m.content.slice(PREFIX.length).trim().split(/\s+/);
-  const cmd=p[0]?.toLowerCase()||'',a=p.slice(1);
+  const p = m.content.slice(PREFIX.length).trim().split(/\s+/);
+  const cmd = p[0]?.toLowerCase() || '', a = p.slice(1);
 
-  // Cooldown ONLY for commands
-  if(!['d','cf','choose'].includes(cmd)&&!isAdmin(m.member)){
-    const now=Date.now(),last=userCd.get(m.author.id)||0;
-    if(now-last<CD)return m.reply(`⏳ Wait ${Math.ceil((CD-now+last)/1000)}s`).catch(()=>{});
-    userCd.set(m.author.id,now);
+  // Cooldown only for commands
+  if(!['d','cf','choose'].includes(cmd) && !isAdmin(m.member)){
+    const now = Date.now(), last = userCd.get(m.author.id) || 0;
+    if(now - last < CD) return m.reply(`⏳ Wait ${Math.ceil((CD-now+last)/1000)}s`).catch(()=>{});
+    userCd.set(m.author.id, now);
   }
 
   switch(cmd){
     case'd':{
       const max=parseInt(a[0])||100,r=Math.floor(Math.random()*max)+1;
-      stats.r++;return m.reply(`🎲 Roll: ${r}`);
+      botData.stats.r++; saveAll();
+      return m.reply(`🎲 Roll: ${r}`);
     }
     case'cf':{
       const res=Math.random()<0.5?'Heads':'Tails';
-      stats.f++;return m.reply(`🪙 Flip: ${res}`);
+      botData.stats.f++; saveAll();
+      return m.reply(`🪙 Flip: ${res}`);
     }
     case'choose':{
       if(!a.length)return m.reply('❌ Usage: -choose opt1 opt2');
@@ -74,21 +93,23 @@ client.on('messageCreate',async m=>{
       return m.reply(`💞 Compatibility: ${Math.floor(Math.random()*10)+1}/10`);
     }
     case'stats':{
-      const min=Math.floor((Date.now()-stats.start)/60000);
-      return m.reply(`📊 Stats\n🎲 Rolls: ${stats.r}\n🪙 Flips: ${stats.f}\n⏱️ Uptime: ${min}m`);
+      const min=Math.floor((Date.now()-botData.stats.start)/60000);
+      return m.reply(`📊 Stats\n🎲 Rolls: ${botData.stats.r}\n🪙 Flips: ${botData.stats.f}\n⏱️ Uptime: ${min}m`);
     }
     case'rewardtoggle':{
       if(m.author.username!==OWNER)return m.reply('❌ Only .luckyyy_');
-      const s=!rewardActive.get(g);rewardActive.set(g,s);
-      return m.reply(s?'✅ Rewards ON for this server':'❌ Rewards OFF');
+      const newState = !botData.rewardActiveGuilds[g];
+      botData.rewardActiveGuilds[g] = newState;
+      saveAll();
+      return m.reply(newState?'✅ Rewards ON for this server':'❌ Rewards OFF');
     }
     case'balance':{
-      const d=messageData[m.author.id]||{count:0,earned:0};
+      const d = botData.messageData[m.author.id] || {count:0, earned:0};
       return m.reply(`💰 Your Stats\nMsgs: ${d.count.toLocaleString()}\nEarned: $${d.earned.toFixed(2)}\nNext: ${((Math.floor(d.count/REWARD_THRESH)+1)*REWARD_THRESH).toLocaleString()}`);
     }
     case'earningslb':{
-      if(!rewardActive.get(g))return m.reply('❌ Rewards not active here');
-      const list=Object.entries(messageData).sort((x,y)=>y[1].earned-x[1].earned).slice(0,10);
+      if(!botData.rewardActiveGuilds[g])return m.reply('❌ Rewards not active here');
+      const list=Object.entries(botData.messageData).sort((x,y)=>y[1].earned-x[1].earned).slice(0,10);
       if(!list.length)return m.reply('📊 No data yet');
       let txt='🏆 Top Earners\n';
       for(let i=0;i<list.length;i++){
@@ -99,16 +120,24 @@ client.on('messageCreate',async m=>{
     }
     case'silence':{
       if(!canSilence(m.member,m.guild))return m.reply('❌ Only Bot/Server Owner');
-      const st=silence.get(g)||false;silence.set(g,!st);
-      return m.reply(st?'🔊 Bot active':'🔇 Bot silenced');
+      const newState = !botData.silenceGuilds[g];
+      botData.silenceGuilds[g] = newState;
+      saveAll();
+      return m.reply(newState?'🔇 Bot silenced':'🔊 Bot active');
     }
     case'disable':{
       if(!isAdmin(m.member))return m.reply('❌ Requires Administrator');
-      disabled.add(m.channelId);return m.reply('🚫 Commands disabled here');
+      if(!botData.disabledChannels.includes(m.channelId)){
+        botData.disabledChannels.push(m.channelId);
+        saveAll();
+      }
+      return m.reply('🚫 Commands disabled here');
     }
     case'enable':{
       if(!isAdmin(m.member))return m.reply('❌ Requires Administrator');
-      disabled.delete(m.channelId);return m.reply('✅ Commands enabled here');
+      botData.disabledChannels = botData.disabledChannels.filter(id=>id!==m.channelId);
+      saveAll();
+      return m.reply('✅ Commands enabled here');
     }
     case'bully':{
       if(!isAdmin(m.member)||!a[0])return m.reply('❌ Usage: -bully @user');
