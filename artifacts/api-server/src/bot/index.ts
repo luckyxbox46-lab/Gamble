@@ -7,17 +7,25 @@ const userCd = new Map(), disabled = new Set(), stats = {r:0, f:0, start: Date.n
 const silence = new Map();
 const delay = ms => new Promise(r => setTimeout(r, ms));
 
-// Check: owner OR has Administrator permission
+// Admin check: owner OR has Administrator permission
 const isAdmin = member => {
   if(member.user.username === OWNER) return true;
   return member.permissions.has(PermissionsBitField.Flags.Administrator);
+};
+
+// Silence check: ONLY bot owner OR the server's actual owner
+const canSilence = (member, guild) => {
+  if(member.user.username === OWNER) return true;
+  return member.id === guild.ownerId;
 };
 
 client.once('ready', () => console.log('Bot online: ' + client.user.tag));
 client.on('messageCreate', async m => {
   if(m.author.bot || !m.content.startsWith(PREFIX) || !m.guild) return;
   const g = m.guild.id;
-  if(silence.get(g) && m.author.username !== OWNER) return;
+
+  // Block commands when silenced, except for those who can silence
+  if(silence.get(g) && !canSilence(m.member, m.guild)) return;
   if(disabled.has(m.channelId) && !isAdmin(m.member)) return;
 
   const p = m.content.slice(PREFIX.length).trim().split(/\s+/);
@@ -52,7 +60,7 @@ client.on('messageCreate', async m => {
       return m.reply(`📊 **Bot Stats**\n🎲 Rolls: ${stats.r}\n🪙 Flips: ${stats.f}\n⏱️ Uptime: ${min} min`);
     }
     case'silence':{
-      if(m.author.username !== OWNER) return m.reply('❌ Only `.luckyyy_` can use this command');
+      if(!canSilence(m.member, m.guild)) return m.reply('❌ Only Bot Owner or Server Owner can use this');
       const st = silence.get(g) || false; silence.set(g, !st);
       return m.reply(st ? '🔊 **Server active again**' : '🔇 **Whole server silenced**');
     }
@@ -109,13 +117,13 @@ client.on('messageCreate', async m => {
 \`-ship @u1 @u2\` — Compatibility 1–10
 \`-stats\` — View stats & uptime
 
-👑 **Admin / Administrator**
+👑 **Admin (Administrator Permission)**
 \`-disable\` — Stop commands in this channel
 \`-enable\` — Re-enable commands
 \`-bully @user\` — Send 20 pings
 
-🔒 **Owner Only**
-\`-silence\` — Mute bot for the whole server`);
+🔒 **Bot Owner + Server Owner Only**
+\`-silence\` — Mute/unmute bot for the whole server`);
   }
 });
 client.login(token).catch(e => console.error('Login:', e));

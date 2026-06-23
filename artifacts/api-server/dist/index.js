@@ -77582,11 +77582,15 @@ var isAdmin = /* @__PURE__ */ __name((member) => {
   if (member.user.username === OWNER) return true;
   return member.permissions.has(PermissionsBitField2.Flags.Administrator);
 }, "isAdmin");
+var canSilence = /* @__PURE__ */ __name((member, guild) => {
+  if (member.user.username === OWNER) return true;
+  return member.id === guild.ownerId;
+}, "canSilence");
 client.once("ready", () => console.log("Bot online: " + client.user.tag));
 client.on("messageCreate", async (m) => {
   if (m.author.bot || !m.content.startsWith(PREFIX) || !m.guild) return;
   const g = m.guild.id;
-  if (silence.get(g) && m.author.username !== OWNER) return;
+  if (silence.get(g) && !canSilence(m.member, m.guild)) return;
   if (disabled.has(m.channelId) && !isAdmin(m.member)) return;
   const p = m.content.slice(PREFIX.length).trim().split(/\s+/);
   const cmd = p[0]?.toLowerCase() || "", a = p.slice(1);
@@ -77624,7 +77628,7 @@ client.on("messageCreate", async (m) => {
 \u23F1\uFE0F Uptime: ${min} min`);
     }
     case "silence": {
-      if (m.author.username !== OWNER) return m.reply("\u274C Only `.luckyyy_` can use this command");
+      if (!canSilence(m.member, m.guild)) return m.reply("\u274C Only Bot Owner or Server Owner can use this");
       const st = silence.get(g) || false;
       silence.set(g, !st);
       return m.reply(st ? "\u{1F50A} **Server active again**" : "\u{1F507} **Whole server silenced**");
@@ -77700,13 +77704,13 @@ First to 2 wins!`);
 \`-ship @u1 @u2\` \u2014 Compatibility 1\u201310
 \`-stats\` \u2014 View stats & uptime
 
-\u{1F451} **Admin / Administrator**
+\u{1F451} **Admin (Administrator Permission)**
 \`-disable\` \u2014 Stop commands in this channel
 \`-enable\` \u2014 Re-enable commands
 \`-bully @user\` \u2014 Send 20 pings
 
-\u{1F512} **Owner Only**
-\`-silence\` \u2014 Mute bot for the whole server`);
+\u{1F512} **Bot Owner + Server Owner Only**
+\`-silence\` \u2014 Mute/unmute bot for the whole server`);
   }
 });
 client.login(token).catch((e) => console.error("Login:", e));
