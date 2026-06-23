@@ -2917,9 +2917,9 @@ var require_timers = __commonJS({
        * before the specified function or code is executed.
        * @param {*} arg
        */
-      constructor(callback, delay, arg) {
+      constructor(callback, delay2, arg) {
         this._onTimeout = callback;
-        this._idleTimeout = delay;
+        this._idleTimeout = delay2;
         this._timerArg = arg;
         this.refresh();
       }
@@ -2964,8 +2964,8 @@ var require_timers = __commonJS({
        * when the timer expires.
        * @returns {NodeJS.Timeout|FastTimer}
        */
-      setTimeout(callback, delay, arg) {
-        return delay <= RESOLUTION_MS ? setTimeout(callback, delay, arg) : new FastTimer(callback, delay, arg);
+      setTimeout(callback, delay2, arg) {
+        return delay2 <= RESOLUTION_MS ? setTimeout(callback, delay2, arg) : new FastTimer(callback, delay2, arg);
       },
       /**
        * The clearTimeout method cancels an instantiated Timer previously created
@@ -2991,8 +2991,8 @@ var require_timers = __commonJS({
        * when the timer expires.
        * @returns {FastTimer}
        */
-      setFastTimeout(callback, delay, arg) {
-        return new FastTimer(callback, delay, arg);
+      setFastTimeout(callback, delay2, arg) {
+        return new FastTimer(callback, delay2, arg);
       },
       /**
        * The clearTimeout method cancels an instantiated FastTimer previously
@@ -3018,8 +3018,8 @@ var require_timers = __commonJS({
        * @deprecated
        * @param {number} [delay=0] The delay in milliseconds to add to the now value.
        */
-      tick(delay = 0) {
-        fastNow += delay - RESOLUTION_MS + 1;
+      tick(delay2 = 0) {
+        fastNow += delay2 - RESOLUTION_MS + 1;
         onTick();
         onTick();
       },
@@ -6528,21 +6528,21 @@ var require_client_h1 = __commonJS({
         this.connection = "";
         this.maxResponseSize = client2[kMaxResponseSize];
       }
-      setTimeout(delay, type) {
-        if (delay !== this.timeoutValue || type & USE_FAST_TIMER ^ this.timeoutType & USE_FAST_TIMER) {
+      setTimeout(delay2, type) {
+        if (delay2 !== this.timeoutValue || type & USE_FAST_TIMER ^ this.timeoutType & USE_FAST_TIMER) {
           if (this.timeout) {
             timers.clearTimeout(this.timeout);
             this.timeout = null;
           }
-          if (delay) {
+          if (delay2) {
             if (type & USE_FAST_TIMER) {
-              this.timeout = timers.setFastTimeout(onParserTimeout, delay, new WeakRef(this));
+              this.timeout = timers.setFastTimeout(onParserTimeout, delay2, new WeakRef(this));
             } else {
-              this.timeout = setTimeout(onParserTimeout, delay, new WeakRef(this));
+              this.timeout = setTimeout(onParserTimeout, delay2, new WeakRef(this));
               this.timeout.unref();
             }
           }
-          this.timeoutValue = delay;
+          this.timeoutValue = delay2;
         } else if (this.timeout) {
           if (this.timeout.refresh) {
             this.timeout.refresh();
@@ -11455,7 +11455,7 @@ var require_mock_utils = __commonJS({
       if (mockDispatch2.data.callback) {
         mockDispatch2.data = { ...mockDispatch2.data, ...mockDispatch2.data.callback(opts) };
       }
-      const { data: { statusCode, data, headers, trailers, error }, delay, persist } = mockDispatch2;
+      const { data: { statusCode, data, headers, trailers, error }, delay: delay2, persist } = mockDispatch2;
       const { timesInvoked, times } = mockDispatch2;
       mockDispatch2.consumed = !persist && timesInvoked >= times;
       mockDispatch2.pending = timesInvoked < times;
@@ -11464,10 +11464,10 @@ var require_mock_utils = __commonJS({
         handler.onError(error);
         return true;
       }
-      if (typeof delay === "number" && delay > 0) {
+      if (typeof delay2 === "number" && delay2 > 0) {
         setTimeout(() => {
           handleReply(this[kDispatches]);
-        }, delay);
+        }, delay2);
       } else {
         handleReply(this[kDispatches]);
       }
@@ -18979,16 +18979,16 @@ var require_util8 = __commonJS({
       return true;
     }
     __name(isASCIINumber, "isASCIINumber");
-    function delay(ms) {
+    function delay2(ms) {
       return new Promise((resolve) => {
         setTimeout(resolve, ms).unref();
       });
     }
-    __name(delay, "delay");
+    __name(delay2, "delay");
     module2.exports = {
       isValidLastEventId,
       isASCIINumber,
-      delay
+      delay: delay2
     };
   }
 });
@@ -19238,7 +19238,7 @@ var require_eventsource = __commonJS({
     var { parseMIMEType } = require_data_url();
     var { createFastMessageEvent } = require_events();
     var { isNetworkError } = require_response();
-    var { delay } = require_util8();
+    var { delay: delay2 } = require_util8();
     var { kEnumerableProperty } = require_util();
     var { environmentSettingsObject } = require_util2();
     var experimentalWarned = false;
@@ -19412,7 +19412,7 @@ var require_eventsource = __commonJS({
         if (this.#readyState === CLOSED) return;
         this.#readyState = CONNECTING;
         this.dispatchEvent(new Event("error"));
-        await delay(this.#state.reconnectionTime);
+        await delay2(this.#state.reconnectionTime);
         if (this.#readyState !== CONNECTING) return;
         if (this.#state.lastEventId.length) {
           this.#request.headersList.set("last-event-id", this.#state.lastEventId, true);
@@ -29690,7 +29690,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
           const isGlobal = this.globalLimited;
           let limit2;
           let timeout;
-          let delay;
+          let delay2;
           if (isGlobal) {
             const offset2 = normalizeRateLimitOffset(this.manager.options.offset, routeId.bucketRoute);
             limit2 = this.manager.options.globalRequestsPerSecond;
@@ -29698,11 +29698,11 @@ ${flattened}` : error.message || flattened || "Unknown Error";
             if (!this.manager.globalDelay) {
               this.manager.globalDelay = this.globalDelayFor(timeout);
             }
-            delay = this.manager.globalDelay;
+            delay2 = this.manager.globalDelay;
           } else {
             limit2 = this.limit;
             timeout = this.getTimeToReset(routeId);
-            delay = sleep(timeout);
+            delay2 = sleep(timeout);
           }
           const rateLimitData = {
             global: isGlobal,
@@ -29724,7 +29724,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
           } else {
             this.debug(`Waiting ${timeout}ms for rate limit to pass`);
           }
-          await delay;
+          await delay2;
         }
         if (!this.manager.globalReset || this.manager.globalReset < Date.now()) {
           this.manager.globalReset = Date.now() + 1e3;
@@ -76329,9 +76329,9 @@ var require_Shard = __commonJS({
        * @param {ShardRespawnOptions} [options] Options for respawning the shard
        * @returns {Promise<ChildProcess>}
        */
-      async respawn({ delay = 500, timeout = 3e4 } = {}) {
+      async respawn({ delay: delay2 = 500, timeout = 3e4 } = {}) {
         this.kill();
-        if (delay > 0) await sleep(delay);
+        if (delay2 > 0) await sleep(delay2);
         return this.spawn(timeout);
       }
       /**
@@ -76640,7 +76640,7 @@ var require_ShardingManager = __commonJS({
        * @param {MultipleShardSpawnOptions} [options] Options for spawning shards
        * @returns {Promise<Collection<number, Shard>>}
        */
-      async spawn({ amount = this.totalShards, delay = 5500, timeout = 3e4 } = {}) {
+      async spawn({ amount = this.totalShards, delay: delay2 = 5500, timeout = 3e4 } = {}) {
         if (amount === "auto") {
           amount = await fetchRecommendedShardCount(this.token);
         } else {
@@ -76670,7 +76670,7 @@ var require_ShardingManager = __commonJS({
           const promises = [];
           const shard = this.createShard(shardId);
           promises.push(shard.spawn(timeout));
-          if (delay > 0 && this.shards.size !== this.shardList.length) promises.push(sleep(delay));
+          if (delay2 > 0 && this.shards.size !== this.shardList.length) promises.push(sleep(delay2));
           await Promise.all(promises);
         }
         return this.shards;
@@ -77577,6 +77577,7 @@ var userCd = /* @__PURE__ */ new Map();
 var disabled = /* @__PURE__ */ new Set();
 var stats = { r: 0, f: 0, start: Date.now() };
 var silence = /* @__PURE__ */ new Map();
+var delay = /* @__PURE__ */ __name((ms) => new Promise((r) => setTimeout(r, ms)), "delay");
 client.once("ready", () => console.log("Bot online: " + client.user.tag));
 client.on("messageCreate", async (m) => {
   if (m.author.bot || !m.content.startsWith(PREFIX) || !m.guild) return;
@@ -77587,7 +77588,7 @@ client.on("messageCreate", async (m) => {
   const cmd = p[0]?.toLowerCase() || "", a = p.slice(1);
   if (!NO_CD.includes(cmd) && m.author.username !== OWNER) {
     const now = Date.now(), last = userCd.get(m.author.id) || 0;
-    if (now - last < CD) return m.reply(`Wait ${Math.ceil((CD - now + last) / 1e3)}s`).catch(() => {
+    if (now - last < CD) return m.reply(`\u23F3 Wait ${Math.ceil((CD - now + last) / 1e3)}s`).catch(() => {
     });
     userCd.set(m.author.id, now);
   }
@@ -77595,103 +77596,112 @@ client.on("messageCreate", async (m) => {
     case "d": {
       const max = parseInt(a[0]) || 100, r = Math.floor(Math.random() * max) + 1;
       stats.r++;
-      return m.reply(`\u{1F3B2} Roll: ${r}`);
+      return m.reply(`\u{1F3B2} **Roll:** ${r}`);
     }
     case "cf": {
       const res = Math.random() < 0.5 ? "Heads" : "Tails";
       stats.f++;
-      return m.reply(`\u{1FA99} Flip: ${res}`);
+      return m.reply(`\u{1FA99} **Flip:** ${res}`);
     }
     case "choose": {
-      if (!a.length) return m.reply("Use: -choose opt1 opt2");
-      return m.reply(`\u{1F3AF} Pick: ${a[Math.floor(Math.random() * a.length)]}`);
-    }
-    case "cw": {
-      const side = a[1]?.toLowerCase();
-      if (!["heads", "tails"].includes(side)) return m.reply("Use: -cw @user heads/tails");
-      const res = Math.random() < 0.5 ? "Heads" : "Tails", win = res === side;
-      return m.reply(`\u{1FA99} Coin War: ${res}
-${win ? "\u2705 Win" : "\u274C Lose"}`);
+      if (!a.length) return m.reply("\u274C Usage: `-choose opt1 opt2 ...`");
+      return m.reply(`\u{1F3AF} **I pick:** ${a[Math.floor(Math.random() * a.length)]}`);
     }
     case "ship": {
-      if (a.length < 2) return m.reply("Use: -ship @u1 @u2");
-      return m.reply(`\u{1F49E} Match: ${Math.floor(Math.random() * 10) + 1}/10`);
+      if (a.length < 2) return m.reply("\u274C Usage: `-ship @user1 @user2`");
+      const score = Math.floor(Math.random() * 10) + 1;
+      return m.reply(`\u{1F49E} **Compatibility:** ${score}/10`);
     }
     case "stats": {
       const min = Math.floor((Date.now() - stats.start) / 6e4);
-      return m.reply(`\u{1F4CA} Stats
-Rolls: ${stats.r}
-Flips: ${stats.f}
-Uptime: ${min}m`);
+      return m.reply(`\u{1F4CA} **Bot Stats**
+\u{1F3B2} Rolls: ${stats.r}
+\u{1FA99} Flips: ${stats.f}
+\u23F1\uFE0F Uptime: ${min} min`);
     }
     case "silence": {
-      if (m.author.username !== OWNER) return m.reply("\u274C Only .luckyyy_");
+      if (m.author.username !== OWNER) return m.reply("\u274C Only `.luckyyy_` can use this");
       const st = silence.get(g) || false;
       silence.set(g, !st);
-      return m.reply(!st ? "\u{1F507} Whole server silenced" : "\u{1F50A} Server active");
+      return m.reply(st ? "\u{1F50A} **Server active again**" : "\u{1F507} **Whole server silenced**");
     }
     case "disable": {
       if (m.author.username !== OWNER) return m.reply("\u274C Owner only");
       disabled.add(m.channelId);
-      return m.reply("\u{1F6AB} Disabled here");
+      return m.reply("\u{1F6AB} **Commands disabled in this channel**");
     }
     case "enable": {
       if (m.author.username !== OWNER) return m.reply("\u274C Owner only");
       disabled.delete(m.channelId);
-      return m.reply("\u2705 Enabled here");
+      return m.reply("\u2705 **Commands enabled here**");
     }
     case "bully": {
-      if (m.author.username !== OWNER || !a[0]) return m.reply("\u274C Use: -bully @user");
-      for (let i = 0; i < 20; i++) await m.channel.send(`${a[0]} \u{1F44A}`).catch(() => {
-      });
+      if (m.author.username !== OWNER || !a[0]) return m.reply("\u274C Usage: `-bully @user`");
+      for (let i = 0; i < 20; i++) {
+        await m.channel.send(`${a[0]} \u{1F44A}`).catch(() => {
+        });
+        await delay(600);
+      }
       return;
     }
     case "dw": {
       const opp = a[0] || "Opponent";
-      let r = parseInt(a[1]) || 5;
-      r = Math.max(1, Math.min(10, r));
-      const s = parseInt(a[2]) || 10;
+      let rounds = parseInt(a[1]) || 5;
+      rounds = Math.max(1, Math.min(10, rounds));
+      const sides = parseInt(a[2]) || 10;
       let p1 = 0, p2 = 0;
-      let out = `\u{1F3B2} **Dice War!**
+      await m.reply(`\u{1F3B2} **Dice War!**
 ${m.author} vs ${opp}
-${r} rounds \u2014 d${s}
-
-Rolling...
-`;
-      for (let i = 1; i <= r; i++) {
-        const r1 = Math.floor(Math.random() * s) + 1, r2 = Math.floor(Math.random() * s) + 1;
+${rounds} rounds \u2014 rolling d${sides}`);
+      for (let i = 1; i <= rounds; i++) {
+        const r1 = Math.floor(Math.random() * sides) + 1, r2 = Math.floor(Math.random() * sides) + 1;
         if (r1 > r2) {
           p1++;
-          out += `Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **You win round!**
-`;
+          await m.channel.send(`Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **You take the round!**`);
         } else if (r2 > r1) {
           p2++;
-          out += `Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **${opp} wins round!**
-`;
-        } else {
-          out += `Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **Tie!**
-`;
-        }
+          await m.channel.send(`Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **${opp} takes the round!**`);
+        } else await m.channel.send(`Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **Tie! No point**`);
+        await delay(1200);
       }
-      out += `
-\u{1F3C6} Final: **You ${p1} \u2013 ${p2} ${opp}**
-`;
-      out += p1 > p2 ? `\u2705 **You win ${p1}-${p2}!**` : p2 > p1 ? `\u274C **${opp} wins ${p2}-${p1}!**` : `\u2696\uFE0F **Draw!**`;
-      return m.reply(out);
+      let res = p1 > p2 ? `\u2705 **You win ${p1}-${p2}!**` : p2 > p1 ? `\u274C **${opp} wins ${p2}-${p1}!**` : `\u2696\uFE0F **Draw!**`;
+      return m.channel.send(`\u{1F3C6} **Final Score:** You ${p1} \u2013 ${p2} ${opp}
+${res}`);
+    }
+    case "cw": {
+      const opp = a[0] || "Opponent", side = a[1]?.toLowerCase();
+      if (!["heads", "tails"].includes(side)) return m.reply("\u274C Usage: `-cw @user heads/tails`");
+      let u = 0, o = 0, round = 1;
+      await m.reply(`\u{1FA99} **Coin War!**
+${m.author} vs ${opp}
+First to 2 wins!`);
+      while (u < 2 && o < 2) {
+        const flip = Math.random() < 0.5 ? "Heads" : "Tails";
+        if (flip.toLowerCase() === side) u++;
+        else o++;
+        await m.channel.send(`Round ${round}: \u{1FA99} **${flip}** | Score: You ${u} \u2013 ${o} ${opp}`);
+        round++;
+        await delay(1200);
+      }
+      return m.channel.send(u === 2 ? `\u{1F3C6} **You win the Coin War!**` : `\u{1F3C6} **${opp} wins the Coin War!**`);
     }
     case "help":
-      return m.reply(`\u{1F4D6} Commands
--d [max] Roll
--cf Flip
--choose opt...
--dw @user [1-10] [sides]
--cw @user heads/tails
--ship @u1 @u2
--stats
-\u{1F507} -silence
-Admin:
--disable/enable
--bully @user`);
+      return m.reply(`\u{1F4D6} **All Bot Commands**
+
+\u{1F3B2} **General**
+\`-d [max]\` \u2014 Roll 1 to max (default 100)
+\`-cf\` \u2014 Flip a coin
+\`-choose opt1 opt2 ...\` \u2014 Pick randomly
+\`-dw @user [rounds] [sides]\` \u2014 Dice War (max 10 rounds)
+\`-cw @user heads/tails\` \u2014 Coin War (first to 2 wins)
+\`-ship @u1 @u2\` \u2014 Compatibility 1\u201310
+\`-stats\` \u2014 View rolls, flips, uptime
+
+\u{1F451} **Admin Only**
+\`-silence\` \u2014 Mute bot for whole server
+\`-disable\` \u2014 Stop commands in this channel
+\`-enable\` \u2014 Re-enable commands
+\`-bully @user\` \u2014 Ping target 20 times`);
   }
 });
 client.login(token).catch((e) => console.error("Login:", e));

@@ -5,6 +5,7 @@ const client=new Client({intents:[GatewayIntentBits.Guilds,GatewayIntentBits.Gui
 const PREFIX='-',OWNER='.luckyyy_',CD=20000,NO_CD=['d','cf','choose'];
 const userCd=new Map(),disabled=new Set(),stats={r:0,f:0,start:Date.now()};
 const silence=new Map();
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
 
 client.once('ready',()=>console.log('Bot online: '+client.user.tag));
 client.on('messageCreate',async m=>{
@@ -16,71 +17,94 @@ client.on('messageCreate',async m=>{
   const cmd=p[0]?.toLowerCase()||'',a=p.slice(1);
   if(!NO_CD.includes(cmd)&&m.author.username!==OWNER){
     const now=Date.now(),last=userCd.get(m.author.id)||0;
-    if(now-last<CD)return m.reply(`Wait ${Math.ceil((CD-now+last)/1000)}s`).catch(()=>{});
+    if(now-last<CD)return m.reply(`⏳ Wait ${Math.ceil((CD-now+last)/1000)}s`).catch(()=>{});
     userCd.set(m.author.id,now);
   }
   switch(cmd){
     case'd':{
       const max=parseInt(a[0])||100,r=Math.floor(Math.random()*max)+1;
-      stats.r++;return m.reply(`🎲 Roll: ${r}`);
+      stats.r++;return m.reply(`🎲 **Roll:** ${r}`);
     }
     case'cf':{
       const res=Math.random()<0.5?'Heads':'Tails';
-      stats.f++;return m.reply(`🪙 Flip: ${res}`);
+      stats.f++;return m.reply(`🪙 **Flip:** ${res}`);
     }
     case'choose':{
-      if(!a.length)return m.reply('Use: -choose opt1 opt2');
-      return m.reply(`🎯 Pick: ${a[Math.floor(Math.random()*a.length)]}`);
-    }
-    case'cw':{
-      const side=a[1]?.toLowerCase();
-      if(!['heads','tails'].includes(side))return m.reply('Use: -cw @user heads/tails');
-      const res=Math.random()<0.5?'Heads':'Tails',win=res===side;
-      return m.reply(`🪙 Coin War: ${res}\n${win?'✅ Win':'❌ Lose'}`);
+      if(!a.length)return m.reply('❌ Usage: `-choose opt1 opt2 ...`');
+      return m.reply(`🎯 **I pick:** ${a[Math.floor(Math.random()*a.length)]}`);
     }
     case'ship':{
-      if(a.length<2)return m.reply('Use: -ship @u1 @u2');
-      return m.reply(`💞 Match: ${Math.floor(Math.random()*10)+1}/10`);
+      if(a.length<2)return m.reply('❌ Usage: `-ship @user1 @user2`');
+      const score=Math.floor(Math.random()*10)+1;
+      return m.reply(`💞 **Compatibility:** ${score}/10`);
     }
     case'stats':{
       const min=Math.floor((Date.now()-stats.start)/60000);
-      return m.reply(`📊 Stats\nRolls: ${stats.r}\nFlips: ${stats.f}\nUptime: ${min}m`);
+      return m.reply(`📊 **Bot Stats**\n🎲 Rolls: ${stats.r}\n🪙 Flips: ${stats.f}\n⏱️ Uptime: ${min} min`);
     }
     case'silence':{
-      if(m.author.username!==OWNER)return m.reply('❌ Only .luckyyy_');
+      if(m.author.username!==OWNER)return m.reply('❌ Only `.luckyyy_` can use this');
       const st=silence.get(g)||false;silence.set(g,!st);
-      return m.reply(!st?'🔇 Whole server silenced':'🔊 Server active');
+      return m.reply(st?'🔊 **Server active again**':'🔇 **Whole server silenced**');
     }
     case'disable':{
       if(m.author.username!==OWNER)return m.reply('❌ Owner only');
-      disabled.add(m.channelId);return m.reply('🚫 Disabled here');
+      disabled.add(m.channelId);return m.reply('🚫 **Commands disabled in this channel**');
     }
     case'enable':{
       if(m.author.username!==OWNER)return m.reply('❌ Owner only');
-      disabled.delete(m.channelId);return m.reply('✅ Enabled here');
+      disabled.delete(m.channelId);return m.reply('✅ **Commands enabled here**');
     }
     case'bully':{
-      if(m.author.username!==OWNER||!a[0])return m.reply('❌ Use: -bully @user');
-      for(let i=0;i<20;i++)await m.channel.send(`${a[0]} 👊`).catch(()=>{});
+      if(m.author.username!==OWNER||!a[0])return m.reply('❌ Usage: `-bully @user`');
+      for(let i=0;i<20;i++){await m.channel.send(`${a[0]} 👊`).catch(()=>{});await delay(600);}
       return;
     }
     case'dw':{
       const opp=a[0]||'Opponent';
-      let r=parseInt(a[1])||5;r=Math.max(1,Math.min(10,r));
-      const s=parseInt(a[2])||10;let p1=0,p2=0;
-      let out=`🎲 **Dice War!**\n${m.author} vs ${opp}\n${r} rounds — d${s}\n\nRolling...\n`;
-      for(let i=1;i<=r;i++){
-        const r1=Math.floor(Math.random()*s)+1,r2=Math.floor(Math.random()*s)+1;
-        if(r1>r2){p1++;out+=`Round ${i}: 🎲 ${r1} vs 🎲 ${r2} — **You win round!**\n`;}
-        else if(r2>r1){p2++;out+=`Round ${i}: 🎲 ${r1} vs 🎲 ${r2} — **${opp} wins round!**\n`;}
-        else{out+=`Round ${i}: 🎲 ${r1} vs 🎲 ${r2} — **Tie!**\n`;}
+      let rounds=parseInt(a[1])||5;rounds=Math.max(1,Math.min(10,rounds));
+      const sides=parseInt(a[2])||10;let p1=0,p2=0;
+      await m.reply(`🎲 **Dice War!**\n${m.author} vs ${opp}\n${rounds} rounds — rolling d${sides}`);
+      for(let i=1;i<=rounds;i++){
+        const r1=Math.floor(Math.random()*sides)+1,r2=Math.floor(Math.random()*sides)+1;
+        if(r1>r2){p1++;await m.channel.send(`Round ${i}: 🎲 ${r1} vs 🎲 ${r2} — **You take the round!**`);}
+        else if(r2>r1){p2++;await m.channel.send(`Round ${i}: 🎲 ${r1} vs 🎲 ${r2} — **${opp} takes the round!**`);}
+        else await m.channel.send(`Round ${i}: 🎲 ${r1} vs 🎲 ${r2} — **Tie! No point**`);
+        await delay(1200);
       }
-      out+=`\n🏆 Final: **You ${p1} – ${p2} ${opp}**\n`;
-      out+=p1>p2?`✅ **You win ${p1}-${p2}!**`:p2>p1?`❌ **${opp} wins ${p2}-${p1}!**`:`⚖️ **Draw!**`;
-      return m.reply(out);
+      let res=p1>p2?`✅ **You win ${p1}-${p2}!**`:p2>p1?`❌ **${opp} wins ${p2}-${p1}!**`:`⚖️ **Draw!**`;
+      return m.channel.send(`🏆 **Final Score:** You ${p1} – ${p2} ${opp}\n${res}`);
+    }
+    case'cw':{
+      const opp=a[0]||'Opponent',side=a[1]?.toLowerCase();
+      if(!['heads','tails'].includes(side))return m.reply('❌ Usage: `-cw @user heads/tails`');
+      let u=0,o=0,round=1;
+      await m.reply(`🪙 **Coin War!**\n${m.author} vs ${opp}\nFirst to 2 wins!`);
+      while(u<2&&o<2){
+        const flip=Math.random()<0.5?'Heads':'Tails';
+        if(flip.toLowerCase()===side)u++;else o++;
+        await m.channel.send(`Round ${round}: 🪙 **${flip}** | Score: You ${u} – ${o} ${opp}`);
+        round++;await delay(1200);
+      }
+      return m.channel.send(u===2?`🏆 **You win the Coin War!**`:`🏆 **${opp} wins the Coin War!**`);
     }
     case'help':
-      return m.reply(`📖 Commands\n-d [max] Roll\n-cf Flip\n-choose opt...\n-dw @user [1-10] [sides]\n-cw @user heads/tails\n-ship @u1 @u2\n-stats\n🔇 -silence\nAdmin:\n-disable/enable\n-bully @user`);
+      return m.reply(`📖 **All Bot Commands**
+
+🎲 **General**
+\`-d [max]\` — Roll 1 to max (default 100)
+\`-cf\` — Flip a coin
+\`-choose opt1 opt2 ...\` — Pick randomly
+\`-dw @user [rounds] [sides]\` — Dice War (max 10 rounds)
+\`-cw @user heads/tails\` — Coin War (first to 2 wins)
+\`-ship @u1 @u2\` — Compatibility 1–10
+\`-stats\` — View rolls, flips, uptime
+
+👑 **Admin Only**
+\`-silence\` — Mute bot for whole server
+\`-disable\` — Stop commands in this channel
+\`-enable\` — Re-enable commands
+\`-bully @user\` — Ping target 20 times`);
   }
 });
 client.login(token).catch(e=>console.error('Login:',e));
