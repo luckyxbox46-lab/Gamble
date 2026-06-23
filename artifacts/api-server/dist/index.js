@@ -77599,7 +77599,8 @@ client.once("ready", () => console.log("Bot online: " + client.user.tag));
 client.on("messageCreate", async (m) => {
   if (m.author.bot || !m.guild) return;
   const g = m.guild.id;
-  if (!m.content.startsWith(PREFIX) && rewardActive.get(g)) {
+  if (!m.content.startsWith(PREFIX)) {
+    if (!rewardActive.get(g)) return;
     const uid = m.author.id, now = Date.now();
     const lastT = msgCd.get(uid) || 0, lastC = lastMsg.get(uid) || "";
     if (now - lastT > 2e3 && m.content.trim() !== lastC.trim()) {

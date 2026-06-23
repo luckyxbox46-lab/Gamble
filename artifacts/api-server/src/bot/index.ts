@@ -10,10 +10,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
 
 const dataFile='./messageData.json';
 let messageData={};
-if(fs.existsSync(dataFile)){
-  try{messageData=JSON.parse(fs.readFileSync(dataFile,'utf8'));}
-  catch(e){messageData={};}
-}
+if(fs.existsSync(dataFile)){try{messageData=JSON.parse(fs.readFileSync(dataFile,'utf8'));}catch(e){messageData={};}}
 const save=()=>fs.writeFileSync(dataFile,JSON.stringify(messageData,null,2),'utf8');
 
 const isAdmin=m=>m.user.username===OWNER||m.permissions.has(PermissionsBitField.Flags.Administrator);
@@ -24,8 +21,11 @@ client.on('messageCreate',async m=>{
   if(m.author.bot||!m.guild)return;
   const g=m.guild.id;
 
-  // Count messages ONLY, no cooldown here
-  if(!m.content.startsWith(PREFIX)&&rewardActive.get(g)){
+  // --------------------------
+  // ONLY NORMAL MESSAGES HERE
+  // --------------------------
+  if(!m.content.startsWith(PREFIX)){
+    if(!rewardActive.get(g))return;
     const uid=m.author.id,now=Date.now();
     const lastT=msgCd.get(uid)||0,lastC=lastMsg.get(uid)||'';
     if(now-lastT>2000&&m.content.trim()!==lastC.trim()){
@@ -37,17 +37,19 @@ client.on('messageCreate',async m=>{
         await m.channel.send(`🎉 ${m.author}: ${c.toLocaleString()} msgs → earned $${e.toFixed(2)}`);
       }
     }
-    return; // STOP HERE for normal messages, no cooldown check
+    return; // EXIT HERE — NO COOLDOWN CHECK FOR CHAT
   }
 
-  // Only process commands from here
+  // --------------------------
+  // ONLY COMMANDS FROM HERE
+  // --------------------------
   if(silence.get(g)&&!canSilence(m.member,m.guild))return;
   if(disabled.has(m.channelId)&&!isAdmin(m.member))return;
 
   const p=m.content.slice(PREFIX.length).trim().split(/\s+/);
   const cmd=p[0]?.toLowerCase()||'',a=p.slice(1);
 
-  // Cooldown ONLY for commands, not normal chat
+  // Cooldown ONLY for commands
   if(!['d','cf','choose'].includes(cmd)&&!isAdmin(m.member)){
     const now=Date.now(),last=userCd.get(m.author.id)||0;
     if(now-last<CD)return m.reply(`⏳ Wait ${Math.ceil((CD-now+last)/1000)}s`).catch(()=>{});
