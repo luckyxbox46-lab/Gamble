@@ -32783,7 +32783,7 @@ var require_PermissionsBitField = __commonJS({
     "use strict";
     var { PermissionFlagsBits } = require_v106();
     var BitField = require_BitField();
-    var PermissionsBitField2 = class extends BitField {
+    var PermissionsBitField3 = class extends BitField {
       static {
         __name(this, "PermissionsBitField");
       }
@@ -32866,7 +32866,7 @@ var require_PermissionsBitField = __commonJS({
         return super.toArray(false);
       }
     };
-    module2.exports = PermissionsBitField2;
+    module2.exports = PermissionsBitField3;
   }
 });
 
@@ -32900,7 +32900,7 @@ var require_Role = __commonJS({
     var { PermissionFlagsBits } = require_v106();
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
-    var PermissionsBitField2 = require_PermissionsBitField();
+    var PermissionsBitField3 = require_PermissionsBitField();
     var RoleFlagsBitField = require_RoleFlagsBitField();
     var Role = class extends Base {
       static {
@@ -32935,7 +32935,7 @@ var require_Role = __commonJS({
           this.rawPosition = data.position;
         }
         if ("permissions" in data) {
-          this.permissions = new PermissionsBitField2(BigInt(data.permissions)).freeze();
+          this.permissions = new PermissionsBitField3(BigInt(data.permissions)).freeze();
         }
         if ("managed" in data) {
           this.managed = data.managed;
@@ -33284,7 +33284,7 @@ var require_PermissionOverwrites = __commonJS({
     var Base = require_Base();
     var { Role } = require_Role();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
-    var PermissionsBitField2 = require_PermissionsBitField();
+    var PermissionsBitField3 = require_PermissionsBitField();
     var PermissionOverwrites = class extends Base {
       static {
         __name(this, "PermissionOverwrites");
@@ -33300,10 +33300,10 @@ var require_PermissionOverwrites = __commonJS({
           this.type = data.type;
         }
         if ("deny" in data) {
-          this.deny = new PermissionsBitField2(BigInt(data.deny)).freeze();
+          this.deny = new PermissionsBitField3(BigInt(data.deny)).freeze();
         }
         if ("allow" in data) {
-          this.allow = new PermissionsBitField2(BigInt(data.allow)).freeze();
+          this.allow = new PermissionsBitField3(BigInt(data.allow)).freeze();
         }
       }
       /**
@@ -33363,8 +33363,8 @@ var require_PermissionOverwrites = __commonJS({
        * @returns {ResolvedOverwriteOptions}
        */
       static resolveOverwriteOptions(options, { allow, deny } = {}) {
-        allow = new PermissionsBitField2(allow);
-        deny = new PermissionsBitField2(deny);
+        allow = new PermissionsBitField3(allow);
+        deny = new PermissionsBitField3(deny);
         for (const [perm, value] of Object.entries(options)) {
           if (value === true) {
             allow.add(perm);
@@ -33413,8 +33413,8 @@ var require_PermissionOverwrites = __commonJS({
           return {
             id: overwrite.id,
             type: overwrite.type,
-            allow: PermissionsBitField2.resolve(overwrite.allow ?? PermissionsBitField2.DefaultBit).toString(),
-            deny: PermissionsBitField2.resolve(overwrite.deny ?? PermissionsBitField2.DefaultBit).toString()
+            allow: PermissionsBitField3.resolve(overwrite.allow ?? PermissionsBitField3.DefaultBit).toString(),
+            deny: PermissionsBitField3.resolve(overwrite.deny ?? PermissionsBitField3.DefaultBit).toString()
           };
         }
         const userOrRole = guild.roles.resolve(overwrite.id) ?? guild.client.users.resolve(overwrite.id);
@@ -33425,8 +33425,8 @@ var require_PermissionOverwrites = __commonJS({
         return {
           id: userOrRole.id,
           type,
-          allow: PermissionsBitField2.resolve(overwrite.allow ?? PermissionsBitField2.DefaultBit).toString(),
-          deny: PermissionsBitField2.resolve(overwrite.deny ?? PermissionsBitField2.DefaultBit).toString()
+          allow: PermissionsBitField3.resolve(overwrite.allow ?? PermissionsBitField3.DefaultBit).toString(),
+          deny: PermissionsBitField3.resolve(overwrite.deny ?? PermissionsBitField3.DefaultBit).toString()
         };
       }
     };
@@ -33594,7 +33594,7 @@ var require_GuildChannel = __commonJS({
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var PermissionOverwriteManager = require_PermissionOverwriteManager();
     var { VoiceBasedChannelTypes } = require_Constants();
-    var PermissionsBitField2 = require_PermissionsBitField();
+    var PermissionsBitField3 = require_PermissionsBitField();
     var { getSortableGroupTypes } = require_Util();
     var GuildChannel = class extends BaseChannel {
       static {
@@ -33657,7 +33657,7 @@ var require_GuildChannel = __commonJS({
         return [...overwriteIds].every((key) => {
           const channelVal = this.permissionOverwrites.cache.get(key);
           const parentVal = this.parent.permissionOverwrites.cache.get(key);
-          if (!channelVal && parentVal.deny.bitfield === PermissionsBitField2.DefaultBit && parentVal.allow.bitfield === PermissionsBitField2.DefaultBit || !parentVal && channelVal.deny.bitfield === PermissionsBitField2.DefaultBit && channelVal.allow.bitfield === PermissionsBitField2.DefaultBit) {
+          if (!channelVal && parentVal.deny.bitfield === PermissionsBitField3.DefaultBit && parentVal.allow.bitfield === PermissionsBitField3.DefaultBit || !parentVal && channelVal.deny.bitfield === PermissionsBitField3.DefaultBit && channelVal.allow.bitfield === PermissionsBitField3.DefaultBit) {
             return true;
           }
           return channelVal !== void 0 && parentVal !== void 0 && channelVal.deny.bitfield === parentVal.deny.bitfield && channelVal.allow.bitfield === parentVal.allow.bitfield;
@@ -33728,15 +33728,15 @@ var require_GuildChannel = __commonJS({
        */
       memberPermissions(member, checkAdmin) {
         if (checkAdmin && member.id === this.guild.ownerId) {
-          return new PermissionsBitField2(PermissionsBitField2.All).freeze();
+          return new PermissionsBitField3(PermissionsBitField3.All).freeze();
         }
         const roles = member.roles.cache;
-        const permissions = new PermissionsBitField2(roles.map((role) => role.permissions));
+        const permissions = new PermissionsBitField3(roles.map((role) => role.permissions));
         if (checkAdmin && permissions.has(PermissionFlagsBits.Administrator)) {
-          return new PermissionsBitField2(PermissionsBitField2.All).freeze();
+          return new PermissionsBitField3(PermissionsBitField3.All).freeze();
         }
         const overwrites = this.overwritesFor(member, true, roles);
-        return permissions.remove(overwrites.everyone?.deny ?? PermissionsBitField2.DefaultBit).add(overwrites.everyone?.allow ?? PermissionsBitField2.DefaultBit).remove(overwrites.roles.length > 0 ? overwrites.roles.map((role) => role.deny) : PermissionsBitField2.DefaultBit).add(overwrites.roles.length > 0 ? overwrites.roles.map((role) => role.allow) : PermissionsBitField2.DefaultBit).remove(overwrites.member?.deny ?? PermissionsBitField2.DefaultBit).add(overwrites.member?.allow ?? PermissionsBitField2.DefaultBit).freeze();
+        return permissions.remove(overwrites.everyone?.deny ?? PermissionsBitField3.DefaultBit).add(overwrites.everyone?.allow ?? PermissionsBitField3.DefaultBit).remove(overwrites.roles.length > 0 ? overwrites.roles.map((role) => role.deny) : PermissionsBitField3.DefaultBit).add(overwrites.roles.length > 0 ? overwrites.roles.map((role) => role.allow) : PermissionsBitField3.DefaultBit).remove(overwrites.member?.deny ?? PermissionsBitField3.DefaultBit).add(overwrites.member?.allow ?? PermissionsBitField3.DefaultBit).freeze();
       }
       /**
        * Gets the overall set of permissions for a role in this channel, taking into account channel overwrites.
@@ -33748,12 +33748,12 @@ var require_GuildChannel = __commonJS({
        */
       rolePermissions(role, checkAdmin) {
         if (checkAdmin && role.permissions.has(PermissionFlagsBits.Administrator)) {
-          return new PermissionsBitField2(PermissionsBitField2.All).freeze();
+          return new PermissionsBitField3(PermissionsBitField3.All).freeze();
         }
-        const basePermissions = new PermissionsBitField2([role.permissions, role.guild.roles.everyone.permissions]);
+        const basePermissions = new PermissionsBitField3([role.permissions, role.guild.roles.everyone.permissions]);
         const everyoneOverwrites = this.permissionOverwrites.cache.get(this.guild.id);
         const roleOverwrites = this.permissionOverwrites.cache.get(role.id);
-        return basePermissions.remove(everyoneOverwrites?.deny ?? PermissionsBitField2.DefaultBit).add(everyoneOverwrites?.allow ?? PermissionsBitField2.DefaultBit).remove(roleOverwrites?.deny ?? PermissionsBitField2.DefaultBit).add(roleOverwrites?.allow ?? PermissionsBitField2.DefaultBit).freeze();
+        return basePermissions.remove(everyoneOverwrites?.deny ?? PermissionsBitField3.DefaultBit).add(everyoneOverwrites?.allow ?? PermissionsBitField3.DefaultBit).remove(roleOverwrites?.deny ?? PermissionsBitField3.DefaultBit).add(roleOverwrites?.allow ?? PermissionsBitField3.DefaultBit).freeze();
       }
       /**
        * Locks in the permission overwrites from the parent channel.
@@ -36786,7 +36786,7 @@ var require_BaseInteraction = __commonJS({
     var { InteractionType, ApplicationCommandType, ComponentType } = require_v106();
     var Base = require_Base();
     var { SelectMenuTypes } = require_Constants();
-    var PermissionsBitField2 = require_PermissionsBitField();
+    var PermissionsBitField3 = require_PermissionsBitField();
     var BaseInteraction = class extends Base {
       static {
         __name(this, "BaseInteraction");
@@ -36802,8 +36802,8 @@ var require_BaseInteraction = __commonJS({
         this.user = this.client.users._add(data.user ?? data.member.user);
         this.member = data.member ? this.guild?.members._add(data.member) ?? data.member : null;
         this.version = data.version;
-        this.appPermissions = new PermissionsBitField2(data.app_permissions).freeze();
-        this.memberPermissions = data.member?.permissions ? new PermissionsBitField2(data.member.permissions).freeze() : null;
+        this.appPermissions = new PermissionsBitField3(data.app_permissions).freeze();
+        this.memberPermissions = data.member?.permissions ? new PermissionsBitField3(data.member.permissions).freeze() : null;
         this.locale = data.locale;
         this.guildLocale = data.guild_locale ?? null;
         this.entitlements = data.entitlements.reduce(
@@ -37581,7 +37581,7 @@ var require_ApplicationCommand = __commonJS({
     var isEqual = require_fast_deep_equal();
     var Base = require_Base();
     var ApplicationCommandPermissionsManager = require_ApplicationCommandPermissionsManager();
-    var PermissionsBitField2 = require_PermissionsBitField();
+    var PermissionsBitField3 = require_PermissionsBitField();
     var ApplicationCommand = class extends Base {
       static {
         __name(this, "ApplicationCommand");
@@ -37630,7 +37630,7 @@ var require_ApplicationCommand = __commonJS({
           this.options ??= [];
         }
         if ("default_member_permissions" in data) {
-          this.defaultMemberPermissions = data.default_member_permissions ? new PermissionsBitField2(BigInt(data.default_member_permissions)).freeze() : null;
+          this.defaultMemberPermissions = data.default_member_permissions ? new PermissionsBitField3(BigInt(data.default_member_permissions)).freeze() : null;
         } else {
           this.defaultMemberPermissions ??= null;
         }
@@ -37851,10 +37851,10 @@ var require_ApplicationCommand = __commonJS({
         let defaultMemberPermissions = null;
         let dmPermission = command.dmPermission ?? command.dm_permission;
         if ("default_member_permissions" in command) {
-          defaultMemberPermissions = command.default_member_permissions ? new PermissionsBitField2(BigInt(command.default_member_permissions)).bitfield : null;
+          defaultMemberPermissions = command.default_member_permissions ? new PermissionsBitField3(BigInt(command.default_member_permissions)).bitfield : null;
         }
         if ("defaultMemberPermissions" in command) {
-          defaultMemberPermissions = command.defaultMemberPermissions !== null ? new PermissionsBitField2(command.defaultMemberPermissions).bitfield : null;
+          defaultMemberPermissions = command.defaultMemberPermissions !== null ? new PermissionsBitField3(command.defaultMemberPermissions).bitfield : null;
         }
         if (command.name !== this.name || "description" in command && command.description !== this.description || "version" in command && command.version !== this.version || command.type && command.type !== this.type || "nsfw" in command && command.nsfw !== this.nsfw || // Future proof for options being nullable
         // TODO: remove ?? 0 on each when nullable
@@ -38030,7 +38030,7 @@ var require_ApplicationCommandManager = __commonJS({
     var CachedManager = require_CachedManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ApplicationCommand = require_ApplicationCommand();
-    var PermissionsBitField2 = require_PermissionsBitField();
+    var PermissionsBitField3 = require_PermissionsBitField();
     var ApplicationCommandManager = class extends CachedManager {
       static {
         __name(this, "ApplicationCommandManager");
@@ -38230,10 +38230,10 @@ var require_ApplicationCommandManager = __commonJS({
         if (isJSONEncodable(command)) return command.toJSON();
         let default_member_permissions;
         if ("default_member_permissions" in command) {
-          default_member_permissions = command.default_member_permissions ? new PermissionsBitField2(BigInt(command.default_member_permissions)).bitfield.toString() : command.default_member_permissions;
+          default_member_permissions = command.default_member_permissions ? new PermissionsBitField3(BigInt(command.default_member_permissions)).bitfield.toString() : command.default_member_permissions;
         }
         if ("defaultMemberPermissions" in command) {
-          default_member_permissions = command.defaultMemberPermissions !== null ? new PermissionsBitField2(command.defaultMemberPermissions).bitfield.toString() : command.defaultMemberPermissions;
+          default_member_permissions = command.defaultMemberPermissions !== null ? new PermissionsBitField3(command.defaultMemberPermissions).bitfield.toString() : command.defaultMemberPermissions;
         }
         return {
           name: command.name,
@@ -38914,7 +38914,7 @@ var require_ClientApplication = __commonJS({
     var { SubscriptionManager } = require_SubscriptionManager();
     var ApplicationFlagsBitField = require_ApplicationFlagsBitField();
     var { resolveImage } = require_DataResolver();
-    var PermissionsBitField2 = require_PermissionsBitField();
+    var PermissionsBitField3 = require_PermissionsBitField();
     var ClientApplication = class extends Application {
       static {
         __name(this, "ClientApplication");
@@ -38932,7 +38932,7 @@ var require_ClientApplication = __commonJS({
         if ("install_params" in data) {
           this.installParams = {
             scopes: data.install_params.scopes,
-            permissions: new PermissionsBitField2(data.install_params.permissions).freeze()
+            permissions: new PermissionsBitField3(data.install_params.permissions).freeze()
           };
         } else {
           this.installParams ??= null;
@@ -38944,7 +38944,7 @@ var require_ClientApplication = __commonJS({
               if (config.oauth2_install_params) {
                 oauth2InstallParams = {
                   scopes: config.oauth2_install_params.scopes,
-                  permissions: new PermissionsBitField2(config.oauth2_install_params.permissions).freeze()
+                  permissions: new PermissionsBitField3(config.oauth2_install_params.permissions).freeze()
                 };
               }
               const context = {
@@ -51218,7 +51218,7 @@ var require_Message = __commonJS({
     var { createComponent, findComponentByCustomId } = require_Components();
     var { NonSystemMessageTypes, MaxBulkDeletableMessageAge, UndeletableMessageTypes } = require_Constants();
     var MessageFlagsBitField = require_MessageFlagsBitField();
-    var PermissionsBitField2 = require_PermissionsBitField();
+    var PermissionsBitField3 = require_PermissionsBitField();
     var { _transformAPIMessageInteractionMetadata } = require_Transformers();
     var { cleanContent, resolvePartialEmoji, transformResolved } = require_Util();
     var Message = class extends Base {
@@ -51714,7 +51714,7 @@ var require_Message = __commonJS({
        * @readonly
        */
       get crosspostable() {
-        const bitfield = PermissionFlagsBits.SendMessages | (this.author.id === this.client.user.id ? PermissionsBitField2.DefaultBit : PermissionFlagsBits.ManageMessages);
+        const bitfield = PermissionFlagsBits.SendMessages | (this.author.id === this.client.user.id ? PermissionsBitField3.DefaultBit : PermissionFlagsBits.ManageMessages);
         const { channel } = this;
         return Boolean(
           channel?.type === ChannelType.GuildAnnouncement && !this.flags.has(MessageFlags.Crossposted) && this.reference?.type !== MessageReferenceType.Forward && this.type === MessageType.Default && !this.poll && channel.viewable && channel.permissionsFor(this.client.user)?.has(bitfield, false)
@@ -52929,7 +52929,7 @@ var require_GuildMember = __commonJS({
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var GuildMemberRoleManager = require_GuildMemberRoleManager();
     var { GuildMemberFlagsBitField } = require_GuildMemberFlagsBitField();
-    var PermissionsBitField2 = require_PermissionsBitField();
+    var PermissionsBitField3 = require_PermissionsBitField();
     var GuildMember = class extends Base {
       static {
         __name(this, "GuildMember");
@@ -53148,8 +53148,8 @@ var require_GuildMember = __commonJS({
        * @readonly
        */
       get permissions() {
-        if (this.user.id === this.guild.ownerId) return new PermissionsBitField2(PermissionsBitField2.All).freeze();
-        return new PermissionsBitField2(this.roles.cache.map((role) => role.permissions)).freeze();
+        if (this.user.id === this.guild.ownerId) return new PermissionsBitField3(PermissionsBitField3.All).freeze();
+        return new PermissionsBitField3(this.roles.cache.map((role) => role.permissions)).freeze();
       }
       /**
        * Whether the client user is above this user in the hierarchy, according to role position and guild ownership.
@@ -72763,7 +72763,7 @@ var require_RoleManager = __commonJS({
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { Role } = require_Role();
     var { resolveImage } = require_DataResolver();
-    var PermissionsBitField2 = require_PermissionsBitField();
+    var PermissionsBitField3 = require_PermissionsBitField();
     var { setPosition, resolveColor } = require_Util();
     var cacheWarningEmitted = false;
     var deprecationEmittedForCreate = false;
@@ -72915,7 +72915,7 @@ var require_RoleManager = __commonJS({
       async create(options = {}) {
         let { permissions, icon } = options;
         const { name, color, hoist, position, mentionable, reason, unicodeEmoji } = options;
-        if (permissions !== void 0) permissions = new PermissionsBitField2(permissions);
+        if (permissions !== void 0) permissions = new PermissionsBitField3(permissions);
         if (icon) {
           const guildEmojiURL = this.guild.emojis.resolve(icon)?.imageURL();
           icon = guildEmojiURL ? await resolveImage(guildEmojiURL) : await resolveImage(icon);
@@ -73004,7 +73004,7 @@ var require_RoleManager = __commonJS({
           name: options.name,
           colors,
           hoist: options.hoist,
-          permissions: options.permissions === void 0 ? void 0 : new PermissionsBitField2(options.permissions),
+          permissions: options.permissions === void 0 ? void 0 : new PermissionsBitField3(options.permissions),
           mentionable: options.mentionable,
           icon,
           unicode_emoji: options.unicodeEmoji
@@ -74511,7 +74511,7 @@ var require_OAuth2Guild = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/OAuth2Guild.js"(exports2, module2) {
     "use strict";
     var BaseGuild = require_BaseGuild();
-    var PermissionsBitField2 = require_PermissionsBitField();
+    var PermissionsBitField3 = require_PermissionsBitField();
     var OAuth2Guild = class extends BaseGuild {
       static {
         __name(this, "OAuth2Guild");
@@ -74519,7 +74519,7 @@ var require_OAuth2Guild = __commonJS({
       constructor(client2, data) {
         super(client2, data);
         this.owner = data.owner;
-        this.permissions = new PermissionsBitField2(BigInt(data.permissions)).freeze();
+        this.permissions = new PermissionsBitField3(BigInt(data.permissions)).freeze();
       }
     };
     module2.exports = OAuth2Guild;
@@ -74547,7 +74547,7 @@ var require_GuildManager = __commonJS({
     var { Role } = require_Role();
     var { resolveImage } = require_DataResolver();
     var Events2 = require_Events();
-    var PermissionsBitField2 = require_PermissionsBitField();
+    var PermissionsBitField3 = require_PermissionsBitField();
     var SystemChannelFlagsBitField = require_SystemChannelFlagsBitField();
     var { _transformAPIIncidentsData } = require_Transformers();
     var { resolveColor } = require_Util();
@@ -74695,7 +74695,7 @@ var require_GuildManager = __commonJS({
             roles: roles.map(({ color, permissions, ...options }) => ({
               ...options,
               color: color && resolveColor(color),
-              permissions: permissions === void 0 ? void 0 : PermissionsBitField2.resolve(permissions).toString()
+              permissions: permissions === void 0 ? void 0 : PermissionsBitField3.resolve(permissions).toString()
             })),
             channels: channels.map(
               ({
@@ -74714,8 +74714,8 @@ var require_GuildManager = __commonJS({
                 video_quality_mode: videoQualityMode,
                 permission_overwrites: permissionOverwrites?.map(({ allow, deny, ...permissionOverwriteOptions }) => ({
                   ...permissionOverwriteOptions,
-                  allow: allow === void 0 ? void 0 : PermissionsBitField2.resolve(allow).toString(),
-                  deny: deny === void 0 ? void 0 : PermissionsBitField2.resolve(deny).toString()
+                  allow: allow === void 0 ? void 0 : PermissionsBitField3.resolve(allow).toString(),
+                  deny: deny === void 0 ? void 0 : PermissionsBitField3.resolve(deny).toString()
                 })),
                 rate_limit_per_user: rateLimitPerUser
               })
@@ -77562,7 +77562,7 @@ var require_src = __commonJS({
 });
 
 // src/bot/index.ts
-var { Client: Client2, GatewayIntentBits } = require_src();
+var { Client: Client2, GatewayIntentBits, PermissionsBitField: PermissionsBitField2 } = require_src();
 var token = process.env.DISCORD_BOT_TOKEN;
 if (!token) {
   console.error("No token");
@@ -77578,20 +77578,19 @@ var disabled = /* @__PURE__ */ new Set();
 var stats = { r: 0, f: 0, start: Date.now() };
 var silence = /* @__PURE__ */ new Map();
 var delay = /* @__PURE__ */ __name((ms) => new Promise((r) => setTimeout(r, ms)), "delay");
-var canManage = /* @__PURE__ */ __name((member, guild) => {
+var isAdmin = /* @__PURE__ */ __name((member) => {
   if (member.user.username === OWNER) return true;
-  const botMember = guild.members.me;
-  return member.roles.highest.position > botMember.roles.highest.position;
-}, "canManage");
+  return member.permissions.has(PermissionsBitField2.Flags.Administrator);
+}, "isAdmin");
 client.once("ready", () => console.log("Bot online: " + client.user.tag));
 client.on("messageCreate", async (m) => {
   if (m.author.bot || !m.content.startsWith(PREFIX) || !m.guild) return;
   const g = m.guild.id;
   if (silence.get(g) && m.author.username !== OWNER) return;
-  if (disabled.has(m.channelId) && !canManage(m.member, m.guild)) return;
+  if (disabled.has(m.channelId) && !isAdmin(m.member)) return;
   const p = m.content.slice(PREFIX.length).trim().split(/\s+/);
   const cmd = p[0]?.toLowerCase() || "", a = p.slice(1);
-  if (!NO_CD.includes(cmd) && !canManage(m.member, m.guild)) {
+  if (!NO_CD.includes(cmd) && !isAdmin(m.member)) {
     const now = Date.now(), last = userCd.get(m.author.id) || 0;
     if (now - last < CD) return m.reply(`\u23F3 Wait ${Math.ceil((CD - now + last) / 1e3)}s`).catch(() => {
     });
@@ -77625,23 +77624,23 @@ client.on("messageCreate", async (m) => {
 \u23F1\uFE0F Uptime: ${min} min`);
     }
     case "silence": {
-      if (m.author.username !== OWNER) return m.reply("\u274C Only `.luckyyy_` can use this");
+      if (m.author.username !== OWNER) return m.reply("\u274C Only `.luckyyy_` can use this command");
       const st = silence.get(g) || false;
       silence.set(g, !st);
       return m.reply(st ? "\u{1F50A} **Server active again**" : "\u{1F507} **Whole server silenced**");
     }
     case "disable": {
-      if (!canManage(m.member, m.guild)) return m.reply("\u274C You need a higher role than the bot to use this");
+      if (!isAdmin(m.member)) return m.reply("\u274C Requires Administrator permission");
       disabled.add(m.channelId);
       return m.reply("\u{1F6AB} **Commands disabled in this channel**");
     }
     case "enable": {
-      if (!canManage(m.member, m.guild)) return m.reply("\u274C You need a higher role than the bot to use this");
+      if (!isAdmin(m.member)) return m.reply("\u274C Requires Administrator permission");
       disabled.delete(m.channelId);
       return m.reply("\u2705 **Commands enabled here**");
     }
     case "bully": {
-      if (!canManage(m.member, m.guild) || !a[0]) return m.reply("\u274C Usage: `-bully @user`");
+      if (!isAdmin(m.member) || !a[0]) return m.reply("\u274C Usage: `-bully @user` | Requires Administrator");
       for (let i = 0; i < 20; i++) {
         await m.channel.send(`${a[0]} \u{1F44A}`).catch(() => {
         });
@@ -77693,18 +77692,18 @@ First to 2 wins!`);
       return m.reply(`\u{1F4D6} **All Bot Commands**
 
 \u{1F3B2} **General**
-\`-d [max]\` \u2014 Roll 1 to max (default 100)
+\`-d [max]\` \u2014 Roll dice (default 100)
 \`-cf\` \u2014 Flip a coin
 \`-choose opt1 opt2 ...\` \u2014 Pick randomly
 \`-dw @user [rounds] [sides]\` \u2014 Dice War (max 10 rounds)
 \`-cw @user heads/tails\` \u2014 Coin War (first to 2 wins)
 \`-ship @u1 @u2\` \u2014 Compatibility 1\u201310
-\`-stats\` \u2014 View rolls, flips, uptime
+\`-stats\` \u2014 View stats & uptime
 
-\u{1F451} **Admin / Higher Role**
+\u{1F451} **Admin / Administrator**
 \`-disable\` \u2014 Stop commands in this channel
 \`-enable\` \u2014 Re-enable commands
-\`-bully @user\` \u2014 Ping target 20 times
+\`-bully @user\` \u2014 Send 20 pings
 
 \u{1F512} **Owner Only**
 \`-silence\` \u2014 Mute bot for the whole server`);

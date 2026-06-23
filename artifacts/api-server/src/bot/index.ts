@@ -1,4 +1,4 @@
-const {Client,GatewayIntentBits} = require('discord.js');
+const {Client,GatewayIntentBits,PermissionsBitField} = require('discord.js');
 const token = process.env.DISCORD_BOT_TOKEN;
 if(!token){console.error('No token');process.exit(1);}
 const client = new Client({intents:[GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent]});
@@ -7,11 +7,10 @@ const userCd = new Map(), disabled = new Set(), stats = {r:0, f:0, start: Date.n
 const silence = new Map();
 const delay = ms => new Promise(r => setTimeout(r, ms));
 
-// Check if user has higher role than bot
-const canManage = (member, guild) => {
+// Check: owner OR has Administrator permission
+const isAdmin = member => {
   if(member.user.username === OWNER) return true;
-  const botMember = guild.members.me;
-  return member.roles.highest.position > botMember.roles.highest.position;
+  return member.permissions.has(PermissionsBitField.Flags.Administrator);
 };
 
 client.once('ready', () => console.log('Bot online: ' + client.user.tag));
@@ -19,12 +18,12 @@ client.on('messageCreate', async m => {
   if(m.author.bot || !m.content.startsWith(PREFIX) || !m.guild) return;
   const g = m.guild.id;
   if(silence.get(g) && m.author.username !== OWNER) return;
-  if(disabled.has(m.channelId) && !canManage(m.member, m.guild)) return;
+  if(disabled.has(m.channelId) && !isAdmin(m.member)) return;
 
   const p = m.content.slice(PREFIX.length).trim().split(/\s+/);
   const cmd = p[0]?.toLowerCase() || '', a = p.slice(1);
 
-  if(!NO_CD.includes(cmd) && !canManage(m.member, m.guild)){
+  if(!NO_CD.includes(cmd) && !isAdmin(m.member)){
     const now = Date.now(), last = userCd.get(m.author.id) || 0;
     if(now - last < CD) return m.reply(`⏳ Wait ${Math.ceil((CD - now + last)/1000)}s`).catch(()=>{});
     userCd.set(m.author.id, now);
@@ -53,20 +52,20 @@ client.on('messageCreate', async m => {
       return m.reply(`📊 **Bot Stats**\n🎲 Rolls: ${stats.r}\n🪙 Flips: ${stats.f}\n⏱️ Uptime: ${min} min`);
     }
     case'silence':{
-      if(m.author.username !== OWNER) return m.reply('❌ Only `.luckyyy_` can use this');
+      if(m.author.username !== OWNER) return m.reply('❌ Only `.luckyyy_` can use this command');
       const st = silence.get(g) || false; silence.set(g, !st);
       return m.reply(st ? '🔊 **Server active again**' : '🔇 **Whole server silenced**');
     }
     case'disable':{
-      if(!canManage(m.member, m.guild)) return m.reply('❌ You need a higher role than the bot to use this');
+      if(!isAdmin(m.member)) return m.reply('❌ Requires Administrator permission');
       disabled.add(m.channelId); return m.reply('🚫 **Commands disabled in this channel**');
     }
     case'enable':{
-      if(!canManage(m.member, m.guild)) return m.reply('❌ You need a higher role than the bot to use this');
+      if(!isAdmin(m.member)) return m.reply('❌ Requires Administrator permission');
       disabled.delete(m.channelId); return m.reply('✅ **Commands enabled here**');
     }
     case'bully':{
-      if(!canManage(m.member, m.guild) || !a[0]) return m.reply('❌ Usage: `-bully @user`');
+      if(!isAdmin(m.member) || !a[0]) return m.reply('❌ Usage: `-bully @user` | Requires Administrator');
       for(let i = 0; i < 20; i++){ await m.channel.send(`${a[0]} 👊`).catch(()=>{}); await delay(600); }
       return;
     }
@@ -102,18 +101,18 @@ client.on('messageCreate', async m => {
       return m.reply(`📖 **All Bot Commands**
 
 🎲 **General**
-\`-d [max]\` — Roll 1 to max (default 100)
+\`-d [max]\` — Roll dice (default 100)
 \`-cf\` — Flip a coin
 \`-choose opt1 opt2 ...\` — Pick randomly
 \`-dw @user [rounds] [sides]\` — Dice War (max 10 rounds)
 \`-cw @user heads/tails\` — Coin War (first to 2 wins)
 \`-ship @u1 @u2\` — Compatibility 1–10
-\`-stats\` — View rolls, flips, uptime
+\`-stats\` — View stats & uptime
 
-👑 **Admin / Higher Role**
+👑 **Admin / Administrator**
 \`-disable\` — Stop commands in this channel
 \`-enable\` — Re-enable commands
-\`-bully @user\` — Ping target 20 times
+\`-bully @user\` — Send 20 pings
 
 🔒 **Owner Only**
 \`-silence\` — Mute bot for the whole server`);
