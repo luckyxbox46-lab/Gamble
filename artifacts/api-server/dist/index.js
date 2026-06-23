@@ -623,13 +623,13 @@ function __disposeResources(env) {
   __name(next, "next");
   return next();
 }
-function __rewriteRelativeImportExtension(path, preserveJsx) {
-  if (typeof path === "string" && /^\.\.?\//.test(path)) {
-    return path.replace(/\.(tsx)$|((?:\.d)?)((?:\.[^./]+?)?)\.([cm]?)ts$/i, function(m, tsx, d, ext, cm) {
+function __rewriteRelativeImportExtension(path2, preserveJsx) {
+  if (typeof path2 === "string" && /^\.\.?\//.test(path2)) {
+    return path2.replace(/\.(tsx)$|((?:\.d)?)((?:\.[^./]+?)?)\.([cm]?)ts$/i, function(m, tsx, d, ext, cm) {
       return tsx ? preserveJsx ? ".jsx" : ".js" : d && (!ext || !cm) ? m : d + ext + "." + cm.toLowerCase() + "js";
     });
   }
-  return path;
+  return path2;
 }
 var extendStatics, __assign, __createBinding, __setModuleDefault, ownKeys, _SuppressedError, tslib_es6_default;
 var init_tslib_es6 = __esm({
@@ -1639,14 +1639,14 @@ var require_util = __commonJS({
         }
         const port = url.port != null ? url.port : url.protocol === "https:" ? 443 : 80;
         let origin = url.origin != null ? url.origin : `${url.protocol || ""}//${url.hostname || ""}:${port}`;
-        let path = url.path != null ? url.path : `${url.pathname || ""}${url.search || ""}`;
+        let path2 = url.path != null ? url.path : `${url.pathname || ""}${url.search || ""}`;
         if (origin[origin.length - 1] === "/") {
           origin = origin.slice(0, origin.length - 1);
         }
-        if (path && path[0] !== "/") {
-          path = `/${path}`;
+        if (path2 && path2[0] !== "/") {
+          path2 = `/${path2}`;
         }
-        return new URL(`${origin}${path}`);
+        return new URL(`${origin}${path2}`);
       }
       if (!isHttpOrHttpsPrefixed(url.origin || url.protocol)) {
         throw new InvalidArgumentError("Invalid URL protocol: the URL must start with `http:` or `https:`.");
@@ -2130,39 +2130,39 @@ var require_diagnostics = __commonJS({
       });
       diagnosticsChannel.channel("undici:client:sendHeaders").subscribe((evt) => {
         const {
-          request: { method, path, origin }
+          request: { method, path: path2, origin }
         } = evt;
-        debuglog("sending request to %s %s/%s", method, origin, path);
+        debuglog("sending request to %s %s/%s", method, origin, path2);
       });
       diagnosticsChannel.channel("undici:request:headers").subscribe((evt) => {
         const {
-          request: { method, path, origin },
+          request: { method, path: path2, origin },
           response: { statusCode }
         } = evt;
         debuglog(
           "received response to %s %s/%s - HTTP %d",
           method,
           origin,
-          path,
+          path2,
           statusCode
         );
       });
       diagnosticsChannel.channel("undici:request:trailers").subscribe((evt) => {
         const {
-          request: { method, path, origin }
+          request: { method, path: path2, origin }
         } = evt;
-        debuglog("trailers received from %s %s/%s", method, origin, path);
+        debuglog("trailers received from %s %s/%s", method, origin, path2);
       });
       diagnosticsChannel.channel("undici:request:error").subscribe((evt) => {
         const {
-          request: { method, path, origin },
+          request: { method, path: path2, origin },
           error
         } = evt;
         debuglog(
           "request to %s %s/%s errored - %s",
           method,
           origin,
-          path,
+          path2,
           error.message
         );
       });
@@ -2211,9 +2211,9 @@ var require_diagnostics = __commonJS({
         });
         diagnosticsChannel.channel("undici:client:sendHeaders").subscribe((evt) => {
           const {
-            request: { method, path, origin }
+            request: { method, path: path2, origin }
           } = evt;
-          debuglog("sending request to %s %s/%s", method, origin, path);
+          debuglog("sending request to %s %s/%s", method, origin, path2);
         });
       }
       diagnosticsChannel.channel("undici:websocket:open").subscribe((evt) => {
@@ -2279,7 +2279,7 @@ var require_request = __commonJS({
         __name(this, "Request");
       }
       constructor(origin, {
-        path,
+        path: path2,
         method,
         body,
         headers,
@@ -2294,11 +2294,11 @@ var require_request = __commonJS({
         expectContinue,
         servername
       }, handler) {
-        if (typeof path !== "string") {
+        if (typeof path2 !== "string") {
           throw new InvalidArgumentError("path must be a string");
-        } else if (path[0] !== "/" && !(path.startsWith("http://") || path.startsWith("https://")) && method !== "CONNECT") {
+        } else if (path2[0] !== "/" && !(path2.startsWith("http://") || path2.startsWith("https://")) && method !== "CONNECT") {
           throw new InvalidArgumentError("path must be an absolute URL or start with a slash");
-        } else if (invalidPathRegex.test(path)) {
+        } else if (invalidPathRegex.test(path2)) {
           throw new InvalidArgumentError("invalid request path");
         }
         if (typeof method !== "string") {
@@ -2364,7 +2364,7 @@ var require_request = __commonJS({
         this.completed = false;
         this.aborted = false;
         this.upgrade = upgrade || null;
-        this.path = query ? buildURL(path, query) : path;
+        this.path = query ? buildURL(path2, query) : path2;
         this.origin = origin;
         this.idempotent = idempotent == null ? method === "HEAD" || method === "GET" : idempotent;
         this.blocking = blocking == null ? false : blocking;
@@ -7016,7 +7016,7 @@ var require_client_h1 = __commonJS({
     }
     __name(shouldSendContentLength, "shouldSendContentLength");
     function writeH1(client2, request) {
-      const { method, path, host, upgrade, blocking, reset } = request;
+      const { method, path: path2, host, upgrade, blocking, reset } = request;
       let { body, headers, contentLength } = request;
       const expectsPayload = method === "PUT" || method === "POST" || method === "PATCH" || method === "QUERY" || method === "PROPFIND" || method === "PROPPATCH";
       if (util.isFormDataLike(body)) {
@@ -7082,7 +7082,7 @@ var require_client_h1 = __commonJS({
       if (blocking) {
         socket[kBlocking] = true;
       }
-      let header = `${method} ${path} HTTP/1.1\r
+      let header = `${method} ${path2} HTTP/1.1\r
 `;
       if (typeof host === "string") {
         header += `host: ${host}\r
@@ -7625,7 +7625,7 @@ var require_client_h2 = __commonJS({
     __name(shouldSendContentLength, "shouldSendContentLength");
     function writeH2(client2, request) {
       const session = client2[kHTTP2Session];
-      const { method, path, host, upgrade, expectContinue, signal, headers: reqHeaders } = request;
+      const { method, path: path2, host, upgrade, expectContinue, signal, headers: reqHeaders } = request;
       let { body } = request;
       if (upgrade) {
         util.errorRequest(client2, request, new Error("Upgrade not supported for H2"));
@@ -7692,7 +7692,7 @@ var require_client_h2 = __commonJS({
         });
         return true;
       }
-      headers[HTTP2_HEADER_PATH] = path;
+      headers[HTTP2_HEADER_PATH] = path2;
       headers[HTTP2_HEADER_SCHEME] = "https";
       const expectsPayload = method === "PUT" || method === "POST" || method === "PATCH";
       if (body && typeof body.read === "function") {
@@ -8059,9 +8059,9 @@ var require_redirect_handler = __commonJS({
           return this.handler.onHeaders(statusCode, headers, resume, statusText);
         }
         const { origin, pathname, search } = util.parseURL(new URL(this.location, this.opts.origin && new URL(this.opts.path, this.opts.origin)));
-        const path = search ? `${pathname}${search}` : pathname;
+        const path2 = search ? `${pathname}${search}` : pathname;
         this.opts.headers = cleanRequestHeaders(this.opts.headers, statusCode === 303, this.opts.origin !== origin);
-        this.opts.path = path;
+        this.opts.path = path2;
         this.opts.origin = origin;
         this.opts.maxRedirections = 0;
         this.opts.query = null;
@@ -9339,10 +9339,10 @@ var require_proxy_agent = __commonJS({
         };
         const {
           origin,
-          path = "/",
+          path: path2 = "/",
           headers = {}
         } = opts;
-        opts.path = origin + path;
+        opts.path = origin + path2;
         if (!("host" in headers) && !("Host" in headers)) {
           const { host } = new URL2(origin);
           headers.host = host;
@@ -11329,21 +11329,21 @@ var require_mock_utils = __commonJS({
       return true;
     }
     __name(matchHeaders, "matchHeaders");
-    function safeUrl(path) {
-      if (typeof path !== "string") {
-        return path;
+    function safeUrl(path2) {
+      if (typeof path2 !== "string") {
+        return path2;
       }
-      const pathSegments = path.split("?");
+      const pathSegments = path2.split("?");
       if (pathSegments.length !== 2) {
-        return path;
+        return path2;
       }
       const qp = new URLSearchParams(pathSegments.pop());
       qp.sort();
       return [...pathSegments, qp.toString()].join("?");
     }
     __name(safeUrl, "safeUrl");
-    function matchKey(mockDispatch2, { path, method, body, headers }) {
-      const pathMatch = matchValue(mockDispatch2.path, path);
+    function matchKey(mockDispatch2, { path: path2, method, body, headers }) {
+      const pathMatch = matchValue(mockDispatch2.path, path2);
       const methodMatch = matchValue(mockDispatch2.method, method);
       const bodyMatch = typeof mockDispatch2.body !== "undefined" ? matchValue(mockDispatch2.body, body) : true;
       const headersMatch = matchHeaders(mockDispatch2, headers);
@@ -11367,7 +11367,7 @@ var require_mock_utils = __commonJS({
     function getMockDispatch(mockDispatches, key) {
       const basePath = key.query ? buildURL(key.path, key.query) : key.path;
       const resolvedPath = typeof basePath === "string" ? safeUrl(basePath) : basePath;
-      let matchedMockDispatches = mockDispatches.filter(({ consumed }) => !consumed).filter(({ path }) => matchValue(safeUrl(path), resolvedPath));
+      let matchedMockDispatches = mockDispatches.filter(({ consumed }) => !consumed).filter(({ path: path2 }) => matchValue(safeUrl(path2), resolvedPath));
       if (matchedMockDispatches.length === 0) {
         throw new MockNotMatchedError(`Mock dispatch not matched for path '${resolvedPath}'`);
       }
@@ -11408,9 +11408,9 @@ var require_mock_utils = __commonJS({
     }
     __name(deleteMockDispatch, "deleteMockDispatch");
     function buildKey(opts) {
-      const { path, method, body, headers, query } = opts;
+      const { path: path2, method, body, headers, query } = opts;
       return {
-        path,
+        path: path2,
         method,
         body,
         headers,
@@ -11901,10 +11901,10 @@ var require_pending_interceptors_formatter = __commonJS({
       }
       format(pendingInterceptors) {
         const withPrettyHeaders = pendingInterceptors.map(
-          ({ method, path, data: { statusCode }, persist, times, timesInvoked, origin }) => ({
+          ({ method, path: path2, data: { statusCode }, persist, times, timesInvoked, origin }) => ({
             Method: method,
             Origin: origin,
-            Path: path,
+            Path: path2,
             "Status code": statusCode,
             Persistent: persist ? PERSISTENT : NOT_PERSISTENT,
             Invocations: timesInvoked,
@@ -16881,9 +16881,9 @@ var require_util6 = __commonJS({
       }
     }
     __name(validateCookieValue, "validateCookieValue");
-    function validateCookiePath(path) {
-      for (let i = 0; i < path.length; ++i) {
-        const code = path.charCodeAt(i);
+    function validateCookiePath(path2) {
+      for (let i = 0; i < path2.length; ++i) {
+        const code = path2.charCodeAt(i);
         if (code < 32 || // exclude CTLs (0-31)
         code === 127 || // DEL
         code === 59) {
@@ -19593,11 +19593,11 @@ var require_undici = __commonJS({
           if (typeof opts.path !== "string") {
             throw new InvalidArgumentError("invalid opts.path");
           }
-          let path = opts.path;
+          let path2 = opts.path;
           if (!opts.path.startsWith("/")) {
-            path = `/${path}`;
+            path2 = `/${path2}`;
           }
-          url = new URL(util.parseOrigin(url).origin + path);
+          url = new URL(util.parseOrigin(url).origin + path2);
         } else {
           if (!opts) {
             opts = typeof url === "object" ? url : {};
@@ -27238,13 +27238,13 @@ var require_tree2 = __commonJS({
       mime: leaf.info.mime,
       extension: leaf.info.extension
     }), "createMatch");
-    var isLeafNode = /* @__PURE__ */ __name((tree, path) => tree && path.length === 0, "isLeafNode");
+    var isLeafNode = /* @__PURE__ */ __name((tree, path2) => tree && path2.length === 0, "isLeafNode");
     var merge = /* @__PURE__ */ __name((node, tree) => {
       if (node.bytes.length === 0)
         return tree;
-      const [currentByte, ...path] = node.bytes;
+      const [currentByte, ...path2] = node.bytes;
       const currentTree = tree.bytes[currentByte];
-      if (isLeafNode(currentTree, path)) {
+      if (isLeafNode(currentTree, path2)) {
         const matchingNode = tree.bytes[currentByte];
         tree.bytes[currentByte] = {
           ...matchingNode,
@@ -27256,9 +27256,9 @@ var require_tree2 = __commonJS({
         return tree;
       }
       if (tree.bytes[currentByte]) {
-        tree.bytes[currentByte] = exports2.merge(exports2.createNode(node.typename, path, node.info), tree.bytes[currentByte]);
+        tree.bytes[currentByte] = exports2.merge(exports2.createNode(node.typename, path2, node.info), tree.bytes[currentByte]);
       } else {
-        tree.bytes[currentByte] = exports2.createComplexNode(node.typename, path, node.info);
+        tree.bytes[currentByte] = exports2.createComplexNode(node.typename, path2, node.info);
       }
       return tree;
     }, "merge");
@@ -27272,7 +27272,7 @@ var require_tree2 = __commonJS({
         bytes: {},
         matches: void 0
       };
-      const [currentKey, ...path] = bytes;
+      const [currentKey, ...path2] = bytes;
       if (bytes.length === 0) {
         return {
           matches: [
@@ -27284,7 +27284,7 @@ var require_tree2 = __commonJS({
           bytes: {}
         };
       }
-      obj.bytes[currentKey] = exports2.createComplexNode(typename, path, info);
+      obj.bytes[currentKey] = exports2.createComplexNode(typename, path2, info);
       return obj;
     }, "createComplexNode");
     exports2.createComplexNode = createComplexNode;
@@ -34145,8 +34145,8 @@ var require_Util = __commonJS({
       return updatedItems;
     }
     __name(setPosition, "setPosition");
-    function basename(path, ext) {
-      const res = parse(path);
+    function basename(path2, ext) {
+      const res = parse(path2);
       return ext && res.ext.startsWith(ext) ? res.name : res.base.split("?")[0];
     }
     __name(basename, "basename");
@@ -36700,7 +36700,7 @@ var require_DataResolver = __commonJS({
     "use strict";
     var { Buffer: Buffer2 } = require("node:buffer");
     var fs2 = require("node:fs/promises");
-    var path = require("node:path");
+    var path2 = require("node:path");
     var { fetch: fetch2 } = require_undici();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var Invite2 = require_Invite();
@@ -36729,7 +36729,7 @@ var require_DataResolver = __commonJS({
           const res = await fetch2(resource);
           return { data: Buffer2.from(await res.arrayBuffer()), contentType: res.headers.get("content-type") };
         }
-        const file = path.resolve(resource);
+        const file = path2.resolve(resource);
         const stats = await fs2.stat(file);
         if (!stats.isFile()) throw new DiscordjsError2(ErrorCodes2.FileNotFound, file);
         return { data: await fs2.readFile(file) };
@@ -39978,11 +39978,11 @@ var require_baseGet = __commonJS({
   "../../node_modules/.pnpm/lodash@4.18.1/node_modules/lodash/_baseGet.js"(exports2, module2) {
     var castPath = require_castPath();
     var toKey = require_toKey();
-    function baseGet(object, path) {
-      path = castPath(path, object);
-      var index = 0, length = path.length;
+    function baseGet(object, path2) {
+      path2 = castPath(path2, object);
+      var index = 0, length = path2.length;
       while (object != null && index < length) {
-        object = object[toKey(path[index++])];
+        object = object[toKey(path2[index++])];
       }
       return index && index == length ? object : void 0;
     }
@@ -39995,8 +39995,8 @@ var require_baseGet = __commonJS({
 var require_get = __commonJS({
   "../../node_modules/.pnpm/lodash@4.18.1/node_modules/lodash/get.js"(exports2, module2) {
     var baseGet = require_baseGet();
-    function get(object, path, defaultValue) {
-      var result = object == null ? void 0 : baseGet(object, path);
+    function get(object, path2, defaultValue) {
+      var result = object == null ? void 0 : baseGet(object, path2);
       return result === void 0 ? defaultValue : result;
     }
     __name(get, "get");
@@ -56699,9 +56699,9 @@ var require_ThreadManager = __commonJS({
        * @returns {Promise<FetchedThreadsMore>}
        */
       async fetchArchived({ type = "public", fetchAll = false, before, limit } = {}, cache = true) {
-        let path = Routes2.channelThreads(this.channel.id, type);
+        let path2 = Routes2.channelThreads(this.channel.id, type);
         if (type === "private" && !fetchAll) {
-          path = Routes2.channelJoinedArchivedThreads(this.channel.id);
+          path2 = Routes2.channelJoinedArchivedThreads(this.channel.id);
         }
         let timestamp;
         let id;
@@ -56725,7 +56725,7 @@ var require_ThreadManager = __commonJS({
             }
           }
         }
-        const raw = await this.client.rest.get(path, { query });
+        const raw = await this.client.rest.get(path2, { query });
         return this.constructor._mapThreads(raw, this.client, { parent: this.channel, cache });
       }
       /**
@@ -66297,20 +66297,20 @@ var require_dist9 = __commonJS({
         }
       }
       resolveWorkerPath() {
-        const path = this.options.workerPath;
-        if (!path) {
+        const path2 = this.options.workerPath;
+        if (!path2) {
           return (0, import_node_path.join)(__dirname, "defaultWorker.js");
         }
-        if ((0, import_node_path.isAbsolute)(path)) {
-          return path;
+        if ((0, import_node_path.isAbsolute)(path2)) {
+          return path2;
         }
-        if (/^\.\.?[/\\]/.test(path)) {
-          return (0, import_node_path.resolve)(path);
+        if (/^\.\.?[/\\]/.test(path2)) {
+          return (0, import_node_path.resolve)(path2);
         }
         try {
-          return require.resolve(path);
+          return require.resolve(path2);
         } catch {
-          return (0, import_node_path.resolve)(path);
+          return (0, import_node_path.resolve)(path2);
         }
       }
       async waitForWorkerReady(worker) {
@@ -76199,7 +76199,7 @@ var require_Shard = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/sharding/Shard.js"(exports2, module2) {
     "use strict";
     var EventEmitter = require("node:events");
-    var path = require("node:path");
+    var path2 = require("node:path");
     var process2 = require("node:process");
     var { setTimeout: setTimeout2, clearTimeout: clearTimeout2 } = require("node:timers");
     var { setTimeout: sleep } = require("node:timers/promises");
@@ -76254,14 +76254,14 @@ var require_Shard = __commonJS({
         this._exitListener = this._handleExit.bind(this, void 0, timeout);
         switch (this.manager.mode) {
           case "process":
-            this.process = childProcess.fork(path.resolve(this.manager.file), this.args, {
+            this.process = childProcess.fork(path2.resolve(this.manager.file), this.args, {
               env: this.env,
               execArgv: this.execArgv,
               silent: this.silent
             }).on("message", this._handleMessage.bind(this)).on("exit", this._exitListener);
             break;
           case "worker":
-            this.worker = new Worker(path.resolve(this.manager.file), {
+            this.worker = new Worker(path2.resolve(this.manager.file), {
               workerData: this.env,
               env: SHARE_ENV,
               execArgv: this.execArgv,
@@ -76523,7 +76523,7 @@ var require_ShardingManager = __commonJS({
     "use strict";
     var EventEmitter = require("node:events");
     var fs2 = require("node:fs");
-    var path = require("node:path");
+    var path2 = require("node:path");
     var process2 = require("node:process");
     var { setTimeout: sleep } = require("node:timers/promises");
     var { Collection: Collection2 } = require_dist6();
@@ -76571,7 +76571,7 @@ var require_ShardingManager = __commonJS({
         };
         this.file = file;
         if (!file) throw new DiscordjsError2(ErrorCodes2.ClientInvalidOption, "File", "specified.");
-        if (!path.isAbsolute(file)) this.file = path.resolve(process2.cwd(), file);
+        if (!path2.isAbsolute(file)) this.file = path2.resolve(process2.cwd(), file);
         const stats = fs2.statSync(this.file);
         if (!stats.isFile()) throw new DiscordjsError2(ErrorCodes2.ClientInvalidOption, "File", "a file");
         this.shardList = _options.shardList ?? "auto";
@@ -77564,6 +77564,7 @@ var require_src = __commonJS({
 // src/bot/index.ts
 var { Client: Client2, GatewayIntentBits, PermissionsBitField: PermissionsBitField2 } = require_src();
 var fs = require("fs");
+var path = require("path");
 var token = process.env.DISCORD_BOT_TOKEN;
 if (!token) {
   console.error("No token");
@@ -77579,20 +77580,22 @@ var userCd = /* @__PURE__ */ new Map();
 var lastMsg = /* @__PURE__ */ new Map();
 var msgCd = /* @__PURE__ */ new Map();
 var delay = /* @__PURE__ */ __name((ms) => new Promise((r) => setTimeout(r, ms)), "delay");
-var DATA_FILE = "./botData.json";
+var DATA_FILE = path.join(__dirname, "..", "..", "persistentData.json");
 var botData = { stats: { r: 0, f: 0, start: Date.now() }, disabled: [], silence: {}, rewardOn: {}, messages: {} };
 if (fs.existsSync(DATA_FILE)) {
   try {
-    botData = { ...botData, ...JSON.parse(fs.readFileSync(DATA_FILE, "utf8")) };
+    const loaded = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
+    botData = { ...botData, ...loaded };
+    console.log("\u2705 Loaded saved data successfully");
   } catch (e) {
-    console.warn("Load error, starting fresh");
+    console.warn("\u26A0\uFE0F Starting fresh data file");
   }
 }
 var save = /* @__PURE__ */ __name(() => {
   try {
     fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), "utf8");
   } catch (e) {
-    console.error("Save error:", e);
+    console.error("\u274C Save error:", e);
   }
 }, "save");
 var isAdmin = /* @__PURE__ */ __name((m) => m.user.username === OWNER || m.permissions?.has(PermissionsBitField2.Flags.Administrator), "isAdmin");
@@ -77645,7 +77648,7 @@ client.on("messageCreate", async (m) => {
       return m.reply(`\u{1FA99} Flip: ${res}`);
     }
     case "choose": {
-      if (!a.length) return m.reply("\u274C Usage: -choose option1 option2 ...");
+      if (!a.length) return m.reply("\u274C Usage: -choose opt1 opt2");
       return m.reply(`\u{1F3AF} Pick: ${a[Math.floor(Math.random() * a.length)]}`);
     }
     case "ship": {
@@ -77654,34 +77657,34 @@ client.on("messageCreate", async (m) => {
     }
     case "stats": {
       const min = Math.floor((Date.now() - botData.stats.start) / 6e4);
-      return m.reply(`\u{1F4CA} Bot Stats
+      return m.reply(`\u{1F4CA} Stats
 \u{1F3B2} Rolls: ${botData.stats.r}
 \u{1FA99} Flips: ${botData.stats.f}
 \u23F1\uFE0F Uptime: ${min}m`);
     }
     case "rewardtoggle": {
-      if (m.author.username !== OWNER) return m.reply("\u274C Only .luckyyy_ can use this");
+      if (m.author.username !== OWNER) return m.reply("\u274C Only .luckyyy_");
       botData.rewardOn[g] = !botData.rewardOn[g];
       save();
-      return m.reply(botData.rewardOn[g] ? "\u2705 Rewards enabled" : "\u274C Rewards disabled");
+      return m.reply(botData.rewardOn[g] ? "\u2705 Rewards ON" : "\u274C Rewards OFF");
     }
     case "balance": {
       let uid = m.author.id;
       if (a[0] && m.mentions.users.first()) {
-        if (!isAdmin(m.member)) return m.reply("\u274C Only admins can check others' balances");
+        if (!isAdmin(m.member)) return m.reply("\u274C Admins only for others");
         uid = m.mentions.users.first().id;
       }
       const d = botData.messages[uid] || { count: 0, earned: 0 };
       const next = (Math.floor(d.count / REWARD_THRESH) + 1) * REWARD_THRESH;
-      return m.reply(`\u{1F4B0} Balance Info
+      return m.reply(`\u{1F4B0} Balance
 Messages: ${d.count.toLocaleString()}
 Earned: $${d.earned.toFixed(2)}
-Next reward at: ${next.toLocaleString()} messages`);
+Next: ${next.toLocaleString()}`);
     }
     case "earningslb": {
-      if (!botData.rewardOn[g]) return m.reply("\u274C Rewards are off in this server");
+      if (!botData.rewardOn[g]) return m.reply("\u274C Rewards off");
       const list = Object.entries(botData.messages).sort((x, y) => y[1].earned - x[1].earned).slice(0, 10);
-      if (!list.length) return m.reply("\u{1F4CA} No earnings data yet");
+      if (!list.length) return m.reply("\u{1F4CA} No data");
       let txt = "\u{1F3C6} Top Earners\n";
       for (let i = 0; i < list.length; i++) {
         const u = await client.users.fetch(list[i][0]).catch(() => null);
@@ -77691,7 +77694,7 @@ Next reward at: ${next.toLocaleString()} messages`);
       return m.reply(txt);
     }
     case "silence": {
-      if (!canSilence(m.member, m.guild)) return m.reply("\u274C Only server/bot owner");
+      if (!canSilence(m.member, m.guild)) return m.reply("\u274C Only owners");
       botData.silence[g] = !botData.silence[g];
       save();
       return m.reply(botData.silence[g] ? "\u{1F507} Bot silenced" : "\u{1F50A} Bot active");
@@ -77702,13 +77705,13 @@ Next reward at: ${next.toLocaleString()} messages`);
         botData.disabled.push(m.channelId);
         save();
       }
-      return m.reply("\u{1F6AB} Commands disabled in this channel");
+      return m.reply("\u{1F6AB} Commands disabled here");
     }
     case "enable": {
       if (!isAdmin(m.member)) return m.reply("\u274C Admin only");
       botData.disabled = botData.disabled.filter((id) => id !== m.channelId);
       save();
-      return m.reply("\u2705 Commands enabled in this channel");
+      return m.reply("\u2705 Commands enabled here");
     }
     case "bully": {
       if (!isAdmin(m.member) || !a[0]) return m.reply("\u274C Usage: -bully @user");
@@ -77760,31 +77763,24 @@ First to 2 wins`);
       return m.channel.send(u === 2 ? `\u{1F3C6} You win!` : `\u{1F3C6} ${opp} wins!`);
     }
     case "help": {
-      return m.reply(`\u{1F4D6} **BOT COMMANDS**
+      return m.reply(`\u{1F4D6} **COMMANDS**
 
 \u{1F4B0} **REWARDS**
-\`-rewardtoggle\` \u2192 Turn rewards ON/OFF (OWNER ONLY)
-\`-balance\` \u2192 Check your own balance
-\`-balance @user\` \u2192 Check others' balance (ADMIN ONLY)
-\`-earningslb\` \u2192 View top earners
-*10,000 messages = $2*
+\`-rewardtoggle\` \u2192 ON/OFF (OWNER ONLY)
+\`-balance\` \u2192 Check your balance
+\`-balance @user\` \u2192 Check others (ADMIN ONLY)
+\`-earningslb\` \u2192 Top earners
+*10,000 msgs = $2*
 
 \u{1F3B2} **GENERAL**
-\`-d [max]\` \u2192 Roll dice
-\`-cf\` \u2192 Flip coin
-\`-choose opt1 opt2 ...\` \u2192 Pick random
-\`-ship @user1 @user2\` \u2192 Compatibility
-\`-stats\` \u2192 Bot usage stats
-\`-dw @user [rounds] [sides]\` \u2192 Dice War
-\`-cw @user heads/tails\` \u2192 Coin War
+\`-d [max]\` / \`-cf\` / \`-choose\` / \`-ship\` / \`-stats\`
+\`-dw\` / \`-cw\`
 
 \u{1F451} **ADMIN**
-\`-disable\` \u2192 Block commands in this channel
-\`-enable\` \u2192 Allow commands in this channel
-\`-bully @user\` \u2192 Spam mention
+\`-disable\` / \`-enable\` / \`-bully\`
 
 \u{1F512} **OWNER**
-\`-silence\` \u2192 Mute/unmute bot responses`);
+\`-silence\``);
     }
   }
 });

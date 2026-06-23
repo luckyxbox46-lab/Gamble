@@ -1,17 +1,32 @@
 const {Client,GatewayIntentBits,PermissionsBitField} = require('discord.js');
 const fs = require('fs');
+const path = require('path');
 const token = process.env.DISCORD_BOT_TOKEN;
 if(!token){console.error('No token');process.exit(1);}
+
 const client = new Client({intents:[GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent]});
 const PREFIX='-',OWNER='.luckyyy_',CD=20000,REWARD_THRESH=10000,REWARD_AMT=2;
 const userCd=new Map(),lastMsg=new Map(),msgCd=new Map();
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 
-// Persistent data — NEVER resets
-const DATA_FILE='./botData.json';
+// ✅ SAVE TO PROJECT ROOT — SAFE FROM BUILD CLEANUP
+const DATA_FILE = path.join(__dirname, '..', '..', 'persistentData.json');
+
 let botData={stats:{r:0,f:0,start:Date.now()},disabled:[],silence:{},rewardOn:{},messages:{}};
-if(fs.existsSync(DATA_FILE)){try{botData={...botData,...JSON.parse(fs.readFileSync(DATA_FILE,'utf8'))};}catch(e){console.warn('Load error, starting fresh');}}
-const save=()=>{try{fs.writeFileSync(DATA_FILE,JSON.stringify(botData,null,2),'utf8');}catch(e){console.error('Save error:',e);}};
+
+// Load existing data FIRST — never overwrite
+if(fs.existsSync(DATA_FILE)){
+  try{
+    const loaded = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+    botData = { ...botData, ...loaded };
+    console.log('✅ Loaded saved data successfully');
+  }catch(e){console.warn('⚠️ Starting fresh data file');}
+}
+
+const save=()=>{
+  try{fs.writeFileSync(DATA_FILE, JSON.stringify(botData,null,2),'utf8');}
+  catch(e){console.error('❌ Save error:',e);}
+};
 
 const isAdmin=m=>m.user.username===OWNER||m.permissions?.has(PermissionsBitField.Flags.Administrator);
 const canSilence=(m,g)=>m.user.username===OWNER||m.id===g.ownerId;
@@ -21,7 +36,6 @@ client.on('messageCreate',async m=>{
   if(m.author.bot||!m.guild)return;
   const g=m.guild.id;
 
-  // Normal chat = no cooldown, no resets
   if(!m.content.startsWith(PREFIX)){
     if(!botData.rewardOn[g])return;
     const uid=m.author.id,now=Date.now();
@@ -39,7 +53,6 @@ client.on('messageCreate',async m=>{
     return;
   }
 
-  // Commands
   if(botData.silence[g]&&!canSilence(m.member,m.guild))return;
   if(botData.disabled.includes(m.channelId)&&!isAdmin(m.member))return;
 
@@ -62,7 +75,7 @@ client.on('messageCreate',async m=>{
       botData.stats.f++;save();return m.reply(`🪙 Flip: ${res}`);
     }
     case'choose':{
-      if(!a.length)return m.reply('❌ Usage: -choose option1 option2 ...');
+      if(!a.length)return m.reply('❌ Usage: -choose opt1 opt2');
       return m.reply(`🎯 Pick: ${a[Math.floor(Math.random()*a.length)]}`);
     }
     case'ship':{
@@ -71,27 +84,27 @@ client.on('messageCreate',async m=>{
     }
     case'stats':{
       const min=Math.floor((Date.now()-botData.stats.start)/60000);
-      return m.reply(`📊 Bot Stats\n🎲 Rolls: ${botData.stats.r}\n🪙 Flips: ${botData.stats.f}\n⏱️ Uptime: ${min}m`);
+      return m.reply(`📊 Stats\n🎲 Rolls: ${botData.stats.r}\n🪙 Flips: ${botData.stats.f}\n⏱️ Uptime: ${min}m`);
     }
     case'rewardtoggle':{
-      if(m.author.username!==OWNER)return m.reply('❌ Only .luckyyy_ can use this');
+      if(m.author.username!==OWNER)return m.reply('❌ Only .luckyyy_');
       botData.rewardOn[g]=!botData.rewardOn[g];save();
-      return m.reply(botData.rewardOn[g]?'✅ Rewards enabled':'❌ Rewards disabled');
+      return m.reply(botData.rewardOn[g]?'✅ Rewards ON':'❌ Rewards OFF');
     }
     case'balance':{
       let uid=m.author.id;
       if(a[0]&&m.mentions.users.first()){
-        if(!isAdmin(m.member))return m.reply('❌ Only admins can check others\' balances');
+        if(!isAdmin(m.member))return m.reply('❌ Admins only for others');
         uid=m.mentions.users.first().id;
       }
       const d=botData.messages[uid]||{count:0,earned:0};
       const next=(Math.floor(d.count/REWARD_THRESH)+1)*REWARD_THRESH;
-      return m.reply(`💰 Balance Info\nMessages: ${d.count.toLocaleString()}\nEarned: $${d.earned.toFixed(2)}\nNext reward at: ${next.toLocaleString()} messages`);
+      return m.reply(`💰 Balance\nMessages: ${d.count.toLocaleString()}\nEarned: $${d.earned.toFixed(2)}\nNext: ${next.toLocaleString()}`);
     }
     case'earningslb':{
-      if(!botData.rewardOn[g])return m.reply('❌ Rewards are off in this server');
+      if(!botData.rewardOn[g])return m.reply('❌ Rewards off');
       const list=Object.entries(botData.messages).sort((x,y)=>y[1].earned-x[1].earned).slice(0,10);
-      if(!list.length)return m.reply('📊 No earnings data yet');
+      if(!list.length)return m.reply('📊 No data');
       let txt='🏆 Top Earners\n';
       for(let i=0;i<list.length;i++){
         const u=await client.users.fetch(list[i][0]).catch(()=>null);
@@ -100,19 +113,19 @@ client.on('messageCreate',async m=>{
       return m.reply(txt);
     }
     case'silence':{
-      if(!canSilence(m.member,m.guild))return m.reply('❌ Only server/bot owner');
+      if(!canSilence(m.member,m.guild))return m.reply('❌ Only owners');
       botData.silence[g]=!botData.silence[g];save();
       return m.reply(botData.silence[g]?'🔇 Bot silenced':'🔊 Bot active');
     }
     case'disable':{
       if(!isAdmin(m.member))return m.reply('❌ Admin only');
       if(!botData.disabled.includes(m.channelId)){botData.disabled.push(m.channelId);save();}
-      return m.reply('🚫 Commands disabled in this channel');
+      return m.reply('🚫 Commands disabled here');
     }
     case'enable':{
       if(!isAdmin(m.member))return m.reply('❌ Admin only');
       botData.disabled=botData.disabled.filter(id=>id!==m.channelId);save();
-      return m.reply('✅ Commands enabled in this channel');
+      return m.reply('✅ Commands enabled here');
     }
     case'bully':{
       if(!isAdmin(m.member)||!a[0])return m.reply('❌ Usage: -bully @user');
@@ -148,31 +161,24 @@ client.on('messageCreate',async m=>{
       return m.channel.send(u===2?`🏆 You win!`:`🏆 ${opp} wins!`);
     }
     case'help':{
-      return m.reply(`📖 **BOT COMMANDS**
+      return m.reply(`📖 **COMMANDS**
 
 💰 **REWARDS**
-\`-rewardtoggle\` → Turn rewards ON/OFF (OWNER ONLY)
-\`-balance\` → Check your own balance
-\`-balance @user\` → Check others' balance (ADMIN ONLY)
-\`-earningslb\` → View top earners
-*10,000 messages = $2*
+\`-rewardtoggle\` → ON/OFF (OWNER ONLY)
+\`-balance\` → Check your balance
+\`-balance @user\` → Check others (ADMIN ONLY)
+\`-earningslb\` → Top earners
+*10,000 msgs = $2*
 
 🎲 **GENERAL**
-\`-d [max]\` → Roll dice
-\`-cf\` → Flip coin
-\`-choose opt1 opt2 ...\` → Pick random
-\`-ship @user1 @user2\` → Compatibility
-\`-stats\` → Bot usage stats
-\`-dw @user [rounds] [sides]\` → Dice War
-\`-cw @user heads/tails\` → Coin War
+\`-d [max]\` / \`-cf\` / \`-choose\` / \`-ship\` / \`-stats\`
+\`-dw\` / \`-cw\`
 
 👑 **ADMIN**
-\`-disable\` → Block commands in this channel
-\`-enable\` → Allow commands in this channel
-\`-bully @user\` → Spam mention
+\`-disable\` / \`-enable\` / \`-bully\`
 
 🔒 **OWNER**
-\`-silence\` → Mute/unmute bot responses`);
+\`-silence\``);
     }
   }
 });
