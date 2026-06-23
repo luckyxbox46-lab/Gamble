@@ -4,8 +4,8 @@ const path = require('path');
 const token = process.env.DISCORD_BOT_TOKEN;
 
 if(!token){console.error('❌ Token missing!');process.exit(1);}
+console.log(`✅ Token loaded, length: ${token.length}`);
 
-// ✅ ALL REQUIRED INTENTS ENABLED
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -23,41 +23,37 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
 const DATA_FILE = path.join(__dirname, '..', '..', 'persistentData.json');
 let botData={stats:{rolls:0,flips:0,started:Date.now()},disabled:[],silence:{},rewards:{},balances:{},rewardCfg:{t:10000,a:2}};
 
-if(fs.existsSync(DATA_FILE)){try{const d=JSON.parse(fs.readFileSync(DATA_FILE));Object.assign(botData,d);REWARD_THRESH=botData.rewardCfg.t||10000;REWARD_AMT=botData.rewardCfg.a||2;}catch(e){console.warn('⚠️ Fresh save file');}}
+if(fs.existsSync(DATA_FILE)){try{const d=JSON.parse(fs.readFileSync(DATA_FILE));Object.assign(botData,d);REWARD_THRESH=botData.rewardCfg.t||10000;REWARD_AMT=botData.rewardCfg.a||2;}catch(e){console.log('ℹ️ New data file created');}}
 const save=()=>{botData.rewardCfg={t:REWARD_THRESH,a:REWARD_AMT};fs.writeFileSync(DATA_FILE,JSON.stringify(botData,null,2),'utf8');};
 const isAdmin=m=>m.user.username===OWNER||m.member.permissions?.has(PermissionsBitField.Flags.Administrator);
 const isOwner=m=>m.user.username===OWNER;
 
-client.once('ready',()=>console.log(`✅ Bot online as ${client.user.tag}`));
+client.once('clientReady',()=>console.log(`✅ Bot online: ${client.user.tag}`));
 
-// ✅ Only ONE message handler — no duplicates
 client.on('messageCreate',async m=>{
-  if(m.author.bot || !m.guild) return;
-  const g=m.guild.id, c=m.channel.id;
-
-  if(botData.disabled.includes(c)) return;
+  if(m.author.bot||!m.guild)return;
+  const g=m.guild.id,c=m.channel.id;
+  if(botData.disabled.includes(c))return;
 
   if(!m.content.startsWith(PREFIX)){
-    if(!botData.rewards[g]) return;
-    const u=m.author.id, now=Date.now();
-    if(now-(msgCd.get(u)||0)>2000 && m.content.trim()!==(lastMsg.get(u)||'').trim()){
-      if(!botData.balances[u]) botData.balances[u]={count:0,earned:0};
-      botData.balances[u].count++;
-      lastMsg.set(u,m.content); msgCd.set(u,now);
+    if(!botData.rewards[g])return;
+    const u=m.author.id,now=Date.now();
+    if(now-(msgCd.get(u)||0)>2000&&m.content.trim()!==(lastMsg.get(u)||'').trim()){
+      if(!botData.balances[u])botData.balances[u]={count:0,earned:0};
+      botData.balances[u].count++;lastMsg.set(u,m.content);msgCd.set(u,now);
       const e=Math.floor(botData.balances[u].count/REWARD_THRESH)*REWARD_AMT;
-      if(e>botData.balances[u].earned){botData.balances[u].earned=e; save();}
+      if(e>botData.balances[u].earned){botData.balances[u].earned=e;save();}
     }
     return;
   }
 
-  if(botData.silence[g] && !isOwner(m)) return;
-
+  if(botData.silence[g]&&!isOwner(m))return;
   const p=m.content.slice(PREFIX.length).trim().split(/\s+/);
-  const cmd=p[0]?.toLowerCase()||'', a=p.slice(1);
+  const cmd=p[0]?.toLowerCase()||'',a=p.slice(1);
 
-  if(!['d','cf','choose'].includes(cmd) && !isAdmin(m)){
+  if(!['d','cf','choose'].includes(cmd)&&!isAdmin(m)){
     const l=userCd.get(m.author.id)||0;
-    if(Date.now()-l<CD) return m.reply(`⏳ Wait ${Math.ceil((CD-Date.now()+l)/1000)}s`).catch(()=>{});
+    if(Date.now()-l<CD)return m.reply(`⏳ Wait ${Math.ceil((CD-Date.now()+l)/1000)}s`).catch(()=>{});
     userCd.set(m.author.id,Date.now());
   }
 
@@ -99,4 +95,4 @@ client.on('messageCreate',async m=>{
   }
 });
 
-client.login(token).catch(e=>console.error('❌ Login failed:',e.message));
+client.login(token).catch(e=>console.error('❌ Login error:',e.message));

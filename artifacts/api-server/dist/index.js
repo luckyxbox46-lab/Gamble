@@ -77570,6 +77570,7 @@ if (!token) {
   console.error("\u274C Token missing!");
   process.exit(1);
 }
+console.log(`\u2705 Token loaded, length: ${token.length}`);
 var client = new Client2({
   intents: [
     GatewayIntentBits.Guilds,
@@ -77596,7 +77597,7 @@ if (fs.existsSync(DATA_FILE)) {
     REWARD_THRESH = botData.rewardCfg.t || 1e4;
     REWARD_AMT = botData.rewardCfg.a || 2;
   } catch (e) {
-    console.warn("\u26A0\uFE0F Fresh save file");
+    console.log("\u2139\uFE0F New data file created");
   }
 }
 var save = /* @__PURE__ */ __name(() => {
@@ -77605,7 +77606,7 @@ var save = /* @__PURE__ */ __name(() => {
 }, "save");
 var isAdmin = /* @__PURE__ */ __name((m) => m.user.username === OWNER || m.member.permissions?.has(PermissionsBitField2.Flags.Administrator), "isAdmin");
 var isOwner = /* @__PURE__ */ __name((m) => m.user.username === OWNER, "isOwner");
-client.once("ready", () => console.log(`\u2705 Bot online as ${client.user.tag}`));
+client.once("clientReady", () => console.log(`\u2705 Bot online: ${client.user.tag}`));
 client.on("messageCreate", async (m) => {
   if (m.author.bot || !m.guild) return;
   const g = m.guild.id, c = m.channel.id;
@@ -77782,7 +77783,7 @@ ${res}`);
     }
   }
 });
-client.login(token).catch((e) => console.error("\u274C Login failed:", e.message));
+client.login(token).catch((e) => console.error("\u274C Login error:", e.message));
 /*! Bundled license information:
 
 undici/lib/web/fetch/body.js:
