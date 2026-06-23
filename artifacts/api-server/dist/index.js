@@ -77589,15 +77589,12 @@ var botData = {
 };
 if (fs.existsSync(dataPath)) {
   try {
-    const loaded = JSON.parse(fs.readFileSync(dataPath, "utf8"));
-    botData = { ...botData, ...loaded };
+    botData = { ...botData, ...JSON.parse(fs.readFileSync(dataPath, "utf8")) };
   } catch (e) {
-    console.warn("Failed to load saved data, starting fresh");
+    console.warn("Load error, starting fresh");
   }
 }
-var saveAll = /* @__PURE__ */ __name(() => {
-  fs.writeFileSync(dataPath, JSON.stringify(botData, null, 2), "utf8");
-}, "saveAll");
+var saveAll = /* @__PURE__ */ __name(() => fs.writeFileSync(dataPath, JSON.stringify(botData, null, 2), "utf8"), "saveAll");
 var isAdmin = /* @__PURE__ */ __name((m) => m.user.username === OWNER || m.permissions.has(PermissionsBitField2.Flags.Administrator), "isAdmin");
 var canSilence = /* @__PURE__ */ __name((m, g) => m.user.username === OWNER || m.id === g.ownerId, "canSilence");
 client.once("ready", () => console.log("Bot online: " + client.user.tag));
@@ -77666,14 +77663,22 @@ client.on("messageCreate", async (m) => {
       const newState = !botData.rewardActiveGuilds[g];
       botData.rewardActiveGuilds[g] = newState;
       saveAll();
-      return m.reply(newState ? "\u2705 Rewards ON for this server" : "\u274C Rewards OFF");
+      return m.reply(newState ? "\u2705 Rewards ON" : "\u274C Rewards OFF");
     }
     case "balance": {
-      const d = botData.messageData[m.author.id] || { count: 0, earned: 0 };
-      return m.reply(`\u{1F4B0} Your Stats
-Msgs: ${d.count.toLocaleString()}
+      let targetId;
+      if (a[0] && m.mentions.users.size > 0) {
+        if (!isAdmin(m.member)) return m.reply("\u274C Only admins can check others' balances");
+        targetId = m.mentions.users.first().id;
+      } else {
+        targetId = m.author.id;
+      }
+      const d = botData.messageData[targetId] || { count: 0, earned: 0 };
+      const next = (Math.floor(d.count / REWARD_THRESH) + 1) * REWARD_THRESH;
+      return m.reply(`\u{1F4B0} **Balance**
+Messages: ${d.count.toLocaleString()}
 Earned: $${d.earned.toFixed(2)}
-Next: ${((Math.floor(d.count / REWARD_THRESH) + 1) * REWARD_THRESH).toLocaleString()}`);
+Next reward: ${next.toLocaleString()} messages`);
     }
     case "earningslb": {
       if (!botData.rewardActiveGuilds[g]) return m.reply("\u274C Rewards not active here");
@@ -77688,7 +77693,7 @@ Next: ${((Math.floor(d.count / REWARD_THRESH) + 1) * REWARD_THRESH).toLocaleStri
       return m.reply(txt);
     }
     case "silence": {
-      if (!canSilence(m.member, m.guild)) return m.reply("\u274C Only Bot/Server Owner");
+      if (!canSilence(m.member, m.guild)) return m.reply("\u274C Only Owner/Server Owner");
       const newState = !botData.silenceGuilds[g];
       botData.silenceGuilds[g] = newState;
       saveAll();
@@ -77762,7 +77767,8 @@ First to 2 wins!`);
 
 \u{1F4B0} REWARDS
 \`-rewardtoggle\` \u2014 ON/OFF (only .luckyyy_)
-\`-balance\` \u2014 Check messages & earnings
+\`-balance\` \u2014 Check your own balance
+\`-balance @user\` \u2014 Check others (ADMINS ONLY)
 \`-earningslb\` \u2014 Top earners
 *10,000 msgs = $2*
 
