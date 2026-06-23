@@ -36699,7 +36699,7 @@ var require_DataResolver = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/util/DataResolver.js"(exports2, module2) {
     "use strict";
     var { Buffer: Buffer2 } = require("node:buffer");
-    var fs = require("node:fs/promises");
+    var fs2 = require("node:fs/promises");
     var path = require("node:path");
     var { fetch: fetch2 } = require_undici();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
@@ -36730,9 +36730,9 @@ var require_DataResolver = __commonJS({
           return { data: Buffer2.from(await res.arrayBuffer()), contentType: res.headers.get("content-type") };
         }
         const file = path.resolve(resource);
-        const stats2 = await fs.stat(file);
+        const stats2 = await fs2.stat(file);
         if (!stats2.isFile()) throw new DiscordjsError2(ErrorCodes2.FileNotFound, file);
-        return { data: await fs.readFile(file) };
+        return { data: await fs2.readFile(file) };
       }
       throw new DiscordjsTypeError2(ErrorCodes2.ReqResourceType);
     }
@@ -76522,7 +76522,7 @@ var require_ShardingManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/sharding/ShardingManager.js"(exports2, module2) {
     "use strict";
     var EventEmitter = require("node:events");
-    var fs = require("node:fs");
+    var fs2 = require("node:fs");
     var path = require("node:path");
     var process2 = require("node:process");
     var { setTimeout: sleep } = require("node:timers/promises");
@@ -76572,7 +76572,7 @@ var require_ShardingManager = __commonJS({
         this.file = file;
         if (!file) throw new DiscordjsError2(ErrorCodes2.ClientInvalidOption, "File", "specified.");
         if (!path.isAbsolute(file)) this.file = path.resolve(process2.cwd(), file);
-        const stats2 = fs.statSync(this.file);
+        const stats2 = fs2.statSync(this.file);
         if (!stats2.isFile()) throw new DiscordjsError2(ErrorCodes2.ClientInvalidOption, "File", "a file");
         this.shardList = _options.shardList ?? "auto";
         if (this.shardList !== "auto") {
@@ -77563,6 +77563,7 @@ var require_src = __commonJS({
 
 // src/bot/index.ts
 var { Client: Client2, GatewayIntentBits, PermissionsBitField: PermissionsBitField2 } = require_src();
+var fs = require("fs");
 var token = process.env.DISCORD_BOT_TOKEN;
 if (!token) {
   console.error("No token");
@@ -77572,29 +77573,48 @@ var client = new Client2({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits
 var PREFIX = "-";
 var OWNER = ".luckyyy_";
 var CD = 2e4;
-var NO_CD = ["d", "cf", "choose"];
+var REWARD_THRESH = 1e4;
+var REWARD_AMT = 2;
 var userCd = /* @__PURE__ */ new Map();
 var disabled = /* @__PURE__ */ new Set();
 var stats = { r: 0, f: 0, start: Date.now() };
 var silence = /* @__PURE__ */ new Map();
+var lastMsg = /* @__PURE__ */ new Map();
+var msgCd = /* @__PURE__ */ new Map();
+var rewardActive = /* @__PURE__ */ new Map();
 var delay = /* @__PURE__ */ __name((ms) => new Promise((r) => setTimeout(r, ms)), "delay");
-var isAdmin = /* @__PURE__ */ __name((member) => {
-  if (member.user.username === OWNER) return true;
-  return member.permissions.has(PermissionsBitField2.Flags.Administrator);
-}, "isAdmin");
-var canSilence = /* @__PURE__ */ __name((member, guild) => {
-  if (member.user.username === OWNER) return true;
-  return member.id === guild.ownerId;
-}, "canSilence");
+var dataFile = "./messageData.json";
+var messageData = {};
+if (fs.existsSync(dataFile)) messageData = JSON.parse(fs.readFileSync(dataFile));
+var save = /* @__PURE__ */ __name(() => fs.writeFileSync(dataFile, JSON.stringify(messageData, null, 2)), "save");
+var isAdmin = /* @__PURE__ */ __name((m) => m.user.username === OWNER || m.permissions.has(PermissionsBitField2.Flags.Administrator), "isAdmin");
+var canSilence = /* @__PURE__ */ __name((m, g) => m.user.username === OWNER || m.id === g.ownerId, "canSilence");
 client.once("ready", () => console.log("Bot online: " + client.user.tag));
 client.on("messageCreate", async (m) => {
-  if (m.author.bot || !m.content.startsWith(PREFIX) || !m.guild) return;
+  if (m.author.bot || !m.guild) return;
   const g = m.guild.id;
+  if (!m.content.startsWith(PREFIX) && rewardActive.get(g)) {
+    const uid = m.author.id, now = Date.now();
+    const lastT = msgCd.get(uid) || 0, lastC = lastMsg.get(uid) || "";
+    if (now - lastT > 2e3 && m.content.trim() !== lastC.trim()) {
+      if (!messageData[uid]) messageData[uid] = { count: 0, earned: 0 };
+      messageData[uid].count++;
+      lastMsg.set(uid, m.content);
+      msgCd.set(uid, now);
+      save();
+      const c = messageData[uid].count, e = Math.floor(c / REWARD_THRESH) * REWARD_AMT;
+      if (e > messageData[uid].earned) {
+        messageData[uid].earned = e;
+        save();
+        await m.channel.send(`\u{1F389} ${m.author}: ${c.toLocaleString()} msgs \u2192 earned $${e.toFixed(2)}`);
+      }
+    }
+  }
   if (silence.get(g) && !canSilence(m.member, m.guild)) return;
   if (disabled.has(m.channelId) && !isAdmin(m.member)) return;
   const p = m.content.slice(PREFIX.length).trim().split(/\s+/);
   const cmd = p[0]?.toLowerCase() || "", a = p.slice(1);
-  if (!NO_CD.includes(cmd) && !isAdmin(m.member)) {
+  if (!["d", "cf", "choose"].includes(cmd) && !isAdmin(m.member)) {
     const now = Date.now(), last = userCd.get(m.author.id) || 0;
     if (now - last < CD) return m.reply(`\u23F3 Wait ${Math.ceil((CD - now + last) / 1e3)}s`).catch(() => {
     });
@@ -77604,47 +77624,71 @@ client.on("messageCreate", async (m) => {
     case "d": {
       const max = parseInt(a[0]) || 100, r = Math.floor(Math.random() * max) + 1;
       stats.r++;
-      return m.reply(`\u{1F3B2} **Roll:** ${r}`);
+      return m.reply(`\u{1F3B2} Roll: ${r}`);
     }
     case "cf": {
       const res = Math.random() < 0.5 ? "Heads" : "Tails";
       stats.f++;
-      return m.reply(`\u{1FA99} **Flip:** ${res}`);
+      return m.reply(`\u{1FA99} Flip: ${res}`);
     }
     case "choose": {
-      if (!a.length) return m.reply("\u274C Usage: `-choose opt1 opt2 ...`");
-      return m.reply(`\u{1F3AF} **I pick:** ${a[Math.floor(Math.random() * a.length)]}`);
+      if (!a.length) return m.reply("\u274C Usage: -choose opt1 opt2");
+      return m.reply(`\u{1F3AF} Pick: ${a[Math.floor(Math.random() * a.length)]}`);
     }
     case "ship": {
-      if (a.length < 2) return m.reply("\u274C Usage: `-ship @user1 @user2`");
-      const score = Math.floor(Math.random() * 10) + 1;
-      return m.reply(`\u{1F49E} **Compatibility:** ${score}/10`);
+      if (a.length < 2) return m.reply("\u274C Usage: -ship @user1 @user2");
+      return m.reply(`\u{1F49E} Compatibility: ${Math.floor(Math.random() * 10) + 1}/10`);
     }
     case "stats": {
       const min = Math.floor((Date.now() - stats.start) / 6e4);
-      return m.reply(`\u{1F4CA} **Bot Stats**
+      return m.reply(`\u{1F4CA} Stats
 \u{1F3B2} Rolls: ${stats.r}
 \u{1FA99} Flips: ${stats.f}
-\u23F1\uFE0F Uptime: ${min} min`);
+\u23F1\uFE0F Uptime: ${min}m`);
+    }
+    case "rewardtoggle": {
+      if (m.author.username !== OWNER) return m.reply("\u274C Only .luckyyy_");
+      const s = !rewardActive.get(g);
+      rewardActive.set(g, s);
+      return m.reply(s ? "\u2705 Rewards ON for this server" : "\u274C Rewards OFF");
+    }
+    case "balance": {
+      const d = messageData[m.author.id] || { count: 0, earned: 0 };
+      return m.reply(`\u{1F4B0} Your Stats
+Msgs: ${d.count.toLocaleString()}
+Earned: $${d.earned.toFixed(2)}
+Next: ${((Math.floor(d.count / REWARD_THRESH) + 1) * REWARD_THRESH).toLocaleString()}`);
+    }
+    case "earningslb": {
+      if (!rewardActive.get(g)) return m.reply("\u274C Rewards not active here");
+      const list = Object.entries(messageData).sort((x, y) => y[1].earned - x[1].earned).slice(0, 10);
+      if (!list.length) return m.reply("\u{1F4CA} No data yet");
+      let txt = "\u{1F3C6} Top Earners\n";
+      for (let i = 0; i < list.length; i++) {
+        const u = await client.users.fetch(list[i][0]).catch(() => null);
+        txt += `${i + 1}. ${u?.tag || "Unknown"} \u2014 $${list[i][1].earned.toFixed(2)} (${list[i][1].count.toLocaleString()})
+`;
+      }
+      return m.reply(txt);
     }
     case "silence": {
-      if (!canSilence(m.member, m.guild)) return m.reply("\u274C Only Bot Owner or Server Owner can use this");
+      if (!canSilence(m.member, m.guild)) return m.reply("\u274C Only Bot/Server Owner");
       const st = silence.get(g) || false;
       silence.set(g, !st);
-      return m.reply(st ? "\u{1F50A} **Server active again**" : "\u{1F507} **Whole server silenced**");
+      return m.reply(st ? "\u{1F50A} Bot active" : "\u{1F507} Bot silenced");
     }
     case "disable": {
-      if (!isAdmin(m.member)) return m.reply("\u274C Requires Administrator permission");
+      if (!isAdmin(m.member)) return m.reply("\u274C Requires Administrator");
       disabled.add(m.channelId);
-      return m.reply("\u{1F6AB} **Commands disabled in this channel**");
+      return m.reply("\u{1F6AB} Commands disabled here");
     }
     case "enable": {
-      if (!isAdmin(m.member)) return m.reply("\u274C Requires Administrator permission");
+      if (!isAdmin(m.member)) return m.reply("\u274C Requires Administrator");
       disabled.delete(m.channelId);
-      return m.reply("\u2705 **Commands enabled here**");
+      return m.reply("\u2705 Commands enabled here");
     }
     case "bully": {
-      if (!isAdmin(m.member) || !a[0]) return m.reply("\u274C Usage: `-bully @user` | Requires Administrator");
+      if (!isAdmin(m.member) || !a[0]) return m.reply("\u274C Usage: -bully @user");
       for (let i = 0; i < 20; i++) {
         await m.channel.send(`${a[0]} \u{1F44A}`).catch(() => {
         });
@@ -77654,63 +77698,68 @@ client.on("messageCreate", async (m) => {
     }
     case "dw": {
       const opp = a[0] || "Opponent";
-      let rounds = parseInt(a[1]) || 5;
-      rounds = Math.max(1, Math.min(10, rounds));
-      const sides = parseInt(a[2]) || 10;
+      let r = parseInt(a[1]) || 5;
+      r = Math.max(1, Math.min(10, r));
+      const s = parseInt(a[2]) || 10;
       let p1 = 0, p2 = 0;
-      await m.reply(`\u{1F3B2} **Dice War!**
+      await m.reply(`\u{1F3B2} Dice War!
 ${m.author} vs ${opp}
-${rounds} rounds \u2014 rolling d${sides}`);
-      for (let i = 1; i <= rounds; i++) {
-        const r1 = Math.floor(Math.random() * sides) + 1, r2 = Math.floor(Math.random() * sides) + 1;
+${r} rounds | d${s}`);
+      for (let i = 1; i <= r; i++) {
+        const r1 = Math.floor(Math.random() * s) + 1, r2 = Math.floor(Math.random() * s) + 1;
         if (r1 > r2) {
           p1++;
-          await m.channel.send(`Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **You take the round!**`);
+          await m.channel.send(`Round ${i}: \u{1F3B2} ${r1} vs ${r2} \u2014 You win!`);
         } else if (r2 > r1) {
           p2++;
-          await m.channel.send(`Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **${opp} takes the round!**`);
-        } else await m.channel.send(`Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **Tie! No point**`);
+          await m.channel.send(`Round ${i}: \u{1F3B2} ${r1} vs ${r2} \u2014 ${opp} wins!`);
+        } else await m.channel.send(`Round ${i}: \u{1F3B2} ${r1} vs ${r2} \u2014 Tie!`);
         await delay(1200);
       }
-      const res = p1 > p2 ? `\u2705 **You win ${p1}-${p2}!**` : p2 > p1 ? `\u274C **${opp} wins ${p2}-${p1}!**` : `\u2696\uFE0F **Draw!**`;
-      return m.channel.send(`\u{1F3C6} **Final Score:** You ${p1} \u2013 ${p2} ${opp}
+      const res = p1 > p2 ? `\u2705 You win ${p1}-${p2}!` : p2 > p1 ? `\u274C ${opp} wins ${p2}-${p1}!` : `\u2696\uFE0F Draw!`;
+      return m.channel.send(`\u{1F3C6} Final: You ${p1} - ${p2} ${opp}
 ${res}`);
     }
     case "cw": {
       const opp = a[0] || "Opponent", side = a[1]?.toLowerCase();
-      if (!["heads", "tails"].includes(side)) return m.reply("\u274C Usage: `-cw @user heads/tails`");
+      if (!["heads", "tails"].includes(side)) return m.reply("\u274C Usage: -cw @user heads/tails");
       let u = 0, o = 0, round = 1;
-      await m.reply(`\u{1FA99} **Coin War!**
+      await m.reply(`\u{1FA99} Coin War!
 ${m.author} vs ${opp}
 First to 2 wins!`);
       while (u < 2 && o < 2) {
         const flip = Math.random() < 0.5 ? "Heads" : "Tails";
         flip.toLowerCase() === side ? u++ : o++;
-        await m.channel.send(`Round ${round}: \u{1FA99} **${flip}** | Score: You ${u} \u2013 ${o} ${opp}`);
+        await m.channel.send(`Round ${round}: \u{1FA99} ${flip} | Score: You ${u} - ${o} ${opp}`);
         round++;
         await delay(1200);
       }
-      return m.channel.send(u === 2 ? `\u{1F3C6} **You win the Coin War!**` : `\u{1F3C6} **${opp} wins the Coin War!**`);
+      return m.channel.send(u === 2 ? `\u{1F3C6} You win!` : `\u{1F3C6} ${opp} wins!`);
     }
     case "help":
-      return m.reply(`\u{1F4D6} **All Bot Commands**
+      return m.reply(`\u{1F4D6} COMMANDS
 
-\u{1F3B2} **General**
-\`-d [max]\` \u2014 Roll dice (default 100)
-\`-cf\` \u2014 Flip a coin
-\`-choose opt1 opt2 ...\` \u2014 Pick randomly
-\`-dw @user [rounds] [sides]\` \u2014 Dice War (max 10 rounds)
-\`-cw @user heads/tails\` \u2014 Coin War (first to 2 wins)
-\`-ship @u1 @u2\` \u2014 Compatibility 1\u201310
-\`-stats\` \u2014 View stats & uptime
+\u{1F4B0} REWARDS
+\`-rewardtoggle\` \u2014 ON/OFF (only .luckyyy_)
+\`-balance\` \u2014 Check messages & earnings
+\`-earningslb\` \u2014 Top earners
+*10,000 msgs = $2*
 
-\u{1F451} **Admin (Administrator Permission)**
-\`-disable\` \u2014 Stop commands in this channel
-\`-enable\` \u2014 Re-enable commands
-\`-bully @user\` \u2014 Send 20 pings
+\u{1F3B2} GENERAL
+\`-d [max]\` \u2014 Roll dice
+\`-cf\` \u2014 Flip coin
+\`-choose opt...\` \u2014 Pick random
+\`-dw @user [r] [s]\` \u2014 Dice War
+\`-cw @user side\` \u2014 Coin War
+\`-ship @u1 @u2\` \u2014 Compatibility
+\`-stats\` \u2014 Bot stats
 
-\u{1F512} **Bot Owner + Server Owner Only**
-\`-silence\` \u2014 Mute/unmute bot for the whole server`);
+\u{1F451} ADMIN
+\`-disable/enable\` \u2014 Channel control
+\`-bully @user\` \u2014 Send pings
+
+\u{1F512} OWNER/SERVER OWNER
+\`-silence\` \u2014 Mute/unmute bot`);
   }
 });
 client.login(token).catch((e) => console.error("Login:", e));
