@@ -77586,13 +77586,18 @@ if (fs.existsSync(DATA_FILE)) {
   try {
     const loaded = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
     botData = { ...botData, ...loaded };
-    console.log("\u2705 Loaded saved data successfully");
+    if (loaded.rewardConfig) {
+      REWARD_THRESH = loaded.rewardConfig.threshold || 1e4;
+      REWARD_AMT = loaded.rewardConfig.amount || 2;
+    }
+    console.log("\u2705 Loaded saved data");
   } catch (e) {
-    console.warn("\u26A0\uFE0F Starting fresh data file");
+    console.warn("\u26A0\uFE0F Starting new data file");
   }
 }
 var save = /* @__PURE__ */ __name(() => {
   try {
+    botData.rewardConfig = { threshold: REWARD_THRESH, amount: REWARD_AMT };
     fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), "utf8");
   } catch (e) {
     console.error("\u274C Save error:", e);
@@ -77668,10 +77673,22 @@ client.on("messageCreate", async (m) => {
       save();
       return m.reply(botData.rewardOn[g] ? "\u2705 Rewards ON" : "\u274C Rewards OFF");
     }
+    case "setreward": {
+      if (m.author.username !== OWNER) return m.reply("\u274C Only owner can change rewards");
+      const newThreshold = parseInt(a[0]);
+      const newAmount = parseFloat(a[1]);
+      if (!newThreshold || !newAmount || newThreshold < 1 || newAmount < 0) {
+        return m.reply("\u274C Usage: -setreward <msgs> <$>\nExample: -setreward 5000 1.5");
+      }
+      REWARD_THRESH = newThreshold;
+      REWARD_AMT = newAmount;
+      save();
+      return m.reply(`\u2705 Updated: ${REWARD_THRESH} msgs = $${REWARD_AMT.toFixed(2)}`);
+    }
     case "balance": {
       let uid = m.author.id;
       if (a[0] && m.mentions.users.first()) {
-        if (!isAdmin(m.member)) return m.reply("\u274C Admins only for others");
+        if (!isAdmin(m.member)) return m.reply("\u274C Admins only");
         uid = m.mentions.users.first().id;
       }
       const d = botData.messages[uid] || { count: 0, earned: 0 };
@@ -77763,24 +77780,24 @@ First to 2 wins`);
       return m.channel.send(u === 2 ? `\u{1F3C6} You win!` : `\u{1F3C6} ${opp} wins!`);
     }
     case "help": {
-      return m.reply(`\u{1F4D6} **COMMANDS**
+      return m.reply(`\u{1F4D6} COMMANDS
 
-\u{1F4B0} **REWARDS**
-\`-rewardtoggle\` \u2192 ON/OFF (OWNER ONLY)
-\`-balance\` \u2192 Check your balance
-\`-balance @user\` \u2192 Check others (ADMIN ONLY)
-\`-earningslb\` \u2192 Top earners
-*10,000 msgs = $2*
+\u{1F4B0} REWARDS
+-rewardtoggle (OWNER)
+-setreward <msgs> <$> (OWNER)
+-balance / -balance @user (ADMIN)
+-earningslb
+*Default: 10,000 msgs = $2*
 
-\u{1F3B2} **GENERAL**
-\`-d [max]\` / \`-cf\` / \`-choose\` / \`-ship\` / \`-stats\`
-\`-dw\` / \`-cw\`
+\u{1F3B2} GENERAL
+-d / -cf / -choose / -ship / -stats
+-dw / -cw
 
-\u{1F451} **ADMIN**
-\`-disable\` / \`-enable\` / \`-bully\`
+\u{1F451} ADMIN
+-disable / -enable / -bully
 
-\u{1F512} **OWNER**
-\`-silence\``);
+\u{1F512} OWNER
+-silence`);
     }
   }
 });

@@ -5,27 +5,32 @@ const token = process.env.DISCORD_BOT_TOKEN;
 if(!token){console.error('No token');process.exit(1);}
 
 const client = new Client({intents:[GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent]});
-const PREFIX='-',OWNER='.luckyyy_',CD=20000,REWARD_THRESH=10000,REWARD_AMT=2;
+const PREFIX='-',OWNER='.luckyyy_',CD=20000;
+let REWARD_THRESH=10000,REWARD_AMT=2;
 const userCd=new Map(),lastMsg=new Map(),msgCd=new Map();
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 
-// ✅ SAVE TO PROJECT ROOT — SAFE FROM BUILD CLEANUP
 const DATA_FILE = path.join(__dirname, '..', '..', 'persistentData.json');
 
 let botData={stats:{r:0,f:0,start:Date.now()},disabled:[],silence:{},rewardOn:{},messages:{}};
 
-// Load existing data FIRST — never overwrite
 if(fs.existsSync(DATA_FILE)){
   try{
     const loaded = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
     botData = { ...botData, ...loaded };
-    console.log('✅ Loaded saved data successfully');
-  }catch(e){console.warn('⚠️ Starting fresh data file');}
+    if(loaded.rewardConfig){
+      REWARD_THRESH = loaded.rewardConfig.threshold || 10000;
+      REWARD_AMT = loaded.rewardConfig.amount || 2;
+    }
+    console.log('✅ Loaded saved data');
+  }catch(e){console.warn('⚠️ Starting new data file');}
 }
 
 const save=()=>{
-  try{fs.writeFileSync(DATA_FILE, JSON.stringify(botData,null,2),'utf8');}
-  catch(e){console.error('❌ Save error:',e);}
+  try{
+    botData.rewardConfig = { threshold: REWARD_THRESH, amount: REWARD_AMT };
+    fs.writeFileSync(DATA_FILE, JSON.stringify(botData,null,2),'utf8');
+  }catch(e){console.error('❌ Save error:',e);}
 };
 
 const isAdmin=m=>m.user.username===OWNER||m.permissions?.has(PermissionsBitField.Flags.Administrator);
@@ -91,10 +96,22 @@ client.on('messageCreate',async m=>{
       botData.rewardOn[g]=!botData.rewardOn[g];save();
       return m.reply(botData.rewardOn[g]?'✅ Rewards ON':'❌ Rewards OFF');
     }
+    case'setreward':{
+      if(m.author.username!==OWNER)return m.reply('❌ Only owner can change rewards');
+      const newThreshold = parseInt(a[0]);
+      const newAmount = parseFloat(a[1]);
+      if(!newThreshold || !newAmount || newThreshold < 1 || newAmount < 0){
+        return m.reply('❌ Usage: -setreward <msgs> <$>\nExample: -setreward 5000 1.5');
+      }
+      REWARD_THRESH = newThreshold;
+      REWARD_AMT = newAmount;
+      save();
+      return m.reply(`✅ Updated: ${REWARD_THRESH} msgs = $${REWARD_AMT.toFixed(2)}`);
+    }
     case'balance':{
       let uid=m.author.id;
       if(a[0]&&m.mentions.users.first()){
-        if(!isAdmin(m.member))return m.reply('❌ Admins only for others');
+        if(!isAdmin(m.member))return m.reply('❌ Admins only');
         uid=m.mentions.users.first().id;
       }
       const d=botData.messages[uid]||{count:0,earned:0};
@@ -161,24 +178,24 @@ client.on('messageCreate',async m=>{
       return m.channel.send(u===2?`🏆 You win!`:`🏆 ${opp} wins!`);
     }
     case'help':{
-      return m.reply(`📖 **COMMANDS**
+      return m.reply(`📖 COMMANDS
 
-💰 **REWARDS**
-\`-rewardtoggle\` → ON/OFF (OWNER ONLY)
-\`-balance\` → Check your balance
-\`-balance @user\` → Check others (ADMIN ONLY)
-\`-earningslb\` → Top earners
-*10,000 msgs = $2*
+💰 REWARDS
+-rewardtoggle (OWNER)
+-setreward <msgs> <$> (OWNER)
+-balance / -balance @user (ADMIN)
+-earningslb
+*Default: 10,000 msgs = $2*
 
-🎲 **GENERAL**
-\`-d [max]\` / \`-cf\` / \`-choose\` / \`-ship\` / \`-stats\`
-\`-dw\` / \`-cw\`
+🎲 GENERAL
+-d / -cf / -choose / -ship / -stats
+-dw / -cw
 
-👑 **ADMIN**
-\`-disable\` / \`-enable\` / \`-bully\`
+👑 ADMIN
+-disable / -enable / -bully
 
-🔒 **OWNER**
-\`-silence\``);
+🔒 OWNER
+-silence`);
     }
   }
 });
