@@ -77567,10 +77567,10 @@ var fs = require("fs");
 var path = require("path");
 var token = process.env.DISCORD_BOT_TOKEN;
 if (!token) {
-  console.error("\u274C Token missing!");
+  console.error("\u274C FATAL: DISCORD_BOT_TOKEN is missing! Set it in Railway Variables.");
   process.exit(1);
 }
-console.log(`\u2705 Token loaded, length: ${token.length}`);
+console.log(`\u2705 Token loaded successfully (length: ${token.length})`);
 var client = new Client2({
   intents: [
     GatewayIntentBits.Guilds,
@@ -77589,26 +77589,37 @@ var lastMsg = /* @__PURE__ */ new Map();
 var msgCd = /* @__PURE__ */ new Map();
 var delay = /* @__PURE__ */ __name((ms) => new Promise((r) => setTimeout(r, ms)), "delay");
 var DATA_FILE = path.join(__dirname, "..", "..", "persistentData.json");
-var botData = { stats: { rolls: 0, flips: 0, started: Date.now() }, disabled: [], silence: {}, rewards: {}, balances: {}, rewardCfg: { t: 1e4, a: 2 } };
+var botData = {
+  stats: { rolls: 0, flips: 0, started: Date.now() },
+  disabled: [],
+  silence: {},
+  rewards: {},
+  balances: {},
+  rewardCfg: { t: 1e4, a: 2 }
+};
 if (fs.existsSync(DATA_FILE)) {
   try {
-    const d = JSON.parse(fs.readFileSync(DATA_FILE));
-    Object.assign(botData, d);
+    const saved = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
+    Object.assign(botData, saved);
     REWARD_THRESH = botData.rewardCfg.t || 1e4;
     REWARD_AMT = botData.rewardCfg.a || 2;
   } catch (e) {
-    console.log("\u2139\uFE0F New data file created");
+    console.log("\u2139\uFE0F Created new data file");
   }
 }
 var save = /* @__PURE__ */ __name(() => {
   botData.rewardCfg = { t: REWARD_THRESH, a: REWARD_AMT };
   fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), "utf8");
 }, "save");
-var isAdmin = /* @__PURE__ */ __name((m) => m.user.username === OWNER || m.member.permissions?.has(PermissionsBitField2.Flags.Administrator), "isAdmin");
-var isOwner = /* @__PURE__ */ __name((m) => m.user.username === OWNER, "isOwner");
+var isAdmin = /* @__PURE__ */ __name((m) => {
+  if (!m || !m.author) return false;
+  if (m.author.username === OWNER) return true;
+  return !!m.member?.permissions?.has(PermissionsBitField2.Flags.Administrator);
+}, "isAdmin");
+var isOwner = /* @__PURE__ */ __name((m) => m && m.author && m.author.username === OWNER, "isOwner");
 client.once("clientReady", () => console.log(`\u2705 Bot online: ${client.user.tag}`));
 client.on("messageCreate", async (m) => {
-  if (m.author.bot || !m.guild) return;
+  if (!m || m.author.bot || !m.guild) return;
   const g = m.guild.id, c = m.channel.id;
   if (botData.disabled.includes(c)) return;
   if (!m.content.startsWith(PREFIX)) {
@@ -77619,163 +77630,172 @@ client.on("messageCreate", async (m) => {
       botData.balances[u].count++;
       lastMsg.set(u, m.content);
       msgCd.set(u, now);
-      const e = Math.floor(botData.balances[u].count / REWARD_THRESH) * REWARD_AMT;
-      if (e > botData.balances[u].earned) {
-        botData.balances[u].earned = e;
+      const earned = Math.floor(botData.balances[u].count / REWARD_THRESH) * REWARD_AMT;
+      if (earned > botData.balances[u].earned) {
+        botData.balances[u].earned = earned;
         save();
       }
     }
     return;
   }
   if (botData.silence[g] && !isOwner(m)) return;
-  const p = m.content.slice(PREFIX.length).trim().split(/\s+/);
-  const cmd = p[0]?.toLowerCase() || "", a = p.slice(1);
+  const parts = m.content.slice(PREFIX.length).trim().split(/\s+/);
+  const cmd = parts[0]?.toLowerCase() || "", args = parts.slice(1);
   if (!["d", "cf", "choose"].includes(cmd) && !isAdmin(m)) {
-    const l = userCd.get(m.author.id) || 0;
-    if (Date.now() - l < CD) return m.reply(`\u23F3 Wait ${Math.ceil((CD - Date.now() + l) / 1e3)}s`).catch(() => {
-    });
+    const lastUsed = userCd.get(m.author.id) || 0;
+    if (Date.now() - lastUsed < CD) {
+      return m.reply(`\u23F3 Wait ${Math.ceil((CD - (Date.now() - lastUsed)) / 1e3)}s`).catch(() => {
+      });
+    }
     userCd.set(m.author.id, Date.now());
   }
   switch (cmd) {
     case "d": {
-      const x = parseInt(a[0]) || 100, r = Math.floor(Math.random() * x) + 1;
+      const max = parseInt(args[0]) || 100;
+      const roll = Math.floor(Math.random() * max) + 1;
       botData.stats.rolls++;
       save();
-      return m.reply(`\u{1F3B2} Roll: ${r}`);
+      return m.reply(`\u{1F3B2} Roll: ${roll}`);
     }
     case "cf": {
-      const r = Math.random() < 0.5 ? "Heads" : "Tails";
+      const result = Math.random() < 0.5 ? "Heads" : "Tails";
       botData.stats.flips++;
       save();
-      return m.reply(`\u{1FA99} Flip: ${r}`);
+      return m.reply(`\u{1FA99} Flip: ${result}`);
     }
     case "choose": {
-      if (!a.length) return m.reply("\u274C Usage: -choose opt1 opt2");
-      return m.reply(`\u{1F3AF} Pick: ${a[Math.floor(Math.random() * a.length)]}`);
+      if (!args.length) return m.reply("\u274C Usage: -choose option1 option2 ...");
+      return m.reply(`\u{1F3AF} Pick: ${args[Math.floor(Math.random() * args.length)]}`);
     }
     case "ship": {
-      if (!m.mentions.users.size) return m.reply("\u274C Usage: -ship @user @user");
+      if (!m.mentions.users.size) return m.reply("\u274C Usage: -ship @user1 @user2");
       return m.reply(`\u{1F49E} Compatibility: ${Math.floor(Math.random() * 100)}%`);
     }
     case "stats": {
-      const u = Math.floor((Date.now() - botData.stats.started) / 6e4);
+      const uptime = Math.floor((Date.now() - botData.stats.started) / 6e4);
       return m.reply(`\u{1F4CA} Stats
 \u{1F3B2} Rolls: ${botData.stats.rolls}
 \u{1FA99} Flips: ${botData.stats.flips}
-\u23F1\uFE0F Uptime: ${u}m`);
+\u23F1\uFE0F Uptime: ${uptime}m`);
     }
     case "rewardtoggle": {
-      if (!isOwner(m)) return m.reply("\u274C Only owner");
+      if (!isOwner(m)) return m.reply("\u274C Only owner can use this");
       botData.rewards[g] = !botData.rewards[g];
       save();
-      return m.reply(botData.rewards[g] ? "\u2705 Rewards ON" : "\u274C Rewards OFF");
+      return m.reply(botData.rewards[g] ? "\u2705 Rewards enabled" : "\u274C Rewards disabled");
     }
     case "setreward": {
-      if (!isOwner(m)) return m.reply("\u274C Only owner");
-      const t = parseInt(a[0]), v = parseFloat(a[1]);
-      if (!t || !v || t < 1 || v < 0) return m.reply("\u274C Usage: -setreward <msgs> <$>");
+      if (!isOwner(m)) return m.reply("\u274C Only owner can use this");
+      const t = parseInt(args[0]), a = parseFloat(args[1]);
+      if (!t || !a || t < 1 || a < 0) return m.reply("\u274C Usage: -setreward <message_count> <amount>");
       REWARD_THRESH = t;
-      REWARD_AMT = v;
+      REWARD_AMT = a;
       save();
-      return m.reply(`\u2705 Updated: ${t} msgs = $${v.toFixed(2)}`);
+      return m.reply(`\u2705 Updated: ${t} messages = $${a.toFixed(2)}`);
     }
     case "balance": {
-      const t = m.mentions.users.first() || m.author;
-      if (m.mentions.users.first() && !isAdmin(m)) return m.reply("\u274C Admin only");
-      const d = botData.balances[t.id] || { count: 0, earned: 0 };
-      const n = (Math.floor(d.count / REWARD_THRESH) + 1) * REWARD_THRESH;
-      return m.reply(`\u{1F4B0} ${t.username}
-Messages: ${d.count}
-Earned: $${d.earned.toFixed(2)}
-Next: ${n}`);
+      const target = m.mentions.users.first() || m.author;
+      if (m.mentions.users.first() && !isAdmin(m)) return m.reply("\u274C Only admins can check others' balance");
+      const data = botData.balances[target.id] || { count: 0, earned: 0 };
+      const nextReward = (Math.floor(data.count / REWARD_THRESH) + 1) * REWARD_THRESH;
+      return m.reply(`\u{1F4B0} ${target.username}
+Messages sent: ${data.count}
+Earned: $${data.earned.toFixed(2)}
+Next reward at: ${nextReward} messages`);
     }
     case "earningslb": {
-      if (!botData.rewards[g]) return m.reply("\u274C Rewards OFF");
-      const s = Object.entries(botData.balances).sort((a2, b) => b[1].earned - a2[1].earned).slice(0, 10);
-      if (!s.length) return m.reply("\u{1F4CA} No data");
-      let l = "\u{1F3C6} Top Earners\n";
-      for (let i = 0; i < s.length; i++) {
-        const u = await client.users.fetch(s[i][0]).catch(() => null);
-        l += `${i + 1}. ${u?.username || "Unknown"} \u2014 $${s[i][1].earned.toFixed(2)}
+      if (!botData.rewards[g]) return m.reply("\u274C Rewards are disabled here");
+      const sorted = Object.entries(botData.balances).sort((x, y) => y[1].earned - x[1].earned).slice(0, 10);
+      if (!sorted.length) return m.reply("\u{1F4CA} No earnings recorded yet");
+      let list = "\u{1F3C6} Top Earners\n";
+      for (let i = 0; i < sorted.length; i++) {
+        const user = await client.users.fetch(sorted[i][0]).catch(() => null);
+        list += `${i + 1}. ${user?.username || "Unknown User"} \u2014 $${sorted[i][1].earned.toFixed(2)}
 `;
       }
-      return m.reply(l);
+      return m.reply(list);
     }
     case "silence": {
-      if (!isOwner(m)) return m.reply("\u274C Only owner");
+      if (!isOwner(m)) return m.reply("\u274C Only owner can use this");
       botData.silence[g] = !botData.silence[g];
       save();
       return m.reply(botData.silence[g] ? "\u{1F507} Bot silenced" : "\u{1F50A} Bot active");
     }
     case "disable": {
-      if (!isAdmin(m)) return m.reply("\u274C Admin only");
+      if (!isAdmin(m)) return m.reply("\u274C Only admins can use this");
       if (!botData.disabled.includes(c)) {
         botData.disabled.push(c);
         save();
       }
-      return m.reply("\u{1F6AB} Commands disabled here");
+      return m.reply("\u{1F6AB} Commands disabled in this channel");
     }
     case "enable": {
-      if (!isAdmin(m)) return m.reply("\u274C Admin only");
-      botData.disabled = botData.disabled.filter((i) => i !== c);
+      if (!isAdmin(m)) return m.reply("\u274C Only admins can use this");
+      botData.disabled = botData.disabled.filter((ch) => ch !== c);
       save();
-      return m.reply("\u2705 Commands enabled here");
+      return m.reply("\u2705 Commands enabled in this channel");
     }
     case "bully": {
       if (!isAdmin(m) || !m.mentions.users.first()) return m.reply("\u274C Usage: -bully @user");
-      const t = m.mentions.users.first();
+      const target = m.mentions.users.first();
       for (let i = 0; i < 8; i++) {
-        await m.channel.send(`${t} \u{1F44A}`).catch(() => {
+        await m.channel.send(`${target} \u{1F44A}`).catch(() => {
         });
         await delay(600);
       }
       return;
     }
     case "dw": {
-      const o = m.mentions.users.first() || { username: "Opponent" }, r = Math.max(1, Math.min(10, parseInt(a[1]) || 5)), s = Math.max(2, Math.min(20, parseInt(a[2]) || 6));
+      const opponent = m.mentions.users.first() || { username: "Opponent" };
+      const rounds = Math.max(1, Math.min(10, parseInt(args[1]) || 5));
+      const sides = Math.max(2, Math.min(20, parseInt(args[2]) || 6));
       let p1 = 0, p2 = 0;
-      await m.reply(`\u{1F3B2} Dice War: ${m.author.username} vs ${o.username}`);
-      for (let i = 1; i <= r; i++) {
-        const r1 = Math.floor(Math.random() * s) + 1, r2 = Math.floor(Math.random() * s) + 1;
-        r1 > r2 ? p1++ : r2 > r1 ? p2++ : null;
-        await m.channel.send(`Round ${i}: ${r1}-${r2} | ${p1}-${p2}`).catch(() => {
+      await m.reply(`\u{1F3B2} Dice War: ${m.author.username} vs ${opponent.username}`);
+      for (let i = 1; i <= rounds; i++) {
+        const r1 = Math.floor(Math.random() * sides) + 1;
+        const r2 = Math.floor(Math.random() * sides) + 1;
+        if (r1 > r2) p1++;
+        else if (r2 > r1) p2++;
+        await m.channel.send(`Round ${i}: ${r1} - ${r2} | Score: ${p1} - ${p2}`).catch(() => {
         });
         await delay(900);
       }
-      const res = p1 > p2 ? `\u2705 ${m.author.username} wins!` : p2 > p1 ? `\u2705 ${o.username} wins!` : "\u2696\uFE0F Draw!";
-      return m.channel.send(`\u{1F3C6} Final: ${p1}-${p2}
-${res}`);
+      const result = p1 > p2 ? `\u2705 ${m.author.username} wins!` : p2 > p1 ? `\u2705 ${opponent.username} wins!` : "\u2696\uFE0F It's a draw!";
+      return m.channel.send(`\u{1F3C6} Final Score: ${p1} - ${p2}
+${result}`);
     }
     case "cw": {
-      const o = m.mentions.users.first(), side = a[1]?.toLowerCase();
-      if (!o || !["heads", "tails"].includes(side)) return m.reply("\u274C Usage: -cw @user heads/tails");
-      let u = 0, us = 0;
-      await m.reply(`\u{1FA99} Coin War: ${m.author.username} vs ${o.username}`);
-      while (u < 2 && us < 2) {
-        const f = Math.random() < 0.5 ? "Heads" : "Tails";
-        f === side ? u++ : us++;
-        await m.channel.send(`Flip: ${f} | ${u}-${us}`).catch(() => {
+      const opponent = m.mentions.users.first();
+      const side = args[1]?.toLowerCase();
+      if (!opponent || !["heads", "tails"].includes(side)) return m.reply("\u274C Usage: -cw @user heads/tails");
+      let userScore = 0, oppScore = 0;
+      await m.reply(`\u{1FA99} Coin War: ${m.author.username} vs ${opponent.username}`);
+      while (userScore < 2 && oppScore < 2) {
+        const flip = Math.random() < 0.5 ? "Heads" : "Tails";
+        if (flip.toLowerCase() === side) userScore++;
+        else oppScore++;
+        await m.channel.send(`Flip: ${flip} | Score: ${userScore} - ${oppScore}`).catch(() => {
         });
         await delay(900);
       }
-      return m.channel.send(u === 2 ? `\u{1F3C6} ${m.author.username} wins!` : `\u{1F3C6} ${o.username} wins!`);
+      return m.channel.send(userScore === 2 ? `\u{1F3C6} ${m.author.username} wins!` : `\u{1F3C6} ${opponent.username} wins!`);
     }
     case "help": {
       return m.reply(`\u{1F4D6} **COMMANDS**
 
 \u{1F4B0} **REWARDS**
-\`-rewardtoggle\` (OWNER)
-\`-setreward <msgs> <$\` (OWNER)
+\`-rewardtoggle\` (Owner only)
+\`-setreward <msgs> <amount>\` (Owner only)
 \`-balance\` / \`-balance @user\`
 \`-earningslb\`
-*Default: 10,000 = $2.00*
 
 \u{1F3B2} **GENERAL**
 \`-d [max]\` \u2022 \`-cf\` \u2022 \`-choose\`
-\`-ship\` \u2022 \`-stats\` \u2022 \`-dw\` \u2022 \`-cw\`
+\`-ship @user1 @user2\` \u2022 \`-stats\`
+\`-dw [rounds] [sides]\` \u2022 \`-cw @user heads/tails\`
 
 \u{1F451} **ADMIN**
-\`-disable\` \u2022 \`-enable\` \u2022 \`-bully\`
+\`-disable\` \u2022 \`-enable\` \u2022 \`-bully @user\`
 
 \u{1F512} **OWNER**
 \`-silence\`
@@ -77783,7 +77803,7 @@ ${res}`);
     }
   }
 });
-client.login(token).catch((e) => console.error("\u274C Login error:", e.message));
+client.login(token).catch((err) => console.error("\u274C Login failed:", err.message));
 /*! Bundled license information:
 
 undici/lib/web/fetch/body.js:
