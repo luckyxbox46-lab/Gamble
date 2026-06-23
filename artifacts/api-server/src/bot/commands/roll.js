@@ -1,14 +1,1 @@
-export async function execute(message, args) {
-  const max = parseInt(args[0]) || 100;
-  // 25% chance to roll 67 when max is 100
-  const chance = Math.random();
-  const result = (max === 100 && chance < 0.25) 
-    ? 67 
-    : Math.floor(Math.random() * max) + 1;
-
-  if (result === 67) {
-    await message.reply(`🎲 Roll: **67**\n\nhttps://tenor.com/view/bosnov-67-bosnov-67-67-meme-gif-16727368109953357722`);
-  } else {
-    await message.reply(`🎲 Roll: ${result}`);
-  }
-}
+export async function execute(m,args){const max=parseInt(args[0])||100;const res=Math.floor(Math.random()*max)+1;if(max===100&&res===67)return m.reply("🎲 Roll: **67**\nhttps://tenor.com/view/bosnov-67-bosnov-67-67-meme-gif-16727368109953357722");return m.reply("🎲 Roll: "+res);}

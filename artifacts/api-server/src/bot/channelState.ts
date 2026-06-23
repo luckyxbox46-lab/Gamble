@@ -1,41 +1,9 @@
 import fs from "fs";
 import path from "path";
-
-const STATE_FILE = path.join(process.cwd(), "channel-state.json");
-
-function loadState() {
-  try {
-    if (fs.existsSync(STATE_FILE)) {
-      const data = JSON.parse(fs.readFileSync(STATE_FILE, "utf8"));
-      return {
-        disabledChannels: new Set<string>(data.disabledChannels || []),
-        ignoredUsers: new Set<string>(data.ignoredUsers || [])
-      };
-    }
-  } catch {}
-  return { disabledChannels: new Set<string>(), ignoredUsers: new Set<string>() };
-}
-
-function saveState(disabled: Set<string>, ignored: Set<string>) {
-  fs.writeFileSync(
-    STATE_FILE,
-    JSON.stringify({
-      disabledChannels: Array.from(disabled),
-      ignoredUsers: Array.from(ignored)
-    })
-  );
-}
-
-const initial = loadState();
-export const disabledChannels = initial.disabledChannels;
-export const ignoredUsers = initial.ignoredUsers;
-
-export function toggleChannel(channelId: string, disable: boolean) {
-  disable ? disabledChannels.add(channelId) : disabledChannels.delete(channelId);
-  saveState(disabledChannels, ignoredUsers);
-}
-
-export function toggleUser(userId: string, ignore: boolean) {
-  ignore ? ignoredUsers.add(userId) : ignoredUsers.delete(userId);
-  saveState(disabledChannels, ignoredUsers);
-}
+const pathFile=path.join(process.cwd(),"state.json");
+function load(){try{return fs.existsSync(pathFile)?JSON.parse(fs.readFileSync(pathFile,"utf8")):{disabled:[],ignored:[]}}catch{return{disabled:[],ignored:[]}}}
+function save(d:any){fs.writeFileSync(pathFile,JSON.stringify(d))}
+const data=load();
+export const disabledChannels=new Set<string>(data.disabled||[]);
+export const ignoredUsers=new Set<string>(data.ignored||[]);
+export function saveAll(){save({disabled:[...disabledChannels],ignored:[...ignoredUsers]})}
