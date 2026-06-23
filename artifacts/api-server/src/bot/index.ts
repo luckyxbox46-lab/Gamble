@@ -10,8 +10,11 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
 
 const dataFile='./messageData.json';
 let messageData={};
-if(fs.existsSync(dataFile))messageData=JSON.parse(fs.readFileSync(dataFile));
-const save=()=>fs.writeFileSync(dataFile,JSON.stringify(messageData,null,2));
+if(fs.existsSync(dataFile)){
+  try{messageData=JSON.parse(fs.readFileSync(dataFile,'utf8'));}
+  catch(e){messageData={};}
+}
+const save=()=>fs.writeFileSync(dataFile,JSON.stringify(messageData,null,2),'utf8');
 
 const isAdmin=m=>m.user.username===OWNER||m.permissions.has(PermissionsBitField.Flags.Administrator);
 const canSilence=(m,g)=>m.user.username===OWNER||m.id===g.ownerId;

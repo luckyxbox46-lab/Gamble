@@ -77585,8 +77585,14 @@ var rewardActive = /* @__PURE__ */ new Map();
 var delay = /* @__PURE__ */ __name((ms) => new Promise((r) => setTimeout(r, ms)), "delay");
 var dataFile = "./messageData.json";
 var messageData = {};
-if (fs.existsSync(dataFile)) messageData = JSON.parse(fs.readFileSync(dataFile));
-var save = /* @__PURE__ */ __name(() => fs.writeFileSync(dataFile, JSON.stringify(messageData, null, 2)), "save");
+if (fs.existsSync(dataFile)) {
+  try {
+    messageData = JSON.parse(fs.readFileSync(dataFile, "utf8"));
+  } catch (e) {
+    messageData = {};
+  }
+}
+var save = /* @__PURE__ */ __name(() => fs.writeFileSync(dataFile, JSON.stringify(messageData, null, 2), "utf8"), "save");
 var isAdmin = /* @__PURE__ */ __name((m) => m.user.username === OWNER || m.permissions.has(PermissionsBitField2.Flags.Administrator), "isAdmin");
 var canSilence = /* @__PURE__ */ __name((m, g) => m.user.username === OWNER || m.id === g.ownerId, "canSilence");
 client.once("ready", () => console.log("Bot online: " + client.user.tag));
