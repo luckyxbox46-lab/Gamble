@@ -5,8 +5,8 @@ await esbuild.build({
   bundle: true,
   platform: 'node',
   target: 'node18',
-  format: 'esm',
-  outfile: 'dist/index.mjs',
-  external: ['pino', 'pino-pretty', 'thread-stream'],
+  format: 'cjs',
+  outfile: 'dist/index.js',
+  external: [],
   logLevel: 'info'
 });

@@ -1,8 +1,8 @@
-import { Client, GatewayIntentBits, Message } from "discord.js";
+const { Client, GatewayIntentBits } = require("discord.js");
 
 const token = process.env.DISCORD_BOT_TOKEN;
 if (!token) {
-  console.error("ERROR: DISCORD_BOTTOKEN environment variable not set");
+  console.error("ERROR: DISCORD_BOT_TOKEN not set");
   process.exit(1);
 }
 
@@ -15,13 +15,13 @@ const client = new Client({
 });
 
 const PREFIX = "-";
-const OWNER = ".luckyyy";
+const OWNER = ".luckyyy_";
 
 client.once("ready", () => {
-  console.log("Bot online: " + client.user?.tag);
+  console.log("Bot online: " + client.user.tag);
 });
 
-client.on("messageCreate", async (msg: Message) => {
+client.on("messageCreate", async (msg) => {
   if (msg.author.bot) return;
   if (!msg.content.startsWith(PREFIX)) return;
 
