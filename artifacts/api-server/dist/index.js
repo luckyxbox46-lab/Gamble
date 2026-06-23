@@ -36730,8 +36730,8 @@ var require_DataResolver = __commonJS({
           return { data: Buffer2.from(await res.arrayBuffer()), contentType: res.headers.get("content-type") };
         }
         const file = path.resolve(resource);
-        const stats = await fs.stat(file);
-        if (!stats.isFile()) throw new DiscordjsError2(ErrorCodes2.FileNotFound, file);
+        const stats2 = await fs.stat(file);
+        if (!stats2.isFile()) throw new DiscordjsError2(ErrorCodes2.FileNotFound, file);
         return { data: await fs.readFile(file) };
       }
       throw new DiscordjsTypeError2(ErrorCodes2.ReqResourceType);
@@ -76572,8 +76572,8 @@ var require_ShardingManager = __commonJS({
         this.file = file;
         if (!file) throw new DiscordjsError2(ErrorCodes2.ClientInvalidOption, "File", "specified.");
         if (!path.isAbsolute(file)) this.file = path.resolve(process2.cwd(), file);
-        const stats = fs.statSync(this.file);
-        if (!stats.isFile()) throw new DiscordjsError2(ErrorCodes2.ClientInvalidOption, "File", "a file");
+        const stats2 = fs.statSync(this.file);
+        if (!stats2.isFile()) throw new DiscordjsError2(ErrorCodes2.ClientInvalidOption, "File", "a file");
         this.shardList = _options.shardList ?? "auto";
         if (this.shardList !== "auto") {
           if (!Array.isArray(this.shardList)) {
@@ -77565,92 +77565,116 @@ var require_src = __commonJS({
 var { Client: Client2, GatewayIntentBits } = require_src();
 var token = process.env.DISCORD_BOT_TOKEN;
 if (!token) {
-  console.error("ERROR: DISCORD_BOT_TOKEN not set");
+  console.error("No token");
   process.exit(1);
 }
-var client = new Client2({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
-  ]
-});
+var client = new Client2({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 var PREFIX = "-";
 var OWNER = ".luckyyy_";
 var CD = 2e4;
-var NO_CD = ["d", "cf"];
+var NO_CD = ["d", "cf", "choose"];
 var userCd = /* @__PURE__ */ new Map();
-client.once("ready", () => {
-  console.log("Bot online: " + client.user.tag);
-});
+var disabledChan = /* @__PURE__ */ new Set();
+var stats = { rolls: 0, flips: 0, started: Date.now() };
+var serverSilence = /* @__PURE__ */ new Map();
+client.once("ready", () => console.log("Bot online: " + client.user.tag));
 client.on("messageCreate", async (msg) => {
-  if (msg.author.bot) return;
-  if (!msg.content.startsWith(PREFIX)) return;
+  if (msg.author.bot || !msg.content.startsWith(PREFIX) || !msg.guild) return;
+  const guildId = msg.guild.id;
+  if (serverSilence.get(guildId) && msg.author.username !== OWNER) return;
+  if (disabledChan.has(msg.channelId) && msg.author.username !== OWNER) return;
   const parts = msg.content.slice(PREFIX.length).trim().split(/\s+/);
-  const cmd = parts[0] ? parts[0].toLowerCase() : "";
-  const args = parts.slice(1);
-  if (msg.author.username !== OWNER && !NO_CD.includes(cmd)) {
-    const now = Date.now();
-    const last = userCd.get(msg.author.id) || 0;
-    if (now - last < CD) {
-      const wait = Math.ceil((CD - now + last) / 1e3);
-      return msg.reply("Wait " + wait + "s").catch(() => {
-      });
-    }
+  const cmd = parts[0]?.toLowerCase() || "", args = parts.slice(1);
+  if (!NO_CD.includes(cmd) && msg.author.username !== OWNER) {
+    const now = Date.now(), last = userCd.get(msg.author.id) || 0;
+    if (now - last < CD) return msg.reply(`Wait ${Math.ceil((CD - now + last) / 1e3)}s`).catch(() => {
+    });
     userCd.set(msg.author.id, now);
   }
-  runCommand(cmd, args, msg);
-});
-function runCommand(cmd, args, msg) {
   switch (cmd) {
-    case "help":
-      return msg.reply("\u{1F4DC} Commands:\n-d Roll\n-cf Flip\n-choose Pick\n-disable/enable Channel\n-stats Info\n-bully Insult\n-cw Coin War\n-ship Pair\n-ignore/unignore User\n-dw Dice War\n-silence Toggle");
-    case "d":
-      const max = parseInt(args[0]) || 100;
-      return msg.reply("\u{1F3B2} Roll: " + (Math.floor(Math.random() * max) + 1));
-    case "cf":
-      return msg.reply("\u{1FA99} Flip: " + (Math.random() < 0.5 ? "Heads" : "Tails"));
-    case "choose":
-      if (!args.length) return msg.reply("\u274C Use: -choose opt1 opt2...");
-      return msg.reply("\u{1F3AF} Pick: " + args[Math.floor(Math.random() * args.length)]);
-    case "disable":
+    case "d": {
+      const max = parseInt(args[0]) || 100, r = Math.floor(Math.random() * max) + 1;
+      stats.rolls++;
+      return msg.reply(`\u{1F3B2} Roll: ${r}`);
+    }
+    case "cf": {
+      const res = Math.random() < 0.5 ? "Heads" : "Tails";
+      stats.flips++;
+      return msg.reply(`\u{1FA99} Flip: ${res}`);
+    }
+    case "choose": {
+      if (!args.length) return msg.reply("Use: -choose opt1 opt2");
+      return msg.reply(`\u{1F3AF} Pick: ${args[Math.floor(Math.random() * args.length)]}`);
+    }
+    case "dw": {
+      const r = parseInt(args[1]) || 1, s = parseInt(args[2]) || 6;
+      let p1 = 0, p2 = 0;
+      for (let i = 0; i < r; i++) {
+        p1 += Math.floor(Math.random() * s) + 1;
+        p2 += Math.floor(Math.random() * s) + 1;
+      }
+      const w = p1 > p2 ? "You win" : p1 < p2 ? "Opponent wins" : "Draw";
+      return msg.reply(`\u2694\uFE0F Dice War
+You: ${p1}
+${args[0] || "Opp"}: ${p2}
+${w}`);
+    }
+    case "cw": {
+      const side = args[1]?.toLowerCase();
+      if (!["heads", "tails"].includes(side)) return msg.reply("Use: -cw @user heads/tails");
+      const res = Math.random() < 0.5 ? "Heads" : "Tails", win = res === side;
+      return msg.reply(`\u{1FA99} Coin War: ${res}
+${win ? "\u2705 Win" : "\u274C Lose"}`);
+    }
+    case "ship": {
+      if (args.length < 2) return msg.reply("Use: -ship @u1 @u2");
+      return msg.reply(`\u{1F49E} Match: ${Math.floor(Math.random() * 10) + 1}/10`);
+    }
+    case "stats": {
+      const m = Math.floor((Date.now() - stats.started) / 6e4);
+      return msg.reply(`\u{1F4CA} Stats
+Rolls: ${stats.rolls}
+Flips: ${stats.flips}
+Uptime: ${m}m`);
+    }
+    case "silence": {
+      if (msg.author.username !== OWNER) return msg.reply("\u274C Only .luckyyy_ can use this");
+      const state = serverSilence.get(guildId) || false;
+      serverSilence.set(guildId, !state);
+      return msg.reply(!state ? "\u{1F507} Bot SILENCED for WHOLE SERVER" : "\u{1F50A} Bot ACTIVE again");
+    }
+    case "disable": {
       if (msg.author.username !== OWNER) return msg.reply("\u274C Owner only");
-      return msg.reply("\u{1F6AB} Channel disabled");
-    case "enable":
+      disabledChan.add(msg.channelId);
+      return msg.reply("\u{1F6AB} Disabled here");
+    }
+    case "enable": {
       if (msg.author.username !== OWNER) return msg.reply("\u274C Owner only");
-      return msg.reply("\u2705 Channel enabled");
-    case "stats":
-      return msg.reply("\u{1F4CA} Bot running fine");
-    case "bully":
-      const insults = ["Nice try", "Not today", "Calm down"];
-      return msg.reply(insults[Math.floor(Math.random() * insults.length)]);
-    case "cw":
-      return msg.reply("\u2694\uFE0F Coin war started");
-    case "ship":
-      if (args.length < 2) return msg.reply("\u274C Use: -ship @user1 @user2");
-      return msg.reply("\u2764\uFE0F Match: " + Math.floor(Math.random() * 101) + "%");
-    case "ignore":
-    case "unignore":
-      if (msg.author.username !== OWNER) return msg.reply("\u274C Owner only");
-      return msg.reply("\u2705 Done");
-    case "dw":
-      const a = Math.floor(Math.random() * 20) + 1;
-      const b = Math.floor(Math.random() * 20) + 1;
-      const res = a > b ? "You win" : a < b ? "Opponent wins" : "Draw";
-      return msg.reply("\u{1F3B2} Dice: You=" + a + " | Them=" + b + "\n" + res);
-    case "stfu":
-    case "silence":
-      if (msg.author.username !== OWNER) return msg.reply("\u274C Owner only");
-      return msg.reply("\u{1F507}/\u{1F50A} Silence toggled");
-    default:
+      disabledChan.delete(msg.channelId);
+      return msg.reply("\u2705 Enabled here");
+    }
+    case "bully": {
+      if (msg.author.username !== OWNER || !args[0]) return msg.reply("\u274C Owner only | Use: -bully @user");
+      for (let i = 0; i < 20; i++) await msg.channel.send(`${args[0]} \u{1F44A}`).catch(() => {
+      });
       return;
+    }
+    case "help":
+      return msg.reply(`\u{1F4D6} Commands
+-d [max] Roll
+-cf Flip
+-choose opt...
+-dw @user rounds sides
+-cw @user heads/tails
+-ship @u1 @u2
+-stats
+\u{1F507} -silence (owner only, whole server)
+Admin:
+-disable/enable
+-bully @user`);
   }
-}
-__name(runCommand, "runCommand");
-client.login(token).catch((err) => {
-  console.error("Login error:", err);
-  process.exit(1);
 });
+client.login(token).catch((e) => console.error("Login error:", e));
 /*! Bundled license information:
 
 undici/lib/web/fetch/body.js:

@@ -1,96 +1,81 @@
-const { Client, GatewayIntentBits } = require('discord.js');
+const {Client,GatewayIntentBits}=require('discord.js');
+const token=process.env.DISCORD_BOT_TOKEN;
+if(!token){console.error('No token');process.exit(1);}
+const client=new Client({intents:[GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent]});
+const PREFIX='-',OWNER='.luckyyy_',CD=20000,NO_CD=['d','cf','choose'];
+const userCd=new Map(),disabledChan=new Set(),stats={rolls:0,flips:0,started:Date.now()};
+const serverSilence=new Map();
 
-const token = process.env.DISCORD_BOT_TOKEN;
-if (!token) {
-  console.error('ERROR: DISCORD_BOT_TOKEN not set');
-  process.exit(1);
-}
+client.once('ready',()=>console.log('Bot online: '+client.user.tag));
+client.on('messageCreate',async msg=>{
+  if(msg.author.bot||!msg.content.startsWith(PREFIX)||!msg.guild)return;
+  const guildId=msg.guild.id;
+  if(serverSilence.get(guildId)&&msg.author.username!==OWNER)return;
+  if(disabledChan.has(msg.channelId)&&msg.author.username!==OWNER)return;
 
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
-  ]
-});
+  const parts=msg.content.slice(PREFIX.length).trim().split(/\s+/);
+  const cmd=parts[0]?.toLowerCase()||'',args=parts.slice(1);
 
-const PREFIX = '-';
-const OWNER = '.luckyyy_';
-const CD = 20000;
-const NO_CD = ['d', 'cf'];
-const userCd = new Map();
+  if(!NO_CD.includes(cmd)&&msg.author.username!==OWNER){
+    const now=Date.now(),last=userCd.get(msg.author.id)||0;
+    if(now-last<CD)return msg.reply(`Wait ${Math.ceil((CD-now+last)/1000)}s`).catch(()=>{});
+    userCd.set(msg.author.id,now);
+  }
 
-client.once('ready', () => {
-  console.log('Bot online: ' + client.user.tag);
-});
-
-client.on('messageCreate', async (msg) => {
-  if (msg.author.bot) return;
-  if (!msg.content.startsWith(PREFIX)) return;
-
-  const parts = msg.content.slice(PREFIX.length).trim().split(/\s+/);
-  const cmd = parts[0] ? parts[0].toLowerCase() : '';
-  const args = parts.slice(1);
-
-  if (msg.author.username !== OWNER && !NO_CD.includes(cmd)) {
-    const now = Date.now();
-    const last = userCd.get(msg.author.id) || 0;
-    if (now - last < CD) {
-      const wait = Math.ceil((CD - now + last) / 1000);
-      return msg.reply('Wait ' + wait + 's').catch(() => {});
+  switch(cmd){
+    case'd':{
+      const max=parseInt(args[0])||100,r=Math.floor(Math.random()*max)+1;
+      stats.rolls++;return msg.reply(`🎲 Roll: ${r}`);
     }
-    userCd.set(msg.author.id, now);
+    case'cf':{
+      const res=Math.random()<0.5?'Heads':'Tails';
+      stats.flips++;return msg.reply(`🪙 Flip: ${res}`);
+    }
+    case'choose':{
+      if(!args.length)return msg.reply('Use: -choose opt1 opt2');
+      return msg.reply(`🎯 Pick: ${args[Math.floor(Math.random()*args.length)]}`);
+    }
+    case'dw':{
+      const r=parseInt(args[1])||1,s=parseInt(args[2])||6;
+      let p1=0,p2=0;for(let i=0;i<r;i++){p1+=Math.floor(Math.random()*s)+1;p2+=Math.floor(Math.random()*s)+1;}
+      const w=p1>p2?'You win':p1<p2?'Opponent wins':'Draw';
+      return msg.reply(`⚔️ Dice War\nYou: ${p1}\n${args[0]||'Opp'}: ${p2}\n${w}`);
+    }
+    case'cw':{
+      const side=args[1]?.toLowerCase();
+      if(!['heads','tails'].includes(side))return msg.reply('Use: -cw @user heads/tails');
+      const res=Math.random()<0.5?'Heads':'Tails',win=res===side;
+      return msg.reply(`🪙 Coin War: ${res}\n${win?'✅ Win':'❌ Lose'}`);
+    }
+    case'ship':{
+      if(args.length<2)return msg.reply('Use: -ship @u1 @u2');
+      return msg.reply(`💞 Match: ${Math.floor(Math.random()*10)+1}/10`);
+    }
+    case'stats':{
+      const m=Math.floor((Date.now()-stats.started)/60000);
+      return msg.reply(`📊 Stats\nRolls: ${stats.rolls}\nFlips: ${stats.flips}\nUptime: ${m}m`);
+    }
+    case'silence':{
+      if(msg.author.username!==OWNER)return msg.reply('❌ Only .luckyyy_ can use this');
+      const state=serverSilence.get(guildId)||false;
+      serverSilence.set(guildId,!state);
+      return msg.reply(!state?'🔇 Bot SILENCED for WHOLE SERVER':'🔊 Bot ACTIVE again');
+    }
+    case'disable':{
+      if(msg.author.username!==OWNER)return msg.reply('❌ Owner only');
+      disabledChan.add(msg.channelId);return msg.reply('🚫 Disabled here');
+    }
+    case'enable':{
+      if(msg.author.username!==OWNER)return msg.reply('❌ Owner only');
+      disabledChan.delete(msg.channelId);return msg.reply('✅ Enabled here');
+    }
+    case'bully':{
+      if(msg.author.username!==OWNER||!args[0])return msg.reply('❌ Owner only | Use: -bully @user');
+      for(let i=0;i<20;i++)await msg.channel.send(`${args[0]} 👊`).catch(()=>{});
+      return;
+    }
+    case'help':
+      return msg.reply(`📖 Commands\n-d [max] Roll\n-cf Flip\n-choose opt...\n-dw @user rounds sides\n-cw @user heads/tails\n-ship @u1 @u2\n-stats\n🔇 -silence (owner only, whole server)\nAdmin:\n-disable/enable\n-bully @user`);
   }
-
-  runCommand(cmd, args, msg);
 });
-
-function runCommand(cmd, args, msg) {
-  switch(cmd) {
-    case 'help':
-      return msg.reply('📜 Commands:\n-d Roll\n-cf Flip\n-choose Pick\n-disable/enable Channel\n-stats Info\n-bully Insult\n-cw Coin War\n-ship Pair\n-ignore/unignore User\n-dw Dice War\n-silence Toggle');
-    case 'd':
-      const max = parseInt(args[0]) || 100;
-      return msg.reply('🎲 Roll: ' + (Math.floor(Math.random() * max) + 1));
-    case 'cf':
-      return msg.reply('🪙 Flip: ' + (Math.random() < 0.5 ? 'Heads' : 'Tails'));
-    case 'choose':
-      if (!args.length) return msg.reply('❌ Use: -choose opt1 opt2...');
-      return msg.reply('🎯 Pick: ' + args[Math.floor(Math.random() * args.length)]);
-    case 'disable':
-      if (msg.author.username !== OWNER) return msg.reply('❌ Owner only');
-      return msg.reply('🚫 Channel disabled');
-    case 'enable':
-      if (msg.author.username !== OWNER) return msg.reply('❌ Owner only');
-      return msg.reply('✅ Channel enabled');
-    case 'stats':
-      return msg.reply('📊 Bot running fine');
-    case 'bully':
-      const insults = ['Nice try', 'Not today', 'Calm down'];
-      return msg.reply(insults[Math.floor(Math.random() * insults.length)]);
-    case 'cw':
-      return msg.reply('⚔️ Coin war started');
-    case 'ship':
-      if (args.length < 2) return msg.reply('❌ Use: -ship @user1 @user2');
-      return msg.reply('❤️ Match: ' + Math.floor(Math.random() * 101) + '%');
-    case 'ignore':
-    case 'unignore':
-      if (msg.author.username !== OWNER) return msg.reply('❌ Owner only');
-      return msg.reply('✅ Done');
-    case 'dw':
-      const a = Math.floor(Math.random() * 20) + 1;
-      const b = Math.floor(Math.random() * 20) + 1;
-      const res = a > b ? 'You win' : a < b ? 'Opponent wins' : 'Draw';
-      return msg.reply('🎲 Dice: You=' + a + ' | Them=' + b + '\n' + res);
-    case 'stfu':
-    case 'silence':
-      if (msg.author.username !== OWNER) return msg.reply('❌ Owner only');
-      return msg.reply('🔇/🔊 Silence toggled');
-    default: return;
-  }
-}
-
-client.login(token).catch(err => {
-  console.error('Login error:', err);
-  process.exit(1);
-});
+client.login(token).catch(e=>console.error('Login error:',e));
