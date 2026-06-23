@@ -77580,19 +77580,17 @@ var userCd = /* @__PURE__ */ new Map();
 var lastMsg = /* @__PURE__ */ new Map();
 var msgCd = /* @__PURE__ */ new Map();
 var delay = /* @__PURE__ */ __name((ms) => new Promise((r) => setTimeout(r, ms)), "delay");
-var DATA_FILE = path.join(__dirname, "..", "..", "persistentData.json");
-var botData = { stats: { r: 0, f: 0, start: Date.now() }, disabled: [], silence: {}, rewardOn: {}, messages: {} };
+var DATA_FILE = path.join(__dirname, "..", "..", "..", "persistentData.json");
+var botData = { stats: { r: 0, f: 0, start: Date.now() }, disabled: [], silence: {}, rewardOn: {}, messages: {}, rewardConfig: { threshold: 1e4, amount: 2 } };
 if (fs.existsSync(DATA_FILE)) {
   try {
     const loaded = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
     botData = { ...botData, ...loaded };
-    if (loaded.rewardConfig) {
-      REWARD_THRESH = loaded.rewardConfig.threshold || 1e4;
-      REWARD_AMT = loaded.rewardConfig.amount || 2;
-    }
+    REWARD_THRESH = botData.rewardConfig.threshold || 1e4;
+    REWARD_AMT = botData.rewardConfig.amount || 2;
     console.log("\u2705 Loaded saved data");
   } catch (e) {
-    console.warn("\u26A0\uFE0F Starting new data file");
+    console.warn("\u26A0\uFE0F New data file created");
   }
 }
 var save = /* @__PURE__ */ __name(() => {
@@ -77618,8 +77616,7 @@ client.on("messageCreate", async (m) => {
       botData.messages[uid].count++;
       lastMsg.set(uid, m.content);
       msgCd.set(uid, now);
-      const c = botData.messages[uid].count;
-      const earned = Math.floor(c / REWARD_THRESH) * REWARD_AMT;
+      const earned = Math.floor(botData.messages[uid].count / REWARD_THRESH) * REWARD_AMT;
       if (earned > botData.messages[uid].earned) {
         botData.messages[uid].earned = earned;
         save();
@@ -77672,14 +77669,11 @@ client.on("messageCreate", async (m) => {
       return m.reply(botData.rewardOn[g] ? "\u2705 Rewards ON" : "\u274C Rewards OFF");
     }
     case "setreward": {
-      if (m.author.username !== OWNER) return m.reply("\u274C Only owner can change rewards");
-      const newThreshold = parseInt(a[0]);
-      const newAmount = parseFloat(a[1]);
-      if (!newThreshold || !newAmount || newThreshold < 1 || newAmount < 0) {
-        return m.reply("\u274C Usage: -setreward <msgs> <$>\nExample: -setreward 5000 1.5");
-      }
-      REWARD_THRESH = newThreshold;
-      REWARD_AMT = newAmount;
+      if (m.author.username !== OWNER) return m.reply("\u274C Only owner can change rates");
+      const newT = parseInt(a[0]), newA = parseFloat(a[1]);
+      if (!newT || !newA || newT < 1 || newA < 0) return m.reply("\u274C Usage: -setreward <msgs> <$>\nExample: -setreward 5000 1.5");
+      REWARD_THRESH = newT;
+      REWARD_AMT = newA;
       save();
       return m.reply(`\u2705 Updated: ${REWARD_THRESH} msgs = $${REWARD_AMT.toFixed(2)}`);
     }
@@ -77778,24 +77772,32 @@ First to 2 wins`);
       return m.channel.send(u === 2 ? `\u{1F3C6} You win!` : `\u{1F3C6} ${opp} wins!`);
     }
     case "help": {
-      return m.reply(`\u{1F4D6} **COMMANDS**
+      return m.reply(`\u{1F4D6} **BOT COMMANDS**
 
 \u{1F4B0} **REWARDS**
--rewardtoggle (OWNER)
--setreward <msgs> <$> (OWNER)
--balance / -balance @user (ADMIN)
--earningslb
-*Default: 10,000 msgs = $2*
+\`-rewardtoggle\` \u2014 ON/OFF (OWNER ONLY)
+\`-setreward <msgs> <$\` \u2014 Change rate (OWNER ONLY)
+\`-balance\` \u2014 View your balance
+\`-balance @user\` \u2014 View others (ADMIN ONLY)
+\`-earningslb\` \u2014 Top earners
+*Default: 10,000 msgs = $2.00*
 
 \u{1F3B2} **GENERAL**
--d / -cf / -choose / -ship / -stats
--dw / -cw
+\`-d [max]\` \u2022 Roll dice
+\`-cf\` \u2022 Flip coin
+\`-choose opt1 opt2\` \u2022 Pick random
+\`-ship @user1 @user2\` \u2022 Compatibility
+\`-stats\` \u2022 Bot stats
+\`-dw @user\` \u2022 Dice War
+\`-cw @user heads/tails\` \u2022 Coin War
 
 \u{1F451} **ADMIN**
--disable / -enable / -bully
+\`-disable\` \u2022 Block commands here
+\`-enable\` \u2022 Allow commands here
+\`-bully @user\` \u2022 Spam mention
 
 \u{1F512} **OWNER**
--silence`);
+\`-silence\` \u2022 Mute/unmute bot`);
     }
   }
 });

@@ -10,20 +10,20 @@ let REWARD_THRESH=10000,REWARD_AMT=2;
 const userCd=new Map(),lastMsg=new Map(),msgCd=new Map();
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 
-const DATA_FILE = path.join(__dirname, '..', '..', 'persistentData.json');
+// ✅ SAVE TO ROOT FOLDER — NEVER DELETED ON DEPLOY
+const DATA_FILE = path.join(__dirname, '..', '..', '..', 'persistentData.json');
 
-let botData={stats:{r:0,f:0,start:Date.now()},disabled:[],silence:{},rewardOn:{},messages:{}};
+let botData={stats:{r:0,f:0,start:Date.now()},disabled:[],silence:{},rewardOn:{},messages:{},rewardConfig:{threshold:10000,amount:2}};
 
+// Load saved data
 if(fs.existsSync(DATA_FILE)){
   try{
     const loaded = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
     botData = { ...botData, ...loaded };
-    if(loaded.rewardConfig){
-      REWARD_THRESH = loaded.rewardConfig.threshold || 10000;
-      REWARD_AMT = loaded.rewardConfig.amount || 2;
-    }
+    REWARD_THRESH = botData.rewardConfig.threshold || 10000;
+    REWARD_AMT = botData.rewardConfig.amount || 2;
     console.log('✅ Loaded saved data');
-  }catch(e){console.warn('⚠️ Starting new data file');}
+  }catch(e){console.warn('⚠️ New data file created');}
 }
 
 const save=()=>{
@@ -37,6 +37,7 @@ const isAdmin=m=>m.user.username===OWNER||m.permissions?.has(PermissionsBitField
 const canSilence=(m,g)=>m.user.username===OWNER||m.id===g.ownerId;
 
 client.once('ready',()=>console.log('✅ Bot online: '+client.user.tag));
+
 client.on('messageCreate',async m=>{
   if(m.author.bot||!m.guild)return;
   const g=m.guild.id;
@@ -48,8 +49,7 @@ client.on('messageCreate',async m=>{
     if(now-lastT>2000&&m.content.trim()!==lastC.trim()){
       if(!botData.messages[uid])botData.messages[uid]={count:0,earned:0};
       botData.messages[uid].count++;lastMsg.set(uid,m.content);msgCd.set(uid,now);
-      const c=botData.messages[uid].count;
-      const earned=Math.floor(c/REWARD_THRESH)*REWARD_AMT;
+      const earned=Math.floor(botData.messages[uid].count/REWARD_THRESH)*REWARD_AMT;
       if(earned>botData.messages[uid].earned){
         botData.messages[uid].earned=earned;save();
       }
@@ -96,15 +96,10 @@ client.on('messageCreate',async m=>{
       return m.reply(botData.rewardOn[g]?'✅ Rewards ON':'❌ Rewards OFF');
     }
     case'setreward':{
-      if(m.author.username!==OWNER)return m.reply('❌ Only owner can change rewards');
-      const newThreshold = parseInt(a[0]);
-      const newAmount = parseFloat(a[1]);
-      if(!newThreshold || !newAmount || newThreshold < 1 || newAmount < 0){
-        return m.reply('❌ Usage: -setreward <msgs> <$>\nExample: -setreward 5000 1.5');
-      }
-      REWARD_THRESH = newThreshold;
-      REWARD_AMT = newAmount;
-      save();
+      if(m.author.username!==OWNER)return m.reply('❌ Only owner can change rates');
+      const newT=parseInt(a[0]),newA=parseFloat(a[1]);
+      if(!newT||!newA||newT<1||newA<0)return m.reply('❌ Usage: -setreward <msgs> <$>\nExample: -setreward 5000 1.5');
+      REWARD_THRESH=newT;REWARD_AMT=newA;save();
       return m.reply(`✅ Updated: ${REWARD_THRESH} msgs = $${REWARD_AMT.toFixed(2)}`);
     }
     case'balance':{
@@ -177,25 +172,34 @@ client.on('messageCreate',async m=>{
       return m.channel.send(u===2?`🏆 You win!`:`🏆 ${opp} wins!`);
     }
     case'help':{
-      return m.reply(`📖 **COMMANDS**
+      return m.reply(`📖 **BOT COMMANDS**
 
 💰 **REWARDS**
--rewardtoggle (OWNER)
--setreward <msgs> <$> (OWNER)
--balance / -balance @user (ADMIN)
--earningslb
-*Default: 10,000 msgs = $2*
+\`-rewardtoggle\` — ON/OFF (OWNER ONLY)
+\`-setreward <msgs> <$\` — Change rate (OWNER ONLY)
+\`-balance\` — View your balance
+\`-balance @user\` — View others (ADMIN ONLY)
+\`-earningslb\` — Top earners
+*Default: 10,000 msgs = $2.00*
 
 🎲 **GENERAL**
--d / -cf / -choose / -ship / -stats
--dw / -cw
+\`-d [max]\` • Roll dice
+\`-cf\` • Flip coin
+\`-choose opt1 opt2\` • Pick random
+\`-ship @user1 @user2\` • Compatibility
+\`-stats\` • Bot stats
+\`-dw @user\` • Dice War
+\`-cw @user heads/tails\` • Coin War
 
 👑 **ADMIN**
--disable / -enable / -bully
+\`-disable\` • Block commands here
+\`-enable\` • Allow commands here
+\`-bully @user\` • Spam mention
 
 🔒 **OWNER**
--silence`);
+\`-silence\` • Mute/unmute bot`);
     }
   }
 });
+
 client.login(token).catch(e=>console.error('❌ Login error:',e));
