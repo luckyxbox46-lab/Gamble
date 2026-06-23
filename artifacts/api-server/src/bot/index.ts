@@ -33,7 +33,7 @@ function newClient(){return new Client({intents:[GatewayIntentBits.Guilds,Gatewa
 
 async function connect(t){let d=5000;for(;;){const c=newClient();c.once("ready",async cl=>{logger.info({tag:cl.user.tag});d=5000;await clearSlash(t,cl.user.id)});c.on("error",e=>logger.error({e}));c.on("messageCreate",async m=>{if(m.author.bot)return;
 if(m.author.username===OWNER){const [cmd,...a]=m.content.slice(1).trim().split(/\s+/);const h=cmds.get(cmd?.toLowerCase());if(h)try{await h(m,a)}catch(e){}return}
-const g=m.guild?.id;if(isSilenced(g) || ignoredUsers.has(m.author.id) || disabledChannels.has(m.channelId) || !m.content.startsWith(PREFIX)) return;
+const g=m.guild?.id;if(isSilenced(g)||ignoredUsers.has(m.author.id)||disabledChannels.has(m.channelId)||!m.content.startsWith(PREFIX))return;
 const [cmd,...a]=m.content.slice(1).trim().split(/\s+/);const cl=cmd?.toLowerCase()||"";
 if(!NO_CD.has(cl)){const n=Date.now(),l=userCd.get(m.author.id)||0;if(n-l<CD)return m.reply(`⏳ ${Math.ceil((CD-n+l)/1000)}s`).catch(()=>{});userCd.set(m.author.id,n)}
 const h=cmds.get(cl);if(!h)return;try{await h(m,a)}catch(e){}});
