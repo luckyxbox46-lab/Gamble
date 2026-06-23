@@ -31137,9 +31137,9 @@ var require_timers = __commonJS({
        * before the specified function or code is executed.
        * @param {*} arg
        */
-      constructor(callback, delay2, arg) {
+      constructor(callback, delay, arg) {
         this._onTimeout = callback;
-        this._idleTimeout = delay2;
+        this._idleTimeout = delay;
         this._timerArg = arg;
         this.refresh();
       }
@@ -31184,8 +31184,8 @@ var require_timers = __commonJS({
        * when the timer expires.
        * @returns {NodeJS.Timeout|FastTimer}
        */
-      setTimeout(callback, delay2, arg) {
-        return delay2 <= RESOLUTION_MS ? setTimeout(callback, delay2, arg) : new FastTimer(callback, delay2, arg);
+      setTimeout(callback, delay, arg) {
+        return delay <= RESOLUTION_MS ? setTimeout(callback, delay, arg) : new FastTimer(callback, delay, arg);
       },
       /**
        * The clearTimeout method cancels an instantiated Timer previously created
@@ -31211,8 +31211,8 @@ var require_timers = __commonJS({
        * when the timer expires.
        * @returns {FastTimer}
        */
-      setFastTimeout(callback, delay2, arg) {
-        return new FastTimer(callback, delay2, arg);
+      setFastTimeout(callback, delay, arg) {
+        return new FastTimer(callback, delay, arg);
       },
       /**
        * The clearTimeout method cancels an instantiated FastTimer previously
@@ -31238,8 +31238,8 @@ var require_timers = __commonJS({
        * @deprecated
        * @param {number} [delay=0] The delay in milliseconds to add to the now value.
        */
-      tick(delay2 = 0) {
-        fastNow += delay2 - RESOLUTION_MS + 1;
+      tick(delay = 0) {
+        fastNow += delay - RESOLUTION_MS + 1;
         onTick();
         onTick();
       },
@@ -31334,7 +31334,7 @@ var require_connect = __commonJS({
       const sessionCache = new SessionCache(maxCachedSessions == null ? 100 : maxCachedSessions);
       timeout = timeout == null ? 1e4 : timeout;
       allowH2 = allowH2 != null ? allowH2 : false;
-      return function connect({ hostname, host, protocol, port: port2, servername, localAddress, httpSocket }, callback) {
+      return function connect2({ hostname, host, protocol, port: port2, servername, localAddress, httpSocket }, callback) {
         let socket;
         if (protocol === "https:") {
           if (!tls) {
@@ -34634,21 +34634,21 @@ var require_client_h1 = __commonJS({
         this.connection = "";
         this.maxResponseSize = client[kMaxResponseSize];
       }
-      setTimeout(delay2, type) {
-        if (delay2 !== this.timeoutValue || type & USE_FAST_TIMER ^ this.timeoutType & USE_FAST_TIMER) {
+      setTimeout(delay, type) {
+        if (delay !== this.timeoutValue || type & USE_FAST_TIMER ^ this.timeoutType & USE_FAST_TIMER) {
           if (this.timeout) {
             timers.clearTimeout(this.timeout);
             this.timeout = null;
           }
-          if (delay2) {
+          if (delay) {
             if (type & USE_FAST_TIMER) {
-              this.timeout = timers.setFastTimeout(onParserTimeout, delay2, new WeakRef(this));
+              this.timeout = timers.setFastTimeout(onParserTimeout, delay, new WeakRef(this));
             } else {
-              this.timeout = setTimeout(onParserTimeout, delay2, new WeakRef(this));
+              this.timeout = setTimeout(onParserTimeout, delay, new WeakRef(this));
               this.timeout.unref();
             }
           }
-          this.timeoutValue = delay2;
+          this.timeoutValue = delay;
         } else if (this.timeout) {
           if (this.timeout.refresh) {
             this.timeout.refresh();
@@ -36324,7 +36324,7 @@ var require_client = __commonJS({
         strictContentLength,
         maxCachedSessions,
         maxRedirections,
-        connect: connect2,
+        connect: connect3,
         maxRequestsPerClient,
         localAddress,
         maxResponseSize,
@@ -36374,7 +36374,7 @@ var require_client = __commonJS({
         if (bodyTimeout != null && (!Number.isInteger(bodyTimeout) || bodyTimeout < 0)) {
           throw new InvalidArgumentError("bodyTimeout must be a positive integer or zero");
         }
-        if (connect2 != null && typeof connect2 !== "function" && typeof connect2 !== "object") {
+        if (connect3 != null && typeof connect3 !== "function" && typeof connect3 !== "object") {
           throw new InvalidArgumentError("connect must be a function or an object");
         }
         if (maxRedirections != null && (!Number.isInteger(maxRedirections) || maxRedirections < 0)) {
@@ -36398,15 +36398,15 @@ var require_client = __commonJS({
         if (maxConcurrentStreams != null && (typeof maxConcurrentStreams !== "number" || maxConcurrentStreams < 1)) {
           throw new InvalidArgumentError("maxConcurrentStreams must be a positive integer, greater than 0");
         }
-        if (typeof connect2 !== "function") {
-          connect2 = buildConnector({
+        if (typeof connect3 !== "function") {
+          connect3 = buildConnector({
             ...tls,
             maxCachedSessions,
             allowH2,
             socketPath,
             timeout: connectTimeout,
             ...autoSelectFamily ? { autoSelectFamily, autoSelectFamilyAttemptTimeout } : void 0,
-            ...connect2
+            ...connect3
           });
         }
         if (interceptors?.Client && Array.isArray(interceptors.Client)) {
@@ -36421,7 +36421,7 @@ var require_client = __commonJS({
           this[kInterceptors] = [createRedirectInterceptor({ maxRedirections })];
         }
         this[kUrl] = util2.parseOrigin(url);
-        this[kConnector] = connect2;
+        this[kConnector] = connect3;
         this[kPipelining] = pipelining != null ? pipelining : 1;
         this[kMaxHeadersSize] = maxHeaderSize || http.maxHeaderSize;
         this[kKeepAliveDefaultTimeout] = keepAliveTimeout == null ? 4e3 : keepAliveTimeout;
@@ -36475,7 +36475,7 @@ var require_client = __commonJS({
       }
       /* istanbul ignore: only used for test */
       [kConnect](cb) {
-        connect(this);
+        connect2(this);
         this.once("connect", cb);
       }
       [kDispatch](opts, handler) {
@@ -36539,7 +36539,7 @@ var require_client = __commonJS({
         assert(client[kSize] === 0);
       }
     }
-    async function connect(client) {
+    async function connect2(client) {
       assert(!client[kConnecting]);
       assert(!client[kHTTPContext]);
       let { host, hostname, protocol, port: port2 } = client[kUrl];
@@ -36710,7 +36710,7 @@ var require_client = __commonJS({
           return;
         }
         if (!client[kHTTPContext]) {
-          connect(client);
+          connect2(client);
           return;
         }
         if (client[kHTTPContext].destroyed) {
@@ -37002,7 +37002,7 @@ var require_pool = __commonJS({
       constructor(origin, {
         connections,
         factory = defaultFactory,
-        connect,
+        connect: connect2,
         connectTimeout,
         tls,
         maxCachedSessions,
@@ -37019,24 +37019,24 @@ var require_pool = __commonJS({
         if (typeof factory !== "function") {
           throw new InvalidArgumentError("factory must be a function.");
         }
-        if (connect != null && typeof connect !== "function" && typeof connect !== "object") {
+        if (connect2 != null && typeof connect2 !== "function" && typeof connect2 !== "object") {
           throw new InvalidArgumentError("connect must be a function or an object");
         }
-        if (typeof connect !== "function") {
-          connect = buildConnector({
+        if (typeof connect2 !== "function") {
+          connect2 = buildConnector({
             ...tls,
             maxCachedSessions,
             allowH2,
             socketPath,
             timeout: connectTimeout,
             ...autoSelectFamily ? { autoSelectFamily, autoSelectFamilyAttemptTimeout } : void 0,
-            ...connect
+            ...connect2
           });
         }
         this[kInterceptors] = options.interceptors?.Pool && Array.isArray(options.interceptors.Pool) ? options.interceptors.Pool : [];
         this[kConnections] = connections || null;
         this[kUrl] = util2.parseOrigin(origin);
-        this[kOptions] = { ...util2.deepClone(options), connect, allowH2 };
+        this[kOptions] = { ...util2.deepClone(options), connect: connect2, allowH2 };
         this[kOptions].interceptors = options.interceptors ? { ...options.interceptors } : void 0;
         this[kFactory] = factory;
         this.on("connectionError", (origin2, targets, error) => {
@@ -37231,22 +37231,22 @@ var require_agent = __commonJS({
       return opts && opts.connections === 1 ? new Client3(origin, opts) : new Pool(origin, opts);
     }
     var Agent = class extends DispatcherBase {
-      constructor({ factory = defaultFactory, maxRedirections = 0, connect, ...options } = {}) {
+      constructor({ factory = defaultFactory, maxRedirections = 0, connect: connect2, ...options } = {}) {
         super();
         if (typeof factory !== "function") {
           throw new InvalidArgumentError("factory must be a function.");
         }
-        if (connect != null && typeof connect !== "function" && typeof connect !== "object") {
+        if (connect2 != null && typeof connect2 !== "function" && typeof connect2 !== "object") {
           throw new InvalidArgumentError("connect must be a function or an object");
         }
         if (!Number.isInteger(maxRedirections) || maxRedirections < 0) {
           throw new InvalidArgumentError("maxRedirections must be a positive number");
         }
-        if (connect && typeof connect !== "function") {
-          connect = { ...connect };
+        if (connect2 && typeof connect2 !== "function") {
+          connect2 = { ...connect2 };
         }
         this[kInterceptors] = options.interceptors?.Agent && Array.isArray(options.interceptors.Agent) ? options.interceptors.Agent : [createRedirectInterceptor({ maxRedirections })];
-        this[kOptions] = { ...util2.deepClone(options), connect };
+        this[kOptions] = { ...util2.deepClone(options), connect: connect2 };
         this[kOptions].interceptors = options.interceptors ? { ...options.interceptors } : void 0;
         this[kMaxRedirections] = maxRedirections;
         this[kFactory] = factory;
@@ -37341,16 +37341,16 @@ var require_proxy_agent = __commonJS({
     }
     var Http1ProxyWrapper = class extends DispatcherBase {
       #client;
-      constructor(proxyUrl, { headers = {}, connect, factory }) {
+      constructor(proxyUrl, { headers = {}, connect: connect2, factory }) {
         super();
         if (!proxyUrl) {
           throw new InvalidArgumentError("Proxy URL is mandatory");
         }
         this[kProxyHeaders] = headers;
         if (factory) {
-          this.#client = factory(proxyUrl, { connect });
+          this.#client = factory(proxyUrl, { connect: connect2 });
         } else {
-          this.#client = new Client3(proxyUrl, { connect });
+          this.#client = new Client3(proxyUrl, { connect: connect2 });
         }
       }
       [kDispatch](opts, handler) {
@@ -37412,7 +37412,7 @@ var require_proxy_agent = __commonJS({
         } else if (username && password) {
           this[kProxyHeaders]["proxy-authorization"] = `Basic ${Buffer.from(`${decodeURIComponent(username)}:${decodeURIComponent(password)}`).toString("base64")}`;
         }
-        const connect = buildConnector({ ...opts.proxyTls });
+        const connect2 = buildConnector({ ...opts.proxyTls });
         this[kConnectEndpoint] = buildConnector({ ...opts.requestTls });
         const agentFactory = opts.factory || defaultAgentFactory;
         const factory = (origin2, options) => {
@@ -37420,13 +37420,13 @@ var require_proxy_agent = __commonJS({
           if (!this[kTunnelProxy] && protocol2 === "http:" && this[kProxy].protocol === "http:") {
             return new Http1ProxyWrapper(this[kProxy].uri, {
               headers: this[kProxyHeaders],
-              connect,
+              connect: connect2,
               factory: agentFactory
             });
           }
           return agentFactory(origin2, options);
         };
-        this[kClient] = clientFactory(url, { connect });
+        this[kClient] = clientFactory(url, { connect: connect2 });
         this[kAgent] = new Agent({
           ...opts,
           factory,
@@ -39121,10 +39121,10 @@ var require_api_connect = __commonJS({
         }
       }
     };
-    function connect(opts, callback) {
+    function connect2(opts, callback) {
       if (callback === void 0) {
         return new Promise((resolve, reject) => {
-          connect.call(this, opts, (err, data) => {
+          connect2.call(this, opts, (err, data) => {
             return err ? reject(err) : resolve(data);
           });
         });
@@ -39140,7 +39140,7 @@ var require_api_connect = __commonJS({
         queueMicrotask(() => callback(err, { opaque }));
       }
     }
-    module2.exports = connect;
+    module2.exports = connect2;
   }
 });
 
@@ -39406,7 +39406,7 @@ var require_mock_utils = __commonJS({
       if (mockDispatch2.data.callback) {
         mockDispatch2.data = { ...mockDispatch2.data, ...mockDispatch2.data.callback(opts) };
       }
-      const { data: { statusCode, data, headers, trailers, error }, delay: delay2, persist } = mockDispatch2;
+      const { data: { statusCode, data, headers, trailers, error }, delay, persist } = mockDispatch2;
       const { timesInvoked, times } = mockDispatch2;
       mockDispatch2.consumed = !persist && timesInvoked >= times;
       mockDispatch2.pending = timesInvoked < times;
@@ -39415,10 +39415,10 @@ var require_mock_utils = __commonJS({
         handler.onError(error);
         return true;
       }
-      if (typeof delay2 === "number" && delay2 > 0) {
+      if (typeof delay === "number" && delay > 0) {
         setTimeout(() => {
           handleReply(this[kDispatches]);
-        }, delay2);
+        }, delay);
       } else {
         handleReply(this[kDispatches]);
       }
@@ -46747,7 +46747,7 @@ var require_util8 = __commonJS({
       }
       return true;
     }
-    function delay2(ms) {
+    function delay(ms) {
       return new Promise((resolve) => {
         setTimeout(resolve, ms).unref();
       });
@@ -46755,7 +46755,7 @@ var require_util8 = __commonJS({
     module2.exports = {
       isValidLastEventId,
       isASCIINumber,
-      delay: delay2
+      delay
     };
   }
 });
@@ -47002,7 +47002,7 @@ var require_eventsource = __commonJS({
     var { parseMIMEType } = require_data_url();
     var { createFastMessageEvent } = require_events();
     var { isNetworkError } = require_response2();
-    var { delay: delay2 } = require_util8();
+    var { delay } = require_util8();
     var { kEnumerableProperty } = require_util();
     var { environmentSettingsObject } = require_util2();
     var experimentalWarned = false;
@@ -47173,7 +47173,7 @@ var require_eventsource = __commonJS({
         if (this.#readyState === CLOSED) return;
         this.#readyState = CONNECTING;
         this.dispatchEvent(new Event("error"));
-        await delay2(this.#state.reconnectionTime);
+        await delay(this.#state.reconnectionTime);
         if (this.#readyState !== CONNECTING) return;
         if (this.#state.lastEventId.length) {
           this.#request.headersList.set("last-event-id", this.#state.lastEventId, true);
@@ -57236,7 +57236,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
           const isGlobal = this.globalLimited;
           let limit2;
           let timeout;
-          let delay2;
+          let delay;
           if (isGlobal) {
             const offset2 = normalizeRateLimitOffset(this.manager.options.offset, routeId.bucketRoute);
             limit2 = this.manager.options.globalRequestsPerSecond;
@@ -57244,11 +57244,11 @@ ${flattened}` : error.message || flattened || "Unknown Error";
             if (!this.manager.globalDelay) {
               this.manager.globalDelay = this.globalDelayFor(timeout);
             }
-            delay2 = this.manager.globalDelay;
+            delay = this.manager.globalDelay;
           } else {
             limit2 = this.limit;
             timeout = this.getTimeToReset(routeId);
-            delay2 = sleep(timeout);
+            delay = sleep(timeout);
           }
           const rateLimitData = {
             global: isGlobal,
@@ -57270,7 +57270,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
           } else {
             this.debug(`Waiting ${timeout}ms for rate limit to pass`);
           }
-          await delay2;
+          await delay;
         }
         if (!this.manager.globalReset || this.manager.globalReset < Date.now()) {
           this.manager.globalReset = Date.now() + 1e3;
@@ -65483,9 +65483,9 @@ var require_ApplicationCommandManager = __commonJS({
        *   .then(console.log)
        *   .catch(console.error);
        */
-      async set(commands2, guildId) {
+      async set(commands, guildId) {
         const data = await this.client.rest.put(this.commandPath({ guildId }), {
-          body: commands2.map((command) => this.constructor.transformCommand(command))
+          body: commands.map((command) => this.constructor.transformCommand(command))
         });
         return data.reduce(
           (collection, command) => collection.set(command.id, this._add(command, true, guildId)),
@@ -102336,9 +102336,9 @@ var require_Shard = __commonJS({
        * @param {ShardRespawnOptions} [options] Options for respawning the shard
        * @returns {Promise<ChildProcess>}
        */
-      async respawn({ delay: delay2 = 500, timeout = 3e4 } = {}) {
+      async respawn({ delay = 500, timeout = 3e4 } = {}) {
         this.kill();
-        if (delay2 > 0) await sleep(delay2);
+        if (delay > 0) await sleep(delay);
         return this.spawn(timeout);
       }
       /**
@@ -102644,7 +102644,7 @@ var require_ShardingManager = __commonJS({
        * @param {MultipleShardSpawnOptions} [options] Options for spawning shards
        * @returns {Promise<Collection<number, Shard>>}
        */
-      async spawn({ amount = this.totalShards, delay: delay2 = 5500, timeout = 3e4 } = {}) {
+      async spawn({ amount = this.totalShards, delay = 5500, timeout = 3e4 } = {}) {
         if (amount === "auto") {
           amount = await fetchRecommendedShardCount(this.token);
         } else {
@@ -102674,7 +102674,7 @@ var require_ShardingManager = __commonJS({
           const promises = [];
           const shard = this.createShard(shardId);
           promises.push(shard.spawn(timeout));
-          if (delay2 > 0 && this.shards.size !== this.shardList.length) promises.push(sleep(delay2));
+          if (delay > 0 && this.shards.size !== this.shardList.length) promises.push(sleep(delay));
           await Promise.all(promises);
         }
         return this.shards;
@@ -107933,67 +107933,13 @@ function isSilenced(guildId) {
   return !!state[guildId];
 }
 
-// src/bot/commands/nuke.ts
-async function execute16(message, _args) {
-  if (message.author.username !== ".luckyyy_") {
-    return;
-  }
-  const target = message.mentions.users.first();
-  if (!target) {
-    await message.reply("Usage: `-nuke @user`");
-    return;
-  }
-  const fakeIp = `${rand(255)}.${rand(255)}.${rand(255)}.${rand(255)}`;
-  const fakeMac = [...Array(6)].map(() => rand(255).toString(16).padStart(2, "0")).join(":");
-  const cities = ["Chicago, IL", "Houston, TX", "Phoenix, AZ", "Miami, FL", "Denver, CO"];
-  const isps = ["Comcast", "AT&T", "Verizon", "T-Mobile", "Spectrum"];
-  const city = cities[rand(cities.length - 1)];
-  const isp = isps[rand(isps.length - 1)];
-  await message.channel.send(`\u2622\uFE0F **NUKE LAUNCHED** \u2622\uFE0F
-**Target:** ${target}
-
-\u{1F50D} **Locating target...**`);
-  await delay(1500);
-  await message.channel.send(`\u{1F4E1} **Target located.**
-> IP Address: \`${fakeIp}\`
-> MAC Address: \`${fakeMac}\`
-> Location: \`${city}\`
-> ISP: \`${isp}\`
-> Device: \`Windows 11 PC\``);
-  await delay(1500);
-  await message.channel.send(`\u{1F4A3} **Nuke incoming...**
-\u2588 [\u2593\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591] 10%`);
-  await delay(800);
-  await message.channel.send(`\u2588\u2588\u2588 [\u2593\u2593\u2593\u2591\u2591\u2591\u2591\u2591\u2591\u2591] 30%`);
-  await delay(800);
-  await message.channel.send(`\u2588\u2588\u2588\u2588\u2588 [\u2593\u2593\u2593\u2593\u2593\u2591\u2591\u2591\u2591\u2591] 50%`);
-  await delay(800);
-  await message.channel.send(`\u2588\u2588\u2588\u2588\u2588\u2588\u2588 [\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2591\u2591\u2591] 70%`);
-  await delay(800);
-  await message.channel.send(`\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588 [\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2593\u2591] 90%`);
-  await delay(800);
-  await message.channel.send(`\u{1F4A5} **BOOM!** \u{1F4A5}
-${target} has been **OBLITERATED**.
-Their IP has been **banned**, device **wiped**, and router **fried**. \u{1F525}
-
-\u2622\uFE0F *This message will self-destruct in 3... 2... 1...*`);
-}
-function rand(max) {
-  return Math.floor(Math.random() * (max + 1));
-}
-function delay(ms) {
-  return new Promise((res) => setTimeout(res, ms));
-}
-
 // src/bot/index.ts
 var PREFIX = "-";
-var RECONNECT_DELAY_MS = 5e3;
-var MAX_RECONNECT_DELAY_MS = 6e4;
-var userCd = /* @__PURE__ */ new Map();
 var CD = 2e4;
 var OWNER4 = ".luckyyy_";
-var NO_CD_CMDS = /* @__PURE__ */ new Set(["d", "cf"]);
-var commands = /* @__PURE__ */ new Map([
+var NO_CD = /* @__PURE__ */ new Set(["d", "cf"]);
+var userCd = /* @__PURE__ */ new Map();
+var cmds = /* @__PURE__ */ new Map([
   ["d", execute],
   ["cf", execute2],
   ["choose", execute3],
@@ -108008,7 +107954,6 @@ var commands = /* @__PURE__ */ new Map([
   ["ignore", execute12],
   ["unignore", execute13],
   ["dw", execute14],
-  ["nuke", execute16],
   ["silence", execute15]
 ]);
 async function clearSlash(t, c) {
@@ -108016,69 +107961,66 @@ async function clearSlash(t, c) {
     const r = new import_discord4.REST({ version: "10" }).setToken(t);
     await r.put(import_discord4.Routes.applicationCommands(c), { body: [] });
   } catch (e) {
-    logger.error({ e }, "clear slash err");
+    logger.error({ e });
   }
 }
-function createClient() {
+function newClient() {
   return new import_discord4.Client({ intents: [import_discord4.GatewayIntentBits.Guilds, import_discord4.GatewayIntentBits.GuildMessages, import_discord4.GatewayIntentBits.MessageContent] });
 }
-async function connectLoop(t) {
-  let d = RECONNECT_DELAY_MS;
+async function connect(t) {
+  let d = 5e3;
   for (; ; ) {
-    const c = createClient();
-    c.once("clientReady", async (cl) => {
-      logger.info({ tag: cl.user.tag }, "bot ready");
-      d = RECONNECT_DELAY_MS;
+    const c = newClient();
+    c.once("ready", async (cl) => {
+      logger.info({ tag: cl.user.tag });
+      d = 5e3;
       await clearSlash(t, cl.user.id);
     });
-    c.on("error", (e) => logger.error({ e }, "client err"));
-    c.on("warn", (i) => logger.warn({ i }, "warn"));
+    c.on("error", (e) => logger.error({ e }));
     c.on("messageCreate", async (m) => {
       if (m.author.bot) return;
-      if (isSilenced() && m.author.username !== OWNER4) return;
-      if (ignoredUsers.has(m.author.id)) return;
-      if (!m.content.startsWith(PREFIX)) return;
-      const [cmd, ...args] = m.content.slice(PREFIX.length).trim().split(/\s+/).filter(Boolean);
-      const cmdLow = cmd?.toLowerCase() || "";
-      if (m.author.username !== OWNER4 && !NO_CD_CMDS.has(cmdLow)) {
-        const n = Date.now(), l = userCd.get(m.author.id) || 0;
-        if (n - l < CD) {
-          const w = Math.ceil((CD - (n - l)) / 1e3);
-          return m.reply(`\u23F3 Wait ${w}s before next command`).catch(() => {
-          });
+      if (m.author.username === OWNER4) {
+        const [cmd2, ...a2] = m.content.slice(1).trim().split(/\s+/);
+        const h2 = cmds.get(cmd2?.toLowerCase());
+        if (h2) try {
+          await h2(m, a2);
+        } catch (e) {
         }
+        return;
+      }
+      const g = m.guild?.id;
+      if (isSilenced(g) || ignoredUsers.has(m.author.id) || disabledChannels.has(m.channelId) || !m.content.startsWith(PREFIX)) return;
+      const [cmd, ...a] = m.content.slice(1).trim().split(/\s+/);
+      const cl = cmd?.toLowerCase() || "";
+      if (!NO_CD.has(cl)) {
+        const n = Date.now(), l = userCd.get(m.author.id) || 0;
+        if (n - l < CD) return m.reply(`\u23F3 ${Math.ceil((CD - n + l) / 1e3)}s`).catch(() => {
+        });
         userCd.set(m.author.id, n);
       }
-      const h = commands.get(cmdLow);
+      const h = cmds.get(cl);
       if (!h) return;
-      if (disabledChannels.has(m.channelId) && !["disable", "enable"].includes(cmdLow)) return;
       try {
-        await h(m, args);
+        await h(m, a);
       } catch (e) {
-        logger.error({ e }, "cmd err");
-        m.reply("Something went wrong.").catch(() => {
-        });
       }
     });
     try {
       await c.login(t);
-      await new Promise((r) => c.once("shardDisconnect", r));
-      logger.warn("reconnecting...");
+      await new Promise((r) => c.once("disconnect", r));
     } catch (e) {
-      logger.error({ e, wait: d }, "login failed");
+      logger.error({ e });
+      await new Promise((r) => setTimeout(r, d));
+      d = Math.min(d * 2, 6e4);
     } finally {
       c.destroy();
     }
-    await new Promise((r) => setTimeout(r, d));
-    d = Math.min(d * 2, MAX_RECONNECT_DELAY_MS);
   }
 }
 async function startBot() {
   const t = process.env.DISCORD_BOT_TOKEN;
-  if (!t) return logger.warn("No token");
-  process.on("unhandledRejection", (r) => logger.error({ r }, "unhandled rejection"));
-  process.on("uncaughtException", (e) => logger.error({ e }, "uncaught exception"));
-  connectLoop(t).catch((e) => logger.error({ e }, "fatal"));
+  if (!t) return;
+  connect(t).catch((e) => logger.error({ e }));
 }
 
 // src/index.ts
