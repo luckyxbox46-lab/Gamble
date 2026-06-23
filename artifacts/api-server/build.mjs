@@ -8,6 +8,7 @@ await esbuild.build({
   format: 'cjs',
   outfile: 'dist/index.js',
   external: [],
-  banner: { js: 'const require = (await import("module")).createRequire(import.meta.url);' },
+  resolveExtensions: ['.js', '.ts', '.json'],
+  keepNames: true,
   logLevel: 'info'
 });

@@ -1,4 +1,3 @@
-const require = (await import("module")).createRequire(import.meta.url);
 "use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -6,6 +5,7 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __esm = (fn, res) => function __init() {
   return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
 };
@@ -42,32 +42,32 @@ var require_dist = __commonJS({
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
     var __hasOwnProp2 = Object.prototype.hasOwnProperty;
-    var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
-    var __export2 = (target, all) => {
+    var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+    var __export2 = /* @__PURE__ */ __name((target, all) => {
       for (var name in all)
         __defProp2(target, name, { get: all[name], enumerable: true });
-    };
-    var __copyProps2 = (to, from, except, desc) => {
+    }, "__export");
+    var __copyProps2 = /* @__PURE__ */ __name((to, from, except, desc) => {
       if (from && typeof from === "object" || typeof from === "function") {
         for (let key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
-            __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
+            __defProp2(to, key, { get: /* @__PURE__ */ __name(() => from[key], "get"), enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
       }
       return to;
-    };
-    var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
+    }, "__copyProps");
+    var __toCommonJS2 = /* @__PURE__ */ __name((mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod), "__toCommonJS");
     var index_exports = {};
     __export2(index_exports, {
-      GatewayRateLimitError: () => GatewayRateLimitError,
-      calculateShardId: () => calculateShardId,
-      getUserAgentAppendix: () => getUserAgentAppendix,
-      isEquatable: () => isEquatable,
-      isJSONEncodable: () => isJSONEncodable,
-      lazy: () => lazy,
-      polyfillDispose: () => polyfillDispose,
-      range: () => range,
-      shouldUseGlobalFetchAndWebSocket: () => shouldUseGlobalFetchAndWebSocket,
-      version: () => version
+      GatewayRateLimitError: /* @__PURE__ */ __name(() => GatewayRateLimitError, "GatewayRateLimitError"),
+      calculateShardId: /* @__PURE__ */ __name(() => calculateShardId, "calculateShardId"),
+      getUserAgentAppendix: /* @__PURE__ */ __name(() => getUserAgentAppendix, "getUserAgentAppendix"),
+      isEquatable: /* @__PURE__ */ __name(() => isEquatable, "isEquatable"),
+      isJSONEncodable: /* @__PURE__ */ __name(() => isJSONEncodable, "isJSONEncodable"),
+      lazy: /* @__PURE__ */ __name(() => lazy, "lazy"),
+      polyfillDispose: /* @__PURE__ */ __name(() => polyfillDispose, "polyfillDispose"),
+      range: /* @__PURE__ */ __name(() => range, "range"),
+      shouldUseGlobalFetchAndWebSocket: /* @__PURE__ */ __name(() => shouldUseGlobalFetchAndWebSocket, "shouldUseGlobalFetchAndWebSocket"),
+      version: /* @__PURE__ */ __name(() => version, "version")
     });
     module2.exports = __toCommonJS2(index_exports);
     function lazy(cb) {
@@ -75,6 +75,7 @@ var require_dist = __commonJS({
       return () => defaultValue ??= cb();
     }
     __name(lazy, "lazy");
+    __name2(lazy, "lazy");
     function* range(range2) {
       let rangeEnd;
       let start = 0;
@@ -91,10 +92,12 @@ var require_dist = __commonJS({
       }
     }
     __name(range, "range");
+    __name2(range, "range");
     function calculateShardId(guildId, shardCount) {
       return Number(BigInt(guildId) >> 22n) % shardCount;
     }
     __name(calculateShardId, "calculateShardId");
+    __name2(calculateShardId, "calculateShardId");
     function shouldUseGlobalFetchAndWebSocket() {
       if (typeof globalThis.process === "undefined") {
         return "fetch" in globalThis && "WebSocket" in globalThis;
@@ -105,6 +108,7 @@ var require_dist = __commonJS({
       return false;
     }
     __name(shouldUseGlobalFetchAndWebSocket, "shouldUseGlobalFetchAndWebSocket");
+    __name2(shouldUseGlobalFetchAndWebSocket, "shouldUseGlobalFetchAndWebSocket");
     function getUserAgentAppendix() {
       if (typeof globalThis.EdgeRuntime !== "undefined") {
         return "Vercel-Edge-Functions";
@@ -135,27 +139,34 @@ var require_dist = __commonJS({
       return "UnknownEnvironment";
     }
     __name(getUserAgentAppendix, "getUserAgentAppendix");
+    __name2(getUserAgentAppendix, "getUserAgentAppendix");
     function polyfillDispose() {
       Symbol.dispose ??= Symbol("Symbol.dispose");
       Symbol.asyncDispose ??= Symbol("Symbol.asyncDispose");
     }
     __name(polyfillDispose, "polyfillDispose");
+    __name2(polyfillDispose, "polyfillDispose");
     function isJSONEncodable(maybeEncodable) {
       return maybeEncodable !== null && typeof maybeEncodable === "object" && "toJSON" in maybeEncodable;
     }
     __name(isJSONEncodable, "isJSONEncodable");
+    __name2(isJSONEncodable, "isJSONEncodable");
     function isEquatable(maybeEquatable) {
       return maybeEquatable !== null && typeof maybeEquatable === "object" && "equals" in maybeEquatable;
     }
     __name(isEquatable, "isEquatable");
+    __name2(isEquatable, "isEquatable");
     var GatewayRateLimitError = class _GatewayRateLimitError extends Error {
+      static {
+        __name(this, "_GatewayRateLimitError");
+      }
       constructor(data, payload) {
         super(`Request with opcode ${data.opcode} was rate limited. Retry after ${data.retry_after} seconds.`);
         this.data = data;
         this.payload = payload;
       }
       static {
-        __name(this, "GatewayRateLimitError");
+        __name2(this, "GatewayRateLimitError");
       }
       name = _GatewayRateLimitError.name;
     };
@@ -207,6 +218,7 @@ function __extends(d, b) {
   function __() {
     this.constructor = d;
   }
+  __name(__, "__");
   d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 }
 function __rest(s, e) {
@@ -236,6 +248,7 @@ function __esDecorate(ctor, descriptorIn, decorators, contextIn, initializers, e
     if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected");
     return f;
   }
+  __name(accept, "accept");
   var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
   var target = !descriptorIn && ctor ? contextIn["static"] ? ctor : ctor.prototype : null;
   var descriptor = descriptorIn || (target ? Object.getOwnPropertyDescriptor(target, contextIn.name) : {});
@@ -286,6 +299,7 @@ function __awaiter(thisArg, _arguments, P, generator) {
       resolve(value);
     });
   }
+  __name(adopt, "adopt");
   return new (P || (P = Promise))(function(resolve, reject) {
     function fulfilled(value) {
       try {
@@ -294,6 +308,7 @@ function __awaiter(thisArg, _arguments, P, generator) {
         reject(e);
       }
     }
+    __name(fulfilled, "fulfilled");
     function rejected(value) {
       try {
         step(generator["throw"](value));
@@ -301,17 +316,19 @@ function __awaiter(thisArg, _arguments, P, generator) {
         reject(e);
       }
     }
+    __name(rejected, "rejected");
     function step(result) {
       result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
     }
+    __name(step, "step");
     step((generator = generator.apply(thisArg, _arguments || [])).next());
   });
 }
 function __generator(thisArg, body) {
-  var _ = { label: 0, sent: function() {
+  var _ = { label: 0, sent: /* @__PURE__ */ __name(function() {
     if (t[0] & 1) throw t[1];
     return t[1];
-  }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+  }, "sent"), trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
   return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() {
     return this;
   }), g;
@@ -320,6 +337,7 @@ function __generator(thisArg, body) {
       return step([n, v]);
     };
   }
+  __name(verb, "verb");
   function step(op) {
     if (f) throw new TypeError("Generator is already executing.");
     while (g && (g = 0, op[0] && (_ = 0)), _) try {
@@ -375,6 +393,7 @@ function __generator(thisArg, body) {
     if (op[0] & 5) throw op[1];
     return { value: op[0] ? op[1] : void 0, done: true };
   }
+  __name(step, "step");
 }
 function __exportStar(m, o) {
   for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p)) __createBinding(o, m, p);
@@ -383,10 +402,10 @@ function __values(o) {
   var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
   if (m) return m.call(o);
   if (o && typeof o.length === "number") return {
-    next: function() {
+    next: /* @__PURE__ */ __name(function() {
       if (o && i >= o.length) o = void 0;
       return { value: o && o[i++], done: !o };
-    }
+    }, "next")
   };
   throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 }
@@ -442,6 +461,7 @@ function __asyncGenerator(thisArg, _arguments, generator) {
       return Promise.resolve(v).then(f, reject);
     };
   }
+  __name(awaitReturn, "awaitReturn");
   function verb(n, f) {
     if (g[n]) {
       i[n] = function(v) {
@@ -452,6 +472,7 @@ function __asyncGenerator(thisArg, _arguments, generator) {
       if (f) i[n] = f(i[n]);
     }
   }
+  __name(verb, "verb");
   function resume(n, v) {
     try {
       step(g[n](v));
@@ -459,18 +480,23 @@ function __asyncGenerator(thisArg, _arguments, generator) {
       settle(q[0][3], e);
     }
   }
+  __name(resume, "resume");
   function step(r) {
     r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);
   }
+  __name(step, "step");
   function fulfill(value) {
     resume("next", value);
   }
+  __name(fulfill, "fulfill");
   function reject(value) {
     resume("throw", value);
   }
+  __name(reject, "reject");
   function settle(f, v) {
     if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]);
   }
+  __name(settle, "settle");
 }
 function __asyncDelegator(o) {
   var i, p;
@@ -484,6 +510,7 @@ function __asyncDelegator(o) {
       return (p = !p) ? { value: __await(o[n](v)), done: false } : f ? f(v) : v;
     } : f;
   }
+  __name(verb, "verb");
 }
 function __asyncValues(o) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -498,11 +525,13 @@ function __asyncValues(o) {
       });
     };
   }
+  __name(verb, "verb");
   function settle(resolve, reject, d, v) {
     Promise.resolve(v).then(function(v2) {
       resolve({ value: v2, done: d });
     }, reject);
   }
+  __name(settle, "settle");
 }
 function __makeTemplateObject(cooked, raw) {
   if (Object.defineProperty) {
@@ -553,13 +582,13 @@ function __addDisposableResource(env, value, async) {
       if (async) inner = dispose;
     }
     if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
-    if (inner) dispose = function() {
+    if (inner) dispose = /* @__PURE__ */ __name(function() {
       try {
         inner.call(this);
       } catch (e) {
         return Promise.reject(e);
       }
-    };
+    }, "dispose");
     env.stack.push({ value, dispose, async });
   } else if (async) {
     env.stack.push({ async: true });
@@ -571,6 +600,7 @@ function __disposeResources(env) {
     env.error = env.hasError ? new _SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
     env.hasError = true;
   }
+  __name(fail, "fail");
   var r, s = 0;
   function next() {
     while (r = env.stack.pop()) {
@@ -590,6 +620,7 @@ function __disposeResources(env) {
     if (s === 1) return env.hasError ? Promise.reject(env.error) : Promise.resolve();
     if (env.hasError) throw env.error;
   }
+  __name(next, "next");
   return next();
 }
 function __rewriteRelativeImportExtension(path, preserveJsx) {
@@ -603,54 +634,84 @@ function __rewriteRelativeImportExtension(path, preserveJsx) {
 var extendStatics, __assign, __createBinding, __setModuleDefault, ownKeys, _SuppressedError, tslib_es6_default;
 var init_tslib_es6 = __esm({
   "../../node_modules/.pnpm/tslib@2.8.1/node_modules/tslib/tslib.es6.mjs"() {
-    extendStatics = function(d, b) {
+    extendStatics = /* @__PURE__ */ __name(function(d, b) {
       extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
         d2.__proto__ = b2;
       } || function(d2, b2) {
         for (var p in b2) if (Object.prototype.hasOwnProperty.call(b2, p)) d2[p] = b2[p];
       };
       return extendStatics(d, b);
-    };
-    __assign = function() {
-      __assign = Object.assign || function __assign2(t) {
+    }, "extendStatics");
+    __name(__extends, "__extends");
+    __assign = /* @__PURE__ */ __name(function() {
+      __assign = Object.assign || /* @__PURE__ */ __name(function __assign2(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
           s = arguments[i];
           for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
         }
         return t;
-      };
+      }, "__assign");
       return __assign.apply(this, arguments);
-    };
+    }, "__assign");
+    __name(__rest, "__rest");
+    __name(__decorate, "__decorate");
+    __name(__param, "__param");
+    __name(__esDecorate, "__esDecorate");
+    __name(__runInitializers, "__runInitializers");
+    __name(__propKey, "__propKey");
+    __name(__setFunctionName, "__setFunctionName");
+    __name(__metadata, "__metadata");
+    __name(__awaiter, "__awaiter");
+    __name(__generator, "__generator");
     __createBinding = Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-        desc = { enumerable: true, get: function() {
+        desc = { enumerable: true, get: /* @__PURE__ */ __name(function() {
           return m[k];
-        } };
+        }, "get") };
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     };
+    __name(__exportStar, "__exportStar");
+    __name(__values, "__values");
+    __name(__read, "__read");
+    __name(__spread, "__spread");
+    __name(__spreadArrays, "__spreadArrays");
+    __name(__spreadArray, "__spreadArray");
+    __name(__await, "__await");
+    __name(__asyncGenerator, "__asyncGenerator");
+    __name(__asyncDelegator, "__asyncDelegator");
+    __name(__asyncValues, "__asyncValues");
+    __name(__makeTemplateObject, "__makeTemplateObject");
     __setModuleDefault = Object.create ? function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     } : function(o, v) {
       o["default"] = v;
     };
-    ownKeys = function(o) {
+    ownKeys = /* @__PURE__ */ __name(function(o) {
       ownKeys = Object.getOwnPropertyNames || function(o2) {
         var ar = [];
         for (var k in o2) if (Object.prototype.hasOwnProperty.call(o2, k)) ar[ar.length] = k;
         return ar;
       };
       return ownKeys(o);
-    };
+    }, "ownKeys");
+    __name(__importStar, "__importStar");
+    __name(__importDefault, "__importDefault");
+    __name(__classPrivateFieldGet, "__classPrivateFieldGet");
+    __name(__classPrivateFieldSet, "__classPrivateFieldSet");
+    __name(__classPrivateFieldIn, "__classPrivateFieldIn");
+    __name(__addDisposableResource, "__addDisposableResource");
     _SuppressedError = typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
       var e = new Error(message);
       return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
     };
+    __name(__disposeResources, "__disposeResources");
+    __name(__rewriteRelativeImportExtension, "__rewriteRelativeImportExtension");
     tslib_es6_default = {
       __extends,
       __assign,
@@ -767,6 +828,9 @@ var require_errors = __commonJS({
     "use strict";
     var kUndiciError = Symbol.for("undici.error.UND_ERR");
     var UndiciError = class extends Error {
+      static {
+        __name(this, "UndiciError");
+      }
       constructor(message) {
         super(message);
         this.name = "UndiciError";
@@ -779,6 +843,9 @@ var require_errors = __commonJS({
     };
     var kConnectTimeoutError = Symbol.for("undici.error.UND_ERR_CONNECT_TIMEOUT");
     var ConnectTimeoutError = class extends UndiciError {
+      static {
+        __name(this, "ConnectTimeoutError");
+      }
       constructor(message) {
         super(message);
         this.name = "ConnectTimeoutError";
@@ -792,6 +859,9 @@ var require_errors = __commonJS({
     };
     var kHeadersTimeoutError = Symbol.for("undici.error.UND_ERR_HEADERS_TIMEOUT");
     var HeadersTimeoutError = class extends UndiciError {
+      static {
+        __name(this, "HeadersTimeoutError");
+      }
       constructor(message) {
         super(message);
         this.name = "HeadersTimeoutError";
@@ -805,6 +875,9 @@ var require_errors = __commonJS({
     };
     var kHeadersOverflowError = Symbol.for("undici.error.UND_ERR_HEADERS_OVERFLOW");
     var HeadersOverflowError = class extends UndiciError {
+      static {
+        __name(this, "HeadersOverflowError");
+      }
       constructor(message) {
         super(message);
         this.name = "HeadersOverflowError";
@@ -818,6 +891,9 @@ var require_errors = __commonJS({
     };
     var kBodyTimeoutError = Symbol.for("undici.error.UND_ERR_BODY_TIMEOUT");
     var BodyTimeoutError = class extends UndiciError {
+      static {
+        __name(this, "BodyTimeoutError");
+      }
       constructor(message) {
         super(message);
         this.name = "BodyTimeoutError";
@@ -831,6 +907,9 @@ var require_errors = __commonJS({
     };
     var kResponseStatusCodeError = Symbol.for("undici.error.UND_ERR_RESPONSE_STATUS_CODE");
     var ResponseStatusCodeError = class extends UndiciError {
+      static {
+        __name(this, "ResponseStatusCodeError");
+      }
       constructor(message, statusCode, headers, body) {
         super(message);
         this.name = "ResponseStatusCodeError";
@@ -848,6 +927,9 @@ var require_errors = __commonJS({
     };
     var kInvalidArgumentError = Symbol.for("undici.error.UND_ERR_INVALID_ARG");
     var InvalidArgumentError = class extends UndiciError {
+      static {
+        __name(this, "InvalidArgumentError");
+      }
       constructor(message) {
         super(message);
         this.name = "InvalidArgumentError";
@@ -861,6 +943,9 @@ var require_errors = __commonJS({
     };
     var kInvalidReturnValueError = Symbol.for("undici.error.UND_ERR_INVALID_RETURN_VALUE");
     var InvalidReturnValueError = class extends UndiciError {
+      static {
+        __name(this, "InvalidReturnValueError");
+      }
       constructor(message) {
         super(message);
         this.name = "InvalidReturnValueError";
@@ -874,6 +959,9 @@ var require_errors = __commonJS({
     };
     var kAbortError = Symbol.for("undici.error.UND_ERR_ABORT");
     var AbortError = class extends UndiciError {
+      static {
+        __name(this, "AbortError");
+      }
       constructor(message) {
         super(message);
         this.name = "AbortError";
@@ -887,6 +975,9 @@ var require_errors = __commonJS({
     };
     var kRequestAbortedError = Symbol.for("undici.error.UND_ERR_ABORTED");
     var RequestAbortedError = class extends AbortError {
+      static {
+        __name(this, "RequestAbortedError");
+      }
       constructor(message) {
         super(message);
         this.name = "AbortError";
@@ -900,6 +991,9 @@ var require_errors = __commonJS({
     };
     var kInformationalError = Symbol.for("undici.error.UND_ERR_INFO");
     var InformationalError = class extends UndiciError {
+      static {
+        __name(this, "InformationalError");
+      }
       constructor(message) {
         super(message);
         this.name = "InformationalError";
@@ -913,6 +1007,9 @@ var require_errors = __commonJS({
     };
     var kRequestContentLengthMismatchError = Symbol.for("undici.error.UND_ERR_REQ_CONTENT_LENGTH_MISMATCH");
     var RequestContentLengthMismatchError = class extends UndiciError {
+      static {
+        __name(this, "RequestContentLengthMismatchError");
+      }
       constructor(message) {
         super(message);
         this.name = "RequestContentLengthMismatchError";
@@ -926,6 +1023,9 @@ var require_errors = __commonJS({
     };
     var kResponseContentLengthMismatchError = Symbol.for("undici.error.UND_ERR_RES_CONTENT_LENGTH_MISMATCH");
     var ResponseContentLengthMismatchError = class extends UndiciError {
+      static {
+        __name(this, "ResponseContentLengthMismatchError");
+      }
       constructor(message) {
         super(message);
         this.name = "ResponseContentLengthMismatchError";
@@ -939,6 +1039,9 @@ var require_errors = __commonJS({
     };
     var kClientDestroyedError = Symbol.for("undici.error.UND_ERR_DESTROYED");
     var ClientDestroyedError = class extends UndiciError {
+      static {
+        __name(this, "ClientDestroyedError");
+      }
       constructor(message) {
         super(message);
         this.name = "ClientDestroyedError";
@@ -952,6 +1055,9 @@ var require_errors = __commonJS({
     };
     var kClientClosedError = Symbol.for("undici.error.UND_ERR_CLOSED");
     var ClientClosedError = class extends UndiciError {
+      static {
+        __name(this, "ClientClosedError");
+      }
       constructor(message) {
         super(message);
         this.name = "ClientClosedError";
@@ -965,6 +1071,9 @@ var require_errors = __commonJS({
     };
     var kSocketError = Symbol.for("undici.error.UND_ERR_SOCKET");
     var SocketError = class extends UndiciError {
+      static {
+        __name(this, "SocketError");
+      }
       constructor(message, socket) {
         super(message);
         this.name = "SocketError";
@@ -979,6 +1088,9 @@ var require_errors = __commonJS({
     };
     var kNotSupportedError = Symbol.for("undici.error.UND_ERR_NOT_SUPPORTED");
     var NotSupportedError = class extends UndiciError {
+      static {
+        __name(this, "NotSupportedError");
+      }
       constructor(message) {
         super(message);
         this.name = "NotSupportedError";
@@ -992,6 +1104,9 @@ var require_errors = __commonJS({
     };
     var kBalancedPoolMissingUpstreamError = Symbol.for("undici.error.UND_ERR_BPL_MISSING_UPSTREAM");
     var BalancedPoolMissingUpstreamError = class extends UndiciError {
+      static {
+        __name(this, "BalancedPoolMissingUpstreamError");
+      }
       constructor(message) {
         super(message);
         this.name = "MissingUpstreamError";
@@ -1005,6 +1120,9 @@ var require_errors = __commonJS({
     };
     var kHTTPParserError = Symbol.for("undici.error.UND_ERR_HTTP_PARSER");
     var HTTPParserError = class extends Error {
+      static {
+        __name(this, "HTTPParserError");
+      }
       constructor(message, code, data) {
         super(message);
         this.name = "HTTPParserError";
@@ -1018,6 +1136,9 @@ var require_errors = __commonJS({
     };
     var kResponseExceededMaxSizeError = Symbol.for("undici.error.UND_ERR_RES_EXCEEDED_MAX_SIZE");
     var ResponseExceededMaxSizeError = class extends UndiciError {
+      static {
+        __name(this, "ResponseExceededMaxSizeError");
+      }
       constructor(message) {
         super(message);
         this.name = "ResponseExceededMaxSizeError";
@@ -1031,6 +1152,9 @@ var require_errors = __commonJS({
     };
     var kRequestRetryError = Symbol.for("undici.error.UND_ERR_REQ_RETRY");
     var RequestRetryError = class extends UndiciError {
+      static {
+        __name(this, "RequestRetryError");
+      }
       constructor(message, code, { headers, data }) {
         super(message);
         this.name = "RequestRetryError";
@@ -1047,6 +1171,9 @@ var require_errors = __commonJS({
     };
     var kResponseError = Symbol.for("undici.error.UND_ERR_RESPONSE");
     var ResponseError = class extends UndiciError {
+      static {
+        __name(this, "ResponseError");
+      }
       constructor(message, code, { headers, data }) {
         super(message);
         this.name = "ResponseError";
@@ -1063,6 +1190,9 @@ var require_errors = __commonJS({
     };
     var kSecureProxyConnectionError = Symbol.for("undici.error.UND_ERR_PRX_TLS");
     var SecureProxyConnectionError = class extends UndiciError {
+      static {
+        __name(this, "SecureProxyConnectionError");
+      }
       constructor(cause, message, options) {
         super(message, { cause, ...options ?? {} });
         this.name = "SecureProxyConnectionError";
@@ -1077,6 +1207,9 @@ var require_errors = __commonJS({
     };
     var kMessageSizeExceededError = Symbol.for("undici.error.UND_ERR_WS_MESSAGE_SIZE_EXCEEDED");
     var MessageSizeExceededError = class extends UndiciError {
+      static {
+        __name(this, "MessageSizeExceededError");
+      }
       constructor(message) {
         super(message);
         this.name = "MessageSizeExceededError";
@@ -1243,6 +1376,9 @@ var require_tree = __commonJS({
       headerNameLowerCasedRecord
     } = require_constants();
     var TstNode = class _TstNode {
+      static {
+        __name(this, "TstNode");
+      }
       /** @type {any} */
       value = null;
       /** @type {null | TstNode} */
@@ -1341,6 +1477,9 @@ var require_tree = __commonJS({
       }
     };
     var TernarySearchTree = class {
+      static {
+        __name(this, "TernarySearchTree");
+      }
       /** @type {TstNode | null} */
       node = null;
       /**
@@ -1392,6 +1531,9 @@ var require_util = __commonJS({
     var { tree } = require_tree();
     var [nodeMajor, nodeMinor] = process.versions.node.split(".").map((v) => Number(v));
     var BodyAsyncIterable = class {
+      static {
+        __name(this, "BodyAsyncIterable");
+      }
       constructor(body) {
         this[kBody] = body;
         this[kBodyUsed] = false;
@@ -1424,11 +1566,14 @@ var require_util = __commonJS({
         return body;
       }
     }
+    __name(wrapRequestBody, "wrapRequestBody");
     function nop() {
     }
+    __name(nop, "nop");
     function isStream(obj) {
       return obj && typeof obj === "object" && typeof obj.pipe === "function" && typeof obj.on === "function";
     }
+    __name(isStream, "isStream");
     function isBlobLike(object) {
       if (object === null) {
         return false;
@@ -1441,6 +1586,7 @@ var require_util = __commonJS({
         return (sTag === "Blob" || sTag === "File") && ("stream" in object && typeof object.stream === "function" || "arrayBuffer" in object && typeof object.arrayBuffer === "function");
       }
     }
+    __name(isBlobLike, "isBlobLike");
     function buildURL(url, queryParams) {
       if (url.includes("?") || url.includes("#")) {
         throw new Error('Query params cannot be passed when url already contains "?" or "#".');
@@ -1451,13 +1597,16 @@ var require_util = __commonJS({
       }
       return url;
     }
+    __name(buildURL, "buildURL");
     function isValidPort(port) {
       const value = parseInt(port, 10);
       return value === Number(port) && value >= 0 && value <= 65535;
     }
+    __name(isValidPort, "isValidPort");
     function isHttpOrHttpsPrefixed(value) {
       return value != null && value[0] === "h" && value[1] === "t" && value[2] === "t" && value[3] === "p" && (value[4] === ":" || value[4] === "s" && value[5] === ":");
     }
+    __name(isHttpOrHttpsPrefixed, "isHttpOrHttpsPrefixed");
     function parseURL(url) {
       if (typeof url === "string") {
         url = new URL(url);
@@ -1504,6 +1653,7 @@ var require_util = __commonJS({
       }
       return url;
     }
+    __name(parseURL, "parseURL");
     function parseOrigin(url) {
       url = parseURL(url);
       if (url.pathname !== "/" || url.search || url.hash) {
@@ -1511,6 +1661,7 @@ var require_util = __commonJS({
       }
       return url;
     }
+    __name(parseOrigin, "parseOrigin");
     function getHostname(host) {
       if (host[0] === "[") {
         const idx2 = host.indexOf("]");
@@ -1521,6 +1672,7 @@ var require_util = __commonJS({
       if (idx === -1) return host;
       return host.substring(0, idx);
     }
+    __name(getHostname, "getHostname");
     function getServerName(host) {
       if (!host) {
         return null;
@@ -1532,15 +1684,19 @@ var require_util = __commonJS({
       }
       return servername;
     }
+    __name(getServerName, "getServerName");
     function deepClone(obj) {
       return JSON.parse(JSON.stringify(obj));
     }
+    __name(deepClone, "deepClone");
     function isAsyncIterable(obj) {
       return !!(obj != null && typeof obj[Symbol.asyncIterator] === "function");
     }
+    __name(isAsyncIterable, "isAsyncIterable");
     function isIterable(obj) {
       return !!(obj != null && (typeof obj[Symbol.iterator] === "function" || typeof obj[Symbol.asyncIterator] === "function"));
     }
+    __name(isIterable, "isIterable");
     function bodyLength(body) {
       if (body == null) {
         return 0;
@@ -1554,9 +1710,11 @@ var require_util = __commonJS({
       }
       return null;
     }
+    __name(bodyLength, "bodyLength");
     function isDestroyed(body) {
       return body && !!(body.destroyed || body[kDestroyed] || stream.isDestroyed?.(body));
     }
+    __name(isDestroyed, "isDestroyed");
     function destroy(stream2, err) {
       if (stream2 == null || !isStream(stream2) || isDestroyed(stream2)) {
         return;
@@ -1575,17 +1733,21 @@ var require_util = __commonJS({
         stream2[kDestroyed] = true;
       }
     }
+    __name(destroy, "destroy");
     var KEEPALIVE_TIMEOUT_EXPR = /timeout=(\d+)/;
     function parseKeepAliveTimeout(val) {
       const m = val.toString().match(KEEPALIVE_TIMEOUT_EXPR);
       return m ? parseInt(m[1], 10) * 1e3 : null;
     }
+    __name(parseKeepAliveTimeout, "parseKeepAliveTimeout");
     function headerNameToString(value) {
       return typeof value === "string" ? headerNameLowerCasedRecord[value] ?? value.toLowerCase() : tree.lookup(value) ?? value.toString("latin1").toLowerCase();
     }
+    __name(headerNameToString, "headerNameToString");
     function bufferToLowerCasedHeaderName(value) {
       return tree.lookup(value) ?? value.toString("latin1").toLowerCase();
     }
+    __name(bufferToLowerCasedHeaderName, "bufferToLowerCasedHeaderName");
     function parseHeaders(headers, obj) {
       if (obj === void 0) obj = {};
       for (let i = 0; i < headers.length; i += 2) {
@@ -1611,6 +1773,7 @@ var require_util = __commonJS({
       }
       return obj;
     }
+    __name(parseHeaders, "parseHeaders");
     function parseRawHeaders(headers) {
       const len = headers.length;
       const ret = new Array(len);
@@ -1638,9 +1801,11 @@ var require_util = __commonJS({
       }
       return ret;
     }
+    __name(parseRawHeaders, "parseRawHeaders");
     function isBuffer(buffer) {
       return buffer instanceof Uint8Array || Buffer.isBuffer(buffer);
     }
+    __name(isBuffer, "isBuffer");
     function validateHandler(handler, method, upgrade) {
       if (!handler || typeof handler !== "object") {
         throw new InvalidArgumentError("handler must be an object");
@@ -1670,15 +1835,19 @@ var require_util = __commonJS({
         }
       }
     }
+    __name(validateHandler, "validateHandler");
     function isDisturbed(body) {
       return !!(body && (stream.isDisturbed(body) || body[kBodyUsed]));
     }
+    __name(isDisturbed, "isDisturbed");
     function isErrored(body) {
       return !!(body && stream.isErrored(body));
     }
+    __name(isErrored, "isErrored");
     function isReadable(body) {
       return !!(body && stream.isReadable(body));
     }
+    __name(isReadable, "isReadable");
     function getSocketInfo(socket) {
       return {
         localAddress: socket.localAddress,
@@ -1691,6 +1860,7 @@ var require_util = __commonJS({
         bytesRead: socket.bytesRead
       };
     }
+    __name(getSocketInfo, "getSocketInfo");
     function ReadableStreamFrom(iterable) {
       let iterator;
       return new ReadableStream(
@@ -1720,9 +1890,11 @@ var require_util = __commonJS({
         }
       );
     }
+    __name(ReadableStreamFrom, "ReadableStreamFrom");
     function isFormDataLike(object) {
       return object && typeof object === "object" && typeof object.append === "function" && typeof object.delete === "function" && typeof object.get === "function" && typeof object.getAll === "function" && typeof object.has === "function" && typeof object.set === "function" && object[Symbol.toStringTag] === "FormData";
     }
+    __name(isFormDataLike, "isFormDataLike");
     function addAbortListener(signal, listener) {
       if ("addEventListener" in signal) {
         signal.addEventListener("abort", listener, { once: true });
@@ -1731,14 +1903,17 @@ var require_util = __commonJS({
       signal.addListener("abort", listener);
       return () => signal.removeListener("abort", listener);
     }
+    __name(addAbortListener, "addAbortListener");
     var hasToWellFormed = typeof String.prototype.toWellFormed === "function";
     var hasIsWellFormed = typeof String.prototype.isWellFormed === "function";
     function toUSVString(val) {
       return hasToWellFormed ? `${val}`.toWellFormed() : nodeUtil.toUSVString(val);
     }
+    __name(toUSVString, "toUSVString");
     function isUSVString(val) {
       return hasIsWellFormed ? `${val}`.isWellFormed() : toUSVString(val) === `${val}`;
     }
+    __name(isUSVString, "isUSVString");
     function isTokenCharCode(c) {
       switch (c) {
         case 34:
@@ -1763,6 +1938,7 @@ var require_util = __commonJS({
           return c >= 33 && c <= 126;
       }
     }
+    __name(isTokenCharCode, "isTokenCharCode");
     function isValidHTTPToken(characters) {
       if (characters.length === 0) {
         return false;
@@ -1774,10 +1950,12 @@ var require_util = __commonJS({
       }
       return true;
     }
+    __name(isValidHTTPToken, "isValidHTTPToken");
     var headerCharRegex = /[^\t\x20-\x7e\x80-\xff]/;
     function isValidHeaderValue(characters) {
       return !headerCharRegex.test(characters);
     }
+    __name(isValidHeaderValue, "isValidHeaderValue");
     function parseRangeHeader(range) {
       if (range == null || range === "") return { start: 0, end: null, size: null };
       const m = range ? range.match(/^bytes (\d+)-(\d+)\/(\d+)?$/) : null;
@@ -1787,18 +1965,21 @@ var require_util = __commonJS({
         size: m[3] ? parseInt(m[3]) : null
       } : null;
     }
+    __name(parseRangeHeader, "parseRangeHeader");
     function addListener(obj, name, listener) {
       const listeners = obj[kListeners] ??= [];
       listeners.push([name, listener]);
       obj.on(name, listener);
       return obj;
     }
+    __name(addListener, "addListener");
     function removeAllListeners(obj) {
       for (const [name, listener] of obj[kListeners] ?? []) {
         obj.removeListener(name, listener);
       }
       obj[kListeners] = null;
     }
+    __name(removeAllListeners, "removeAllListeners");
     function errorRequest(client2, request, err) {
       try {
         request.onError(err);
@@ -1807,6 +1988,7 @@ var require_util = __commonJS({
         client2.emit("error", err2);
       }
     }
+    __name(errorRequest, "errorRequest");
     var kEnumerableProperty = /* @__PURE__ */ Object.create(null);
     kEnumerableProperty.enumerable = true;
     var normalizedMethodRecordsBase = {
@@ -2093,6 +2275,9 @@ var require_request = __commonJS({
     var invalidPathRegex = /[^\u0021-\u00ff]/;
     var kHandler = Symbol("handler");
     var Request = class {
+      static {
+        __name(this, "Request");
+      }
       constructor(origin, {
         path,
         method,
@@ -2150,9 +2335,9 @@ var require_request = __commonJS({
           this.body = body;
           const rState = this.body._readableState;
           if (!rState || !rState.autoDestroy) {
-            this.endHandler = function autoDestroy() {
+            this.endHandler = /* @__PURE__ */ __name(function autoDestroy() {
               destroy(this);
-            };
+            }, "autoDestroy");
             this.body.on("end", this.endHandler);
           }
           this.errorHandler = (err) => {
@@ -2394,6 +2579,7 @@ var require_request = __commonJS({
         request.headers.push(key, val);
       }
     }
+    __name(processHeader, "processHeader");
     module2.exports = Request;
   }
 });
@@ -2404,6 +2590,9 @@ var require_dispatcher = __commonJS({
     "use strict";
     var EventEmitter = require("node:events");
     var Dispatcher = class extends EventEmitter {
+      static {
+        __name(this, "Dispatcher");
+      }
       dispatch() {
         throw new Error("not implemented");
       }
@@ -2432,6 +2621,9 @@ var require_dispatcher = __commonJS({
       }
     };
     var ComposedDispatcher = class extends Dispatcher {
+      static {
+        __name(this, "ComposedDispatcher");
+      }
       #dispatcher = null;
       #dispatch = null;
       constructor(dispatcher, dispatch) {
@@ -2468,6 +2660,9 @@ var require_dispatcher_base = __commonJS({
     var kOnClosed = Symbol("onClosed");
     var kInterceptedDispatch = Symbol("Intercepted Dispatch");
     var DispatcherBase = class extends Dispatcher {
+      static {
+        __name(this, "DispatcherBase");
+      }
       constructor() {
         super();
         this[kDestroyed] = false;
@@ -2520,13 +2715,13 @@ var require_dispatcher_base = __commonJS({
         }
         this[kClosed] = true;
         this[kOnClosed].push(callback);
-        const onClosed = () => {
+        const onClosed = /* @__PURE__ */ __name(() => {
           const callbacks = this[kOnClosed];
           this[kOnClosed] = null;
           for (let i = 0; i < callbacks.length; i++) {
             callbacks[i](null, null);
           }
-        };
+        }, "onClosed");
         this[kClose]().then(() => this.destroy()).then(() => {
           queueMicrotask(onClosed);
         });
@@ -2563,13 +2758,13 @@ var require_dispatcher_base = __commonJS({
         this[kDestroyed] = true;
         this[kOnDestroyed] = this[kOnDestroyed] || [];
         this[kOnDestroyed].push(callback);
-        const onDestroyed = () => {
+        const onDestroyed = /* @__PURE__ */ __name(() => {
           const callbacks = this[kOnDestroyed];
           this[kOnDestroyed] = null;
           for (let i = 0; i < callbacks.length; i++) {
             callbacks[i](null, null);
           }
-        };
+        }, "onDestroyed");
         this[kDestroy](err).then(() => {
           queueMicrotask(onDestroyed);
         });
@@ -2656,6 +2851,7 @@ var require_timers = __commonJS({
         refreshTimeout();
       }
     }
+    __name(onTick, "onTick");
     function refreshTimeout() {
       if (fastNowTimeout) {
         fastNowTimeout.refresh();
@@ -2667,7 +2863,11 @@ var require_timers = __commonJS({
         }
       }
     }
+    __name(refreshTimeout, "refreshTimeout");
     var FastTimer = class {
+      static {
+        __name(this, "FastTimer");
+      }
       [kFastTimer] = true;
       /**
        * The state of the timer, which can be one of the following:
@@ -2856,10 +3056,14 @@ var require_connect = __commonJS({
     var timers = require_timers();
     function noop() {
     }
+    __name(noop, "noop");
     var tls;
     var SessionCache;
     if (global.FinalizationRegistry && !(process.env.NODE_V8_COVERAGE || process.env.UNDICI_NO_FG)) {
       SessionCache = class WeakSessionCache {
+        static {
+          __name(this, "WeakSessionCache");
+        }
         constructor(maxCachedSessions) {
           this._maxCachedSessions = maxCachedSessions;
           this._sessionCache = /* @__PURE__ */ new Map();
@@ -2887,6 +3091,9 @@ var require_connect = __commonJS({
       };
     } else {
       SessionCache = class SimpleSessionCache {
+        static {
+          __name(this, "SimpleSessionCache");
+        }
         constructor(maxCachedSessions) {
           this._maxCachedSessions = maxCachedSessions;
           this._sessionCache = /* @__PURE__ */ new Map();
@@ -2914,7 +3121,7 @@ var require_connect = __commonJS({
       const sessionCache = new SessionCache(maxCachedSessions == null ? 100 : maxCachedSessions);
       timeout = timeout == null ? 1e4 : timeout;
       allowH2 = allowH2 != null ? allowH2 : false;
-      return function connect({ hostname, host, protocol, port, servername, localAddress, httpSocket }, callback) {
+      return /* @__PURE__ */ __name(function connect({ hostname, host, protocol, port, servername, localAddress, httpSocket }, callback) {
         let socket;
         if (protocol === "https:") {
           if (!tls) {
@@ -2975,8 +3182,9 @@ var require_connect = __commonJS({
           }
         });
         return socket;
-      };
+      }, "connect");
     }
+    __name(buildConnector, "buildConnector");
     var setupConnectTimeout = process.platform === "win32" ? (socketWeakRef, opts) => {
       if (!opts.timeout) {
         return noop;
@@ -3021,6 +3229,7 @@ var require_connect = __commonJS({
       message += ` timeout: ${opts.timeout}ms)`;
       util.destroy(socket, new ConnectTimeoutError(message));
     }
+    __name(onConnectTimeout, "onConnectTimeout");
     module2.exports = buildConnector;
   }
 });
@@ -3041,6 +3250,7 @@ var require_utils = __commonJS({
       });
       return res;
     }
+    __name(enumToMap, "enumToMap");
     exports2.enumToMap = enumToMap;
   }
 });
@@ -3610,6 +3820,7 @@ var require_global = __commonJS({
     function getGlobalOrigin() {
       return globalThis[globalOrigin];
     }
+    __name(getGlobalOrigin, "getGlobalOrigin");
     function setGlobalOrigin(newOrigin) {
       if (newOrigin === void 0) {
         Object.defineProperty(globalThis, globalOrigin, {
@@ -3631,6 +3842,7 @@ var require_global = __commonJS({
         configurable: false
       });
     }
+    __name(setGlobalOrigin, "setGlobalOrigin");
     module2.exports = {
       getGlobalOrigin,
       setGlobalOrigin
@@ -3685,6 +3897,7 @@ var require_data_url = __commonJS({
       }
       return { mimeType: mimeTypeRecord, body };
     }
+    __name(dataURLProcessor, "dataURLProcessor");
     function URLSerializer(url, excludeFragment = false) {
       if (!excludeFragment) {
         return url.href;
@@ -3697,6 +3910,7 @@ var require_data_url = __commonJS({
       }
       return serialized;
     }
+    __name(URLSerializer, "URLSerializer");
     function collectASequenceOfCodePoints(condition, input, position) {
       let result = "";
       while (position.position < input.length && condition(input[position.position])) {
@@ -3705,6 +3919,7 @@ var require_data_url = __commonJS({
       }
       return result;
     }
+    __name(collectASequenceOfCodePoints, "collectASequenceOfCodePoints");
     function collectASequenceOfCodePointsFast(char, input, position) {
       const idx = input.indexOf(char, position.position);
       const start = position.position;
@@ -3715,19 +3930,23 @@ var require_data_url = __commonJS({
       position.position = idx;
       return input.slice(start, position.position);
     }
+    __name(collectASequenceOfCodePointsFast, "collectASequenceOfCodePointsFast");
     function stringPercentDecode(input) {
       const bytes = encoder.encode(input);
       return percentDecode(bytes);
     }
+    __name(stringPercentDecode, "stringPercentDecode");
     function isHexCharByte(byte) {
       return byte >= 48 && byte <= 57 || byte >= 65 && byte <= 70 || byte >= 97 && byte <= 102;
     }
+    __name(isHexCharByte, "isHexCharByte");
     function hexByteToNumber(byte) {
       return (
         // 0-9
         byte >= 48 && byte <= 57 ? byte - 48 : (byte & 223) - 55
       );
     }
+    __name(hexByteToNumber, "hexByteToNumber");
     function percentDecode(input) {
       const length = input.length;
       const output = new Uint8Array(length);
@@ -3745,6 +3964,7 @@ var require_data_url = __commonJS({
       }
       return length === j ? output : output.subarray(0, j);
     }
+    __name(percentDecode, "percentDecode");
     function parseMIMEType(input) {
       input = removeHTTPWhitespace(input, true, true);
       const position = { position: 0 };
@@ -3827,6 +4047,7 @@ var require_data_url = __commonJS({
       }
       return mimeType;
     }
+    __name(parseMIMEType, "parseMIMEType");
     function forgivingBase64(data) {
       data = data.replace(ASCII_WHITESPACE_REPLACE_REGEX, "");
       let dataLength = data.length;
@@ -3847,6 +4068,7 @@ var require_data_url = __commonJS({
       const buffer = Buffer.from(data, "base64");
       return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     }
+    __name(forgivingBase64, "forgivingBase64");
     function collectAnHTTPQuotedString(input, position, extractValue) {
       const positionStart = position.position;
       let value = "";
@@ -3880,6 +4102,7 @@ var require_data_url = __commonJS({
       }
       return input.slice(positionStart, position.position);
     }
+    __name(collectAnHTTPQuotedString, "collectAnHTTPQuotedString");
     function serializeAMimeType(mimeType) {
       assert(mimeType !== "failure");
       const { parameters, essence } = mimeType;
@@ -3897,18 +4120,23 @@ var require_data_url = __commonJS({
       }
       return serialization;
     }
+    __name(serializeAMimeType, "serializeAMimeType");
     function isHTTPWhiteSpace(char) {
       return char === 13 || char === 10 || char === 9 || char === 32;
     }
+    __name(isHTTPWhiteSpace, "isHTTPWhiteSpace");
     function removeHTTPWhitespace(str, leading = true, trailing = true) {
       return removeChars(str, leading, trailing, isHTTPWhiteSpace);
     }
+    __name(removeHTTPWhitespace, "removeHTTPWhitespace");
     function isASCIIWhitespace(char) {
       return char === 13 || char === 10 || char === 9 || char === 12 || char === 32;
     }
+    __name(isASCIIWhitespace, "isASCIIWhitespace");
     function removeASCIIWhitespace(str, leading = true, trailing = true) {
       return removeChars(str, leading, trailing, isASCIIWhitespace);
     }
+    __name(removeASCIIWhitespace, "removeASCIIWhitespace");
     function removeChars(str, leading, trailing, predicate) {
       let lead = 0;
       let trail = str.length - 1;
@@ -3920,6 +4148,7 @@ var require_data_url = __commonJS({
       }
       return lead === 0 && trail === str.length - 1 ? str : str.slice(lead, trail + 1);
     }
+    __name(removeChars, "removeChars");
     function isomorphicDecode(input) {
       const length = input.length;
       if ((2 << 15) - 1 > length) {
@@ -3936,6 +4165,7 @@ var require_data_url = __commonJS({
       }
       return result;
     }
+    __name(isomorphicDecode, "isomorphicDecode");
     function minimizeSupportedMimeType(mimeType) {
       switch (mimeType.essence) {
         case "application/ecmascript":
@@ -3972,6 +4202,7 @@ var require_data_url = __commonJS({
       }
       return "";
     }
+    __name(minimizeSupportedMimeType, "minimizeSupportedMimeType");
     module2.exports = {
       dataURLProcessor,
       URLSerializer,
@@ -4436,6 +4667,7 @@ var require_util2 = __commonJS({
       const length = urlList.length;
       return length === 0 ? null : urlList[length - 1].toString();
     }
+    __name(responseURL, "responseURL");
     function responseLocationURL(response, requestFragment) {
       if (!redirectStatusSet.has(response.status)) {
         return null;
@@ -4452,6 +4684,7 @@ var require_util2 = __commonJS({
       }
       return location;
     }
+    __name(responseLocationURL, "responseLocationURL");
     function isValidEncodedURL(url) {
       for (let i = 0; i < url.length; ++i) {
         const code = url.charCodeAt(i);
@@ -4462,12 +4695,15 @@ var require_util2 = __commonJS({
       }
       return true;
     }
+    __name(isValidEncodedURL, "isValidEncodedURL");
     function normalizeBinaryStringToUtf8(value) {
       return Buffer.from(value, "binary").toString("utf8");
     }
+    __name(normalizeBinaryStringToUtf8, "normalizeBinaryStringToUtf8");
     function requestCurrentURL(request) {
       return request.urlList[request.urlList.length - 1];
     }
+    __name(requestCurrentURL, "requestCurrentURL");
     function requestBadPort(request) {
       const url = requestCurrentURL(request);
       if (urlIsHttpHttpsScheme(url) && badPortsSet.has(url.port)) {
@@ -4475,9 +4711,11 @@ var require_util2 = __commonJS({
       }
       return "allowed";
     }
+    __name(requestBadPort, "requestBadPort");
     function isErrorLike(object) {
       return object instanceof Error || (object?.constructor?.name === "Error" || object?.constructor?.name === "DOMException");
     }
+    __name(isErrorLike, "isErrorLike");
     function isValidReasonPhrase(statusText) {
       for (let i = 0; i < statusText.length; ++i) {
         const c = statusText.charCodeAt(i);
@@ -4489,10 +4727,12 @@ var require_util2 = __commonJS({
       }
       return true;
     }
+    __name(isValidReasonPhrase, "isValidReasonPhrase");
     var isValidHeaderName = isValidHTTPToken;
     function isValidHeaderValue(potentialValue) {
       return (potentialValue[0] === "	" || potentialValue[0] === " " || potentialValue[potentialValue.length - 1] === "	" || potentialValue[potentialValue.length - 1] === " " || potentialValue.includes("\n") || potentialValue.includes("\r") || potentialValue.includes("\0")) === false;
     }
+    __name(isValidHeaderValue, "isValidHeaderValue");
     function setRequestReferrerPolicyOnRedirect(request, actualResponse) {
       const { headersList } = actualResponse;
       const policyHeader = (headersList.get("referrer-policy", true) ?? "").split(",");
@@ -4510,20 +4750,25 @@ var require_util2 = __commonJS({
         request.referrerPolicy = policy;
       }
     }
+    __name(setRequestReferrerPolicyOnRedirect, "setRequestReferrerPolicyOnRedirect");
     function crossOriginResourcePolicyCheck() {
       return "allowed";
     }
+    __name(crossOriginResourcePolicyCheck, "crossOriginResourcePolicyCheck");
     function corsCheck() {
       return "success";
     }
+    __name(corsCheck, "corsCheck");
     function TAOCheck() {
       return "success";
     }
+    __name(TAOCheck, "TAOCheck");
     function appendFetchMetadata(httpRequest) {
       let header = null;
       header = httpRequest.mode;
       httpRequest.headersList.set("sec-fetch-mode", header, true);
     }
+    __name(appendFetchMetadata, "appendFetchMetadata");
     function appendRequestOriginHeader(request) {
       let serializedOrigin = request.origin;
       if (serializedOrigin === "client" || serializedOrigin === void 0) {
@@ -4553,9 +4798,11 @@ var require_util2 = __commonJS({
         request.headersList.append("origin", serializedOrigin, true);
       }
     }
+    __name(appendRequestOriginHeader, "appendRequestOriginHeader");
     function coarsenTime(timestamp, crossOriginIsolatedCapability) {
       return timestamp;
     }
+    __name(coarsenTime, "coarsenTime");
     function clampAndCoarsenConnectionTimingInfo(connectionTimingInfo, defaultStartTime, crossOriginIsolatedCapability) {
       if (!connectionTimingInfo?.startTime || connectionTimingInfo.startTime < defaultStartTime) {
         return {
@@ -4576,9 +4823,11 @@ var require_util2 = __commonJS({
         ALPNNegotiatedProtocol: connectionTimingInfo.ALPNNegotiatedProtocol
       };
     }
+    __name(clampAndCoarsenConnectionTimingInfo, "clampAndCoarsenConnectionTimingInfo");
     function coarsenedSharedCurrentTime(crossOriginIsolatedCapability) {
       return coarsenTime(performance2.now(), crossOriginIsolatedCapability);
     }
+    __name(coarsenedSharedCurrentTime, "coarsenedSharedCurrentTime");
     function createOpaqueTimingInfo(timingInfo) {
       return {
         startTime: timingInfo.startTime ?? 0,
@@ -4594,16 +4843,19 @@ var require_util2 = __commonJS({
         finalConnectionTimingInfo: null
       };
     }
+    __name(createOpaqueTimingInfo, "createOpaqueTimingInfo");
     function makePolicyContainer() {
       return {
         referrerPolicy: "strict-origin-when-cross-origin"
       };
     }
+    __name(makePolicyContainer, "makePolicyContainer");
     function clonePolicyContainer(policyContainer) {
       return {
         referrerPolicy: policyContainer.referrerPolicy
       };
     }
+    __name(clonePolicyContainer, "clonePolicyContainer");
     function determineRequestsReferrer(request) {
       const policy = request.referrerPolicy;
       assert(policy);
@@ -4649,6 +4901,7 @@ var require_util2 = __commonJS({
           return isNonPotentiallyTrustWorthy ? "no-referrer" : referrerOrigin;
       }
     }
+    __name(determineRequestsReferrer, "determineRequestsReferrer");
     function stripURLForReferrer(url, originOnly) {
       assert(url instanceof URL);
       url = new URL(url);
@@ -4664,6 +4917,7 @@ var require_util2 = __commonJS({
       }
       return url;
     }
+    __name(stripURLForReferrer, "stripURLForReferrer");
     function isURLPotentiallyTrustworthy(url) {
       if (!(url instanceof URL)) {
         return false;
@@ -4685,7 +4939,9 @@ var require_util2 = __commonJS({
         }
         return false;
       }
+      __name(isOriginPotentiallyTrustworthy, "isOriginPotentiallyTrustworthy");
     }
+    __name(isURLPotentiallyTrustworthy, "isURLPotentiallyTrustworthy");
     function bytesMatch(bytes, metadataList) {
       if (crypto === void 0) {
         return true;
@@ -4716,6 +4972,7 @@ var require_util2 = __commonJS({
       }
       return false;
     }
+    __name(bytesMatch, "bytesMatch");
     var parseHashWithOptions = /(?<algo>sha256|sha384|sha512)-((?<hash>[A-Za-z0-9+/]+|[A-Za-z0-9_-]+)={0,2}(?:\s|$)( +[!-~]*)?)?/i;
     function parseMetadata(metadata) {
       const result = [];
@@ -4736,6 +4993,7 @@ var require_util2 = __commonJS({
       }
       return result;
     }
+    __name(parseMetadata, "parseMetadata");
     function getStrongestMetadata(metadataList) {
       let algorithm = metadataList[0].algo;
       if (algorithm[3] === "5") {
@@ -4754,6 +5012,7 @@ var require_util2 = __commonJS({
       }
       return algorithm;
     }
+    __name(getStrongestMetadata, "getStrongestMetadata");
     function filterMetadataListByAlgorithm(metadataList, algorithm) {
       if (metadataList.length === 1) {
         return metadataList;
@@ -4767,6 +5026,7 @@ var require_util2 = __commonJS({
       metadataList.length = pos;
       return metadataList;
     }
+    __name(filterMetadataListByAlgorithm, "filterMetadataListByAlgorithm");
     function compareBase64Mixed(actualValue, expectedValue) {
       if (actualValue.length !== expectedValue.length) {
         return false;
@@ -4781,8 +5041,10 @@ var require_util2 = __commonJS({
       }
       return true;
     }
+    __name(compareBase64Mixed, "compareBase64Mixed");
     function tryUpgradeRequestToAPotentiallyTrustworthyURL(request) {
     }
+    __name(tryUpgradeRequestToAPotentiallyTrustworthyURL, "tryUpgradeRequestToAPotentiallyTrustworthyURL");
     function sameOrigin(A, B) {
       if (A.origin === B.origin && A.origin === "null") {
         return true;
@@ -4792,6 +5054,7 @@ var require_util2 = __commonJS({
       }
       return false;
     }
+    __name(sameOrigin, "sameOrigin");
     function createDeferredPromise() {
       let res;
       let rej;
@@ -4801,15 +5064,19 @@ var require_util2 = __commonJS({
       });
       return { promise, resolve: res, reject: rej };
     }
+    __name(createDeferredPromise, "createDeferredPromise");
     function isAborted(fetchParams) {
       return fetchParams.controller.state === "aborted";
     }
+    __name(isAborted, "isAborted");
     function isCancelled(fetchParams) {
       return fetchParams.controller.state === "aborted" || fetchParams.controller.state === "terminated";
     }
+    __name(isCancelled, "isCancelled");
     function normalizeMethod(method) {
       return normalizedMethodRecordsBase[method.toLowerCase()] ?? method;
     }
+    __name(normalizeMethod, "normalizeMethod");
     function serializeJavascriptValueToJSONString(value) {
       const result = JSON.stringify(value);
       if (result === void 0) {
@@ -4818,9 +5085,13 @@ var require_util2 = __commonJS({
       assert(typeof result === "string");
       return result;
     }
+    __name(serializeJavascriptValueToJSONString, "serializeJavascriptValueToJSONString");
     var esIteratorPrototype = Object.getPrototypeOf(Object.getPrototypeOf([][Symbol.iterator]()));
     function createIterator(name, kInternalIterator, keyIndex = 0, valueIndex = 1) {
       class FastIterableIterator {
+        static {
+          __name(this, "FastIterableIterator");
+        }
         /** @type {any} */
         #target;
         /** @type {'key' | 'value' | 'key+value'} */
@@ -4887,6 +5158,7 @@ var require_util2 = __commonJS({
         return new FastIterableIterator(target, kind);
       };
     }
+    __name(createIterator, "createIterator");
     function iteratorMixin(name, object, kInternalIterator, keyIndex = 0, valueIndex = 1) {
       const makeIterator = createIterator(name, kInternalIterator, keyIndex, valueIndex);
       const properties = {
@@ -4894,34 +5166,34 @@ var require_util2 = __commonJS({
           writable: true,
           enumerable: true,
           configurable: true,
-          value: function keys() {
+          value: /* @__PURE__ */ __name(function keys() {
             webidl.brandCheck(this, object);
             return makeIterator(this, "key");
-          }
+          }, "keys")
         },
         values: {
           writable: true,
           enumerable: true,
           configurable: true,
-          value: function values() {
+          value: /* @__PURE__ */ __name(function values() {
             webidl.brandCheck(this, object);
             return makeIterator(this, "value");
-          }
+          }, "values")
         },
         entries: {
           writable: true,
           enumerable: true,
           configurable: true,
-          value: function entries() {
+          value: /* @__PURE__ */ __name(function entries() {
             webidl.brandCheck(this, object);
             return makeIterator(this, "key+value");
-          }
+          }, "entries")
         },
         forEach: {
           writable: true,
           enumerable: true,
           configurable: true,
-          value: function forEach(callbackfn, thisArg = globalThis) {
+          value: /* @__PURE__ */ __name(function forEach(callbackfn, thisArg = globalThis) {
             webidl.brandCheck(this, object);
             webidl.argumentLengthCheck(arguments, 1, `${name}.forEach`);
             if (typeof callbackfn !== "function") {
@@ -4932,7 +5204,7 @@ var require_util2 = __commonJS({
             for (const { 0: key, 1: value } of makeIterator(this, "key+value")) {
               callbackfn.call(thisArg, value, key, this);
             }
-          }
+          }, "forEach")
         }
       };
       return Object.defineProperties(object.prototype, {
@@ -4945,6 +5217,7 @@ var require_util2 = __commonJS({
         }
       });
     }
+    __name(iteratorMixin, "iteratorMixin");
     async function fullyReadBody(body, processBody, processBodyError) {
       const successSteps = processBody;
       const errorSteps = processBodyError;
@@ -4961,9 +5234,11 @@ var require_util2 = __commonJS({
         errorSteps(e);
       }
     }
+    __name(fullyReadBody, "fullyReadBody");
     function isReadableStreamLike(stream) {
       return stream instanceof ReadableStream || stream[Symbol.toStringTag] === "ReadableStream" && typeof stream.tee === "function";
     }
+    __name(isReadableStreamLike, "isReadableStreamLike");
     function readableStreamClose(controller) {
       try {
         controller.close();
@@ -4974,11 +5249,13 @@ var require_util2 = __commonJS({
         }
       }
     }
+    __name(readableStreamClose, "readableStreamClose");
     var invalidIsomorphicEncodeValueRegex = /[^\x00-\xFF]/;
     function isomorphicEncode(input) {
       assert(!invalidIsomorphicEncodeValueRegex.test(input));
       return input;
     }
+    __name(isomorphicEncode, "isomorphicEncode");
     async function readAllBytes(reader) {
       const bytes = [];
       let byteLength = 0;
@@ -4994,19 +5271,23 @@ var require_util2 = __commonJS({
         byteLength += chunk.length;
       }
     }
+    __name(readAllBytes, "readAllBytes");
     function urlIsLocal(url) {
       assert("protocol" in url);
       const protocol = url.protocol;
       return protocol === "about:" || protocol === "blob:" || protocol === "data:";
     }
+    __name(urlIsLocal, "urlIsLocal");
     function urlHasHttpsScheme(url) {
       return typeof url === "string" && url[5] === ":" && url[0] === "h" && url[1] === "t" && url[2] === "t" && url[3] === "p" && url[4] === "s" || url.protocol === "https:";
     }
+    __name(urlHasHttpsScheme, "urlHasHttpsScheme");
     function urlIsHttpHttpsScheme(url) {
       assert("protocol" in url);
       const protocol = url.protocol;
       return protocol === "http:" || protocol === "https:";
     }
+    __name(urlIsHttpHttpsScheme, "urlIsHttpHttpsScheme");
     function simpleRangeHeaderValue(value, allowWhitespace) {
       const data = value;
       if (!data.startsWith("bytes")) {
@@ -5078,6 +5359,7 @@ var require_util2 = __commonJS({
       }
       return { rangeStartValue, rangeEndValue };
     }
+    __name(simpleRangeHeaderValue, "simpleRangeHeaderValue");
     function buildContentRange(rangeStart, rangeEnd, fullLength) {
       let contentRange = "bytes ";
       contentRange += isomorphicEncode(`${rangeStart}`);
@@ -5087,7 +5369,11 @@ var require_util2 = __commonJS({
       contentRange += isomorphicEncode(`${fullLength}`);
       return contentRange;
     }
+    __name(buildContentRange, "buildContentRange");
     var InflateStream = class extends Transform {
+      static {
+        __name(this, "InflateStream");
+      }
       #zlibOptions;
       /** @param {zlib.ZlibOptions} [zlibOptions] */
       constructor(zlibOptions) {
@@ -5118,6 +5404,7 @@ var require_util2 = __commonJS({
     function createInflate(zlibOptions) {
       return new InflateStream(zlibOptions);
     }
+    __name(createInflate, "createInflate");
     function extractMimeType(headers) {
       let charset = null;
       let essence = null;
@@ -5147,6 +5434,7 @@ var require_util2 = __commonJS({
       }
       return mimeType;
     }
+    __name(extractMimeType, "extractMimeType");
     function gettingDecodingSplitting(value) {
       const input = value;
       const position = { position: 0 };
@@ -5178,6 +5466,7 @@ var require_util2 = __commonJS({
       }
       return values;
     }
+    __name(gettingDecodingSplitting, "gettingDecodingSplitting");
     function getDecodeSplit(name, list) {
       const value = list.get(name, true);
       if (value === null) {
@@ -5185,6 +5474,7 @@ var require_util2 = __commonJS({
       }
       return gettingDecodingSplitting(value);
     }
+    __name(getDecodeSplit, "getDecodeSplit");
     var textDecoder = new TextDecoder();
     function utf8DecodeBytes(buffer) {
       if (buffer.length === 0) {
@@ -5196,7 +5486,11 @@ var require_util2 = __commonJS({
       const output = textDecoder.decode(buffer);
       return output;
     }
+    __name(utf8DecodeBytes, "utf8DecodeBytes");
     var EnvironmentSettingsObjectBase = class {
+      static {
+        __name(this, "EnvironmentSettingsObjectBase");
+      }
       get baseUrl() {
         return getGlobalOrigin();
       }
@@ -5206,6 +5500,9 @@ var require_util2 = __commonJS({
       policyContainer = makePolicyContainer();
     };
     var EnvironmentSettingsObject = class {
+      static {
+        __name(this, "EnvironmentSettingsObject");
+      }
       settingsObject = new EnvironmentSettingsObjectBase();
     };
     var environmentSettingsObject = new EnvironmentSettingsObject();
@@ -5287,6 +5584,9 @@ var require_file = __commonJS({
     var { kState } = require_symbols2();
     var { webidl } = require_webidl();
     var FileLike = class _FileLike {
+      static {
+        __name(this, "FileLike");
+      }
       constructor(blobLike, fileName, options = {}) {
         const n = fileName;
         const t = options.type;
@@ -5338,6 +5638,7 @@ var require_file = __commonJS({
     function isFileLike(object) {
       return object instanceof File || object && (typeof object.stream === "function" || typeof object.arrayBuffer === "function") && object[Symbol.toStringTag] === "File";
     }
+    __name(isFileLike, "isFileLike");
     module2.exports = { FileLike, isFileLike };
   }
 });
@@ -5355,6 +5656,9 @@ var require_formdata = __commonJS({
     var nodeUtil = require("node:util");
     var File = globalThis.File ?? NativeFile;
     var FormData2 = class _FormData {
+      static {
+        __name(this, "FormData");
+      }
       constructor(form) {
         webidl.util.markAsUncloneable(this);
         if (form !== void 0) {
@@ -5485,6 +5789,7 @@ var require_formdata = __commonJS({
       }
       return { name, value };
     }
+    __name(makeEntry, "makeEntry");
     module2.exports = { FormData: FormData2, makeEntry };
   }
 });
@@ -5513,6 +5818,7 @@ var require_formdata_parser = __commonJS({
       }
       return true;
     }
+    __name(isAsciiString, "isAsciiString");
     function validateBoundary(boundary) {
       const length = boundary.length;
       if (length < 27 || length > 70) {
@@ -5526,6 +5832,7 @@ var require_formdata_parser = __commonJS({
       }
       return true;
     }
+    __name(validateBoundary, "validateBoundary");
     function multipartFormDataParser(input, mimeType) {
       assert(mimeType !== "failure" && mimeType.essence === "multipart/form-data");
       const boundaryString = mimeType.parameters.get("boundary");
@@ -5596,6 +5903,7 @@ var require_formdata_parser = __commonJS({
         entryList.push(makeEntry(name, value, filename));
       }
     }
+    __name(multipartFormDataParser, "multipartFormDataParser");
     function parseMultipartFormDataHeaders(input, position) {
       let name = null;
       let filename = null;
@@ -5689,6 +5997,7 @@ var require_formdata_parser = __commonJS({
         }
       }
     }
+    __name(parseMultipartFormDataHeaders, "parseMultipartFormDataHeaders");
     function parseMultipartFormDataName(input, position) {
       assert(input[position.position - 1] === 34);
       let name = collectASequenceOfBytes(
@@ -5704,6 +6013,7 @@ var require_formdata_parser = __commonJS({
       name = new TextDecoder().decode(name).replace(/%0A/ig, "\n").replace(/%0D/ig, "\r").replace(/%22/g, '"');
       return name;
     }
+    __name(parseMultipartFormDataName, "parseMultipartFormDataName");
     function collectASequenceOfBytes(condition, input, position) {
       let start = position.position;
       while (start < input.length && condition(input[start])) {
@@ -5711,6 +6021,7 @@ var require_formdata_parser = __commonJS({
       }
       return input.subarray(position.position, position.position = start);
     }
+    __name(collectASequenceOfBytes, "collectASequenceOfBytes");
     function removeChars(buf, leading, trailing, predicate) {
       let lead = 0;
       let trail = buf.length - 1;
@@ -5722,6 +6033,7 @@ var require_formdata_parser = __commonJS({
       }
       return lead === 0 && trail === buf.length - 1 ? buf : buf.subarray(lead, trail + 1);
     }
+    __name(removeChars, "removeChars");
     function bufferStartsWith(buffer, start, position) {
       if (buffer.length < start.length) {
         return false;
@@ -5733,6 +6045,7 @@ var require_formdata_parser = __commonJS({
       }
       return true;
     }
+    __name(bufferStartsWith, "bufferStartsWith");
     module2.exports = {
       multipartFormDataParser,
       validateBoundary
@@ -5767,13 +6080,14 @@ var require_body = __commonJS({
     var random;
     try {
       const crypto = require("node:crypto");
-      random = (max) => crypto.randomInt(0, max);
+      random = /* @__PURE__ */ __name((max) => crypto.randomInt(0, max), "random");
     } catch {
-      random = (max) => Math.floor(Math.random(max));
+      random = /* @__PURE__ */ __name((max) => Math.floor(Math.random(max)), "random");
     }
     var textEncoder = new TextEncoder();
     function noop() {
     }
+    __name(noop, "noop");
     var hasFinalizationRegistry = globalThis.FinalizationRegistry && process.version.indexOf("v18") !== 0;
     var streamRegistry;
     if (hasFinalizationRegistry) {
@@ -5823,8 +6137,8 @@ var require_body = __commonJS({
         const boundary = `----formdata-undici-0${`${random(1e11)}`.padStart(11, "0")}`;
         const prefix = `--${boundary}\r
 Content-Disposition: form-data`;
-        const escape2 = (str) => str.replace(/\n/g, "%0A").replace(/\r/g, "%0D").replace(/"/g, "%22");
-        const normalizeLinefeeds = (value) => value.replace(/\r?\n|\r/g, "\r\n");
+        const escape2 = /* @__PURE__ */ __name((str) => str.replace(/\n/g, "%0A").replace(/\r/g, "%0D").replace(/"/g, "%22"), "escape");
+        const normalizeLinefeeds = /* @__PURE__ */ __name((value) => value.replace(/\r?\n|\r/g, "\r\n"), "normalizeLinefeeds");
         const blobParts = [];
         const rn = new Uint8Array([13, 10]);
         length = 0;
@@ -5858,7 +6172,7 @@ Content-Type: ${value.type || "application/octet-stream"}\r
           length = null;
         }
         source = object;
-        action = async function* () {
+        action = /* @__PURE__ */ __name(async function* () {
           for (const part of blobParts) {
             if (part.stream) {
               yield* part.stream();
@@ -5866,7 +6180,7 @@ Content-Type: ${value.type || "application/octet-stream"}\r
               yield part;
             }
           }
-        };
+        }, "action");
         type = `multipart/form-data; boundary=${boundary}`;
       } else if (isBlobLike(object)) {
         source = object;
@@ -5920,6 +6234,7 @@ Content-Type: ${value.type || "application/octet-stream"}\r
       const body = { stream, source, length };
       return [body, type];
     }
+    __name(extractBody, "extractBody");
     function safelyExtractBody(object, keepalive = false) {
       if (object instanceof ReadableStream) {
         assert(!util.isDisturbed(object), "The body has already been consumed.");
@@ -5927,6 +6242,7 @@ Content-Type: ${value.type || "application/octet-stream"}\r
       }
       return extractBody(object, keepalive);
     }
+    __name(safelyExtractBody, "safelyExtractBody");
     function cloneBody(instance, body) {
       const [out1, out2] = body.stream.tee();
       body.stream = out1;
@@ -5936,11 +6252,13 @@ Content-Type: ${value.type || "application/octet-stream"}\r
         source: body.source
       };
     }
+    __name(cloneBody, "cloneBody");
     function throwIfAborted(state) {
       if (state.aborted) {
         throw new DOMException("The operation was aborted.", "AbortError");
       }
     }
+    __name(throwIfAborted, "throwIfAborted");
     function bodyMixinMethods(instance) {
       const methods = {
         blob() {
@@ -6002,9 +6320,11 @@ Content-Type: ${value.type || "application/octet-stream"}\r
       };
       return methods;
     }
+    __name(bodyMixinMethods, "bodyMixinMethods");
     function mixinBody(prototype) {
       Object.assign(prototype.prototype, bodyMixinMethods(prototype));
     }
+    __name(mixinBody, "mixinBody");
     async function consumeBody(object, convertBytesToJSValue, instance) {
       webidl.brandCheck(object, instance);
       if (bodyUnusable(object)) {
@@ -6012,14 +6332,14 @@ Content-Type: ${value.type || "application/octet-stream"}\r
       }
       throwIfAborted(object[kState]);
       const promise = createDeferredPromise();
-      const errorSteps = (error) => promise.reject(error);
-      const successSteps = (data) => {
+      const errorSteps = /* @__PURE__ */ __name((error) => promise.reject(error), "errorSteps");
+      const successSteps = /* @__PURE__ */ __name((data) => {
         try {
           promise.resolve(convertBytesToJSValue(data));
         } catch (e) {
           errorSteps(e);
         }
-      };
+      }, "successSteps");
       if (object[kState].body == null) {
         successSteps(Buffer.allocUnsafe(0));
         return promise.promise;
@@ -6027,13 +6347,16 @@ Content-Type: ${value.type || "application/octet-stream"}\r
       await fullyReadBody(object[kState].body, successSteps, errorSteps);
       return promise.promise;
     }
+    __name(consumeBody, "consumeBody");
     function bodyUnusable(object) {
       const body = object[kState].body;
       return body != null && (body.stream.locked || util.isDisturbed(body.stream));
     }
+    __name(bodyUnusable, "bodyUnusable");
     function parseJSONFromBytes(bytes) {
       return JSON.parse(utf8DecodeBytes(bytes));
     }
+    __name(parseJSONFromBytes, "parseJSONFromBytes");
     function bodyMimeType(requestOrResponse) {
       const headers = requestOrResponse[kState].headersList;
       const mimeType = extractMimeType(headers);
@@ -6042,6 +6365,7 @@ Content-Type: ${value.type || "application/octet-stream"}\r
       }
       return mimeType;
     }
+    __name(bodyMimeType, "bodyMimeType");
     module2.exports = {
       extractBody,
       safelyExtractBody,
@@ -6124,45 +6448,46 @@ var require_client_h1 = __commonJS({
       return await WebAssembly.instantiate(mod, {
         env: {
           /* eslint-disable camelcase */
-          wasm_on_url: (p, at, len) => {
+          wasm_on_url: /* @__PURE__ */ __name((p, at, len) => {
             return 0;
-          },
-          wasm_on_status: (p, at, len) => {
+          }, "wasm_on_url"),
+          wasm_on_status: /* @__PURE__ */ __name((p, at, len) => {
             assert(currentParser.ptr === p);
             const start = at - currentBufferPtr + currentBufferRef.byteOffset;
             return currentParser.onStatus(new FastBuffer(currentBufferRef.buffer, start, len)) || 0;
-          },
-          wasm_on_message_begin: (p) => {
+          }, "wasm_on_status"),
+          wasm_on_message_begin: /* @__PURE__ */ __name((p) => {
             assert(currentParser.ptr === p);
             return currentParser.onMessageBegin() || 0;
-          },
-          wasm_on_header_field: (p, at, len) => {
+          }, "wasm_on_message_begin"),
+          wasm_on_header_field: /* @__PURE__ */ __name((p, at, len) => {
             assert(currentParser.ptr === p);
             const start = at - currentBufferPtr + currentBufferRef.byteOffset;
             return currentParser.onHeaderField(new FastBuffer(currentBufferRef.buffer, start, len)) || 0;
-          },
-          wasm_on_header_value: (p, at, len) => {
+          }, "wasm_on_header_field"),
+          wasm_on_header_value: /* @__PURE__ */ __name((p, at, len) => {
             assert(currentParser.ptr === p);
             const start = at - currentBufferPtr + currentBufferRef.byteOffset;
             return currentParser.onHeaderValue(new FastBuffer(currentBufferRef.buffer, start, len)) || 0;
-          },
-          wasm_on_headers_complete: (p, statusCode, upgrade, shouldKeepAlive) => {
+          }, "wasm_on_header_value"),
+          wasm_on_headers_complete: /* @__PURE__ */ __name((p, statusCode, upgrade, shouldKeepAlive) => {
             assert(currentParser.ptr === p);
             return currentParser.onHeadersComplete(statusCode, Boolean(upgrade), Boolean(shouldKeepAlive)) || 0;
-          },
-          wasm_on_body: (p, at, len) => {
+          }, "wasm_on_headers_complete"),
+          wasm_on_body: /* @__PURE__ */ __name((p, at, len) => {
             assert(currentParser.ptr === p);
             const start = at - currentBufferPtr + currentBufferRef.byteOffset;
             return currentParser.onBody(new FastBuffer(currentBufferRef.buffer, start, len)) || 0;
-          },
-          wasm_on_message_complete: (p) => {
+          }, "wasm_on_body"),
+          wasm_on_message_complete: /* @__PURE__ */ __name((p) => {
             assert(currentParser.ptr === p);
             return currentParser.onMessageComplete() || 0;
-          }
+          }, "wasm_on_message_complete")
           /* eslint-enable camelcase */
         }
       });
     }
+    __name(lazyllhttp, "lazyllhttp");
     var llhttpInstance = null;
     var llhttpPromise = lazyllhttp();
     llhttpPromise.catch();
@@ -6176,6 +6501,9 @@ var require_client_h1 = __commonJS({
     var TIMEOUT_BODY = 4 | USE_FAST_TIMER;
     var TIMEOUT_KEEP_ALIVE = 8 | USE_NATIVE_TIMER;
     var Parser = class {
+      static {
+        __name(this, "Parser");
+      }
       constructor(client2, socket, { exports: exports3 }) {
         assert(Number.isFinite(client2[kMaxHeadersSize]) && client2[kMaxHeadersSize] > 0);
         this.llhttp = exports3;
@@ -6548,6 +6876,7 @@ var require_client_h1 = __commonJS({
         util.destroy(socket, new InformationalError("socket idle timeout"));
       }
     }
+    __name(onParserTimeout, "onParserTimeout");
     async function connectH1(client2, socket) {
       client2[kSocket] = socket;
       if (!llhttpInstance) {
@@ -6655,6 +6984,7 @@ var require_client_h1 = __commonJS({
         }
       };
     }
+    __name(connectH1, "connectH1");
     function resumeH1(client2) {
       const socket = client2[kSocket];
       if (socket && !socket.destroyed) {
@@ -6680,9 +7010,11 @@ var require_client_h1 = __commonJS({
         }
       }
     }
+    __name(resumeH1, "resumeH1");
     function shouldSendContentLength(method) {
       return method !== "GET" && method !== "HEAD" && method !== "OPTIONS" && method !== "TRACE" && method !== "CONNECT";
     }
+    __name(shouldSendContentLength, "shouldSendContentLength");
     function writeH1(client2, request) {
       const { method, path, host, upgrade, blocking, reset } = request;
       let { body, headers, contentLength } = request;
@@ -6719,14 +7051,14 @@ var require_client_h1 = __commonJS({
         process.emitWarning(new RequestContentLengthMismatchError());
       }
       const socket = client2[kSocket];
-      const abort = (err) => {
+      const abort = /* @__PURE__ */ __name((err) => {
         if (request.aborted || request.completed) {
           return;
         }
         util.errorRequest(client2, request, err || new RequestAbortedError());
         util.destroy(body);
         util.destroy(socket, new InformationalError("aborted"));
-      };
+      }, "abort");
       try {
         request.onConnect(abort);
       } catch (err) {
@@ -6804,11 +7136,12 @@ upgrade: ${upgrade}\r
       }
       return true;
     }
+    __name(writeH1, "writeH1");
     function writeStream(abort, body, client2, request, socket, contentLength, header, expectsPayload) {
       assert(contentLength !== 0 || client2[kRunning] === 0, "stream body cannot be pipelined");
       let finished = false;
       const writer = new AsyncWriter({ abort, socket, request, contentLength, client: client2, expectsPayload, header });
-      const onData = function(chunk) {
+      const onData = /* @__PURE__ */ __name(function(chunk) {
         if (finished) {
           return;
         }
@@ -6819,16 +7152,16 @@ upgrade: ${upgrade}\r
         } catch (err) {
           util.destroy(this, err);
         }
-      };
-      const onDrain = function() {
+      }, "onData");
+      const onDrain = /* @__PURE__ */ __name(function() {
         if (finished) {
           return;
         }
         if (body.resume) {
           body.resume();
         }
-      };
-      const onClose = function() {
+      }, "onDrain");
+      const onClose = /* @__PURE__ */ __name(function() {
         queueMicrotask(() => {
           body.removeListener("error", onFinished);
         });
@@ -6836,8 +7169,8 @@ upgrade: ${upgrade}\r
           const err = new RequestAbortedError();
           queueMicrotask(() => onFinished(err));
         }
-      };
-      const onFinished = function(err) {
+      }, "onClose");
+      const onFinished = /* @__PURE__ */ __name(function(err) {
         if (finished) {
           return;
         }
@@ -6858,7 +7191,7 @@ upgrade: ${upgrade}\r
         } else {
           util.destroy(body);
         }
-      };
+      }, "onFinished");
       body.on("data", onData).on("end", onFinished).on("error", onFinished).on("close", onClose);
       if (body.resume) {
         body.resume();
@@ -6873,6 +7206,7 @@ upgrade: ${upgrade}\r
         setImmediate(onClose);
       }
     }
+    __name(writeStream, "writeStream");
     function writeBuffer(abort, body, client2, request, socket, contentLength, header, expectsPayload) {
       try {
         if (!body) {
@@ -6904,6 +7238,7 @@ upgrade: ${upgrade}\r
         abort(err);
       }
     }
+    __name(writeBuffer, "writeBuffer");
     async function writeBlob(abort, body, client2, request, socket, contentLength, header, expectsPayload) {
       assert(contentLength === body.size, "blob body must have content length");
       try {
@@ -6927,6 +7262,7 @@ upgrade: ${upgrade}\r
         abort(err);
       }
     }
+    __name(writeBlob, "writeBlob");
     async function writeIterable(abort, body, client2, request, socket, contentLength, header, expectsPayload) {
       assert(contentLength !== 0 || client2[kRunning] === 0, "iterator body cannot be pipelined");
       let callback = null;
@@ -6937,14 +7273,15 @@ upgrade: ${upgrade}\r
           cb();
         }
       }
-      const waitForDrain = () => new Promise((resolve, reject) => {
+      __name(onDrain, "onDrain");
+      const waitForDrain = /* @__PURE__ */ __name(() => new Promise((resolve, reject) => {
         assert(callback === null);
         if (socket[kError]) {
           reject(socket[kError]);
         } else {
           callback = resolve;
         }
-      });
+      }), "waitForDrain");
       socket.on("close", onDrain).on("drain", onDrain);
       const writer = new AsyncWriter({ abort, socket, request, contentLength, client: client2, expectsPayload, header });
       try {
@@ -6963,7 +7300,11 @@ upgrade: ${upgrade}\r
         socket.off("close", onDrain).off("drain", onDrain);
       }
     }
+    __name(writeIterable, "writeIterable");
     var AsyncWriter = class {
+      static {
+        __name(this, "AsyncWriter");
+      }
       constructor({ abort, socket, request, contentLength, client: client2, expectsPayload, header }) {
         this.socket = socket;
         this.request = request;
@@ -7139,6 +7480,7 @@ var require_client_h2 = __commonJS({
       }
       return result;
     }
+    __name(parseH2Headers, "parseH2Headers");
     async function connectH2(client2, socket) {
       client2[kSocket] = socket;
       if (!h2ExperimentalWarned) {
@@ -7148,7 +7490,7 @@ var require_client_h2 = __commonJS({
         });
       }
       const session = http2.connect(client2[kUrl], {
-        createConnection: () => socket,
+        createConnection: /* @__PURE__ */ __name(() => socket, "createConnection"),
         peerMaxConcurrentStreams: client2[kMaxConcurrentStreams]
       });
       session[kOpenStreams] = 0;
@@ -7222,6 +7564,7 @@ var require_client_h2 = __commonJS({
         }
       };
     }
+    __name(connectH2, "connectH2");
     function resumeH2(client2) {
       const socket = client2[kSocket];
       if (socket?.destroyed === false) {
@@ -7234,11 +7577,13 @@ var require_client_h2 = __commonJS({
         }
       }
     }
+    __name(resumeH2, "resumeH2");
     function onHttp2SessionError(err) {
       assert(err.code !== "ERR_TLS_CERT_ALTNAME_INVALID");
       this[kSocket][kError] = err;
       this[kClient][kOnError](err);
     }
+    __name(onHttp2SessionError, "onHttp2SessionError");
     function onHttp2FrameError(type, code, id) {
       if (id === 0) {
         const err = new InformationalError(`HTTP/2: "frameError" received - type ${type}, code ${code}`);
@@ -7246,11 +7591,13 @@ var require_client_h2 = __commonJS({
         this[kClient][kOnError](err);
       }
     }
+    __name(onHttp2FrameError, "onHttp2FrameError");
     function onHttp2SessionEnd() {
       const err = new SocketError("other side closed", util.getSocketInfo(this[kSocket]));
       this.destroy(err);
       util.destroy(this[kSocket], err);
     }
+    __name(onHttp2SessionEnd, "onHttp2SessionEnd");
     function onHTTP2GoAway(code) {
       const err = this[kError] || new SocketError(`HTTP/2: "GOAWAY" frame received with code ${code}`, util.getSocketInfo(this));
       const client2 = this[kClient];
@@ -7271,9 +7618,11 @@ var require_client_h2 = __commonJS({
       client2.emit("disconnect", client2[kUrl], [client2], err);
       client2[kResume]();
     }
+    __name(onHTTP2GoAway, "onHTTP2GoAway");
     function shouldSendContentLength(method) {
       return method !== "GET" && method !== "HEAD" && method !== "OPTIONS" && method !== "TRACE" && method !== "CONNECT";
     }
+    __name(shouldSendContentLength, "shouldSendContentLength");
     function writeH2(client2, request) {
       const session = client2[kHTTP2Session];
       const { method, path, host, upgrade, expectContinue, signal, headers: reqHeaders } = request;
@@ -7302,7 +7651,7 @@ var require_client_h2 = __commonJS({
       const { hostname, port } = client2[kUrl];
       headers[HTTP2_HEADER_AUTHORITY] = host || `${hostname}${port ? `:${port}` : ""}`;
       headers[HTTP2_HEADER_METHOD] = method;
-      const abort = (err) => {
+      const abort = /* @__PURE__ */ __name((err) => {
         if (request.aborted || request.completed) {
           return;
         }
@@ -7314,7 +7663,7 @@ var require_client_h2 = __commonJS({
         util.destroy(body, err);
         client2[kQueue][client2[kRunningIdx]++] = null;
         client2[kResume]();
-      };
+      }, "abort");
       try {
         request.onConnect(abort);
       } catch (err) {
@@ -7504,7 +7853,9 @@ var require_client_h2 = __commonJS({
           assert(false);
         }
       }
+      __name(writeBodyH2, "writeBodyH2");
     }
+    __name(writeH2, "writeH2");
     function writeBuffer(abort, h2stream, body, client2, request, socket, contentLength, expectsPayload) {
       try {
         if (body != null && util.isBuffer(body)) {
@@ -7524,6 +7875,7 @@ var require_client_h2 = __commonJS({
         abort(error);
       }
     }
+    __name(writeBuffer, "writeBuffer");
     function writeStream(abort, socket, expectsPayload, h2stream, body, client2, request, contentLength) {
       assert(contentLength !== 0 || client2[kRunning] === 0, "stream body cannot be pipelined");
       const pipe = pipeline(
@@ -7547,7 +7899,9 @@ var require_client_h2 = __commonJS({
       function onPipeData(chunk) {
         request.onBodySent(chunk);
       }
+      __name(onPipeData, "onPipeData");
     }
+    __name(writeStream, "writeStream");
     async function writeBlob(abort, h2stream, body, client2, request, socket, contentLength, expectsPayload) {
       assert(contentLength === body.size, "blob body must have content length");
       try {
@@ -7569,6 +7923,7 @@ var require_client_h2 = __commonJS({
         abort(err);
       }
     }
+    __name(writeBlob, "writeBlob");
     async function writeIterable(abort, h2stream, body, client2, request, socket, contentLength, expectsPayload) {
       assert(contentLength !== 0 || client2[kRunning] === 0, "iterator body cannot be pipelined");
       let callback = null;
@@ -7579,14 +7934,15 @@ var require_client_h2 = __commonJS({
           cb();
         }
       }
-      const waitForDrain = () => new Promise((resolve, reject) => {
+      __name(onDrain, "onDrain");
+      const waitForDrain = /* @__PURE__ */ __name(() => new Promise((resolve, reject) => {
         assert(callback === null);
         if (socket[kError]) {
           reject(socket[kError]);
         } else {
           callback = resolve;
         }
-      });
+      }), "waitForDrain");
       h2stream.on("close", onDrain).on("drain", onDrain);
       try {
         for await (const chunk of body) {
@@ -7611,6 +7967,7 @@ var require_client_h2 = __commonJS({
         h2stream.off("close", onDrain).off("drain", onDrain);
       }
     }
+    __name(writeIterable, "writeIterable");
     module2.exports = connectH2;
   }
 });
@@ -7627,6 +7984,9 @@ var require_redirect_handler = __commonJS({
     var redirectableStatusCodes = [300, 301, 302, 303, 307, 308];
     var kBody = Symbol("body");
     var BodyAsyncIterable = class {
+      static {
+        __name(this, "BodyAsyncIterable");
+      }
       constructor(body) {
         this[kBody] = body;
         this[kBodyUsed] = false;
@@ -7638,6 +7998,9 @@ var require_redirect_handler = __commonJS({
       }
     };
     var RedirectHandler = class {
+      static {
+        __name(this, "RedirectHandler");
+      }
       constructor(dispatch, maxRedirections, opts, handler) {
         if (maxRedirections != null && (!Number.isInteger(maxRedirections) || maxRedirections < 0)) {
           throw new InvalidArgumentError("maxRedirections must be a positive number");
@@ -7738,6 +8101,7 @@ var require_redirect_handler = __commonJS({
         }
       }
     }
+    __name(parseLocation, "parseLocation");
     function shouldRemoveHeader(header, removeContent, unknownOrigin) {
       if (header.length === 4) {
         return util.headerNameToString(header) === "host";
@@ -7751,6 +8115,7 @@ var require_redirect_handler = __commonJS({
       }
       return false;
     }
+    __name(shouldRemoveHeader, "shouldRemoveHeader");
     function cleanRequestHeaders(headers, removeContent, unknownOrigin) {
       const ret = [];
       if (Array.isArray(headers)) {
@@ -7770,6 +8135,7 @@ var require_redirect_handler = __commonJS({
       }
       return ret;
     }
+    __name(cleanRequestHeaders, "cleanRequestHeaders");
     module2.exports = RedirectHandler;
   }
 });
@@ -7781,7 +8147,7 @@ var require_redirect_interceptor = __commonJS({
     var RedirectHandler = require_redirect_handler();
     function createRedirectInterceptor({ maxRedirections: defaultMaxRedirections }) {
       return (dispatch) => {
-        return function Intercept(opts, handler) {
+        return /* @__PURE__ */ __name(function Intercept(opts, handler) {
           const { maxRedirections = defaultMaxRedirections } = opts;
           if (!maxRedirections) {
             return dispatch(opts, handler);
@@ -7789,9 +8155,10 @@ var require_redirect_interceptor = __commonJS({
           const redirectHandler = new RedirectHandler(dispatch, maxRedirections, opts, handler);
           opts = { ...opts, maxRedirections: 0 };
           return dispatch(opts, redirectHandler);
-        };
+        }, "Intercept");
       };
     }
+    __name(createRedirectInterceptor, "createRedirectInterceptor");
     module2.exports = createRedirectInterceptor;
   }
 });
@@ -7859,12 +8226,16 @@ var require_client = __commonJS({
     var connectH2 = require_client_h2();
     var deprecatedInterceptorWarned = false;
     var kClosedResolve = Symbol("kClosedResolve");
-    var noop = () => {
-    };
+    var noop = /* @__PURE__ */ __name(() => {
+    }, "noop");
     function getPipelining(client2) {
       return client2[kPipelining] ?? client2[kHTTPContext]?.defaultPipelining ?? 1;
     }
+    __name(getPipelining, "getPipelining");
     var Client3 = class extends DispatcherBase {
+      static {
+        __name(this, "Client");
+      }
       /**
        *
        * @param {string|URL} url
@@ -8076,13 +8447,13 @@ var require_client = __commonJS({
             const request = requests[i];
             util.errorRequest(this, request, err);
           }
-          const callback = () => {
+          const callback = /* @__PURE__ */ __name(() => {
             if (this[kClosedResolve]) {
               this[kClosedResolve]();
               this[kClosedResolve] = null;
             }
             resolve(null);
-          };
+          }, "callback");
           if (this[kHTTPContext]) {
             this[kHTTPContext].destroy(err, callback);
             this[kHTTPContext] = null;
@@ -8105,6 +8476,7 @@ var require_client = __commonJS({
         assert(client2[kSize] === 0);
       }
     }
+    __name(onError, "onError");
     async function connect(client2) {
       assert(!client2[kConnecting]);
       assert(!client2[kHTTPContext]);
@@ -8213,10 +8585,12 @@ var require_client = __commonJS({
       }
       client2[kResume]();
     }
+    __name(connect, "connect");
     function emitDrain(client2) {
       client2[kNeedDrain] = 0;
       client2.emit("drain", client2[kUrl], [client2]);
     }
+    __name(emitDrain, "emitDrain");
     function resume(client2, sync) {
       if (client2[kResuming] === 2) {
         return;
@@ -8230,6 +8604,7 @@ var require_client = __commonJS({
         client2[kRunningIdx] = 0;
       }
     }
+    __name(resume, "resume");
     function _resume(client2, sync) {
       while (true) {
         if (client2.destroyed) {
@@ -8292,6 +8667,7 @@ var require_client = __commonJS({
         }
       }
     }
+    __name(_resume, "_resume");
     module2.exports = Client3;
   }
 });
@@ -8303,6 +8679,9 @@ var require_fixed_queue = __commonJS({
     var kSize = 2048;
     var kMask = kSize - 1;
     var FixedCircularBuffer = class {
+      static {
+        __name(this, "FixedCircularBuffer");
+      }
       constructor() {
         this.bottom = 0;
         this.top = 0;
@@ -8329,6 +8708,9 @@ var require_fixed_queue = __commonJS({
       }
     };
     module2.exports = class FixedQueue {
+      static {
+        __name(this, "FixedQueue");
+      }
       constructor() {
         this.head = this.tail = new FixedCircularBuffer();
       }
@@ -8359,6 +8741,9 @@ var require_pool_stats = __commonJS({
     var { kFree, kConnected, kPending, kQueued, kRunning, kSize } = require_symbols();
     var kPool = Symbol("pool");
     var PoolStats = class {
+      static {
+        __name(this, "PoolStats");
+      }
       constructor(pool) {
         this[kPool] = pool;
       }
@@ -8406,13 +8791,16 @@ var require_pool_base = __commonJS({
     var kRemoveClient = Symbol("remove client");
     var kStats = Symbol("stats");
     var PoolBase = class extends DispatcherBase {
+      static {
+        __name(this, "PoolBase");
+      }
       constructor() {
         super();
         this[kQueue] = new FixedQueue();
         this[kClients] = [];
         this[kQueued] = 0;
         const pool = this;
-        this[kOnDrain] = function onDrain(origin, targets) {
+        this[kOnDrain] = /* @__PURE__ */ __name(function onDrain(origin, targets) {
           const queue = pool[kQueue];
           let needDrain = false;
           while (!needDrain) {
@@ -8431,7 +8819,7 @@ var require_pool_base = __commonJS({
           if (pool[kClosedResolve] && queue.isEmpty()) {
             Promise.all(pool[kClients].map((c) => c.close())).then(pool[kClosedResolve]);
           }
-        };
+        }, "onDrain");
         this[kOnConnect] = (origin, targets) => {
           pool.emit("connect", origin, [pool, ...targets]);
         };
@@ -8564,7 +8952,11 @@ var require_pool = __commonJS({
     function defaultFactory(origin, opts) {
       return new Client3(origin, opts);
     }
+    __name(defaultFactory, "defaultFactory");
     var Pool = class extends PoolBase {
+      static {
+        __name(this, "Pool");
+      }
       constructor(origin, {
         connections,
         factory = defaultFactory,
@@ -8667,10 +9059,15 @@ var require_balanced_pool = __commonJS({
       }
       return a;
     }
+    __name(getGreatestCommonDivisor, "getGreatestCommonDivisor");
     function defaultFactory(origin, opts) {
       return new Pool(origin, opts);
     }
+    __name(defaultFactory, "defaultFactory");
     var BalancedPool = class extends PoolBase {
+      static {
+        __name(this, "BalancedPool");
+      }
       constructor(upstreams = [], { factory = defaultFactory, ...opts } = {}) {
         super();
         this[kOptions] = opts;
@@ -8796,7 +9193,11 @@ var require_agent = __commonJS({
     function defaultFactory(origin, opts) {
       return opts && opts.connections === 1 ? new Client3(origin, opts) : new Pool(origin, opts);
     }
+    __name(defaultFactory, "defaultFactory");
     var Agent = class extends DispatcherBase {
+      static {
+        __name(this, "Agent");
+      }
       constructor({ factory = defaultFactory, maxRedirections = 0, connect, ...options } = {}) {
         super();
         if (typeof factory !== "function") {
@@ -8894,18 +9295,24 @@ var require_proxy_agent = __commonJS({
     function defaultProtocolPort(protocol) {
       return protocol === "https:" ? 443 : 80;
     }
+    __name(defaultProtocolPort, "defaultProtocolPort");
     function defaultFactory(origin, opts) {
       return new Pool(origin, opts);
     }
-    var noop = () => {
-    };
+    __name(defaultFactory, "defaultFactory");
+    var noop = /* @__PURE__ */ __name(() => {
+    }, "noop");
     function defaultAgentFactory(origin, opts) {
       if (opts.connections === 1) {
         return new Client3(origin, opts);
       }
       return new Pool(origin, opts);
     }
+    __name(defaultAgentFactory, "defaultAgentFactory");
     var Http1ProxyWrapper = class extends DispatcherBase {
+      static {
+        __name(this, "Http1ProxyWrapper");
+      }
       #client;
       constructor(proxyUrl, { headers = {}, connect, factory }) {
         super();
@@ -8951,6 +9358,9 @@ var require_proxy_agent = __commonJS({
       }
     };
     var ProxyAgent = class extends DispatcherBase {
+      static {
+        __name(this, "ProxyAgent");
+      }
       constructor(opts) {
         super();
         if (!opts || typeof opts === "object" && !(opts instanceof URL2) && !opts.uri) {
@@ -8981,7 +9391,7 @@ var require_proxy_agent = __commonJS({
         const connect = buildConnector({ ...opts.proxyTls });
         this[kConnectEndpoint] = buildConnector({ ...opts.requestTls });
         const agentFactory = opts.factory || defaultAgentFactory;
-        const factory = (origin2, options) => {
+        const factory = /* @__PURE__ */ __name((origin2, options) => {
           const { protocol: protocol2 } = new URL2(origin2);
           if (!this[kTunnelProxy] && protocol2 === "http:" && this[kProxy].protocol === "http:") {
             return new Http1ProxyWrapper(this[kProxy].uri, {
@@ -8991,12 +9401,12 @@ var require_proxy_agent = __commonJS({
             });
           }
           return agentFactory(origin2, options);
-        };
+        }, "factory");
         this[kClient] = clientFactory(url, { connect });
         this[kAgent] = new Agent({
           ...opts,
           factory,
-          connect: async (opts2, callback) => {
+          connect: /* @__PURE__ */ __name(async (opts2, callback) => {
             let requestedPath = opts2.host;
             if (!opts2.port) {
               requestedPath += `:${defaultProtocolPort(opts2.protocol)}`;
@@ -9035,7 +9445,7 @@ var require_proxy_agent = __commonJS({
                 callback(err);
               }
             }
-          }
+          }, "connect")
         });
       }
       dispatch(opts, handler) {
@@ -9085,12 +9495,14 @@ var require_proxy_agent = __commonJS({
       }
       return headers;
     }
+    __name(buildHeaders, "buildHeaders");
     function throwIfProxyAuthIsSent(headers) {
       const existProxyAuth = headers && Object.keys(headers).find((key) => key.toLowerCase() === "proxy-authorization");
       if (existProxyAuth) {
         throw new InvalidArgumentError("Proxy-Authorization should be sent in ProxyAgent constructor");
       }
     }
+    __name(throwIfProxyAuthIsSent, "throwIfProxyAuthIsSent");
     module2.exports = ProxyAgent;
   }
 });
@@ -9109,6 +9521,9 @@ var require_env_http_proxy_agent = __commonJS({
     };
     var experimentalWarned = false;
     var EnvHttpProxyAgent = class extends DispatcherBase {
+      static {
+        __name(this, "EnvHttpProxyAgent");
+      }
       #noProxyValue = null;
       #noProxyEntries = null;
       #opts = null;
@@ -9248,7 +9663,11 @@ var require_retry_handler = __commonJS({
       const current = Date.now();
       return new Date(retryAfter).getTime() - current;
     }
+    __name(calculateRetryAfterHeader, "calculateRetryAfterHeader");
     var RetryHandler = class _RetryHandler {
+      static {
+        __name(this, "RetryHandler");
+      }
       constructor(opts, handlers) {
         const { retryOptions, ...dispatchOpts } = opts;
         const {
@@ -9523,6 +9942,7 @@ var require_retry_handler = __commonJS({
             this.handler.onError(err3);
           }
         }
+        __name(onRetry, "onRetry");
       }
     };
     module2.exports = RetryHandler;
@@ -9536,6 +9956,9 @@ var require_retry_agent = __commonJS({
     var Dispatcher = require_dispatcher();
     var RetryHandler = require_retry_handler();
     var RetryAgent = class extends Dispatcher {
+      static {
+        __name(this, "RetryAgent");
+      }
       #agent = null;
       #options = null;
       constructor(agent, options = {}) {
@@ -9579,9 +10002,12 @@ var require_readable = __commonJS({
     var kAbort = Symbol("kAbort");
     var kContentType = Symbol("kContentType");
     var kContentLength = Symbol("kContentLength");
-    var noop = () => {
-    };
+    var noop = /* @__PURE__ */ __name(() => {
+    }, "noop");
     var BodyReadable = class extends Readable {
+      static {
+        __name(this, "BodyReadable");
+      }
       constructor({
         resume,
         abort,
@@ -9700,9 +10126,9 @@ var require_readable = __commonJS({
           if (this[kContentLength] > limit) {
             this.destroy(new AbortError());
           }
-          const onAbort = () => {
+          const onAbort = /* @__PURE__ */ __name(() => {
             this.destroy(signal.reason ?? new AbortError());
-          };
+          }, "onAbort");
           signal?.addEventListener("abort", onAbort);
           this.on("close", function() {
             signal?.removeEventListener("abort", onAbort);
@@ -9723,9 +10149,11 @@ var require_readable = __commonJS({
     function isLocked(self2) {
       return self2[kBody] && self2[kBody].locked === true || self2[kConsume];
     }
+    __name(isLocked, "isLocked");
     function isUnusable(self2) {
       return util.isDisturbed(self2) || isLocked(self2);
     }
+    __name(isUnusable, "isUnusable");
     async function consume(stream, type) {
       assert(!stream[kConsume]);
       return new Promise((resolve, reject) => {
@@ -9762,6 +10190,7 @@ var require_readable = __commonJS({
         }
       });
     }
+    __name(consume, "consume");
     function consumeStart(consume2) {
       if (consume2.body === null) {
         return;
@@ -9789,6 +10218,7 @@ var require_readable = __commonJS({
       while (consume2.stream.read() != null) {
       }
     }
+    __name(consumeStart, "consumeStart");
     function chunksDecode(chunks, length) {
       if (chunks.length === 0 || length === 0) {
         return "";
@@ -9798,6 +10228,7 @@ var require_readable = __commonJS({
       const start = bufferLength > 2 && buffer[0] === 239 && buffer[1] === 187 && buffer[2] === 191 ? 3 : 0;
       return buffer.utf8Slice(start, bufferLength);
     }
+    __name(chunksDecode, "chunksDecode");
     function chunksConcat(chunks, length) {
       if (chunks.length === 0 || length === 0) {
         return new Uint8Array(0);
@@ -9814,6 +10245,7 @@ var require_readable = __commonJS({
       }
       return buffer;
     }
+    __name(chunksConcat, "chunksConcat");
     function consumeEnd(consume2) {
       const { type, body, resolve, stream, length } = consume2;
       try {
@@ -9833,10 +10265,12 @@ var require_readable = __commonJS({
         stream.destroy(err);
       }
     }
+    __name(consumeEnd, "consumeEnd");
     function consumePush(consume2, chunk) {
       consume2.length += chunk.length;
       consume2.body.push(chunk);
     }
+    __name(consumePush, "consumePush");
     function consumeFinish(consume2, err) {
       if (consume2.body === null) {
         return;
@@ -9853,6 +10287,7 @@ var require_readable = __commonJS({
       consume2.length = 0;
       consume2.body = null;
     }
+    __name(consumeFinish, "consumeFinish");
     module2.exports = { Readable: BodyReadable, chunksDecode };
   }
 });
@@ -9904,12 +10339,13 @@ var require_util3 = __commonJS({
       }
       queueMicrotask(() => callback(new ResponseStatusCodeError(message, statusCode, headers, payload)));
     }
-    var isContentTypeApplicationJson = (contentType) => {
+    __name(getResolveErrorBodyCallback, "getResolveErrorBodyCallback");
+    var isContentTypeApplicationJson = /* @__PURE__ */ __name((contentType) => {
       return contentType.length > 15 && contentType[11] === "/" && contentType[0] === "a" && contentType[1] === "p" && contentType[2] === "p" && contentType[3] === "l" && contentType[4] === "i" && contentType[5] === "c" && contentType[6] === "a" && contentType[7] === "t" && contentType[8] === "i" && contentType[9] === "o" && contentType[10] === "n" && contentType[12] === "j" && contentType[13] === "s" && contentType[14] === "o" && contentType[15] === "n";
-    };
-    var isContentTypeText = (contentType) => {
+    }, "isContentTypeApplicationJson");
+    var isContentTypeText = /* @__PURE__ */ __name((contentType) => {
       return contentType.length > 4 && contentType[4] === "/" && contentType[0] === "t" && contentType[1] === "e" && contentType[2] === "x" && contentType[3] === "t";
-    };
+    }, "isContentTypeText");
     module2.exports = {
       getResolveErrorBodyCallback,
       isContentTypeApplicationJson,
@@ -9929,6 +10365,9 @@ var require_api_request = __commonJS({
     var { getResolveErrorBodyCallback } = require_util3();
     var { AsyncResource } = require("node:async_hooks");
     var RequestHandler = class extends AsyncResource {
+      static {
+        __name(this, "RequestHandler");
+      }
       constructor(opts, callback) {
         if (!opts || typeof opts !== "object") {
           throw new InvalidArgumentError("invalid opts");
@@ -10099,6 +10538,7 @@ var require_api_request = __commonJS({
         queueMicrotask(() => callback(err, { opaque }));
       }
     }
+    __name(request, "request");
     module2.exports = request;
     module2.exports.RequestHandler = RequestHandler;
   }
@@ -10119,6 +10559,7 @@ var require_abort_signal = __commonJS({
       }
       removeSignal(self2);
     }
+    __name(abort, "abort");
     function addSignal(self2, signal) {
       self2.reason = null;
       self2[kSignal] = null;
@@ -10136,6 +10577,7 @@ var require_abort_signal = __commonJS({
       };
       addAbortListener(self2[kSignal], self2[kListener]);
     }
+    __name(addSignal, "addSignal");
     function removeSignal(self2) {
       if (!self2[kSignal]) {
         return;
@@ -10148,6 +10590,7 @@ var require_abort_signal = __commonJS({
       self2[kSignal] = null;
       self2[kListener] = null;
     }
+    __name(removeSignal, "removeSignal");
     module2.exports = {
       addSignal,
       removeSignal
@@ -10167,6 +10610,9 @@ var require_api_stream = __commonJS({
     var { AsyncResource } = require("node:async_hooks");
     var { addSignal, removeSignal } = require_abort_signal();
     var StreamHandler = class extends AsyncResource {
+      static {
+        __name(this, "StreamHandler");
+      }
       constructor(opts, factory, callback) {
         if (!opts || typeof opts !== "object") {
           throw new InvalidArgumentError("invalid opts");
@@ -10324,6 +10770,7 @@ var require_api_stream = __commonJS({
         queueMicrotask(() => callback(err, { opaque }));
       }
     }
+    __name(stream, "stream");
     module2.exports = stream;
   }
 });
@@ -10348,6 +10795,9 @@ var require_api_pipeline = __commonJS({
     var assert = require("node:assert");
     var kResume = Symbol("resume");
     var PipelineRequest = class extends Readable {
+      static {
+        __name(this, "PipelineRequest");
+      }
       constructor() {
         super({ autoDestroy: true });
         this[kResume] = null;
@@ -10365,6 +10815,9 @@ var require_api_pipeline = __commonJS({
       }
     };
     var PipelineResponse = class extends Readable {
+      static {
+        __name(this, "PipelineResponse");
+      }
       constructor(resume) {
         super({ autoDestroy: true });
         this[kResume] = resume;
@@ -10380,6 +10833,9 @@ var require_api_pipeline = __commonJS({
       }
     };
     var PipelineHandler = class extends AsyncResource {
+      static {
+        __name(this, "PipelineHandler");
+      }
       constructor(opts, handler) {
         if (!opts || typeof opts !== "object") {
           throw new InvalidArgumentError("invalid opts");
@@ -10408,21 +10864,21 @@ var require_api_pipeline = __commonJS({
         this.ret = new Duplex({
           readableObjectMode: opts.objectMode,
           autoDestroy: true,
-          read: () => {
+          read: /* @__PURE__ */ __name(() => {
             const { body } = this;
             if (body?.resume) {
               body.resume();
             }
-          },
-          write: (chunk, encoding, callback) => {
+          }, "read"),
+          write: /* @__PURE__ */ __name((chunk, encoding, callback) => {
             const { req } = this;
             if (req.push(chunk, encoding) || req._readableState.destroyed) {
               callback();
             } else {
               req[kResume] = callback;
             }
-          },
-          destroy: (err, callback) => {
+          }, "write"),
+          destroy: /* @__PURE__ */ __name((err, callback) => {
             const { body, req, res, ret, abort } = this;
             if (!err && !ret._readableState.endEmitted) {
               err = new RequestAbortedError();
@@ -10435,7 +10891,7 @@ var require_api_pipeline = __commonJS({
             util.destroy(res, err);
             removeSignal(this);
             callback(err);
-          }
+          }, "destroy")
         }).on("prefinish", () => {
           const { req } = this;
           req.push(null);
@@ -10524,6 +10980,7 @@ var require_api_pipeline = __commonJS({
         return new PassThrough().destroy(err);
       }
     }
+    __name(pipeline, "pipeline");
     module2.exports = pipeline;
   }
 });
@@ -10538,6 +10995,9 @@ var require_api_upgrade = __commonJS({
     var { addSignal, removeSignal } = require_abort_signal();
     var assert = require("node:assert");
     var UpgradeHandler = class extends AsyncResource {
+      static {
+        __name(this, "UpgradeHandler");
+      }
       constructor(opts, callback) {
         if (!opts || typeof opts !== "object") {
           throw new InvalidArgumentError("invalid opts");
@@ -10616,6 +11076,7 @@ var require_api_upgrade = __commonJS({
         queueMicrotask(() => callback(err, { opaque }));
       }
     }
+    __name(upgrade, "upgrade");
     module2.exports = upgrade;
   }
 });
@@ -10630,6 +11091,9 @@ var require_api_connect = __commonJS({
     var util = require_util();
     var { addSignal, removeSignal } = require_abort_signal();
     var ConnectHandler = class extends AsyncResource {
+      static {
+        __name(this, "ConnectHandler");
+      }
       constructor(opts, callback) {
         if (!opts || typeof opts !== "object") {
           throw new InvalidArgumentError("invalid opts");
@@ -10706,6 +11170,7 @@ var require_api_connect = __commonJS({
         queueMicrotask(() => callback(err, { opaque }));
       }
     }
+    __name(connect, "connect");
     module2.exports = connect;
   }
 });
@@ -10729,6 +11194,9 @@ var require_mock_errors = __commonJS({
     var { UndiciError } = require_errors();
     var kMockNotMatchedError = Symbol.for("undici.error.UND_MOCK_ERR_MOCK_NOT_MATCHED");
     var MockNotMatchedError = class _MockNotMatchedError extends UndiciError {
+      static {
+        __name(this, "MockNotMatchedError");
+      }
       constructor(message) {
         super(message);
         Error.captureStackTrace(this, _MockNotMatchedError);
@@ -10806,6 +11274,7 @@ var require_mock_utils = __commonJS({
       }
       return false;
     }
+    __name(matchValue, "matchValue");
     function lowerCaseEntries(headers) {
       return Object.fromEntries(
         Object.entries(headers).map(([headerName, headerValue]) => {
@@ -10813,6 +11282,7 @@ var require_mock_utils = __commonJS({
         })
       );
     }
+    __name(lowerCaseEntries, "lowerCaseEntries");
     function getHeaderByName(headers, key) {
       if (Array.isArray(headers)) {
         for (let i = 0; i < headers.length; i += 2) {
@@ -10827,6 +11297,7 @@ var require_mock_utils = __commonJS({
         return lowerCaseEntries(headers)[key.toLocaleLowerCase()];
       }
     }
+    __name(getHeaderByName, "getHeaderByName");
     function buildHeadersFromArray(headers) {
       const clone = headers.slice();
       const entries = [];
@@ -10835,6 +11306,7 @@ var require_mock_utils = __commonJS({
       }
       return Object.fromEntries(entries);
     }
+    __name(buildHeadersFromArray, "buildHeadersFromArray");
     function matchHeaders(mockDispatch2, headers) {
       if (typeof mockDispatch2.headers === "function") {
         if (Array.isArray(headers)) {
@@ -10856,6 +11328,7 @@ var require_mock_utils = __commonJS({
       }
       return true;
     }
+    __name(matchHeaders, "matchHeaders");
     function safeUrl(path) {
       if (typeof path !== "string") {
         return path;
@@ -10868,6 +11341,7 @@ var require_mock_utils = __commonJS({
       qp.sort();
       return [...pathSegments, qp.toString()].join("?");
     }
+    __name(safeUrl, "safeUrl");
     function matchKey(mockDispatch2, { path, method, body, headers }) {
       const pathMatch = matchValue(mockDispatch2.path, path);
       const methodMatch = matchValue(mockDispatch2.method, method);
@@ -10875,6 +11349,7 @@ var require_mock_utils = __commonJS({
       const headersMatch = matchHeaders(mockDispatch2, headers);
       return pathMatch && methodMatch && bodyMatch && headersMatch;
     }
+    __name(matchKey, "matchKey");
     function getResponseData(data) {
       if (Buffer.isBuffer(data)) {
         return data;
@@ -10888,6 +11363,7 @@ var require_mock_utils = __commonJS({
         return data.toString();
       }
     }
+    __name(getResponseData, "getResponseData");
     function getMockDispatch(mockDispatches, key) {
       const basePath = key.query ? buildURL(key.path, key.query) : key.path;
       const resolvedPath = typeof basePath === "string" ? safeUrl(basePath) : basePath;
@@ -10910,6 +11386,7 @@ var require_mock_utils = __commonJS({
       }
       return matchedMockDispatches[0];
     }
+    __name(getMockDispatch, "getMockDispatch");
     function addMockDispatch(mockDispatches, key, data) {
       const baseData = { timesInvoked: 0, times: 1, persist: false, consumed: false };
       const replyData = typeof data === "function" ? { callback: data } : { ...data };
@@ -10917,6 +11394,7 @@ var require_mock_utils = __commonJS({
       mockDispatches.push(newMockDispatch);
       return newMockDispatch;
     }
+    __name(addMockDispatch, "addMockDispatch");
     function deleteMockDispatch(mockDispatches, key) {
       const index = mockDispatches.findIndex((dispatch) => {
         if (!dispatch.consumed) {
@@ -10928,6 +11406,7 @@ var require_mock_utils = __commonJS({
         mockDispatches.splice(index, 1);
       }
     }
+    __name(deleteMockDispatch, "deleteMockDispatch");
     function buildKey(opts) {
       const { path, method, body, headers, query } = opts;
       return {
@@ -10938,6 +11417,7 @@ var require_mock_utils = __commonJS({
         query
       };
     }
+    __name(buildKey, "buildKey");
     function generateKeyValues(data) {
       const keys = Object.keys(data);
       const result = [];
@@ -10955,9 +11435,11 @@ var require_mock_utils = __commonJS({
       }
       return result;
     }
+    __name(generateKeyValues, "generateKeyValues");
     function getStatusText(statusCode) {
       return STATUS_CODES[statusCode] || "unknown";
     }
+    __name(getStatusText, "getStatusText");
     async function getResponse(body) {
       const buffers = [];
       for await (const data of body) {
@@ -10965,6 +11447,7 @@ var require_mock_utils = __commonJS({
       }
       return Buffer.concat(buffers).toString("utf8");
     }
+    __name(getResponse, "getResponse");
     function mockDispatch(opts, handler) {
       const key = buildKey(opts);
       const mockDispatch2 = getMockDispatch(this[kDispatches], key);
@@ -11004,15 +11487,18 @@ var require_mock_utils = __commonJS({
         handler.onComplete?.(responseTrailers);
         deleteMockDispatch(mockDispatches, key);
       }
+      __name(handleReply, "handleReply");
       function resume() {
       }
+      __name(resume, "resume");
       return true;
     }
+    __name(mockDispatch, "mockDispatch");
     function buildMockDispatch() {
       const agent = this[kMockAgent];
       const origin = this[kOrigin];
       const originalDispatch = this[kOriginalDispatch];
-      return function dispatch(opts, handler) {
+      return /* @__PURE__ */ __name(function dispatch(opts, handler) {
         if (agent.isMockActive) {
           try {
             mockDispatch.call(this, opts, handler);
@@ -11034,8 +11520,9 @@ var require_mock_utils = __commonJS({
         } else {
           originalDispatch.call(this, opts, handler);
         }
-      };
+      }, "dispatch");
     }
+    __name(buildMockDispatch, "buildMockDispatch");
     function checkNetConnect(netConnect, origin) {
       const url = new URL(origin);
       if (netConnect === true) {
@@ -11045,12 +11532,14 @@ var require_mock_utils = __commonJS({
       }
       return false;
     }
+    __name(checkNetConnect, "checkNetConnect");
     function buildMockOptions(opts) {
       if (opts) {
         const { agent, ...mockOptions } = opts;
         return mockOptions;
       }
     }
+    __name(buildMockOptions, "buildMockOptions");
     module2.exports = {
       getResponseData,
       getMockDispatch,
@@ -11087,6 +11576,9 @@ var require_mock_interceptor = __commonJS({
     var { InvalidArgumentError } = require_errors();
     var { buildURL } = require_util();
     var MockScope = class {
+      static {
+        __name(this, "MockScope");
+      }
       constructor(mockDispatch) {
         this[kMockDispatch] = mockDispatch;
       }
@@ -11119,6 +11611,9 @@ var require_mock_interceptor = __commonJS({
       }
     };
     var MockInterceptor = class {
+      static {
+        __name(this, "MockInterceptor");
+      }
       constructor(opts, mockDispatches) {
         if (typeof opts !== "object") {
           throw new InvalidArgumentError("opts must be an object");
@@ -11166,7 +11661,7 @@ var require_mock_interceptor = __commonJS({
        */
       reply(replyOptionsCallbackOrStatusCode) {
         if (typeof replyOptionsCallbackOrStatusCode === "function") {
-          const wrappedDefaultsCallback = (opts) => {
+          const wrappedDefaultsCallback = /* @__PURE__ */ __name((opts) => {
             const resolvedData = replyOptionsCallbackOrStatusCode(opts);
             if (typeof resolvedData !== "object" || resolvedData === null) {
               throw new InvalidArgumentError("reply options callback must return an object");
@@ -11176,7 +11671,7 @@ var require_mock_interceptor = __commonJS({
             return {
               ...this.createMockScopeDispatchData(replyParameters2)
             };
-          };
+          }, "wrappedDefaultsCallback");
           const newMockDispatch2 = addMockDispatch(this[kDispatches], this[kDispatchKey], wrappedDefaultsCallback);
           return new MockScope(newMockDispatch2);
         }
@@ -11253,6 +11748,9 @@ var require_mock_client = __commonJS({
     var Symbols = require_symbols();
     var { InvalidArgumentError } = require_errors();
     var MockClient = class extends Client3 {
+      static {
+        __name(this, "MockClient");
+      }
       constructor(origin, opts) {
         super(origin, opts);
         if (!opts || !opts.agent || typeof opts.agent.dispatch !== "function") {
@@ -11306,6 +11804,9 @@ var require_mock_pool = __commonJS({
     var Symbols = require_symbols();
     var { InvalidArgumentError } = require_errors();
     var MockPool = class extends Pool {
+      static {
+        __name(this, "MockPool");
+      }
       constructor(origin, opts) {
         super(origin, opts);
         if (!opts || !opts.agent || typeof opts.agent.dispatch !== "function") {
@@ -11356,6 +11857,9 @@ var require_pluralizer = __commonJS({
       this: "these"
     };
     module2.exports = class Pluralizer {
+      static {
+        __name(this, "Pluralizer");
+      }
       constructor(singular, plural) {
         this.singular = singular;
         this.plural = plural;
@@ -11379,6 +11883,9 @@ var require_pending_interceptors_formatter = __commonJS({
     var PERSISTENT = process.versions.icu ? "\u2705" : "Y ";
     var NOT_PERSISTENT = process.versions.icu ? "\u274C" : "N ";
     module2.exports = class PendingInterceptorsFormatter {
+      static {
+        __name(this, "PendingInterceptorsFormatter");
+      }
       constructor({ disableColors } = {}) {
         this.transform = new Transform({
           transform(chunk, _enc, cb) {
@@ -11436,6 +11943,9 @@ var require_mock_agent = __commonJS({
     var Pluralizer = require_pluralizer();
     var PendingInterceptorsFormatter = require_pending_interceptors_formatter();
     var MockAgent = class extends Dispatcher {
+      static {
+        __name(this, "MockAgent");
+      }
       constructor(opts) {
         super(opts);
         this[kNetConnect] = true;
@@ -11562,9 +12072,11 @@ var require_global2 = __commonJS({
         configurable: false
       });
     }
+    __name(setGlobalDispatcher, "setGlobalDispatcher");
     function getGlobalDispatcher() {
       return globalThis[globalDispatcher];
     }
+    __name(getGlobalDispatcher, "getGlobalDispatcher");
     module2.exports = {
       setGlobalDispatcher,
       getGlobalDispatcher
@@ -11577,6 +12089,9 @@ var require_decorator_handler = __commonJS({
   "../../node_modules/.pnpm/undici@6.24.1/node_modules/undici/lib/handler/decorator-handler.js"(exports2, module2) {
     "use strict";
     module2.exports = class DecoratorHandler {
+      static {
+        __name(this, "DecoratorHandler");
+      }
       #handler;
       constructor(handler) {
         if (typeof handler !== "object" || handler === null) {
@@ -11620,7 +12135,7 @@ var require_redirect = __commonJS({
     module2.exports = (opts) => {
       const globalMaxRedirections = opts?.maxRedirections;
       return (dispatch) => {
-        return function redirectInterceptor(opts2, handler) {
+        return /* @__PURE__ */ __name(function redirectInterceptor(opts2, handler) {
           const { maxRedirections = globalMaxRedirections, ...baseOpts } = opts2;
           if (!maxRedirections) {
             return dispatch(opts2, handler);
@@ -11632,7 +12147,7 @@ var require_redirect = __commonJS({
             handler
           );
           return dispatch(baseOpts, redirectHandler);
-        };
+        }, "redirectInterceptor");
       };
     };
   }
@@ -11645,7 +12160,7 @@ var require_retry = __commonJS({
     var RetryHandler = require_retry_handler();
     module2.exports = (globalOpts) => {
       return (dispatch) => {
-        return function retryInterceptor(opts, handler) {
+        return /* @__PURE__ */ __name(function retryInterceptor(opts, handler) {
           return dispatch(
             opts,
             new RetryHandler(
@@ -11656,7 +12171,7 @@ var require_retry = __commonJS({
               }
             )
           );
-        };
+        }, "retryInterceptor");
       };
     };
   }
@@ -11670,6 +12185,9 @@ var require_dump = __commonJS({
     var { InvalidArgumentError, RequestAbortedError } = require_errors();
     var DecoratorHandler = require_decorator_handler();
     var DumpHandler = class extends DecoratorHandler {
+      static {
+        __name(this, "DumpHandler");
+      }
       #maxSize = 1024 * 1024;
       #abort = null;
       #dumped = false;
@@ -11746,16 +12264,17 @@ var require_dump = __commonJS({
       maxSize: 1024 * 1024
     }) {
       return (dispatch) => {
-        return function Intercept(opts, handler) {
+        return /* @__PURE__ */ __name(function Intercept(opts, handler) {
           const { dumpMaxSize = defaultMaxSize } = opts;
           const dumpHandler = new DumpHandler(
             { maxSize: dumpMaxSize },
             handler
           );
           return dispatch(opts, dumpHandler);
-        };
+        }, "Intercept");
       };
     }
+    __name(createDumpInterceptor, "createDumpInterceptor");
     module2.exports = createDumpInterceptor;
   }
 });
@@ -11770,6 +12289,9 @@ var require_dns = __commonJS({
     var { InvalidArgumentError, InformationalError } = require_errors();
     var maxInt = Math.pow(2, 31) - 1;
     var DNSInstance = class {
+      static {
+        __name(this, "DNSInstance");
+      }
       #maxTTL = 0;
       #maxItems = 0;
       #records = /* @__PURE__ */ new Map();
@@ -11936,6 +12458,9 @@ var require_dns = __commonJS({
       }
     };
     var DNSDispatchHandler = class extends DecoratorHandler {
+      static {
+        __name(this, "DNSDispatchHandler");
+      }
       #state = null;
       #opts = null;
       #dispatch = null;
@@ -12016,7 +12541,7 @@ var require_dns = __commonJS({
       };
       const instance = new DNSInstance(opts);
       return (dispatch) => {
-        return function dnsInterceptor(origDispatchOpts, handler) {
+        return /* @__PURE__ */ __name(function dnsInterceptor(origDispatchOpts, handler) {
           const origin = origDispatchOpts.origin.constructor === URL ? origDispatchOpts.origin : new URL(origDispatchOpts.origin);
           if (isIP(origin.hostname) !== 0) {
             return dispatch(origDispatchOpts, handler);
@@ -12042,7 +12567,7 @@ var require_dns = __commonJS({
             );
           });
           return true;
-        };
+        }, "dnsInterceptor");
       };
     };
   }
@@ -12067,6 +12592,7 @@ var require_headers = __commonJS({
     function isHTTPWhiteSpaceCharCode(code) {
       return code === 10 || code === 13 || code === 9 || code === 32;
     }
+    __name(isHTTPWhiteSpaceCharCode, "isHTTPWhiteSpaceCharCode");
     function headerValueNormalize(potentialValue) {
       let i = 0;
       let j = potentialValue.length;
@@ -12074,6 +12600,7 @@ var require_headers = __commonJS({
       while (j > i && isHTTPWhiteSpaceCharCode(potentialValue.charCodeAt(i))) ++i;
       return i === 0 && j === potentialValue.length ? potentialValue : potentialValue.substring(i, j);
     }
+    __name(headerValueNormalize, "headerValueNormalize");
     function fill(headers, object) {
       if (Array.isArray(object)) {
         for (let i = 0; i < object.length; ++i) {
@@ -12099,6 +12626,7 @@ var require_headers = __commonJS({
         });
       }
     }
+    __name(fill, "fill");
     function appendHeader(headers, name, value) {
       value = headerValueNormalize(value);
       if (!isValidHeaderName(name)) {
@@ -12119,10 +12647,15 @@ var require_headers = __commonJS({
       }
       return getHeadersList(headers).append(name, value, false);
     }
+    __name(appendHeader, "appendHeader");
     function compareHeaderName(a, b) {
       return a[0] < b[0] ? -1 : 1;
     }
+    __name(compareHeaderName, "compareHeaderName");
     var HeadersList = class _HeadersList {
+      static {
+        __name(this, "HeadersList");
+      }
       /** @type {[string, string][]|null} */
       cookies = null;
       constructor(init) {
@@ -12288,6 +12821,9 @@ var require_headers = __commonJS({
       }
     };
     var Headers = class _Headers {
+      static {
+        __name(this, "Headers");
+      }
       #guard;
       #headersList;
       constructor(init = void 0) {
@@ -12524,6 +13060,9 @@ var require_response = __commonJS({
     var { types } = require("node:util");
     var textEncoder = new TextEncoder("utf-8");
     var Response2 = class _Response {
+      static {
+        __name(this, "Response");
+      }
       // Creates network error Response.
       static error() {
         const responseObject = fromInnerResponse(makeNetworkError(), "immutable");
@@ -12701,6 +13240,7 @@ var require_response = __commonJS({
       }
       return newResponse;
     }
+    __name(cloneResponse, "cloneResponse");
     function makeResponse(init) {
       return {
         aborted: false,
@@ -12717,6 +13257,7 @@ var require_response = __commonJS({
         urlList: init?.urlList ? [...init.urlList] : []
       };
     }
+    __name(makeResponse, "makeResponse");
     function makeNetworkError(reason) {
       const isError = isErrorLike(reason);
       return makeResponse({
@@ -12726,6 +13267,7 @@ var require_response = __commonJS({
         aborted: reason && reason.name === "AbortError"
       });
     }
+    __name(makeNetworkError, "makeNetworkError");
     function isNetworkError(response) {
       return (
         // A network error is a response whose type is "error",
@@ -12733,6 +13275,7 @@ var require_response = __commonJS({
         response.status === 0
       );
     }
+    __name(isNetworkError, "isNetworkError");
     function makeFilteredResponse(response, state) {
       state = {
         internalResponse: response,
@@ -12749,6 +13292,7 @@ var require_response = __commonJS({
         }
       });
     }
+    __name(makeFilteredResponse, "makeFilteredResponse");
     function filterResponse(response, type) {
       if (type === "basic") {
         return makeFilteredResponse(response, {
@@ -12780,10 +13324,12 @@ var require_response = __commonJS({
         assert(false);
       }
     }
+    __name(filterResponse, "filterResponse");
     function makeAppropriateNetworkError(fetchParams, err = null) {
       assert(isCancelled(fetchParams));
       return isAborted(fetchParams) ? makeNetworkError(Object.assign(new DOMException("The operation was aborted.", "AbortError"), { cause: err })) : makeNetworkError(Object.assign(new DOMException("Request was cancelled."), { cause: err }));
     }
+    __name(makeAppropriateNetworkError, "makeAppropriateNetworkError");
     function initializeResponse(response, init, body) {
       if (init.status !== null && (init.status < 200 || init.status > 599)) {
         throw new RangeError('init["status"] must be in the range of 200 to 599, inclusive.');
@@ -12815,6 +13361,7 @@ var require_response = __commonJS({
         }
       }
     }
+    __name(initializeResponse, "initializeResponse");
     function fromInnerResponse(innerResponse, guard) {
       const response = new Response2(kConstruct);
       response[kState] = innerResponse;
@@ -12826,6 +13373,7 @@ var require_response = __commonJS({
       }
       return response;
     }
+    __name(fromInnerResponse, "fromInnerResponse");
     webidl.converters.ReadableStream = webidl.interfaceConverter(
       ReadableStream
     );
@@ -12866,12 +13414,12 @@ var require_response = __commonJS({
       {
         key: "status",
         converter: webidl.converters["unsigned short"],
-        defaultValue: () => 200
+        defaultValue: /* @__PURE__ */ __name(() => 200, "defaultValue")
       },
       {
         key: "statusText",
         converter: webidl.converters.ByteString,
-        defaultValue: () => ""
+        defaultValue: /* @__PURE__ */ __name(() => "", "defaultValue")
       },
       {
         key: "headers",
@@ -12897,6 +13445,9 @@ var require_dispatcher_weakref = __commonJS({
     "use strict";
     var { kConnected, kSize } = require_symbols();
     var CompatWeakRef = class {
+      static {
+        __name(this, "CompatWeakRef");
+      }
       constructor(value) {
         this.value = value;
       }
@@ -12905,6 +13456,9 @@ var require_dispatcher_weakref = __commonJS({
       }
     };
     var CompatFinalizer = class {
+      static {
+        __name(this, "CompatFinalizer");
+      }
       constructor(finalizer) {
         this.finalizer = finalizer;
       }
@@ -12992,9 +13546,14 @@ var require_request2 = __commonJS({
           }
         }
       }
+      __name(abort, "abort");
     }
+    __name(buildAbort, "buildAbort");
     var patchMethodWarning = false;
     var Request = class _Request {
+      static {
+        __name(this, "Request");
+      }
       // https://fetch.spec.whatwg.org/#dom-request
       constructor(input, init = {}) {
         webidl.util.markAsUncloneable(this);
@@ -13484,6 +14043,7 @@ var require_request2 = __commonJS({
         headersList: init.headersList ? new HeadersList(init.headersList) : new HeadersList()
       };
     }
+    __name(makeRequest, "makeRequest");
     function cloneRequest(request) {
       const newRequest = makeRequest({ ...request, body: null });
       if (request.body != null) {
@@ -13491,6 +14051,7 @@ var require_request2 = __commonJS({
       }
       return newRequest;
     }
+    __name(cloneRequest, "cloneRequest");
     function fromInnerRequest(innerRequest, signal, guard) {
       const request = new Request(kConstruct);
       request[kState] = innerRequest;
@@ -13500,6 +14061,7 @@ var require_request2 = __commonJS({
       setHeadersGuard(request[kHeaders], guard);
       return request;
     }
+    __name(fromInnerRequest, "fromInnerRequest");
     Object.defineProperties(Request.prototype, {
       method: kEnumerableProperty,
       url: kEnumerableProperty,
@@ -13698,6 +14260,9 @@ var require_fetch = __commonJS({
     var defaultUserAgent = typeof __UNDICI_IS_NODE__ !== "undefined" || typeof esbuildDetection !== "undefined" ? "node" : "undici";
     var resolveObjectURL;
     var Fetch = class extends EE {
+      static {
+        __name(this, "Fetch");
+      }
       constructor(dispatcher) {
         super();
         this.dispatcher = dispatcher;
@@ -13730,6 +14295,7 @@ var require_fetch = __commonJS({
     function handleFetchDone(response) {
       finalizeAndReportTiming(response, "fetch");
     }
+    __name(handleFetchDone, "handleFetchDone");
     function fetch2(input, init = void 0) {
       webidl.argumentLengthCheck(arguments, 1, "globalThis.fetch");
       let p = createDeferredPromise();
@@ -13762,7 +14328,7 @@ var require_fetch = __commonJS({
           abortFetch(p, request, realResponse, requestObject.signal.reason);
         }
       );
-      const processResponse = (response) => {
+      const processResponse = /* @__PURE__ */ __name((response) => {
         if (locallyAborted) {
           return;
         }
@@ -13777,7 +14343,7 @@ var require_fetch = __commonJS({
         responseObject = new WeakRef(fromInnerResponse(response, "immutable"));
         p.resolve(responseObject.deref());
         p = null;
-      };
+      }, "processResponse");
       controller = fetching({
         request,
         processResponseEndOfBody: handleFetchDone,
@@ -13787,6 +14353,7 @@ var require_fetch = __commonJS({
       });
       return p.promise;
     }
+    __name(fetch2, "fetch");
     function finalizeAndReportTiming(response, initiatorType = "other") {
       if (response.type === "error" && response.aborted) {
         return;
@@ -13819,6 +14386,7 @@ var require_fetch = __commonJS({
         cacheState
       );
     }
+    __name(finalizeAndReportTiming, "finalizeAndReportTiming");
     var markResourceTiming = performance.markResourceTiming;
     function abortFetch(p, request, responseObject, error) {
       if (p) {
@@ -13845,6 +14413,7 @@ var require_fetch = __commonJS({
         });
       }
     }
+    __name(abortFetch, "abortFetch");
     function fetching({
       request,
       processRequestBodyChunkLength,
@@ -13911,6 +14480,7 @@ var require_fetch = __commonJS({
       });
       return fetchParams.controller;
     }
+    __name(fetching, "fetching");
     async function mainFetch(fetchParams, recursive = false) {
       const request = fetchParams.request;
       let response = null;
@@ -13990,24 +14560,25 @@ var require_fetch = __commonJS({
         fetchParams.controller.dump = true;
       }
       if (request.integrity) {
-        const processBodyError = (reason) => fetchFinale(fetchParams, makeNetworkError(reason));
+        const processBodyError = /* @__PURE__ */ __name((reason) => fetchFinale(fetchParams, makeNetworkError(reason)), "processBodyError");
         if (request.responseTainting === "opaque" || response.body == null) {
           processBodyError(response.error);
           return;
         }
-        const processBody = (bytes) => {
+        const processBody = /* @__PURE__ */ __name((bytes) => {
           if (!bytesMatch(bytes, request.integrity)) {
             processBodyError("integrity mismatch");
             return;
           }
           response.body = safelyExtractBody(bytes)[0];
           fetchFinale(fetchParams, response);
-        };
+        }, "processBody");
         await fullyReadBody(response.body, processBody, processBodyError);
       } else {
         fetchFinale(fetchParams, response);
       }
     }
+    __name(mainFetch, "mainFetch");
     function schemeFetch(fetchParams) {
       if (isCancelled(fetchParams) && fetchParams.request.redirectCount === 0) {
         return Promise.resolve(makeAppropriateNetworkError(fetchParams));
@@ -14099,15 +14670,17 @@ var require_fetch = __commonJS({
         }
       }
     }
+    __name(schemeFetch, "schemeFetch");
     function finalizeResponse(fetchParams, response) {
       fetchParams.request.done = true;
       if (fetchParams.processResponseDone != null) {
         queueMicrotask(() => fetchParams.processResponseDone(response));
       }
     }
+    __name(finalizeResponse, "finalizeResponse");
     function fetchFinale(fetchParams, response) {
       let timingInfo = fetchParams.timingInfo;
-      const processResponseEndOfBody = () => {
+      const processResponseEndOfBody = /* @__PURE__ */ __name(() => {
         const unsafeEndTime = Date.now();
         if (fetchParams.request.destination === "document") {
           fetchParams.controller.fullTimingInfo = timingInfo;
@@ -14135,7 +14708,7 @@ var require_fetch = __commonJS({
             markResourceTiming(timingInfo, fetchParams.request.url.href, fetchParams.request.initiatorType, globalThis, cacheState, bodyInfo, responseStatus);
           }
         };
-        const processResponseEndOfBodyTask = () => {
+        const processResponseEndOfBodyTask = /* @__PURE__ */ __name(() => {
           fetchParams.request.done = true;
           if (fetchParams.processResponseEndOfBody != null) {
             queueMicrotask(() => fetchParams.processResponseEndOfBody(response));
@@ -14143,9 +14716,9 @@ var require_fetch = __commonJS({
           if (fetchParams.request.initiatorType != null) {
             fetchParams.controller.reportTimingSteps();
           }
-        };
+        }, "processResponseEndOfBodyTask");
         queueMicrotask(() => processResponseEndOfBodyTask());
-      };
+      }, "processResponseEndOfBody");
       if (fetchParams.processResponse != null) {
         queueMicrotask(() => {
           fetchParams.processResponse(response);
@@ -14161,6 +14734,7 @@ var require_fetch = __commonJS({
         });
       }
     }
+    __name(fetchFinale, "fetchFinale");
     async function httpFetch(fetchParams) {
       const request = fetchParams.request;
       let response = null;
@@ -14205,6 +14779,7 @@ var require_fetch = __commonJS({
       response.timingInfo = timingInfo;
       return response;
     }
+    __name(httpFetch, "httpFetch");
     function httpRedirectFetch(fetchParams, response) {
       const request = fetchParams.request;
       const actualResponse = response.internalResponse ? response.internalResponse : response;
@@ -14264,6 +14839,7 @@ var require_fetch = __commonJS({
       setRequestReferrerPolicyOnRedirect(request, actualResponse);
       return mainFetch(fetchParams, true);
     }
+    __name(httpRedirectFetch, "httpRedirectFetch");
     async function httpNetworkOrCacheFetch(fetchParams, isAuthenticationFetch = false, isNewConnectionFetch = false) {
       const request = fetchParams.request;
       let httpFetchParams = null;
@@ -14384,6 +14960,7 @@ var require_fetch = __commonJS({
       }
       return response;
     }
+    __name(httpNetworkOrCacheFetch, "httpNetworkOrCacheFetch");
     async function httpNetworkFetch(fetchParams, includeCredentials = false, forceNewConnection = false) {
       assert(!fetchParams.controller.connection || fetchParams.controller.connection.destroyed);
       fetchParams.controller.connection = {
@@ -14413,22 +14990,22 @@ var require_fetch = __commonJS({
       if (request.body == null && fetchParams.processRequestEndOfBody) {
         queueMicrotask(() => fetchParams.processRequestEndOfBody());
       } else if (request.body != null) {
-        const processBodyChunk = async function* (bytes) {
+        const processBodyChunk = /* @__PURE__ */ __name(async function* (bytes) {
           if (isCancelled(fetchParams)) {
             return;
           }
           yield bytes;
           fetchParams.processRequestBodyChunkLength?.(bytes.byteLength);
-        };
-        const processEndOfBody = () => {
+        }, "processBodyChunk");
+        const processEndOfBody = /* @__PURE__ */ __name(() => {
           if (isCancelled(fetchParams)) {
             return;
           }
           if (fetchParams.processRequestEndOfBody) {
             fetchParams.processRequestEndOfBody();
           }
-        };
-        const processBodyError = (e) => {
+        }, "processEndOfBody");
+        const processBodyError = /* @__PURE__ */ __name((e) => {
           if (isCancelled(fetchParams)) {
             return;
           }
@@ -14437,7 +15014,7 @@ var require_fetch = __commonJS({
           } else {
             fetchParams.controller.terminate(e);
           }
-        };
+        }, "processBodyError");
         requestBody = async function* () {
           try {
             for await (const bytes of request.body.stream) {
@@ -14465,14 +15042,14 @@ var require_fetch = __commonJS({
         }
         return makeNetworkError(err);
       }
-      const pullAlgorithm = async () => {
+      const pullAlgorithm = /* @__PURE__ */ __name(async () => {
         await fetchParams.controller.resume();
-      };
-      const cancelAlgorithm = (reason) => {
+      }, "pullAlgorithm");
+      const cancelAlgorithm = /* @__PURE__ */ __name((reason) => {
         if (!isCancelled(fetchParams)) {
           fetchParams.controller.abort(reason);
         }
-      };
+      }, "cancelAlgorithm");
       const stream = new ReadableStream(
         {
           async start(controller) {
@@ -14548,6 +15125,7 @@ var require_fetch = __commonJS({
         }
         fetchParams.controller.connection.destroy();
       }
+      __name(onAborted, "onAborted");
       return response;
       function dispatch({ body }) {
         const url = requestCurrentURL(request);
@@ -14685,7 +15263,9 @@ var require_fetch = __commonJS({
           }
         ));
       }
+      __name(dispatch, "dispatch");
     }
+    __name(httpNetworkFetch, "httpNetworkFetch");
     module2.exports = {
       fetch: fetch2,
       Fetch,
@@ -14717,6 +15297,9 @@ var require_progressevent = __commonJS({
     var { webidl } = require_webidl();
     var kState = Symbol("ProgressEvent state");
     var ProgressEvent = class _ProgressEvent extends Event {
+      static {
+        __name(this, "ProgressEvent");
+      }
       constructor(type, eventInitDict = {}) {
         type = webidl.converters.DOMString(type, "ProgressEvent constructor", "type");
         eventInitDict = webidl.converters.ProgressEventInit(eventInitDict ?? {});
@@ -14744,32 +15327,32 @@ var require_progressevent = __commonJS({
       {
         key: "lengthComputable",
         converter: webidl.converters.boolean,
-        defaultValue: () => false
+        defaultValue: /* @__PURE__ */ __name(() => false, "defaultValue")
       },
       {
         key: "loaded",
         converter: webidl.converters["unsigned long long"],
-        defaultValue: () => 0
+        defaultValue: /* @__PURE__ */ __name(() => 0, "defaultValue")
       },
       {
         key: "total",
         converter: webidl.converters["unsigned long long"],
-        defaultValue: () => 0
+        defaultValue: /* @__PURE__ */ __name(() => 0, "defaultValue")
       },
       {
         key: "bubbles",
         converter: webidl.converters.boolean,
-        defaultValue: () => false
+        defaultValue: /* @__PURE__ */ __name(() => false, "defaultValue")
       },
       {
         key: "cancelable",
         converter: webidl.converters.boolean,
-        defaultValue: () => false
+        defaultValue: /* @__PURE__ */ __name(() => false, "defaultValue")
       },
       {
         key: "composed",
         converter: webidl.converters.boolean,
-        defaultValue: () => false
+        defaultValue: /* @__PURE__ */ __name(() => false, "defaultValue")
       }
     ]);
     module2.exports = {
@@ -15058,6 +15641,7 @@ var require_encoding = __commonJS({
           return "failure";
       }
     }
+    __name(getEncoding, "getEncoding");
     module2.exports = {
       getEncoding
     };
@@ -15154,6 +15738,7 @@ var require_util4 = __commonJS({
         }
       })();
     }
+    __name(readOperation, "readOperation");
     function fireAProgressEvent(e, reader) {
       const event = new ProgressEvent(e, {
         bubbles: false,
@@ -15161,6 +15746,7 @@ var require_util4 = __commonJS({
       });
       reader.dispatchEvent(event);
     }
+    __name(fireAProgressEvent, "fireAProgressEvent");
     function packageData(bytes, type, mimeType, encodingName) {
       switch (type) {
         case "DataURL": {
@@ -15208,6 +15794,7 @@ var require_util4 = __commonJS({
         }
       }
     }
+    __name(packageData, "packageData");
     function decode(ioQueue, encoding) {
       const bytes = combineByteSequences(ioQueue);
       const BOMEncoding = BOMSniffing(bytes);
@@ -15219,6 +15806,7 @@ var require_util4 = __commonJS({
       const sliced = bytes.slice(slice);
       return new TextDecoder(encoding).decode(sliced);
     }
+    __name(decode, "decode");
     function BOMSniffing(ioQueue) {
       const [a, b, c] = ioQueue;
       if (a === 239 && b === 187 && c === 191) {
@@ -15230,6 +15818,7 @@ var require_util4 = __commonJS({
       }
       return null;
     }
+    __name(BOMSniffing, "BOMSniffing");
     function combineByteSequences(sequences) {
       const size = sequences.reduce((a, b) => {
         return a + b.byteLength;
@@ -15241,6 +15830,7 @@ var require_util4 = __commonJS({
         return a;
       }, new Uint8Array(size));
     }
+    __name(combineByteSequences, "combineByteSequences");
     module2.exports = {
       staticPropertyDescriptors,
       readOperation,
@@ -15268,6 +15858,9 @@ var require_filereader = __commonJS({
     var { webidl } = require_webidl();
     var { kEnumerableProperty } = require_util();
     var FileReader = class _FileReader extends EventTarget {
+      static {
+        __name(this, "FileReader");
+      }
       constructor() {
         super();
         this[kState] = "empty";
@@ -15530,6 +16123,7 @@ var require_util5 = __commonJS({
       const serializedB = URLSerializer(B, excludeFragment);
       return serializedA === serializedB;
     }
+    __name(urlEquals, "urlEquals");
     function getFieldValues(header) {
       assert(header !== null);
       const values = [];
@@ -15541,6 +16135,7 @@ var require_util5 = __commonJS({
       }
       return values;
     }
+    __name(getFieldValues, "getFieldValues");
     module2.exports = {
       urlEquals,
       getFieldValues
@@ -15563,6 +16158,9 @@ var require_cache = __commonJS({
     var { urlIsHttpHttpsScheme, createDeferredPromise, readAllBytes } = require_util2();
     var assert = require("node:assert");
     var Cache = class _Cache {
+      static {
+        __name(this, "Cache");
+      }
       /**
        * @see https://w3c.github.io/ServiceWorker/#dfn-relevant-request-response-list
        * @type {requestResponseList}
@@ -16062,17 +16660,17 @@ var require_cache = __commonJS({
       {
         key: "ignoreSearch",
         converter: webidl.converters.boolean,
-        defaultValue: () => false
+        defaultValue: /* @__PURE__ */ __name(() => false, "defaultValue")
       },
       {
         key: "ignoreMethod",
         converter: webidl.converters.boolean,
-        defaultValue: () => false
+        defaultValue: /* @__PURE__ */ __name(() => false, "defaultValue")
       },
       {
         key: "ignoreVary",
         converter: webidl.converters.boolean,
-        defaultValue: () => false
+        defaultValue: /* @__PURE__ */ __name(() => false, "defaultValue")
       }
     ];
     webidl.converters.CacheQueryOptions = webidl.dictionaryConverter(cacheQueryOptionConverters);
@@ -16102,6 +16700,9 @@ var require_cachestorage = __commonJS({
     var { webidl } = require_webidl();
     var { kEnumerableProperty } = require_util();
     var CacheStorage = class _CacheStorage {
+      static {
+        __name(this, "CacheStorage");
+      }
       /**
        * @see https://w3c.github.io/ServiceWorker/#dfn-relevant-name-to-cache-map
        * @type {Map<string, import('./cache').requestResponseList}
@@ -16229,6 +16830,7 @@ var require_util6 = __commonJS({
       }
       return false;
     }
+    __name(isCTLExcludingHtab, "isCTLExcludingHtab");
     function validateCookieName(name) {
       for (let i = 0; i < name.length; ++i) {
         const code = name.charCodeAt(i);
@@ -16255,6 +16857,7 @@ var require_util6 = __commonJS({
         }
       }
     }
+    __name(validateCookieName, "validateCookieName");
     function validateCookieValue(value) {
       let len = value.length;
       let i = 0;
@@ -16277,6 +16880,7 @@ var require_util6 = __commonJS({
         }
       }
     }
+    __name(validateCookieValue, "validateCookieValue");
     function validateCookiePath(path) {
       for (let i = 0; i < path.length; ++i) {
         const code = path.charCodeAt(i);
@@ -16287,11 +16891,13 @@ var require_util6 = __commonJS({
         }
       }
     }
+    __name(validateCookiePath, "validateCookiePath");
     function validateCookieDomain(domain) {
       if (domain.startsWith("-") || domain.endsWith(".") || domain.endsWith("-")) {
         throw new Error("Invalid cookie domain");
       }
     }
+    __name(validateCookieDomain, "validateCookieDomain");
     var IMFDays = [
       "Sun",
       "Mon",
@@ -16322,11 +16928,13 @@ var require_util6 = __commonJS({
       }
       return `${IMFDays[date.getUTCDay()]}, ${IMFPaddedNumbers[date.getUTCDate()]} ${IMFMonths[date.getUTCMonth()]} ${date.getUTCFullYear()} ${IMFPaddedNumbers[date.getUTCHours()]}:${IMFPaddedNumbers[date.getUTCMinutes()]}:${IMFPaddedNumbers[date.getUTCSeconds()]} GMT`;
     }
+    __name(toIMFDate, "toIMFDate");
     function validateCookieMaxAge(maxAge) {
       if (maxAge < 0) {
         throw new Error("Invalid cookie max-age");
       }
     }
+    __name(validateCookieMaxAge, "validateCookieMaxAge");
     function stringify(cookie) {
       if (cookie.name.length === 0) {
         return null;
@@ -16375,6 +16983,7 @@ var require_util6 = __commonJS({
       }
       return out.join("; ");
     }
+    __name(stringify, "stringify");
     module2.exports = {
       isCTLExcludingHtab,
       validateCookieName,
@@ -16431,6 +17040,7 @@ var require_parse = __commonJS({
         ...parseUnparsedAttributes(unparsedAttributes)
       };
     }
+    __name(parseSetCookie, "parseSetCookie");
     function parseUnparsedAttributes(unparsedAttributes, cookieAttributeList = {}) {
       if (unparsedAttributes.length === 0) {
         return cookieAttributeList;
@@ -16519,6 +17129,7 @@ var require_parse = __commonJS({
       }
       return parseUnparsedAttributes(unparsedAttributes, cookieAttributeList);
     }
+    __name(parseUnparsedAttributes, "parseUnparsedAttributes");
     module2.exports = {
       parseSetCookie,
       parseUnparsedAttributes
@@ -16548,6 +17159,7 @@ var require_cookies = __commonJS({
       }
       return out;
     }
+    __name(getCookies, "getCookies");
     function deleteCookie(headers, name, attributes) {
       webidl.brandCheck(headers, Headers, { strict: false });
       const prefix = "deleteCookie";
@@ -16561,6 +17173,7 @@ var require_cookies = __commonJS({
         ...attributes
       });
     }
+    __name(deleteCookie, "deleteCookie");
     function getSetCookies(headers) {
       webidl.argumentLengthCheck(arguments, 1, "getSetCookies");
       webidl.brandCheck(headers, Headers, { strict: false });
@@ -16570,6 +17183,7 @@ var require_cookies = __commonJS({
       }
       return cookies.map((pair) => parseSetCookie(pair));
     }
+    __name(getSetCookies, "getSetCookies");
     function setCookie(headers, cookie) {
       webidl.argumentLengthCheck(arguments, 2, "setCookie");
       webidl.brandCheck(headers, Headers, { strict: false });
@@ -16579,16 +17193,17 @@ var require_cookies = __commonJS({
         headers.append("Set-Cookie", str);
       }
     }
+    __name(setCookie, "setCookie");
     webidl.converters.DeleteCookieAttributes = webidl.dictionaryConverter([
       {
         converter: webidl.nullableConverter(webidl.converters.DOMString),
         key: "path",
-        defaultValue: () => null
+        defaultValue: /* @__PURE__ */ __name(() => null, "defaultValue")
       },
       {
         converter: webidl.nullableConverter(webidl.converters.DOMString),
         key: "domain",
-        defaultValue: () => null
+        defaultValue: /* @__PURE__ */ __name(() => null, "defaultValue")
       }
     ]);
     webidl.converters.Cookie = webidl.dictionaryConverter([
@@ -16608,32 +17223,32 @@ var require_cookies = __commonJS({
           return new Date(value);
         }),
         key: "expires",
-        defaultValue: () => null
+        defaultValue: /* @__PURE__ */ __name(() => null, "defaultValue")
       },
       {
         converter: webidl.nullableConverter(webidl.converters["long long"]),
         key: "maxAge",
-        defaultValue: () => null
+        defaultValue: /* @__PURE__ */ __name(() => null, "defaultValue")
       },
       {
         converter: webidl.nullableConverter(webidl.converters.DOMString),
         key: "domain",
-        defaultValue: () => null
+        defaultValue: /* @__PURE__ */ __name(() => null, "defaultValue")
       },
       {
         converter: webidl.nullableConverter(webidl.converters.DOMString),
         key: "path",
-        defaultValue: () => null
+        defaultValue: /* @__PURE__ */ __name(() => null, "defaultValue")
       },
       {
         converter: webidl.nullableConverter(webidl.converters.boolean),
         key: "secure",
-        defaultValue: () => null
+        defaultValue: /* @__PURE__ */ __name(() => null, "defaultValue")
       },
       {
         converter: webidl.nullableConverter(webidl.converters.boolean),
         key: "httpOnly",
-        defaultValue: () => null
+        defaultValue: /* @__PURE__ */ __name(() => null, "defaultValue")
       },
       {
         converter: webidl.converters.USVString,
@@ -16643,7 +17258,7 @@ var require_cookies = __commonJS({
       {
         converter: webidl.sequenceConverter(webidl.converters.DOMString),
         key: "unparsed",
-        defaultValue: () => new Array(0)
+        defaultValue: /* @__PURE__ */ __name(() => new Array(0), "defaultValue")
       }
     ]);
     module2.exports = {
@@ -16664,6 +17279,9 @@ var require_events = __commonJS({
     var { kConstruct } = require_symbols();
     var { MessagePort } = require("node:worker_threads");
     var MessageEvent = class _MessageEvent extends Event {
+      static {
+        __name(this, "MessageEvent");
+      }
       #eventInit;
       constructor(type, eventInitDict = {}) {
         if (type === kConstruct) {
@@ -16729,6 +17347,9 @@ var require_events = __commonJS({
     var { createFastMessageEvent } = MessageEvent;
     delete MessageEvent.createFastMessageEvent;
     var CloseEvent = class _CloseEvent extends Event {
+      static {
+        __name(this, "CloseEvent");
+      }
       #eventInit;
       constructor(type, eventInitDict = {}) {
         const prefix = "CloseEvent constructor";
@@ -16753,6 +17374,9 @@ var require_events = __commonJS({
       }
     };
     var ErrorEvent = class _ErrorEvent extends Event {
+      static {
+        __name(this, "ErrorEvent");
+      }
       #eventInit;
       constructor(type, eventInitDict) {
         const prefix = "ErrorEvent constructor";
@@ -16824,17 +17448,17 @@ var require_events = __commonJS({
       {
         key: "bubbles",
         converter: webidl.converters.boolean,
-        defaultValue: () => false
+        defaultValue: /* @__PURE__ */ __name(() => false, "defaultValue")
       },
       {
         key: "cancelable",
         converter: webidl.converters.boolean,
-        defaultValue: () => false
+        defaultValue: /* @__PURE__ */ __name(() => false, "defaultValue")
       },
       {
         key: "composed",
         converter: webidl.converters.boolean,
-        defaultValue: () => false
+        defaultValue: /* @__PURE__ */ __name(() => false, "defaultValue")
       }
     ];
     webidl.converters.MessageEventInit = webidl.dictionaryConverter([
@@ -16842,29 +17466,29 @@ var require_events = __commonJS({
       {
         key: "data",
         converter: webidl.converters.any,
-        defaultValue: () => null
+        defaultValue: /* @__PURE__ */ __name(() => null, "defaultValue")
       },
       {
         key: "origin",
         converter: webidl.converters.USVString,
-        defaultValue: () => ""
+        defaultValue: /* @__PURE__ */ __name(() => "", "defaultValue")
       },
       {
         key: "lastEventId",
         converter: webidl.converters.DOMString,
-        defaultValue: () => ""
+        defaultValue: /* @__PURE__ */ __name(() => "", "defaultValue")
       },
       {
         key: "source",
         // Node doesn't implement WindowProxy or ServiceWorker, so the only
         // valid value for source is a MessagePort.
         converter: webidl.nullableConverter(webidl.converters.MessagePort),
-        defaultValue: () => null
+        defaultValue: /* @__PURE__ */ __name(() => null, "defaultValue")
       },
       {
         key: "ports",
         converter: webidl.converters["sequence<MessagePort>"],
-        defaultValue: () => new Array(0)
+        defaultValue: /* @__PURE__ */ __name(() => new Array(0), "defaultValue")
       }
     ]);
     webidl.converters.CloseEventInit = webidl.dictionaryConverter([
@@ -16872,17 +17496,17 @@ var require_events = __commonJS({
       {
         key: "wasClean",
         converter: webidl.converters.boolean,
-        defaultValue: () => false
+        defaultValue: /* @__PURE__ */ __name(() => false, "defaultValue")
       },
       {
         key: "code",
         converter: webidl.converters["unsigned short"],
-        defaultValue: () => 0
+        defaultValue: /* @__PURE__ */ __name(() => 0, "defaultValue")
       },
       {
         key: "reason",
         converter: webidl.converters.USVString,
-        defaultValue: () => ""
+        defaultValue: /* @__PURE__ */ __name(() => "", "defaultValue")
       }
     ]);
     webidl.converters.ErrorEventInit = webidl.dictionaryConverter([
@@ -16890,22 +17514,22 @@ var require_events = __commonJS({
       {
         key: "message",
         converter: webidl.converters.DOMString,
-        defaultValue: () => ""
+        defaultValue: /* @__PURE__ */ __name(() => "", "defaultValue")
       },
       {
         key: "filename",
         converter: webidl.converters.USVString,
-        defaultValue: () => ""
+        defaultValue: /* @__PURE__ */ __name(() => "", "defaultValue")
       },
       {
         key: "lineno",
         converter: webidl.converters["unsigned long"],
-        defaultValue: () => 0
+        defaultValue: /* @__PURE__ */ __name(() => 0, "defaultValue")
       },
       {
         key: "colno",
         converter: webidl.converters["unsigned long"],
-        defaultValue: () => 0
+        defaultValue: /* @__PURE__ */ __name(() => 0, "defaultValue")
       },
       {
         key: "error",
@@ -17007,19 +17631,24 @@ var require_util7 = __commonJS({
     function isConnecting(ws) {
       return ws[kReadyState] === states.CONNECTING;
     }
+    __name(isConnecting, "isConnecting");
     function isEstablished(ws) {
       return ws[kReadyState] === states.OPEN;
     }
+    __name(isEstablished, "isEstablished");
     function isClosing(ws) {
       return ws[kReadyState] === states.CLOSING;
     }
+    __name(isClosing, "isClosing");
     function isClosed(ws) {
       return ws[kReadyState] === states.CLOSED;
     }
+    __name(isClosed, "isClosed");
     function fireEvent(e, target, eventFactory = (type, init) => new Event(type, init), eventInitDict = {}) {
       const event = eventFactory(e, eventInitDict);
       target.dispatchEvent(event);
     }
+    __name(fireEvent, "fireEvent");
     function websocketMessageReceived(ws, type, data) {
       if (ws[kReadyState] !== states.OPEN) {
         return;
@@ -17044,12 +17673,14 @@ var require_util7 = __commonJS({
         data: dataForEvent
       });
     }
+    __name(websocketMessageReceived, "websocketMessageReceived");
     function toArrayBuffer(buffer) {
       if (buffer.byteLength === buffer.buffer.byteLength) {
         return buffer.buffer;
       }
       return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
     }
+    __name(toArrayBuffer, "toArrayBuffer");
     function isValidSubprotocol(protocol) {
       if (protocol.length === 0) {
         return false;
@@ -17079,6 +17710,7 @@ var require_util7 = __commonJS({
       }
       return true;
     }
+    __name(isValidSubprotocol, "isValidSubprotocol");
     function isValidStatusCode(code) {
       if (code >= 1e3 && code < 1015) {
         return code !== 1004 && // reserved
@@ -17087,6 +17719,7 @@ var require_util7 = __commonJS({
       }
       return code >= 3e3 && code <= 4999;
     }
+    __name(isValidStatusCode, "isValidStatusCode");
     function failWebsocketConnection(ws, reason) {
       const { [kController]: controller, [kResponse]: response } = ws;
       controller.abort();
@@ -17100,18 +17733,23 @@ var require_util7 = __commonJS({
         });
       }
     }
+    __name(failWebsocketConnection, "failWebsocketConnection");
     function isControlFrame(opcode) {
       return opcode === opcodes.CLOSE || opcode === opcodes.PING || opcode === opcodes.PONG;
     }
+    __name(isControlFrame, "isControlFrame");
     function isContinuationFrame(opcode) {
       return opcode === opcodes.CONTINUATION;
     }
+    __name(isContinuationFrame, "isContinuationFrame");
     function isTextBinaryFrame(opcode) {
       return opcode === opcodes.TEXT || opcode === opcodes.BINARY;
     }
+    __name(isTextBinaryFrame, "isTextBinaryFrame");
     function isValidOpcode(opcode) {
       return isTextBinaryFrame(opcode) || isContinuationFrame(opcode) || isControlFrame(opcode);
     }
+    __name(isValidOpcode, "isValidOpcode");
     function parseExtensions(extensions) {
       const position = { position: 0 };
       const extensionList = /* @__PURE__ */ new Map();
@@ -17126,6 +17764,7 @@ var require_util7 = __commonJS({
       }
       return extensionList;
     }
+    __name(parseExtensions, "parseExtensions");
     function isValidClientWindowBits(value) {
       if (value.length === 0) {
         return false;
@@ -17139,6 +17778,7 @@ var require_util7 = __commonJS({
       const num = Number.parseInt(value, 10);
       return num >= 8 && num <= 15;
     }
+    __name(isValidClientWindowBits, "isValidClientWindowBits");
     var hasIntl = typeof process.versions.icu === "string";
     var fatalDecoder = hasIntl ? new TextDecoder("utf-8", { fatal: true }) : void 0;
     var utf8Decode = hasIntl ? fatalDecoder.decode.bind(fatalDecoder) : function(buffer) {
@@ -17182,12 +17822,12 @@ var require_frame = __commonJS({
     } catch {
       crypto = {
         // not full compatibility, but minimum.
-        randomFillSync: function randomFillSync(buffer2, _offset, _size) {
+        randomFillSync: /* @__PURE__ */ __name(function randomFillSync(buffer2, _offset, _size) {
           for (let i = 0; i < buffer2.length; ++i) {
             buffer2[i] = Math.random() * 255 | 0;
           }
           return buffer2;
-        }
+        }, "randomFillSync")
       };
     }
     function generateMask() {
@@ -17197,7 +17837,11 @@ var require_frame = __commonJS({
       }
       return [buffer[bufIdx++], buffer[bufIdx++], buffer[bufIdx++], buffer[bufIdx++]];
     }
+    __name(generateMask, "generateMask");
     var WebsocketFrameSend = class {
+      static {
+        __name(this, "WebsocketFrameSend");
+      }
       /**
        * @param {Buffer|undefined} data
        */
@@ -17354,6 +17998,7 @@ var require_connection = __commonJS({
       });
       return controller;
     }
+    __name(establishWebSocketConnection, "establishWebSocketConnection");
     function closeWebSocketConnection(ws, code, reason, reasonByteLength) {
       if (isClosing(ws) || isClosed(ws)) {
       } else if (!isEstablished(ws)) {
@@ -17380,11 +18025,13 @@ var require_connection = __commonJS({
         ws[kReadyState] = states.CLOSING;
       }
     }
+    __name(closeWebSocketConnection, "closeWebSocketConnection");
     function onSocketData(chunk) {
       if (!this.ws[kByteParser].write(chunk)) {
         this.pause();
       }
     }
+    __name(onSocketData, "onSocketData");
     function onSocketClose() {
       const { ws } = this;
       const { [kResponse]: response } = ws;
@@ -17415,6 +18062,7 @@ var require_connection = __commonJS({
         });
       }
     }
+    __name(onSocketClose, "onSocketClose");
     function onSocketError(error) {
       const { ws } = this;
       ws[kReadyState] = states.CLOSING;
@@ -17423,6 +18071,7 @@ var require_connection = __commonJS({
       }
       this.destroy();
     }
+    __name(onSocketError, "onSocketError");
     module2.exports = {
       establishWebSocketConnection,
       closeWebSocketConnection
@@ -17442,6 +18091,9 @@ var require_permessage_deflate = __commonJS({
     var kLength = Symbol("kLength");
     var kDefaultMaxDecompressedSize = 4 * 1024 * 1024;
     var PerMessageDeflate = class {
+      static {
+        __name(this, "PerMessageDeflate");
+      }
       /** @type {import('node:zlib').InflateRaw} */
       #inflate;
       #options = {};
@@ -17546,6 +18198,9 @@ var require_receiver = __commonJS({
     var { closeWebSocketConnection } = require_connection();
     var { PerMessageDeflate } = require_permessage_deflate();
     var ByteParser = class extends Writable {
+      static {
+        __name(this, "ByteParser");
+      }
       #buffers = [];
       #byteOffset = 0;
       #loop = false;
@@ -17841,6 +18496,9 @@ var require_sender = __commonJS({
     var FixedQueue = require_fixed_queue();
     var FastBuffer = Buffer[Symbol.species];
     var SendQueue = class {
+      static {
+        __name(this, "SendQueue");
+      }
       /**
        * @type {FixedQueue}
        */
@@ -17899,6 +18557,7 @@ var require_sender = __commonJS({
     function createFrame(data, hint) {
       return new WebsocketFrameSend(toBuffer(data, hint)).createFrame(hint === sendHints.string ? opcodes.TEXT : opcodes.BINARY);
     }
+    __name(createFrame, "createFrame");
     function toBuffer(data, hint) {
       switch (hint) {
         case sendHints.string:
@@ -17910,6 +18569,7 @@ var require_sender = __commonJS({
           return new FastBuffer(data.buffer, data.byteOffset, data.byteLength);
       }
     }
+    __name(toBuffer, "toBuffer");
     module2.exports = { SendQueue };
   }
 });
@@ -17946,6 +18606,9 @@ var require_websocket = __commonJS({
     var { ErrorEvent, CloseEvent } = require_events();
     var { SendQueue } = require_sender();
     var WebSocket = class _WebSocket extends EventTarget {
+      static {
+        __name(this, "WebSocket");
+      }
       #events = {
         open: null,
         error: null,
@@ -18248,12 +18911,12 @@ var require_websocket = __commonJS({
       {
         key: "protocols",
         converter: webidl.converters["DOMString or sequence<DOMString>"],
-        defaultValue: () => new Array(0)
+        defaultValue: /* @__PURE__ */ __name(() => new Array(0), "defaultValue")
       },
       {
         key: "dispatcher",
         converter: webidl.converters.any,
-        defaultValue: () => getGlobalDispatcher()
+        defaultValue: /* @__PURE__ */ __name(() => getGlobalDispatcher(), "defaultValue")
       },
       {
         key: "headers",
@@ -18280,6 +18943,7 @@ var require_websocket = __commonJS({
     function onParserDrain() {
       this.ws[kResponse].socket.resume();
     }
+    __name(onParserDrain, "onParserDrain");
     function onParserError(err) {
       let message;
       let code;
@@ -18292,6 +18956,7 @@ var require_websocket = __commonJS({
       fireEvent("error", this, () => new ErrorEvent("error", { error: err, message }));
       closeWebSocketConnection(this, code);
     }
+    __name(onParserError, "onParserError");
     module2.exports = {
       WebSocket
     };
@@ -18305,6 +18970,7 @@ var require_util8 = __commonJS({
     function isValidLastEventId(value) {
       return value.indexOf("\0") === -1;
     }
+    __name(isValidLastEventId, "isValidLastEventId");
     function isASCIINumber(value) {
       if (value.length === 0) return false;
       for (let i = 0; i < value.length; i++) {
@@ -18312,11 +18978,13 @@ var require_util8 = __commonJS({
       }
       return true;
     }
+    __name(isASCIINumber, "isASCIINumber");
     function delay(ms) {
       return new Promise((resolve) => {
         setTimeout(resolve, ms).unref();
       });
     }
+    __name(delay, "delay");
     module2.exports = {
       isValidLastEventId,
       isASCIINumber,
@@ -18337,6 +19005,9 @@ var require_eventsource_stream = __commonJS({
     var COLON = 58;
     var SPACE = 32;
     var EventSourceStream = class extends Transform {
+      static {
+        __name(this, "EventSourceStream");
+      }
       /**
        * @type {eventSourceSettings}
        */
@@ -18578,6 +19249,9 @@ var require_eventsource = __commonJS({
     var ANONYMOUS = "anonymous";
     var USE_CREDENTIALS = "use-credentials";
     var EventSource = class _EventSource extends EventTarget {
+      static {
+        __name(this, "EventSource");
+      }
       #events = {
         open: null,
         error: null,
@@ -18678,13 +19352,13 @@ var require_eventsource = __commonJS({
           request: this.#request,
           dispatcher: this.#dispatcher
         };
-        const processEventSourceEndOfBody = (response) => {
+        const processEventSourceEndOfBody = /* @__PURE__ */ __name((response) => {
           if (isNetworkError(response)) {
             this.dispatchEvent(new Event("error"));
             this.close();
           }
           this.#reconnect();
-        };
+        }, "processEventSourceEndOfBody");
         fetchParams.processResponseEndOfBody = processEventSourceEndOfBody;
         fetchParams.processResponse = (response) => {
           if (isNetworkError(response)) {
@@ -18710,12 +19384,12 @@ var require_eventsource = __commonJS({
           this.#state.origin = response.urlList[response.urlList.length - 1].origin;
           const eventSourceStream = new EventSourceStream({
             eventSourceSettings: this.#state,
-            push: (event) => {
+            push: /* @__PURE__ */ __name((event) => {
               this.dispatchEvent(createFastMessageEvent(
                 event.type,
                 event.options
               ));
-            }
+            }, "push")
           });
           pipeline(
             response.body.stream,
@@ -18837,7 +19511,7 @@ var require_eventsource = __commonJS({
       {
         key: "withCredentials",
         converter: webidl.converters.boolean,
-        defaultValue: () => false
+        defaultValue: /* @__PURE__ */ __name(() => false, "defaultValue")
       },
       {
         key: "dispatcher",
@@ -18942,10 +19616,11 @@ var require_undici = __commonJS({
         }, handler);
       };
     }
+    __name(makeDispatcher, "makeDispatcher");
     module2.exports.setGlobalDispatcher = setGlobalDispatcher;
     module2.exports.getGlobalDispatcher = getGlobalDispatcher;
     var fetchImpl = require_fetch().fetch;
-    module2.exports.fetch = async function fetch2(init, options = void 0) {
+    module2.exports.fetch = /* @__PURE__ */ __name(async function fetch2(init, options = void 0) {
       try {
         return await fetchImpl(init, options);
       } catch (err) {
@@ -18954,7 +19629,7 @@ var require_undici = __commonJS({
         }
         throw err;
       }
-    };
+    }, "fetch");
     module2.exports.Headers = require_headers().Headers;
     module2.exports.Response = require_response().Response;
     module2.exports.Request = require_request2().Request;
@@ -20102,9 +20777,9 @@ var require_chatInput = __commonJS({
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-        desc = { enumerable: true, get: function() {
+        desc = { enumerable: true, get: /* @__PURE__ */ __name(function() {
           return m[k];
-        } };
+        }, "get") };
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
@@ -20133,8 +20808,8 @@ var require_permissions = __commonJS({
     })(ApplicationCommandPermissionType || (exports2.ApplicationCommandPermissionType = ApplicationCommandPermissionType = {}));
     exports2.APIApplicationCommandPermissionsConstant = {
       // eslint-disable-next-line unicorn/prefer-native-coercion-functions
-      Everyone: (guildId) => String(guildId),
-      AllChannels: (guildId) => String(BigInt(guildId) - 1n)
+      Everyone: /* @__PURE__ */ __name((guildId) => String(guildId), "Everyone"),
+      AllChannels: /* @__PURE__ */ __name((guildId) => String(BigInt(guildId) - 1n), "AllChannels")
     };
   }
 });
@@ -20147,9 +20822,9 @@ var require_applicationCommands = __commonJS({
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-        desc = { enumerable: true, get: function() {
+        desc = { enumerable: true, get: /* @__PURE__ */ __name(function() {
           return m[k];
-        } };
+        }, "get") };
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
@@ -20226,9 +20901,9 @@ var require_interactions = __commonJS({
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-        desc = { enumerable: true, get: function() {
+        desc = { enumerable: true, get: /* @__PURE__ */ __name(function() {
           return m[k];
-        } };
+        }, "get") };
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
@@ -20781,9 +21456,9 @@ var require_v102 = __commonJS({
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-        desc = { enumerable: true, get: function() {
+        desc = { enumerable: true, get: /* @__PURE__ */ __name(function() {
           return m[k];
-        } };
+        }, "get") };
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
@@ -21181,9 +21856,9 @@ var require_v103 = __commonJS({
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-        desc = { enumerable: true, get: function() {
+        desc = { enumerable: true, get: /* @__PURE__ */ __name(function() {
           return m[k];
-        } };
+        }, "get") };
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
@@ -22582,9 +23257,9 @@ var require_v104 = __commonJS({
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-        desc = { enumerable: true, get: function() {
+        desc = { enumerable: true, get: /* @__PURE__ */ __name(function() {
           return m[k];
-        } };
+        }, "get") };
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
@@ -22709,36 +23384,47 @@ var require_v105 = __commonJS({
     function isDMInteraction(interaction) {
       return Reflect.has(interaction, "user");
     }
+    __name(isDMInteraction, "isDMInteraction");
     function isGuildInteraction(interaction) {
       return Reflect.has(interaction, "guild_id");
     }
+    __name(isGuildInteraction, "isGuildInteraction");
     function isApplicationCommandDMInteraction(interaction) {
       return isDMInteraction(interaction);
     }
+    __name(isApplicationCommandDMInteraction, "isApplicationCommandDMInteraction");
     function isApplicationCommandGuildInteraction(interaction) {
       return isGuildInteraction(interaction);
     }
+    __name(isApplicationCommandGuildInteraction, "isApplicationCommandGuildInteraction");
     function isMessageComponentDMInteraction(interaction) {
       return isDMInteraction(interaction);
     }
+    __name(isMessageComponentDMInteraction, "isMessageComponentDMInteraction");
     function isMessageComponentGuildInteraction(interaction) {
       return isGuildInteraction(interaction);
     }
+    __name(isMessageComponentGuildInteraction, "isMessageComponentGuildInteraction");
     function isLinkButton(component) {
       return component.style === index_1.ButtonStyle.Link;
     }
+    __name(isLinkButton, "isLinkButton");
     function isInteractionButton(component) {
       return ![index_1.ButtonStyle.Link, index_1.ButtonStyle.Premium].includes(component.style);
     }
+    __name(isInteractionButton, "isInteractionButton");
     function isModalSubmitInteraction(interaction) {
       return interaction.type === index_1.InteractionType.ModalSubmit;
     }
+    __name(isModalSubmitInteraction, "isModalSubmitInteraction");
     function isMessageComponentInteraction(interaction) {
       return interaction.type === index_1.InteractionType.MessageComponent;
     }
+    __name(isMessageComponentInteraction, "isMessageComponentInteraction");
     function isMessageComponentButtonInteraction(interaction) {
       return interaction.data.component_type === index_1.ComponentType.Button;
     }
+    __name(isMessageComponentButtonInteraction, "isMessageComponentButtonInteraction");
     function isMessageComponentSelectMenuInteraction(interaction) {
       return [
         index_1.ComponentType.StringSelect,
@@ -22748,12 +23434,15 @@ var require_v105 = __commonJS({
         index_1.ComponentType.ChannelSelect
       ].includes(interaction.data.component_type);
     }
+    __name(isMessageComponentSelectMenuInteraction, "isMessageComponentSelectMenuInteraction");
     function isChatInputApplicationCommandInteraction(interaction) {
       return interaction.data.type === index_1.ApplicationCommandType.ChatInput;
     }
+    __name(isChatInputApplicationCommandInteraction, "isChatInputApplicationCommandInteraction");
     function isContextMenuApplicationCommandInteraction(interaction) {
       return interaction.data.type === index_1.ApplicationCommandType.Message || interaction.data.type === index_1.ApplicationCommandType.User;
     }
+    __name(isContextMenuApplicationCommandInteraction, "isContextMenuApplicationCommandInteraction");
   }
 });
 
@@ -22765,9 +23454,9 @@ var require_v106 = __commonJS({
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-        desc = { enumerable: true, get: function() {
+        desc = { enumerable: true, get: /* @__PURE__ */ __name(function() {
           return m[k];
-        } };
+        }, "get") };
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
@@ -22783,14 +23472,14 @@ var require_v106 = __commonJS({
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
     var __importStar2 = exports2 && exports2.__importStar || /* @__PURE__ */ function() {
-      var ownKeys2 = function(o) {
+      var ownKeys2 = /* @__PURE__ */ __name(function(o) {
         ownKeys2 = Object.getOwnPropertyNames || function(o2) {
           var ar = [];
           for (var k in o2) if (Object.prototype.hasOwnProperty.call(o2, k)) ar[ar.length] = k;
           return ar;
         };
         return ownKeys2(o);
-      };
+      }, "ownKeys");
       return function(mod) {
         if (mod && mod.__esModule) return mod;
         var result = {};
@@ -22821,29 +23510,32 @@ var require_dist2 = __commonJS({
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
     var __hasOwnProp2 = Object.prototype.hasOwnProperty;
-    var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
-    var __export2 = (target, all) => {
+    var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+    var __export2 = /* @__PURE__ */ __name((target, all) => {
       for (var name in all)
         __defProp2(target, name, { get: all[name], enumerable: true });
-    };
-    var __copyProps2 = (to, from, except, desc) => {
+    }, "__export");
+    var __copyProps2 = /* @__PURE__ */ __name((to, from, except, desc) => {
       if (from && typeof from === "object" || typeof from === "function") {
         for (let key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
-            __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
+            __defProp2(to, key, { get: /* @__PURE__ */ __name(() => from[key], "get"), enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
       }
       return to;
-    };
-    var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
+    }, "__copyProps");
+    var __toCommonJS2 = /* @__PURE__ */ __name((mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod), "__toCommonJS");
     var src_exports = {};
     __export2(src_exports, {
-      Collection: () => Collection2,
-      version: () => version
+      Collection: /* @__PURE__ */ __name(() => Collection2, "Collection"),
+      version: /* @__PURE__ */ __name(() => version, "version")
     });
     module2.exports = __toCommonJS2(src_exports);
     var Collection2 = class _Collection extends Map {
       static {
-        __name(this, "Collection");
+        __name(this, "_Collection");
+      }
+      static {
+        __name2(this, "Collection");
       }
       /**
        * Obtains the value of the given key if it exists, otherwise sets and returns the value provided by the default value generator.
@@ -23379,9 +24071,9 @@ var require_cjs = __commonJS({
   "../../node_modules/.pnpm/@sapphire+snowflake@3.5.5/node_modules/@sapphire/snowflake/dist/cjs/index.cjs"(exports2) {
     "use strict";
     var __defProp2 = Object.defineProperty;
-    var __defNormalProp = (obj, key, value) => key in obj ? __defProp2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-    var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
-    var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+    var __defNormalProp = /* @__PURE__ */ __name((obj, key, value) => key in obj ? __defProp2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value, "__defNormalProp");
+    var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+    var __publicField = /* @__PURE__ */ __name((obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value), "__publicField");
     var IncrementSymbol = Symbol("@sapphire/snowflake.increment");
     var EpochSymbol = Symbol("@sapphire/snowflake.epoch");
     var EpochNumberSymbol = Symbol("@sapphire/snowflake.epoch.number");
@@ -23398,6 +24090,9 @@ var require_cjs = __commonJS({
     var _e;
     _e = EpochSymbol, _d = EpochNumberSymbol, _c = IncrementSymbol, _b = ProcessIdSymbol, _a = WorkerIdSymbol;
     var _Snowflake = class _Snowflake {
+      static {
+        __name(this, "_Snowflake");
+      }
       /**
        * @param epoch the epoch to use
        */
@@ -23532,16 +24227,18 @@ var require_cjs = __commonJS({
         return typeA === typeof b ? typeA === "string" ? cmpString(a, b) : cmpBigInt(a, b) : cmpBigInt(BigInt(a), BigInt(b));
       }
     };
-    __name(_Snowflake, "Snowflake");
+    __name2(_Snowflake, "Snowflake");
     var Snowflake = _Snowflake;
     function cmpBigInt(a, b) {
       return a === b ? 0 : a < b ? -1 : 1;
     }
     __name(cmpBigInt, "cmpBigInt");
+    __name2(cmpBigInt, "cmpBigInt");
     function cmpString(a, b) {
       return a === b ? 0 : a.length < b.length ? -1 : a.length > b.length ? 1 : a < b ? -1 : 1;
     }
     __name(cmpString, "cmpString");
+    __name2(cmpString, "cmpString");
     var DiscordSnowflake = new Snowflake(1420070400000n);
     var TwitterSnowflake = new Snowflake(1288834974657n);
     exports2.DiscordSnowflake = DiscordSnowflake;
@@ -23563,34 +24260,34 @@ var require_dist3 = __commonJS({
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
     var __getProtoOf2 = Object.getPrototypeOf;
     var __hasOwnProp2 = Object.prototype.hasOwnProperty;
-    var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
-    var __esm2 = (fn, res) => function __init() {
+    var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+    var __esm2 = /* @__PURE__ */ __name((fn, res) => /* @__PURE__ */ __name(function __init() {
       return fn && (res = (0, fn[__getOwnPropNames2(fn)[0]])(fn = 0)), res;
-    };
-    var __commonJS2 = (cb, mod) => function __require() {
+    }, "__init"), "__esm");
+    var __commonJS2 = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
       return mod || (0, cb[__getOwnPropNames2(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-    };
-    var __export2 = (target, all) => {
+    }, "__require"), "__commonJS");
+    var __export2 = /* @__PURE__ */ __name((target, all) => {
       for (var name in all)
         __defProp2(target, name, { get: all[name], enumerable: true });
-    };
-    var __copyProps2 = (to, from, except, desc) => {
+    }, "__export");
+    var __copyProps2 = /* @__PURE__ */ __name((to, from, except, desc) => {
       if (from && typeof from === "object" || typeof from === "function") {
         for (let key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
-            __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
+            __defProp2(to, key, { get: /* @__PURE__ */ __name(() => from[key], "get"), enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
       }
       return to;
-    };
-    var __toESM2 = (mod, isNodeMode, target) => (target = mod != null ? __create2(__getProtoOf2(mod)) : {}, __copyProps2(
+    }, "__copyProps");
+    var __toESM2 = /* @__PURE__ */ __name((mod, isNodeMode, target) => (target = mod != null ? __create2(__getProtoOf2(mod)) : {}, __copyProps2(
       // If the importer is in node compatibility mode or this is not an ESM
       // file that has been converted to a CommonJS file using a Babel-
       // compatible transform (i.e. "__esModule" has not been set), then set
       // "default" to the CommonJS "module.exports" for node compatibility.
       isNodeMode || !mod || !mod.__esModule ? __defProp2(target, "default", { value: mod, enumerable: true }) : target,
       mod
-    ));
-    var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
+    )), "__toESM");
+    var __toCommonJS2 = /* @__PURE__ */ __name((mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod), "__toCommonJS");
     var init_cjs_shims = __esm2({
       "node_modules/tsup/assets/cjs_shims.js"() {
       }
@@ -23615,6 +24312,7 @@ var require_dist3 = __commonJS({
               }, n(t3);
             }
             __name(n, "n");
+            __name2(n, "n");
             function o(t3, e3) {
               var r2 = "undefined" != typeof Symbol && t3[Symbol.iterator] || t3["@@iterator"];
               if (!r2) {
@@ -23626,25 +24324,25 @@ var require_dist3 = __commonJS({
                   }
                 }(t3)) || e3 && t3 && "number" == typeof t3.length) {
                   r2 && (t3 = r2);
-                  var n2 = 0, o2 = /* @__PURE__ */ __name(function() {
+                  var n2 = 0, o2 = /* @__PURE__ */ __name2(function() {
                   }, "o");
-                  return { s: o2, n: /* @__PURE__ */ __name(function() {
+                  return { s: o2, n: /* @__PURE__ */ __name2(function() {
                     return n2 >= t3.length ? { done: true } : { done: false, value: t3[n2++] };
-                  }, "n"), e: /* @__PURE__ */ __name(function(t4) {
+                  }, "n"), e: /* @__PURE__ */ __name2(function(t4) {
                     throw t4;
                   }, "e"), f: o2 };
                 }
                 throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
               }
               var i2, c2 = true, u2 = false;
-              return { s: /* @__PURE__ */ __name(function() {
+              return { s: /* @__PURE__ */ __name2(function() {
                 r2 = r2.call(t3);
-              }, "s"), n: /* @__PURE__ */ __name(function() {
+              }, "s"), n: /* @__PURE__ */ __name2(function() {
                 var t4 = r2.next();
                 return c2 = t4.done, t4;
-              }, "n"), e: /* @__PURE__ */ __name(function(t4) {
+              }, "n"), e: /* @__PURE__ */ __name2(function(t4) {
                 u2 = true, i2 = t4;
-              }, "e"), f: /* @__PURE__ */ __name(function() {
+              }, "e"), f: /* @__PURE__ */ __name2(function() {
                 try {
                   c2 || null == r2.return || r2.return();
                 } finally {
@@ -23653,12 +24351,14 @@ var require_dist3 = __commonJS({
               }, "f") };
             }
             __name(o, "o");
+            __name2(o, "o");
             function a(t3, e3) {
               (null == e3 || e3 > t3.length) && (e3 = t3.length);
               for (var r2 = 0, n2 = Array(e3); r2 < e3; r2++) n2[r2] = t3[r2];
               return n2;
             }
             __name(a, "a");
+            __name2(a, "a");
             function i(t3, e3) {
               var r2 = Object.keys(t3);
               if (Object.getOwnPropertySymbols) {
@@ -23670,6 +24370,7 @@ var require_dist3 = __commonJS({
               return r2;
             }
             __name(i, "i");
+            __name2(i, "i");
             function c(t3) {
               for (var e3 = 1; e3 < arguments.length; e3++) {
                 var r2 = null != arguments[e3] ? arguments[e3] : {};
@@ -23682,6 +24383,7 @@ var require_dist3 = __commonJS({
               return t3;
             }
             __name(c, "c");
+            __name2(c, "c");
             function u(t3, e3, r2) {
               return (e3 = function(t4) {
                 var e4 = function(t5) {
@@ -23698,24 +24400,26 @@ var require_dist3 = __commonJS({
               }(e3)) in t3 ? Object.defineProperty(t3, e3, { value: r2, enumerable: true, configurable: true, writable: true }) : t3[e3] = r2, t3;
             }
             __name(u, "u");
+            __name2(u, "u");
             var l, f, s, y = r(425), p = y.AggregateError, g = y.AggregateErrorPrototype, v = y.Array, h = y.ArrayBuffer, d = y.ArrayBufferPrototype, b = y.ArrayIsArray, m = y.ArrayPrototype, S = y.ArrayPrototypeFilter, P = y.ArrayPrototypeForEach, x = y.ArrayPrototypeIncludes, w = y.ArrayPrototypeIndexOf, A = y.ArrayPrototypeJoin, O = y.ArrayPrototypeMap, _ = y.ArrayPrototypePop, j = y.ArrayPrototypePush, E = y.ArrayPrototypePushApply, k = y.ArrayPrototypeSlice, I = y.ArrayPrototypeSort, R = y.ArrayPrototypeSplice, L = y.ArrayPrototypeUnshift, T = y.BigIntPrototypeValueOf, B = y.Boolean, z = y.BooleanPrototype, M = y.BooleanPrototypeValueOf, C = y.DataView, D = y.DataViewPrototype, N = y.Date, F = y.DatePrototype, W = y.DatePrototypeGetTime, H = y.DatePrototypeToISOString, U = y.DatePrototypeToString, G = y.Error, V = y.ErrorPrototype, Z = y.ErrorPrototypeToString, $ = y.Function, Y = y.FunctionPrototype, q = y.FunctionPrototypeBind, J = y.FunctionPrototypeCall, K = y.FunctionPrototypeSymbolHasInstance, Q = y.FunctionPrototypeToString, X = y.JSONStringify, tt = y.Map, et = y.MapPrototype, rt = y.MapPrototypeEntries, nt = y.MapPrototypeGetSize, ot = y.MathFloor, at = y.MathMax, it = y.MathMin, ct = y.MathRound, ut = y.MathSqrt, lt = y.MathTrunc, ft = y.Number, st = y.NumberIsFinite, yt = y.NumberIsNaN, pt = y.NumberParseFloat, gt = y.NumberParseInt, vt = y.NumberPrototype, ht = y.NumberPrototypeToString, dt = y.NumberPrototypeValueOf, bt = y.Object, mt = y.ObjectAssign, St = y.ObjectDefineProperty, Pt = y.ObjectGetOwnPropertyDescriptor, xt = y.ObjectGetOwnPropertyNames, wt = y.ObjectGetOwnPropertySymbols, At = y.ObjectGetPrototypeOf, Ot = y.ObjectIs, _t = y.ObjectKeys, jt = y.ObjectPrototype, Et = y.ObjectPrototypeHasOwnProperty, kt = y.ObjectPrototypePropertyIsEnumerable, It = y.ObjectSeal, Rt = y.ObjectSetPrototypeOf, Lt = y.Promise, Tt = y.PromisePrototype, Bt = y.RangeError, zt = y.RangeErrorPrototype, Mt = y.ReflectApply, Ct = y.ReflectOwnKeys, Dt = y.RegExp, Nt = y.RegExpPrototype, Ft = y.RegExpPrototypeExec, Wt = y.RegExpPrototypeSymbolReplace, Ht = y.RegExpPrototypeSymbolSplit, Ut = y.RegExpPrototypeToString, Gt = y.SafeMap, Vt = y.SafeSet, Zt = y.SafeStringIterator, $t = y.Set, Yt = y.SetPrototype, qt = y.SetPrototypeGetSize, Jt = y.SetPrototypeValues, Kt = y.String, Qt = y.StringPrototype, Xt = y.StringPrototypeCharCodeAt, te = y.StringPrototypeCodePointAt, ee = y.StringPrototypeEndsWith, re = y.StringPrototypeIncludes, ne = y.StringPrototypeIndexOf, oe = y.StringPrototypeLastIndexOf, ae = y.StringPrototypeNormalize, ie = y.StringPrototypePadEnd, ce = y.StringPrototypePadStart, ue = y.StringPrototypeRepeat, le = y.StringPrototypeReplace, fe = y.StringPrototypeReplaceAll, se = y.StringPrototypeSlice, ye = y.StringPrototypeSplit, pe = y.StringPrototypeStartsWith, ge = y.StringPrototypeToLowerCase, ve = y.StringPrototypeTrim, he = y.StringPrototypeValueOf, de = y.SymbolIterator, be = y.SymbolPrototypeToString, me = y.SymbolPrototypeValueOf, Se = y.SymbolToPrimitive, Pe = y.SymbolToStringTag, xe = y.TypeError, we = y.TypeErrorPrototype, Ae = y.TypedArray, Oe = y.TypedArrayPrototype, _e = y.TypedArrayPrototypeGetLength, je = y.TypedArrayPrototypeGetSymbolToStringTag, Ee = y.Uint8Array, ke = y.WeakMap, Ie = y.WeakMapPrototype, Re = y.WeakSet, Le = y.WeakSetPrototype, Te = y.globalThis, Be = y.internalBinding, ze = y.uncurryThis, Me = r(153), Ce = Me.constants, De = Ce.ALL_PROPERTIES, Ne = Ce.ONLY_ENUMERABLE, Fe = Ce.kPending, We = Ce.kRejected, He = Me.getOwnNonIndexProperties, Ue = Me.getPromiseDetails, Ge = Me.getProxyDetails, Ve = Me.previewEntries, Ze = Me.getConstructorName, $e = Me.getExternalValue, Ye = Me.Proxy, qe = r(923), Je = qe.customInspectSymbol, Ke = qe.isError, Qe = qe.join, Xe = qe.removeColors, tr = r(924).isStackOverflowError, er = r(617), rr = er.isAsyncFunction, nr = er.isGeneratorFunction, or = er.isAnyArrayBuffer, ar = er.isArrayBuffer, ir = er.isArgumentsObject, cr = er.isBoxedPrimitive, ur = er.isDataView, lr = er.isExternal, fr = er.isMap, sr = er.isMapIterator, yr = er.isModuleNamespaceObject, pr = er.isNativeError, gr = er.isPromise, vr = er.isSet, hr = er.isSetIterator, dr = er.isWeakMap, br = er.isWeakSet, mr = er.isRegExp, Sr = er.isDate, Pr = er.isTypedArray, xr = er.isStringObject, wr = er.isNumberObject, Ar = er.isBooleanObject, Or = er.isBigIntObject, _r = r(229), jr = r(705).BuiltinModule, Er = r(116), kr = Er.validateObject, Ir = Er.validateString, Rr = Er.kValidateObjectAllowArray;
             function Lr(t3) {
               return (f = f || r(802)).pathToFileURL(t3).href;
             }
             __name(Lr, "Lr");
+            __name2(Lr, "Lr");
             var Tr, Br, zr, Mr, Cr, Dr = new Vt(S(xt(Te), function(t3) {
               return null !== Ft(/^[A-Z][a-zA-Z0-9]+$/, t3);
-            })), Nr = /* @__PURE__ */ __name(function(t3) {
+            })), Nr = /* @__PURE__ */ __name2(function(t3) {
               return void 0 === t3 && void 0 !== t3;
             }, "Nr"), Fr = It({ showHidden: false, depth: 2, colors: false, customInspect: true, showProxy: false, maxArrayLength: 100, maxStringLength: 1e4, breakLength: 80, compact: 3, sorted: false, getters: false, numericSeparator: false });
             try {
               Tr = new Dt("[\\x00-\\x1f\\x27\\x5c\\x7f-\\x9f]|[\\ud800-\\udbff](?![\\udc00-\\udfff])|(?<![\\ud800-\\udbff])[\\udc00-\\udfff]"), Br = new Dt("[\0-\\x1f\\x27\\x5c\\x7f-\\x9f]|[\\ud800-\\udbff](?![\\udc00-\\udfff])|(?<![\\ud800-\\udbff])[\\udc00-\\udfff]", "g"), zr = new Dt("[\\x00-\\x1f\\x5c\\x7f-\\x9f]|[\\ud800-\\udbff](?![\\udc00-\\udfff])|(?<![\\ud800-\\udbff])[\\udc00-\\udfff]"), Mr = new Dt("[\\x00-\\x1f\\x5c\\x7f-\\x9f]|[\\ud800-\\udbff](?![\\udc00-\\udfff])|(?<![\\ud800-\\udbff])[\\udc00-\\udfff]", "g");
               var Wr = new Dt("(?<=\\n)");
-              Cr = /* @__PURE__ */ __name(function(t3) {
+              Cr = /* @__PURE__ */ __name2(function(t3) {
                 return Ht(Wr, t3);
               }, "Cr");
             } catch (t3) {
-              Tr = /[\x00-\x1f\x27\x5c\x7f-\x9f]/, Br = /[\x00-\x1f\x27\x5c\x7f-\x9f]/g, zr = /[\x00-\x1f\x5c\x7f-\x9f]/, Mr = /[\x00-\x1f\x5c\x7f-\x9f]/g, Cr = /* @__PURE__ */ __name(function(t4) {
+              Tr = /[\x00-\x1f\x27\x5c\x7f-\x9f]/, Br = /[\x00-\x1f\x27\x5c\x7f-\x9f]/g, zr = /[\x00-\x1f\x5c\x7f-\x9f]/, Mr = /[\x00-\x1f\x5c\x7f-\x9f]/g, Cr = /* @__PURE__ */ __name2(function(t4) {
                 var e3 = Ht(/\n/, t4), r2 = _(e3), n2 = O(e3, function(t5) {
                   return t5 + "\n";
                 });
@@ -23735,29 +24439,33 @@ var require_dist3 = __commonJS({
               return r2.colors && (r2.stylize = nn), null === r2.maxArrayLength && (r2.maxArrayLength = 1 / 0), null === r2.maxStringLength && (r2.maxStringLength = 1 / 0), gn(r2, t3, 0);
             }
             __name(Jr, "Jr");
-            Jr.custom = Je, St(Jr, "defaultOptions", { __proto__: null, get: /* @__PURE__ */ __name(function() {
+            __name2(Jr, "Jr");
+            Jr.custom = Je, St(Jr, "defaultOptions", { __proto__: null, get: /* @__PURE__ */ __name2(function() {
               return Fr;
-            }, "get"), set: /* @__PURE__ */ __name(function(t3) {
+            }, "get"), set: /* @__PURE__ */ __name2(function(t3) {
               return kr(t3, "options"), mt(Fr, t3);
             }, "set") });
             var Kr = 39, Qr = 49;
             function Xr(t3, e3) {
-              St(Jr.colors, e3, { __proto__: null, get: /* @__PURE__ */ __name(function() {
+              St(Jr.colors, e3, { __proto__: null, get: /* @__PURE__ */ __name2(function() {
                 return this[t3];
-              }, "get"), set: /* @__PURE__ */ __name(function(e4) {
+              }, "get"), set: /* @__PURE__ */ __name2(function(e4) {
                 this[t3] = e4;
               }, "set"), configurable: true, enumerable: false });
             }
             __name(Xr, "Xr");
+            __name2(Xr, "Xr");
             function tn(t3, e3) {
               return -1 === e3 ? '"'.concat(t3, '"') : -2 === e3 ? "`".concat(t3, "`") : "'".concat(t3, "'");
             }
             __name(tn, "tn");
+            __name2(tn, "tn");
             function en(t3) {
               var e3 = Xt(t3);
               return Yr.length > e3 ? Yr[e3] : "\\u".concat(ht(e3, 16));
             }
             __name(en, "en");
+            __name2(en, "en");
             function rn(t3) {
               var e3 = Tr, r2 = Br, n2 = 39;
               if (re(t3, "'") && (re(t3, '"') ? re(t3, "`") || re(t3, "${") || (n2 = -2) : n2 = -1, 39 !== n2 && (e3 = zr, r2 = Mr)), t3.length < 5e3 && null === Ft(e3, t3)) return tn(t3, n2);
@@ -23779,6 +24487,7 @@ var require_dist3 = __commonJS({
               return a2 !== t3.length && (o2 += se(t3, a2)), tn(o2, n2);
             }
             __name(rn, "rn");
+            __name2(rn, "rn");
             function nn(t3, e3) {
               var r2 = Jr.styles[e3];
               if (void 0 !== r2) {
@@ -23788,14 +24497,17 @@ var require_dist3 = __commonJS({
               return t3;
             }
             __name(nn, "nn");
+            __name2(nn, "nn");
             function on(t3) {
               return t3;
             }
             __name(on, "on");
+            __name2(on, "on");
             function an() {
               return [];
             }
             __name(an, "an");
+            __name2(an, "an");
             function cn(t3, e3) {
               try {
                 return t3 instanceof e3;
@@ -23804,6 +24516,7 @@ var require_dist3 = __commonJS({
               }
             }
             __name(cn, "cn");
+            __name2(cn, "cn");
             Jr.colors = { __proto__: null, reset: [0, 0], bold: [1, 22], dim: [2, 22], italic: [3, 23], underline: [4, 24], blink: [5, 25], inverse: [7, 27], hidden: [8, 28], strikethrough: [9, 29], doubleunderline: [21, 24], black: [30, Kr], red: [31, Kr], green: [32, Kr], yellow: [33, Kr], blue: [34, Kr], magenta: [35, Kr], cyan: [36, Kr], white: [37, Kr], bgBlack: [40, Qr], bgRed: [41, Qr], bgGreen: [42, Qr], bgYellow: [43, Qr], bgBlue: [44, Qr], bgMagenta: [45, Qr], bgCyan: [46, Qr], bgWhite: [47, Qr], framed: [51, 54], overlined: [53, 55], gray: [90, Kr], redBright: [91, Kr], greenBright: [92, Kr], yellowBright: [93, Kr], blueBright: [94, Kr], magentaBright: [95, Kr], cyanBright: [96, Kr], whiteBright: [97, Kr], bgGray: [100, Qr], bgRedBright: [101, Qr], bgGreenBright: [102, Qr], bgYellowBright: [103, Qr], bgBlueBright: [104, Qr], bgMagentaBright: [105, Qr], bgCyanBright: [106, Qr], bgWhiteBright: [107, Qr] }, Xr("gray", "grey"), Xr("gray", "blackBright"), Xr("bgGray", "bgGrey"), Xr("bgGray", "bgBlackBright"), Xr("dim", "faint"), Xr("strikethrough", "crossedout"), Xr("strikethrough", "strikeThrough"), Xr("strikethrough", "crossedOut"), Xr("hidden", "conceal"), Xr("inverse", "swapColors"), Xr("inverse", "swapcolors"), Xr("doubleunderline", "doubleUnderline"), Jr.styles = mt({ __proto__: null }, { special: "cyan", number: "yellow", bigint: "yellow", boolean: "yellow", undefined: "grey", null: "bold", string: "green", symbol: "green", date: "magenta", regexp: "red", module: "underline" });
             var un = new Gt().set(m, { name: "Array", constructor: v }).set(d, { name: "ArrayBuffer", constructor: h }).set(Y, { name: "Function", constructor: $ }).set(et, { name: "Map", constructor: tt }).set(Yt, { name: "Set", constructor: $t }).set(jt, { name: "Object", constructor: bt }).set(Oe, { name: "TypedArray", constructor: Ae }).set(Nt, { name: "RegExp", constructor: Dt }).set(F, { name: "Date", constructor: N }).set(D, { name: "DataView", constructor: C }).set(V, { name: "Error", constructor: G }).set(g, { name: "AggregateError", constructor: p }).set(zt, { name: "RangeError", constructor: Bt }).set(we, { name: "TypeError", constructor: xe }).set(z, { name: "Boolean", constructor: B }).set(vt, { name: "Number", constructor: ft }).set(Qt, { name: "String", constructor: Kt }).set(Tt, { name: "Promise", constructor: Lt }).set(Ie, { name: "WeakMap", constructor: ke }).set(Le, { name: "WeakSet", constructor: Re });
             function ln(t3, e3, r2, n2) {
@@ -23824,6 +24537,7 @@ var require_dist3 = __commonJS({
               return null === y2 ? "".concat(s2, " <").concat(Jr(o2, c(c({}, e3), {}, { customInspect: false, depth: -1 })), ">") : "".concat(s2, " <").concat(y2, ">");
             }
             __name(ln, "ln");
+            __name2(ln, "ln");
             function fn(t3, e3, r2, n2, a2) {
               var i2, c2, u2 = 0;
               do {
@@ -23856,11 +24570,13 @@ var require_dist3 = __commonJS({
               } while (3 !== ++u2);
             }
             __name(fn, "fn");
+            __name2(fn, "fn");
             function sn(t3, e3, r2) {
               var n2 = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : "";
               return null === t3 ? "" !== e3 && r2 !== e3 ? "[".concat(r2).concat(n2, ": null prototype] [").concat(e3, "] ") : "[".concat(r2).concat(n2, ": null prototype] ") : "" !== e3 && t3 !== e3 ? "".concat(t3).concat(n2, " [").concat(e3, "] ") : "".concat(t3).concat(n2, " ");
             }
             __name(sn, "sn");
+            __name2(sn, "sn");
             function yn(t3, e3) {
               var r2, n2 = wt(t3);
               if (e3) r2 = xt(t3), 0 !== n2.length && E(r2, n2);
@@ -23877,11 +24593,13 @@ var require_dist3 = __commonJS({
               return r2;
             }
             __name(yn, "yn");
+            __name2(yn, "yn");
             function pn(t3, e3, r2) {
               var n2 = "";
               return null === e3 && (n2 = Ze(t3)) === r2 && (n2 = "Object"), sn(e3, r2, n2);
             }
             __name(pn, "pn");
+            __name2(pn, "pn");
             function gn(t3, e3, a2, i2) {
               if ("object" !== n(e3) && "function" != typeof e3 && !Nr(e3)) return An(t3.stylize, e3, t3);
               if (null === e3) return t3.stylize("null", "null");
@@ -24139,10 +24857,12 @@ var require_dist3 = __commonJS({
               }(t3, e3, a2, i2);
             }
             __name(gn, "gn");
+            __name2(gn, "gn");
             function vn(t3, e3) {
               return e3 !== "".concat(t3, " Iterator") && ("" !== e3 && (e3 += "] ["), e3 += "".concat(t3, " Iterator")), ["[".concat(e3, "] {"), "}"];
             }
             __name(vn, "vn");
+            __name2(vn, "vn");
             function hn(t3, e3) {
               for (var r2 = 0; r2 < t3.length - 3; r2++) {
                 var n2 = w(e3, t3[r2]);
@@ -24157,6 +24877,7 @@ var require_dist3 = __commonJS({
               return { len: 0, offset: 0 };
             }
             __name(hn, "hn");
+            __name2(hn, "hn");
             function dn(t3, e3) {
               if (e3.stack) {
                 if ("string" == typeof e3.stack) return e3.stack;
@@ -24167,6 +24888,7 @@ var require_dist3 = __commonJS({
               return Z(e3);
             }
             __name(dn, "dn");
+            __name2(dn, "dn");
             function bn(t3, e3) {
               for (var r2 = "", n2 = 0, o2 = 0; ; ) {
                 var a2 = ne(e3, "node_modules", o2);
@@ -24185,6 +24907,7 @@ var require_dist3 = __commonJS({
               return 0 !== n2 && (e3 = r2 + se(e3, n2)), e3;
             }
             __name(bn, "bn");
+            __name2(bn, "bn");
             function mn(t3, e3, r2) {
               var n2 = ne(e3, r2), o2 = "", a2 = r2.length;
               if (-1 !== n2) {
@@ -24195,6 +24918,7 @@ var require_dist3 = __commonJS({
               return o2;
             }
             __name(mn, "mn");
+            __name2(mn, "mn");
             function Sn(t3) {
               var e3 = "", r2 = t3.length;
               _r(0 !== r2);
@@ -24202,7 +24926,8 @@ var require_dist3 = __commonJS({
               return r2 === t3.length ? t3 : "".concat(se(t3, 0, r2)).concat(e3);
             }
             __name(Sn, "Sn");
-            var Pn = /* @__PURE__ */ __name(function(t3) {
+            __name2(Sn, "Sn");
+            var Pn = /* @__PURE__ */ __name2(function(t3) {
               return "... ".concat(t3, " more item").concat(t3 > 1 ? "s" : "");
             }, "Pn");
             function xn(t3, e3, r2) {
@@ -24214,11 +24939,13 @@ var require_dist3 = __commonJS({
               }(se(Kt(e3), o2.length + 1))), "number");
             }
             __name(xn, "xn");
+            __name2(xn, "xn");
             function wn(t3, e3, r2) {
               var n2 = Kt(e3);
               return t3("".concat(r2 ? Sn(n2) : n2, "n"), "bigint");
             }
             __name(wn, "wn");
+            __name2(wn, "wn");
             function An(t3, e3, r2) {
               if ("string" == typeof e3) {
                 var n2 = "";
@@ -24233,6 +24960,7 @@ var require_dist3 = __commonJS({
               return "number" == typeof e3 ? xn(t3, e3, r2.numericSeparator) : "bigint" == typeof e3 ? wn(t3, e3, r2.numericSeparator) : "boolean" == typeof e3 ? t3("".concat(e3), "boolean") : void 0 === e3 ? t3("undefined", "undefined") : t3(be(e3), "symbol");
             }
             __name(An, "An");
+            __name2(An, "An");
             function On(t3, e3, r2, n2) {
               for (var o2 = new v(t3.length), a2 = 0; a2 < t3.length; a2++) try {
                 o2[a2] = Nn(e3, r2, n2, t3[a2], 0);
@@ -24246,6 +24974,7 @@ var require_dist3 = __commonJS({
               return t3.length = 0, o2;
             }
             __name(On, "On");
+            __name2(On, "On");
             function _n(t3, e3, r2, n2, o2, a2) {
               for (var i2 = _t(e3), c2 = a2; a2 < i2.length && o2.length < n2; a2++) {
                 var u2 = i2[a2], l2 = +u2;
@@ -24267,6 +24996,7 @@ var require_dist3 = __commonJS({
               return o2;
             }
             __name(_n, "_n");
+            __name2(_n, "_n");
             function jn(t3, e3) {
               var n2;
               try {
@@ -24279,6 +25009,7 @@ var require_dist3 = __commonJS({
               return a2 > 0 && (o2 += " ... ".concat(a2, " more byte").concat(a2 > 1 ? "s" : "")), ["".concat(t3.stylize("[Uint8Contents]", "special"), ": <").concat(o2, ">")];
             }
             __name(jn, "jn");
+            __name2(jn, "jn");
             function En(t3, e3, r2) {
               for (var n2 = e3.length, o2 = it(at(0, t3.maxArrayLength), n2), a2 = n2 - o2, i2 = [], c2 = 0; c2 < o2; c2++) {
                 if (!Et(e3, c2)) return _n(t3, e3, r2, o2, i2, c2);
@@ -24287,6 +25018,7 @@ var require_dist3 = __commonJS({
               return a2 > 0 && j(i2, Pn(a2)), i2;
             }
             __name(En, "En");
+            __name2(En, "En");
             function kn(t3, e3, r2, n2, o2) {
               for (var a2 = it(at(0, r2.maxArrayLength), e3), i2 = t3.length - a2, c2 = new v(a2), u2 = t3.length > 0 && "number" == typeof t3[0] ? xn : wn, l2 = 0; l2 < a2; ++l2) c2[l2] = u2(r2.stylize, t3[l2], r2.numericSeparator);
               if (i2 > 0 && (c2[a2] = Pn(i2)), r2.showHidden) {
@@ -24300,6 +25032,7 @@ var require_dist3 = __commonJS({
               return c2;
             }
             __name(kn, "kn");
+            __name2(kn, "kn");
             function In(t3, e3, r2, n2) {
               var a2 = t3.size, i2 = it(at(0, e3.maxArrayLength), a2), c2 = a2 - i2, u2 = [];
               e3.indentationLvl += 2;
@@ -24318,6 +25051,7 @@ var require_dist3 = __commonJS({
               return c2 > 0 && j(u2, Pn(c2)), e3.indentationLvl -= 2, u2;
             }
             __name(In, "In");
+            __name2(In, "In");
             function Rn(t3, e3, r2, n2) {
               var a2 = t3.size, i2 = it(at(0, e3.maxArrayLength), a2), c2 = a2 - i2, u2 = [];
               e3.indentationLvl += 2;
@@ -24336,6 +25070,7 @@ var require_dist3 = __commonJS({
               return c2 > 0 && j(u2, Pn(c2)), e3.indentationLvl -= 2, u2;
             }
             __name(Rn, "Rn");
+            __name2(Rn, "Rn");
             function Ln(t3, e3, r2, n2) {
               var o2 = at(t3.maxArrayLength, 0), a2 = it(o2, r2.length), i2 = new v(a2);
               t3.indentationLvl += 2;
@@ -24345,6 +25080,7 @@ var require_dist3 = __commonJS({
               return u2 > 0 && j(i2, Pn(u2)), i2;
             }
             __name(Ln, "Ln");
+            __name2(Ln, "Ln");
             function Tn(t3, e3, r2, n2) {
               var o2 = at(t3.maxArrayLength, 0), a2 = r2.length / 2, i2 = a2 - o2, c2 = it(o2, a2), u2 = new v(c2), l2 = 0;
               if (t3.indentationLvl += 2, 0 === n2) {
@@ -24360,23 +25096,28 @@ var require_dist3 = __commonJS({
               return t3.indentationLvl -= 2, i2 > 0 && j(u2, Pn(i2)), u2;
             }
             __name(Tn, "Tn");
+            __name2(Tn, "Tn");
             function Bn(t3) {
               return [t3.stylize("<items unknown>", "special")];
             }
             __name(Bn, "Bn");
+            __name2(Bn, "Bn");
             function zn(t3, e3, r2) {
               return Ln(t3, r2, Ve(e3), 0);
             }
             __name(zn, "zn");
+            __name2(zn, "zn");
             function Mn(t3, e3, r2) {
               return Tn(t3, r2, Ve(e3), 0);
             }
             __name(Mn, "Mn");
+            __name2(Mn, "Mn");
             function Cn(t3, e3, r2, n2) {
               var o2 = Ve(r2, true), a2 = o2[0];
               return o2[1] ? (t3[0] = Wt(/ Iterator] {$/, t3[0], " Entries] {"), Tn(e3, n2, a2, 2)) : Ln(e3, n2, a2, 1);
             }
             __name(Cn, "Cn");
+            __name2(Cn, "Cn");
             function Dn(t3, e3, r2) {
               var n2, o2 = Ue(e3), a2 = o2[0], i2 = o2[1];
               if (a2 === Fe) n2 = [t3.stylize("<pending>", "special")];
@@ -24388,6 +25129,7 @@ var require_dist3 = __commonJS({
               return n2;
             }
             __name(Dn, "Dn");
+            __name2(Dn, "Dn");
             function Nn(t3, e3, r2, o2, a2, i2) {
               var c2, u2, l2 = arguments.length > 6 && void 0 !== arguments[6] ? arguments[6] : e3, f2 = " ";
               if (void 0 !== (i2 = i2 || Pt(e3, o2) || { value: e3[o2], enumerable: true }).value) {
@@ -24418,6 +25160,7 @@ var require_dist3 = __commonJS({
               return false === i2.enumerable && (c2 = "[".concat(c2, "]")), "".concat(c2, ":").concat(f2).concat(u2);
             }
             __name(Nn, "Nn");
+            __name2(Nn, "Nn");
             function Fn(t3, e3, r2, n2) {
               var o2 = e3.length + r2;
               if (o2 + e3.length > t3.breakLength) return false;
@@ -24425,6 +25168,7 @@ var require_dist3 = __commonJS({
               return "" === n2 || !re(n2, "\n");
             }
             __name(Fn, "Fn");
+            __name2(Fn, "Fn");
             function Wn(t3, e3, r2, n2, o2, a2, i2) {
               if (true !== t3.compact) {
                 if ("number" == typeof t3.compact && t3.compact >= 1) {
@@ -24478,6 +25222,7 @@ var require_dist3 = __commonJS({
               return "".concat(n2[0]).concat(s2).concat(Qe(e3, ",\n".concat(f2, "  ")), " ").concat(n2[1]);
             }
             __name(Wn, "Wn");
+            __name2(Wn, "Wn");
             function Hn(t3) {
               var e3 = Ge(t3, false);
               if (void 0 !== e3) {
@@ -24502,11 +25247,13 @@ var require_dist3 = __commonJS({
               return void 0 !== a2 && "function" == typeof a2.value && Dr.has(a2.value.name);
             }
             __name(Hn, "Hn");
+            __name2(Hn, "Hn");
             function Un() {
               return false;
             }
             __name(Un, "Un");
-            var Gn, Vn = /* @__PURE__ */ __name(function(t3) {
+            __name2(Un, "Un");
+            var Gn, Vn = /* @__PURE__ */ __name2(function(t3) {
               return ye(t3.message, "\n", 1)[0];
             }, "Vn");
             function Zn(t3) {
@@ -24524,16 +25271,19 @@ var require_dist3 = __commonJS({
               }
             }
             __name(Zn, "Zn");
+            __name2(Zn, "Zn");
             function $n(t3, e3) {
               var r2;
               return xn(on, t3, null !== (r2 = null == e3 ? void 0 : e3.numericSeparator) && void 0 !== r2 ? r2 : Fr.numericSeparator);
             }
             __name($n, "$n");
+            __name2($n, "$n");
             function Yn(t3, e3) {
               var r2;
               return wn(on, t3, null !== (r2 = null == e3 ? void 0 : e3.numericSeparator) && void 0 !== r2 ? r2 : Fr.numericSeparator);
             }
             __name(Yn, "Yn");
+            __name2(Yn, "Yn");
             function qn(t3, e3) {
               var r2 = e3[0], o2 = 0, a2 = "", i2 = "";
               if ("string" == typeof r2) {
@@ -24588,13 +25338,15 @@ var require_dist3 = __commonJS({
               return a2;
             }
             __name(qn, "qn");
+            __name2(qn, "qn");
             function Jn(t3) {
               return t3 <= 31 || t3 >= 127 && t3 <= 159 || t3 >= 768 && t3 <= 879 || t3 >= 8203 && t3 <= 8207 || t3 >= 8400 && t3 <= 8447 || t3 >= 65024 && t3 <= 65039 || t3 >= 65056 && t3 <= 65071 || t3 >= 917760 && t3 <= 917999;
             }
             __name(Jn, "Jn");
+            __name2(Jn, "Jn");
             if (Be("config").hasIntl) _r(false);
             else {
-              Hr = /* @__PURE__ */ __name(function(t3) {
+              Hr = /* @__PURE__ */ __name2(function(t3) {
                 var e3 = 0;
                 (!(arguments.length > 1 && void 0 !== arguments[1]) || arguments[1]) && (t3 = Qn(t3)), t3 = ae(t3, "NFC");
                 var r2, n2 = o(new Zt(t3));
@@ -24610,7 +25362,7 @@ var require_dist3 = __commonJS({
                 }
                 return e3;
               }, "Hr");
-              var Kn = /* @__PURE__ */ __name(function(t3) {
+              var Kn = /* @__PURE__ */ __name2(function(t3) {
                 return t3 >= 4352 && (t3 <= 4447 || 9001 === t3 || 9002 === t3 || t3 >= 11904 && t3 <= 12871 && 12351 !== t3 || t3 >= 12880 && t3 <= 19903 || t3 >= 19968 && t3 <= 42182 || t3 >= 43360 && t3 <= 43388 || t3 >= 44032 && t3 <= 55203 || t3 >= 63744 && t3 <= 64255 || t3 >= 65040 && t3 <= 65049 || t3 >= 65072 && t3 <= 65131 || t3 >= 65281 && t3 <= 65376 || t3 >= 65504 && t3 <= 65510 || t3 >= 110592 && t3 <= 110593 || t3 >= 127488 && t3 <= 127569 || t3 >= 127744 && t3 <= 128591 || t3 >= 131072 && t3 <= 262141);
               }, "Kn");
             }
@@ -24618,6 +25370,7 @@ var require_dist3 = __commonJS({
               return Ir(t3, "str"), Wt(qr, t3, "");
             }
             __name(Qn, "Qn");
+            __name2(Qn, "Qn");
             var Xn = { 34: "&quot;", 38: "&amp;", 39: "&apos;", 60: "&lt;", 62: "&gt;", 160: "&nbsp;" };
             function to(t3) {
               return t3.replace(/[\u0000-\u002F\u003A-\u0040\u005B-\u0060\u007B-\u00FF]/g, function(t4) {
@@ -24626,14 +25379,15 @@ var require_dist3 = __commonJS({
               });
             }
             __name(to, "to");
-            t2.exports = { identicalSequenceRange: hn, inspect: Jr, inspectDefaultOptions: Fr, format: /* @__PURE__ */ __name(function() {
+            __name2(to, "to");
+            t2.exports = { identicalSequenceRange: hn, inspect: Jr, inspectDefaultOptions: Fr, format: /* @__PURE__ */ __name2(function() {
               for (var t3 = arguments.length, e3 = new Array(t3), r2 = 0; r2 < t3; r2++) e3[r2] = arguments[r2];
               return qn(void 0, e3);
-            }, "format"), formatWithOptions: /* @__PURE__ */ __name(function(t3) {
+            }, "format"), formatWithOptions: /* @__PURE__ */ __name2(function(t3) {
               kr(t3, "inspectOptions", Rr);
               for (var e3 = arguments.length, r2 = new Array(e3 > 1 ? e3 - 1 : 0), n2 = 1; n2 < e3; n2++) r2[n2 - 1] = arguments[n2];
               return qn(t3, r2);
-            }, "formatWithOptions"), getStringWidth: Hr, stripVTControlCharacters: Qn, isZeroWidthCodePoint: Jn, stylizeWithColor: nn, stylizeWithHTML: /* @__PURE__ */ __name(function(t3, e3) {
+            }, "formatWithOptions"), getStringWidth: Hr, stripVTControlCharacters: Qn, isZeroWidthCodePoint: Jn, stylizeWithColor: nn, stylizeWithHTML: /* @__PURE__ */ __name2(function(t3, e3) {
               var r2 = Jr.styles[e3];
               return void 0 !== r2 ? '<span style="color:'.concat(r2, ';">').concat(to(t3), "</span>") : to(t3);
             }, "stylizeWithHTML"), Proxy: Ye };
@@ -24646,6 +25400,7 @@ var require_dist3 = __commonJS({
               }, n(t3);
             }
             __name(n, "n");
+            __name2(n, "n");
             var o = r(425).ArrayIsArray, a = r(924), i = a.hideStackFrames, c = a.codes.ERR_INVALID_ARG_TYPE, u = i(function(t3, e3) {
               var r2 = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : 0;
               if (0 === r2) {
@@ -24658,7 +25413,7 @@ var require_dist3 = __commonJS({
                 if ("object" !== i2 && (a2 || "function" !== i2)) throw new c(e3, "Object", t3);
               }
             });
-            t2.exports = { kValidateObjectNone: 0, kValidateObjectAllowNullable: 1, kValidateObjectAllowArray: 2, kValidateObjectAllowFunction: 4, validateObject: u, validateString: /* @__PURE__ */ __name(function(t3, e3) {
+            t2.exports = { kValidateObjectNone: 0, kValidateObjectAllowNullable: 1, kValidateObjectAllowArray: 2, kValidateObjectAllowFunction: 4, validateObject: u, validateString: /* @__PURE__ */ __name2(function(t3, e3) {
               if ("string" != typeof t3) throw new c(e3, "string", t3);
             }, "validateString") };
           }, 153: (t2, e2, r) => {
@@ -24670,6 +25425,7 @@ var require_dist3 = __commonJS({
               }, n(t3);
             }
             __name(n, "n");
+            __name2(n, "n");
             function o(t3, e3) {
               return function(t4) {
                 if (Array.isArray(t4)) return t4;
@@ -24698,30 +25454,31 @@ var require_dist3 = __commonJS({
               }();
             }
             __name(o, "o");
+            __name2(o, "o");
             function a(t3, e3) {
               var r2 = "undefined" != typeof Symbol && t3[Symbol.iterator] || t3["@@iterator"];
               if (!r2) {
                 if (Array.isArray(t3) || (r2 = i(t3)) || e3 && t3 && "number" == typeof t3.length) {
                   r2 && (t3 = r2);
-                  var n2 = 0, o2 = /* @__PURE__ */ __name(function() {
+                  var n2 = 0, o2 = /* @__PURE__ */ __name2(function() {
                   }, "o");
-                  return { s: o2, n: /* @__PURE__ */ __name(function() {
+                  return { s: o2, n: /* @__PURE__ */ __name2(function() {
                     return n2 >= t3.length ? { done: true } : { done: false, value: t3[n2++] };
-                  }, "n"), e: /* @__PURE__ */ __name(function(t4) {
+                  }, "n"), e: /* @__PURE__ */ __name2(function(t4) {
                     throw t4;
                   }, "e"), f: o2 };
                 }
                 throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
               }
               var a2, c2 = true, u2 = false;
-              return { s: /* @__PURE__ */ __name(function() {
+              return { s: /* @__PURE__ */ __name2(function() {
                 r2 = r2.call(t3);
-              }, "s"), n: /* @__PURE__ */ __name(function() {
+              }, "s"), n: /* @__PURE__ */ __name2(function() {
                 var t4 = r2.next();
                 return c2 = t4.done, t4;
-              }, "n"), e: /* @__PURE__ */ __name(function(t4) {
+              }, "n"), e: /* @__PURE__ */ __name2(function(t4) {
                 u2 = true, a2 = t4;
-              }, "e"), f: /* @__PURE__ */ __name(function() {
+              }, "e"), f: /* @__PURE__ */ __name2(function() {
                 try {
                   c2 || null == r2.return || r2.return();
                 } finally {
@@ -24730,6 +25487,7 @@ var require_dist3 = __commonJS({
               }, "f") };
             }
             __name(a, "a");
+            __name2(a, "a");
             function i(t3, e3) {
               if (t3) {
                 if ("string" == typeof t3) return c(t3, e3);
@@ -24738,14 +25496,16 @@ var require_dist3 = __commonJS({
               }
             }
             __name(i, "i");
+            __name2(i, "i");
             function c(t3, e3) {
               (null == e3 || e3 > t3.length) && (e3 = t3.length);
               for (var r2 = 0, n2 = Array(e3); r2 < e3; r2++) n2[r2] = t3[r2];
               return n2;
             }
             __name(c, "c");
+            __name2(c, "c");
             var u = r(425), l = u.BigInt, f = u.Error, s = u.NumberParseInt, y = u.ObjectEntries, p = u.ObjectGetOwnPropertyDescriptor, g = u.ObjectGetOwnPropertyDescriptors, v = u.ObjectGetOwnPropertySymbols, h = u.ObjectPrototypeToString, d = u.Symbol, b = r(569), m = d("kPending"), S = d("kRejected");
-            t2.exports = { constants: { kPending: m, kRejected: S, ALL_PROPERTIES: 0, ONLY_ENUMERABLE: 2 }, getOwnNonIndexProperties: /* @__PURE__ */ __name(function(t3) {
+            t2.exports = { constants: { kPending: m, kRejected: S, ALL_PROPERTIES: 0, ONLY_ENUMERABLE: 2 }, getOwnNonIndexProperties: /* @__PURE__ */ __name2(function(t3) {
               var e3, r2 = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : 2, n2 = g(t3), i2 = [], c2 = a(y(n2));
               try {
                 for (c2.s(); !(e3 = c2.n()).done; ) {
@@ -24772,17 +25532,17 @@ var require_dist3 = __commonJS({
                 d2.f();
               }
               return i2;
-            }, "getOwnNonIndexProperties"), getPromiseDetails: /* @__PURE__ */ __name(function() {
+            }, "getOwnNonIndexProperties"), getPromiseDetails: /* @__PURE__ */ __name2(function() {
               return [m, void 0];
-            }, "getPromiseDetails"), getProxyDetails: b.getProxyDetails, Proxy: b.Proxy, previewEntries: /* @__PURE__ */ __name(function(t3) {
+            }, "getPromiseDetails"), getProxyDetails: b.getProxyDetails, Proxy: b.Proxy, previewEntries: /* @__PURE__ */ __name2(function(t3) {
               return [[], false];
-            }, "previewEntries"), getConstructorName: /* @__PURE__ */ __name(function(t3) {
+            }, "previewEntries"), getConstructorName: /* @__PURE__ */ __name2(function(t3) {
               var e3;
               if (!t3 || "object" !== n(t3)) throw new f("Invalid object");
               if (null !== (e3 = t3.constructor) && void 0 !== e3 && e3.name) return t3.constructor.name;
               var r2 = h(t3).match(/^\[object ([^\]]+)\]/);
               return r2 ? r2[1] : "Object";
-            }, "getConstructorName"), getExternalValue: /* @__PURE__ */ __name(function() {
+            }, "getConstructorName"), getExternalValue: /* @__PURE__ */ __name2(function() {
               return l(0);
             }, "getExternalValue") };
           }, 229: (t2, e2, r) => {
@@ -24791,10 +25551,12 @@ var require_dist3 = __commonJS({
               return n = null != n ? n : r(924).codes.ERR_INTERNAL_ASSERTION;
             }
             __name(o, "o");
+            __name2(o, "o");
             function a(t3, e3) {
               if (!t3) throw new (o())(e3);
             }
             __name(a, "a");
+            __name2(a, "a");
             a.fail = function(t3) {
               throw new (o())(t3);
             }, t2.exports = a;
@@ -24804,6 +25566,7 @@ var require_dist3 = __commonJS({
               return t3 === l;
             }
             __name(s, "s");
+            __name2(s, "s");
             function y(t3, e3, r2, n2) {
               for (var c2 = "", f2 = 0, s2 = -1, y2 = 0, p = 0, g = 0; g <= t3.length; ++g) {
                 if (g < t3.length) p = o(t3, g);
@@ -24833,7 +25596,8 @@ var require_dist3 = __commonJS({
               return c2;
             }
             __name(y, "y");
-            t2.exports = { isPosixPathSeparator: s, normalizeString: y, resolve: /* @__PURE__ */ __name(function() {
+            __name2(y, "y");
+            t2.exports = { isPosixPathSeparator: s, normalizeString: y, resolve: /* @__PURE__ */ __name2(function() {
               if ((0 === arguments.length || 1 === arguments.length && ("" === (arguments.length <= 0 ? void 0 : arguments[0]) || "." === (arguments.length <= 0 ? void 0 : arguments[0]))) && o("/", 0) === l) return "/";
               for (var t3 = "", e3 = false, r2 = arguments.length - 1; r2 >= 0 && !e3; r2--) {
                 var n2 = r2 < 0 || arguments.length <= r2 ? void 0 : arguments[r2];
@@ -24847,7 +25611,7 @@ var require_dist3 = __commonJS({
               function c2(e3, o3, a3, i3) {
                 var c3 = o3 && o3.prototype instanceof l2 ? o3 : l2, f3 = Object.create(c3.prototype);
                 return r(f3, "_invoke", function(e4, r2, o4) {
-                  var a4, i4, c4, l3 = 0, f4 = o4 || [], s3 = false, y3 = { p: 0, n: 0, v: t3, a: p3, f: p3.bind(t3, 4), d: /* @__PURE__ */ __name(function(e5, r3) {
+                  var a4, i4, c4, l3 = 0, f4 = o4 || [], s3 = false, y3 = { p: 0, n: 0, v: t3, a: p3, f: p3.bind(t3, 4), d: /* @__PURE__ */ __name2(function(e5, r3) {
                     return a4 = e5, i4 = 0, c4 = t3, y3.n = r3, u2;
                   }, "d") };
                   function p3(e5, r3) {
@@ -24858,7 +25622,8 @@ var require_dist3 = __commonJS({
                     if (o5 || e5 > 1) return u2;
                     throw s3 = true, r3;
                   }
-                  __name(p3, "p");
+                  __name(p3, "p3");
+                  __name2(p3, "p");
                   return function(o5, f5, g3) {
                     if (l3 > 1) throw TypeError("Generator is already running");
                     for (s3 && 1 === f5 && p3(f5, g3), i4 = f5, c4 = g3; (n2 = i4 < 2 ? t3 : c4) || !s3; ) {
@@ -24882,17 +25647,21 @@ var require_dist3 = __commonJS({
                   };
                 }(e3, a3, i3), true), f3;
               }
-              __name(c2, "c");
+              __name(c2, "c2");
+              __name2(c2, "c");
               var u2 = {};
               function l2() {
               }
-              __name(l2, "l");
+              __name(l2, "l2");
+              __name2(l2, "l");
               function f2() {
               }
-              __name(f2, "f");
+              __name(f2, "f2");
+              __name2(f2, "f");
               function s2() {
               }
-              __name(s2, "s");
+              __name(s2, "s2");
+              __name2(s2, "s");
               n2 = Object.getPrototypeOf;
               var y2 = [][a2] ? n2(n2([][a2]())) : (r(n2 = {}, a2, function() {
                 return this;
@@ -24900,16 +25669,18 @@ var require_dist3 = __commonJS({
               function g2(t4) {
                 return Object.setPrototypeOf ? Object.setPrototypeOf(t4, s2) : (t4.__proto__ = s2, r(t4, i2, "GeneratorFunction")), t4.prototype = Object.create(p2), t4;
               }
-              __name(g2, "g");
+              __name(g2, "g2");
+              __name2(g2, "g");
               return f2.prototype = s2, r(p2, "constructor", s2), r(s2, "constructor", f2), f2.displayName = "GeneratorFunction", r(s2, i2, "GeneratorFunction"), r(p2), r(p2, i2, "Generator"), r(p2, a2, function() {
                 return this;
               }), r(p2, "toString", function() {
                 return "[object Generator]";
-              }), (e2 = /* @__PURE__ */ __name(function() {
+              }), (e2 = /* @__PURE__ */ __name2(function() {
                 return { w: c2, m: g2 };
               }, "e"))();
             }
-            __name(e2, "e");
+            __name(e2, "e2");
+            __name2(e2, "e");
             function r(t3, e3, n2, o2) {
               var a2 = Object.defineProperty;
               try {
@@ -24917,17 +25688,19 @@ var require_dist3 = __commonJS({
               } catch (t4) {
                 a2 = 0;
               }
-              r = /* @__PURE__ */ __name(function(t4, e4, n3, o3) {
+              r = /* @__PURE__ */ __name2(function(t4, e4, n3, o3) {
                 function i2(e5, n4) {
                   r(t4, e5, function(t5) {
                     return this._invoke(e5, n4, t5);
                   });
                 }
-                __name(i2, "i");
+                __name(i2, "i2");
+                __name2(i2, "i");
                 e4 ? a2 ? a2(t4, e4, { value: n3, enumerable: !o3, configurable: !o3, writable: !o3 }) : t4[e4] = n3 : (i2("next", 0), i2("throw", 1), i2("return", 2));
               }, "r"), r(t3, e3, n2, o2);
             }
             __name(r, "r");
+            __name2(r, "r");
             function n(t3, e3, r2) {
               return e3 = a(e3), function(t4, e4) {
                 if (e4 && ("object" == d(e4) || "function" == typeof e4)) return e4;
@@ -24939,38 +25712,44 @@ var require_dist3 = __commonJS({
               }(t3, o() ? Reflect.construct(e3, r2 || [], a(t3).constructor) : e3.apply(t3, r2));
             }
             __name(n, "n");
+            __name2(n, "n");
             function o() {
               try {
                 var t3 = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
                 }));
               } catch (t4) {
               }
-              return (o = /* @__PURE__ */ __name(function() {
+              return (o = /* @__PURE__ */ __name2(function() {
                 return !!t3;
               }, "o"))();
             }
             __name(o, "o");
+            __name2(o, "o");
             function a(t3) {
               return a = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(t4) {
                 return t4.__proto__ || Object.getPrototypeOf(t4);
               }, a(t3);
             }
             __name(a, "a");
+            __name2(a, "a");
             function i(t3, e3) {
               if ("function" != typeof e3 && null !== e3) throw new TypeError("Super expression must either be null or a function");
               t3.prototype = Object.create(e3 && e3.prototype, { constructor: { value: t3, writable: true, configurable: true } }), Object.defineProperty(t3, "prototype", { writable: false }), e3 && c(t3, e3);
             }
             __name(i, "i");
+            __name2(i, "i");
             function c(t3, e3) {
               return c = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(t4, e4) {
                 return t4.__proto__ = e4, t4;
               }, c(t3, e3);
             }
             __name(c, "c");
+            __name2(c, "c");
             function u(t3, e3) {
               if (!(t3 instanceof e3)) throw new TypeError("Cannot call a class as a function");
             }
             __name(u, "u");
+            __name2(u, "u");
             function l(t3, e3) {
               for (var r2 = 0; r2 < e3.length; r2++) {
                 var n2 = e3[r2];
@@ -24978,10 +25757,12 @@ var require_dist3 = __commonJS({
               }
             }
             __name(l, "l");
+            __name2(l, "l");
             function f(t3, e3, r2) {
               return e3 && l(t3.prototype, e3), r2 && l(t3, r2), Object.defineProperty(t3, "prototype", { writable: false }), t3;
             }
             __name(f, "f");
+            __name2(f, "f");
             function s(t3, e3) {
               var r2 = Object.keys(t3);
               if (Object.getOwnPropertySymbols) {
@@ -24993,6 +25774,7 @@ var require_dist3 = __commonJS({
               return r2;
             }
             __name(s, "s");
+            __name2(s, "s");
             function y(t3) {
               for (var e3 = 1; e3 < arguments.length; e3++) {
                 var r2 = null != arguments[e3] ? arguments[e3] : {};
@@ -25005,10 +25787,12 @@ var require_dist3 = __commonJS({
               return t3;
             }
             __name(y, "y");
+            __name2(y, "y");
             function p(t3, e3, r2) {
               return (e3 = g(e3)) in t3 ? Object.defineProperty(t3, e3, { value: r2, enumerable: true, configurable: true, writable: true }) : t3[e3] = r2, t3;
             }
             __name(p, "p");
+            __name2(p, "p");
             function g(t3) {
               var e3 = function(t4) {
                 if ("object" != d(t4) || !t4) return t4;
@@ -25023,6 +25807,7 @@ var require_dist3 = __commonJS({
               return "symbol" == d(e3) ? e3 : e3 + "";
             }
             __name(g, "g");
+            __name2(g, "g");
             function v(t3, e3) {
               var r2 = "undefined" != typeof Symbol && t3[Symbol.iterator] || t3["@@iterator"];
               if (!r2) {
@@ -25034,25 +25819,25 @@ var require_dist3 = __commonJS({
                   }
                 }(t3)) || e3 && t3 && "number" == typeof t3.length) {
                   r2 && (t3 = r2);
-                  var n2 = 0, o2 = /* @__PURE__ */ __name(function() {
+                  var n2 = 0, o2 = /* @__PURE__ */ __name2(function() {
                   }, "o");
-                  return { s: o2, n: /* @__PURE__ */ __name(function() {
+                  return { s: o2, n: /* @__PURE__ */ __name2(function() {
                     return n2 >= t3.length ? { done: true } : { done: false, value: t3[n2++] };
-                  }, "n"), e: /* @__PURE__ */ __name(function(t4) {
+                  }, "n"), e: /* @__PURE__ */ __name2(function(t4) {
                     throw t4;
                   }, "e"), f: o2 };
                 }
                 throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
               }
               var a2, i2 = true, c2 = false;
-              return { s: /* @__PURE__ */ __name(function() {
+              return { s: /* @__PURE__ */ __name2(function() {
                 r2 = r2.call(t3);
-              }, "s"), n: /* @__PURE__ */ __name(function() {
+              }, "s"), n: /* @__PURE__ */ __name2(function() {
                 var t4 = r2.next();
                 return i2 = t4.done, t4;
-              }, "n"), e: /* @__PURE__ */ __name(function(t4) {
+              }, "n"), e: /* @__PURE__ */ __name2(function(t4) {
                 c2 = true, a2 = t4;
-              }, "e"), f: /* @__PURE__ */ __name(function() {
+              }, "e"), f: /* @__PURE__ */ __name2(function() {
                 try {
                   i2 || null == r2.return || r2.return();
                 } finally {
@@ -25061,12 +25846,14 @@ var require_dist3 = __commonJS({
               }, "f") };
             }
             __name(v, "v");
+            __name2(v, "v");
             function h(t3, e3) {
               (null == e3 || e3 > t3.length) && (e3 = t3.length);
               for (var r2 = 0, n2 = Array(e3); r2 < e3; r2++) n2[r2] = t3[r2];
               return n2;
             }
             __name(h, "h");
+            __name2(h, "h");
             function d(t3) {
               return d = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(t4) {
                 return typeof t4;
@@ -25075,12 +25862,14 @@ var require_dist3 = __commonJS({
               }, d(t3);
             }
             __name(d, "d");
+            __name2(d, "d");
             function b(t3) {
               return function() {
                 return new m(t3.apply(this, arguments));
               };
             }
             __name(b, "b");
+            __name2(b, "b");
             function m(t3) {
               var e3, r2;
               function n2(e4, r3) {
@@ -25100,7 +25889,8 @@ var require_dist3 = __commonJS({
                   o2("throw", t4);
                 }
               }
-              __name(n2, "n");
+              __name(n2, "n2");
+              __name2(n2, "n");
               function o2(t4, o3) {
                 switch (t4) {
                   case "return":
@@ -25114,7 +25904,8 @@ var require_dist3 = __commonJS({
                 }
                 (e3 = e3.next) ? n2(e3.key, e3.arg) : r2 = null;
               }
-              __name(o2, "o");
+              __name(o2, "o2");
+              __name2(o2, "o");
               this._invoke = function(t4, o3) {
                 return new Promise(function(a2, i2) {
                   var c2 = { key: t4, arg: o3, resolve: a2, reject: i2, next: null };
@@ -25123,10 +25914,12 @@ var require_dist3 = __commonJS({
               }, "function" != typeof t3.return && (this.return = void 0);
             }
             __name(m, "m");
+            __name2(m, "m");
             function S(t3, e3) {
               this.v = t3, this.k = e3;
             }
             __name(S, "S");
+            __name2(S, "S");
             m.prototype["function" == typeof Symbol && Symbol.asyncIterator || "@@asyncIterator"] = function() {
               return this;
             }, m.prototype.next = function(t3) {
@@ -25145,11 +25938,13 @@ var require_dist3 = __commonJS({
               return "symbol" === d(t3) ? "Symbol".concat(t3.description[7].toUpperCase()).concat(t3.description.slice(8)) : "".concat(t3[0].toUpperCase()).concat(t3.slice(1));
             }
             __name(L, "L");
+            __name2(L, "L");
             function T(t3, e3, r2, n2) {
               var o2 = n2.enumerable, a2 = n2.get, i2 = n2.set;
               x(t3, "".concat(e3, "Get").concat(r2), { __proto__: null, value: k(a2), enumerable: o2 }), void 0 !== i2 && x(t3, "".concat(e3, "Set").concat(r2), { __proto__: null, value: k(i2), enumerable: o2 });
             }
             __name(T, "T");
+            __name2(T, "T");
             function B(t3, e3, r2) {
               var n2, o2 = v(A(t3));
               try {
@@ -25168,6 +25963,7 @@ var require_dist3 = __commonJS({
               }
             }
             __name(B, "B");
+            __name2(B, "B");
             function z(t3, e3, r2) {
               var n2, o2 = v(A(t3));
               try {
@@ -25188,6 +25984,7 @@ var require_dist3 = __commonJS({
               }
             }
             __name(z, "z");
+            __name2(z, "z");
             ["Proxy", "globalThis"].forEach(function(t3) {
               P[t3] = globalThis[t3];
             }), [decodeURI, decodeURIComponent, encodeURI, encodeURIComponent].forEach(function(t3) {
@@ -25224,24 +26021,24 @@ var require_dist3 = __commonJS({
               var e3 = t3.name, r2 = t3.original;
               P[e3] = r2, z(r2, P, e3), z(r2.prototype, P, "".concat(e3, "Prototype"));
             }), P.IteratorPrototype = Reflect.getPrototypeOf(P.ArrayIteratorPrototype);
-            var M = P.ArrayPrototypeForEach, C = P.FinalizationRegistry, D = P.FunctionPrototypeCall, N = P.Map, F = P.ObjectFreeze, W = P.ObjectSetPrototypeOf, H = P.RegExp, U = P.Set, G = P.SymbolIterator, V = P.WeakMap, Z = P.WeakRef, $ = P.WeakSet, Y = /* @__PURE__ */ __name(function(t3, e3) {
+            var M = P.ArrayPrototypeForEach, C = P.FinalizationRegistry, D = P.FunctionPrototypeCall, N = P.Map, F = P.ObjectFreeze, W = P.ObjectSetPrototypeOf, H = P.RegExp, U = P.Set, G = P.SymbolIterator, V = P.WeakMap, Z = P.WeakRef, $ = P.WeakSet, Y = /* @__PURE__ */ __name2(function(t3, e3) {
               var r2 = function() {
-                return f(/* @__PURE__ */ __name(function e4(r3) {
+                return f(/* @__PURE__ */ __name2(/* @__PURE__ */ __name(function e4(r3) {
                   u(this, e4), this._iterator = t3(r3);
-                }, "e"), [{ key: "next", value: /* @__PURE__ */ __name(function() {
+                }, "e4"), "e"), [{ key: "next", value: /* @__PURE__ */ __name2(function() {
                   return e3(this._iterator);
-                }, "value") }, { key: G, value: /* @__PURE__ */ __name(function() {
+                }, "value") }, { key: G, value: /* @__PURE__ */ __name2(function() {
                   return this;
                 }, "value") }]);
               }();
               return W(r2.prototype, null), F(r2.prototype), F(r2), r2;
             }, "Y");
             P.SafeArrayIterator = Y(P.ArrayPrototypeSymbolIterator, P.ArrayIteratorPrototypeNext), P.SafeStringIterator = Y(P.StringPrototypeSymbolIterator, P.StringIteratorPrototypeNext);
-            var q = /* @__PURE__ */ __name(function(t3, e3) {
+            var q = /* @__PURE__ */ __name2(function(t3, e3) {
               M(A(t3), function(r2) {
                 w(e3, r2) || x(e3, r2, y({ __proto__: null }, w(t3, r2)));
               });
-            }, "q"), J = /* @__PURE__ */ __name(function(t3, e3) {
+            }, "q"), J = /* @__PURE__ */ __name2(function(t3, e3) {
               if (G in t3.prototype) {
                 var r2, n2 = new t3();
                 M(A(t3.prototype), function(o2) {
@@ -25265,43 +26062,49 @@ var require_dist3 = __commonJS({
               function e3(t4) {
                 return u(this, e3), n(this, e3, [t4]);
               }
-              __name(e3, "e");
+              __name(e3, "e3");
+              __name2(e3, "e");
               return i(e3, t3), f(e3);
             }(N)), P.SafeWeakMap = J(V, function(t3) {
               function e3(t4) {
                 return u(this, e3), n(this, e3, [t4]);
               }
-              __name(e3, "e");
+              __name(e3, "e3");
+              __name2(e3, "e");
               return i(e3, t3), f(e3);
             }(V)), P.SafeSet = J(U, function(t3) {
               function e3(t4) {
                 return u(this, e3), n(this, e3, [t4]);
               }
-              __name(e3, "e");
+              __name(e3, "e3");
+              __name2(e3, "e");
               return i(e3, t3), f(e3);
             }(U)), P.SafeWeakSet = J($, function(t3) {
               function e3(t4) {
                 return u(this, e3), n(this, e3, [t4]);
               }
-              __name(e3, "e");
+              __name(e3, "e3");
+              __name2(e3, "e");
               return i(e3, t3), f(e3);
             }($)), P.SafeFinalizationRegistry = J(C, function(t3) {
               function e3(t4) {
                 return u(this, e3), n(this, e3, [t4]);
               }
-              __name(e3, "e");
+              __name(e3, "e3");
+              __name2(e3, "e");
               return i(e3, t3), f(e3);
             }(C)), P.SafeWeakRef = J(Z, function(t3) {
               function e3(t4) {
                 return u(this, e3), n(this, e3, [t4]);
               }
-              __name(e3, "e");
+              __name(e3, "e3");
+              __name2(e3, "e");
               return i(e3, t3), f(e3);
-            }(Z)), P.AsyncIteratorPrototype = P.ReflectGetPrototypeOf(b(e2().m(/* @__PURE__ */ __name(function t3() {
+            }(Z)), P.AsyncIteratorPrototype = P.ReflectGetPrototypeOf(b(e2().m(/* @__PURE__ */ __name2(/* @__PURE__ */ __name(function t3() {
               return e2().w(function(t4) {
                 for (; ; ) if (0 === t4.n) return t4.a(2);
               }, t3);
-            }, "t")))).prototype, P.internalBinding = function(t3) {
+            }, "t3"), "t")))).prototype, P.internalBinding = function(t3) {
               if ("config" === t3) return { hasIntl: false };
               throw new Error('unknown module: "'.concat(t3, '"'));
             }, P._stringPrototypeReplaceAll = function(t3, e3, r2) {
@@ -25316,6 +26119,7 @@ var require_dist3 = __commonJS({
               }, n(t3);
             }
             __name(n, "n");
+            __name2(n, "n");
             function o(t3, e3) {
               for (var r2 = 0; r2 < e3.length; r2++) {
                 var n2 = e3[r2];
@@ -25323,6 +26127,7 @@ var require_dist3 = __commonJS({
               }
             }
             __name(o, "o");
+            __name2(o, "o");
             function a(t3) {
               var e3 = function(t4) {
                 if ("object" != n(t4) || !t4) return t4;
@@ -25337,17 +26142,18 @@ var require_dist3 = __commonJS({
               return "symbol" == n(e3) ? e3 : e3 + "";
             }
             __name(a, "a");
+            __name2(a, "a");
             var i = r(425), c = i.Proxy, u = i.ProxyRevocable, l = new (0, i.SafeWeakMap)(), f = function() {
-              return t3 = /* @__PURE__ */ __name(function t4(e4, r2) {
+              return t3 = /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function t4(e4, r2) {
                 !function(t5, e5) {
                   if (!(t5 instanceof e5)) throw new TypeError("Cannot call a class as a function");
                 }(this, t4);
                 var n2 = new c(e4, r2);
                 return l.set(n2, [e4, r2]), n2;
-              }, "t"), e3 = [{ key: "getProxyDetails", value: /* @__PURE__ */ __name(function(t4) {
+              }, "t4"), "t"), e3 = [{ key: "getProxyDetails", value: /* @__PURE__ */ __name2(function(t4) {
                 var e4 = !(arguments.length > 1 && void 0 !== arguments[1]) || arguments[1], r2 = l.get(t4);
                 if (r2) return e4 ? r2 : r2[0];
-              }, "value") }, { key: "revocable", value: /* @__PURE__ */ __name(function(t4, e4) {
+              }, "value") }, { key: "revocable", value: /* @__PURE__ */ __name2(function(t4, e4) {
                 var r2 = u(t4, e4);
                 l.set(r2.proxy, [t4, e4]);
                 var n2 = r2.revoke;
@@ -25367,6 +26173,7 @@ var require_dist3 = __commonJS({
               }, n(t3);
             }
             __name(n, "n");
+            __name2(n, "n");
             var o = r(425), a = o.ArrayIsArray, i = o.BigInt, c = o.Boolean, u = o.DatePrototype, l = o.Error, f = o.FunctionPrototype, s = o.MapPrototypeHas, y = o.Number, p = o.ObjectDefineProperty, g = o.ObjectGetOwnPropertyDescriptor, v = o.ObjectGetPrototypeOf, h = o.ObjectIsFrozen, d = o.ObjectPrototype, b = o.SetPrototypeHas, m = o.String, S = o.Symbol, P = o.SymbolToStringTag, x = o.globalThis, w = r(153).getConstructorName;
             function A(t3) {
               for (var e3 = arguments.length, r2 = new Array(e3 > 1 ? e3 - 1 : 0), o2 = 1; o2 < e3; o2++) r2[o2 - 1] = arguments[o2];
@@ -25382,6 +26189,7 @@ var require_dist3 = __commonJS({
               return false;
             }
             __name(A, "A");
+            __name2(A, "A");
             function O(t3) {
               return function(e3) {
                 if (!A(e3, t3.name)) return false;
@@ -25394,31 +26202,32 @@ var require_dist3 = __commonJS({
               };
             }
             __name(O, "O");
-            "object" !== n(x) && (p(d, "__magic__", { get: /* @__PURE__ */ __name(function() {
+            __name2(O, "O");
+            "object" !== n(x) && (p(d, "__magic__", { get: /* @__PURE__ */ __name2(function() {
               return this;
             }, "get"), configurable: true }), __magic__.globalThis = __magic__, delete d.__magic__);
             var _ = O(m), j = O(y), E = O(c), k = O(i), I = O(S);
-            t2.exports = { isAsyncFunction: /* @__PURE__ */ __name(function(t3) {
+            t2.exports = { isAsyncFunction: /* @__PURE__ */ __name2(function(t3) {
               return "function" == typeof t3 && f.toString.call(t3).startsWith("async");
-            }, "isAsyncFunction"), isGeneratorFunction: /* @__PURE__ */ __name(function(t3) {
+            }, "isAsyncFunction"), isGeneratorFunction: /* @__PURE__ */ __name2(function(t3) {
               return "function" == typeof t3 && f.toString.call(t3).match(/^(async\s+)?function *\*/);
-            }, "isGeneratorFunction"), isAnyArrayBuffer: /* @__PURE__ */ __name(function(t3) {
+            }, "isGeneratorFunction"), isAnyArrayBuffer: /* @__PURE__ */ __name2(function(t3) {
               return A(t3, "ArrayBuffer", "SharedArrayBuffer");
-            }, "isAnyArrayBuffer"), isArrayBuffer: /* @__PURE__ */ __name(function(t3) {
+            }, "isAnyArrayBuffer"), isArrayBuffer: /* @__PURE__ */ __name2(function(t3) {
               return A(t3, "ArrayBuffer");
-            }, "isArrayBuffer"), isArgumentsObject: /* @__PURE__ */ __name(function(t3) {
+            }, "isArrayBuffer"), isArgumentsObject: /* @__PURE__ */ __name2(function(t3) {
               if (null !== t3 && "object" === n(t3) && !a(t3) && "number" == typeof t3.length && t3.length === (0 | t3.length) && t3.length >= 0) {
                 var e3 = g(t3, "callee");
                 return e3 && !e3.enumerable;
               }
               return false;
-            }, "isArgumentsObject"), isBoxedPrimitive: /* @__PURE__ */ __name(function(t3) {
+            }, "isArgumentsObject"), isBoxedPrimitive: /* @__PURE__ */ __name2(function(t3) {
               return j(t3) || _(t3) || E(t3) || k(t3) || I(t3);
-            }, "isBoxedPrimitive"), isDataView: /* @__PURE__ */ __name(function(t3) {
+            }, "isBoxedPrimitive"), isDataView: /* @__PURE__ */ __name2(function(t3) {
               return A(t3, "DataView");
-            }, "isDataView"), isExternal: /* @__PURE__ */ __name(function(t3) {
+            }, "isDataView"), isExternal: /* @__PURE__ */ __name2(function(t3) {
               return "object" === n(t3) && h(t3) && null == v(t3);
-            }, "isExternal"), isMap: /* @__PURE__ */ __name(function(t3) {
+            }, "isExternal"), isMap: /* @__PURE__ */ __name2(function(t3) {
               if (!A(t3, "Map")) return false;
               try {
                 s(t3);
@@ -25426,15 +26235,15 @@ var require_dist3 = __commonJS({
                 return false;
               }
               return true;
-            }, "isMap"), isMapIterator: /* @__PURE__ */ __name(function(t3) {
+            }, "isMap"), isMapIterator: /* @__PURE__ */ __name2(function(t3) {
               return "[object Map Iterator]" === d.toString.call(v(t3));
-            }, "isMapIterator"), isModuleNamespaceObject: /* @__PURE__ */ __name(function(t3) {
+            }, "isMapIterator"), isModuleNamespaceObject: /* @__PURE__ */ __name2(function(t3) {
               return t3 && "object" === n(t3) && "Module" === t3[P];
-            }, "isModuleNamespaceObject"), isNativeError: /* @__PURE__ */ __name(function(t3) {
+            }, "isModuleNamespaceObject"), isNativeError: /* @__PURE__ */ __name2(function(t3) {
               return t3 instanceof l && A(t3, "Error", "EvalError", "RangeError", "ReferenceError", "SyntaxError", "TypeError", "URIError", "AggregateError");
-            }, "isNativeError"), isPromise: /* @__PURE__ */ __name(function(t3) {
+            }, "isNativeError"), isPromise: /* @__PURE__ */ __name2(function(t3) {
               return A(t3, "Promise");
-            }, "isPromise"), isSet: /* @__PURE__ */ __name(function(t3) {
+            }, "isPromise"), isSet: /* @__PURE__ */ __name2(function(t3) {
               if (!A(t3, "Set")) return false;
               try {
                 b(t3);
@@ -25442,31 +26251,31 @@ var require_dist3 = __commonJS({
                 return false;
               }
               return true;
-            }, "isSet"), isSetIterator: /* @__PURE__ */ __name(function(t3) {
+            }, "isSet"), isSetIterator: /* @__PURE__ */ __name2(function(t3) {
               return "[object Set Iterator]" === d.toString.call(v(t3));
-            }, "isSetIterator"), isWeakMap: /* @__PURE__ */ __name(function(t3) {
+            }, "isSetIterator"), isWeakMap: /* @__PURE__ */ __name2(function(t3) {
               return A(t3, "WeakMap");
-            }, "isWeakMap"), isWeakSet: /* @__PURE__ */ __name(function(t3) {
+            }, "isWeakMap"), isWeakSet: /* @__PURE__ */ __name2(function(t3) {
               return A(t3, "WeakSet");
-            }, "isWeakSet"), isRegExp: /* @__PURE__ */ __name(function(t3) {
+            }, "isWeakSet"), isRegExp: /* @__PURE__ */ __name2(function(t3) {
               return A(t3, "RegExp");
-            }, "isRegExp"), isDate: /* @__PURE__ */ __name(function(t3) {
+            }, "isRegExp"), isDate: /* @__PURE__ */ __name2(function(t3) {
               if (A(t3, "Date")) try {
                 return u.getTime.call(t3), true;
               } catch (t4) {
               }
               return false;
-            }, "isDate"), isTypedArray: /* @__PURE__ */ __name(function(t3) {
+            }, "isDate"), isTypedArray: /* @__PURE__ */ __name2(function(t3) {
               return A(t3, "Int8Array", "Uint8Array", "Uint8ClampedArray", "Int16Array", "Uint16Array", "Int32Array", "Uint32Array", "Float32Array", "Float64Array", "BigInt64Array", "BigUint64Array");
             }, "isTypedArray"), isStringObject: _, isNumberObject: j, isBooleanObject: E, isBigIntObject: k, isSymbolObject: I };
           }, 705: (t2) => {
             var e2 = ["_http_agent", "_http_client", "_http_common", "_http_incoming", "_http_outgoing", "_http_server", "_stream_duplex", "_stream_passthrough", "_stream_readable", "_stream_transform", "_stream_wrap", "_stream_writable", "_tls_common", "_tls_wrap", "assert", "assert/strict", "async_hooks", "buffer", "child_process", "cluster", "console", "constants", "crypto", "dgram", "diagnostics_channel", "dns", "dns/promises", "domain", "events", "fs", "fs/promises", "http", "http2", "https", "inspector", "module", "Module", "net", "os", "path", "path/posix", "path/win32", "perf_hooks", "process", "punycode", "querystring", "readline", "readline/promises", "repl", "stream", "stream/consumers", "stream/promises", "stream/web", "string_decoder", "sys", "timers", "timers/promises", "tls", "trace_events", "tty", "url", "util", "util/types", "v8", "vm", "wasi", "worker_threads", "zlib"];
-            t2.exports.BuiltinModule = { exists: /* @__PURE__ */ __name(function(t3) {
+            t2.exports.BuiltinModule = { exists: /* @__PURE__ */ __name2(function(t3) {
               return t3.startsWith("internal/") || -1 !== e2.indexOf(t3);
             }, "exists") };
           }, 802: (t2, e2, r) => {
             var n = r(425), o = n.StringPrototypeCharCodeAt, a = n.StringPrototypeIncludes, i = n.StringPrototypeReplace, c = r(24), u = r(22).CHAR_FORWARD_SLASH, l = r(370), f = /%/g, s = /\\/g, y = /\n/g, p = /\r/g, g = /\t/g;
-            t2.exports = { pathToFileURL: /* @__PURE__ */ __name(function(t3) {
+            t2.exports = { pathToFileURL: /* @__PURE__ */ __name2(function(t3) {
               var e3 = new c("file://"), r2 = l.resolve(t3);
               return o(t3, t3.length - 1) === u && r2[r2.length - 1] !== l.sep && (r2 += "/"), e3.pathname = function(t4) {
                 return a(t4, "%") && (t4 = i(t4, f, "%25")), a(t4, "\\") && (t4 = i(t4, s, "%5C")), a(t4, "\n") && (t4 = i(t4, y, "%0A")), a(t4, "\r") && (t4 = i(t4, p, "%0D")), a(t4, "	") && (t4 = i(t4, g, "%09")), t4;
@@ -25481,6 +26290,7 @@ var require_dist3 = __commonJS({
               }, n(t3);
             }
             __name(n, "n");
+            __name2(n, "n");
             function o(t3, e3) {
               for (var r2 = 0; r2 < e3.length; r2++) {
                 var n2 = e3[r2];
@@ -25488,6 +26298,7 @@ var require_dist3 = __commonJS({
               }
             }
             __name(o, "o");
+            __name2(o, "o");
             function a(t3) {
               var e3 = function(t4) {
                 if ("object" != n(t4) || !t4) return t4;
@@ -25502,12 +26313,13 @@ var require_dist3 = __commonJS({
               return "symbol" == n(e3) ? e3 : e3 + "";
             }
             __name(a, "a");
+            __name2(a, "a");
             var i = r(425).ArrayPrototypeMap, c = function() {
-              return t3 = /* @__PURE__ */ __name(function t4() {
+              return t3 = /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function t4() {
                 !function(t5, e4) {
                   if (!(t5 instanceof e4)) throw new TypeError("Cannot call a class as a function");
                 }(this, t4);
-              }, "t"), e3 = [{ key: "hexSlice", value: /* @__PURE__ */ __name(function() {
+              }, "t4"), "t"), e3 = [{ key: "hexSlice", value: /* @__PURE__ */ __name2(function() {
                 var t4 = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : 0, e4 = arguments.length > 1 ? arguments[1] : void 0;
                 return i(this.slice(t4, e4), function(t5) {
                   return ("00" + t5.toString(16)).slice(-2);
@@ -25518,9 +26330,9 @@ var require_dist3 = __commonJS({
             e2.h = c;
           }, 923: (t2, e2, r) => {
             var n = r(425), o = n.ArrayPrototypeJoin, a = n.Error, i = n.StringPrototypeReplace, c = n.SymbolFor, u = /\u001b\[\d\d?m/g;
-            t2.exports = { customInspectSymbol: c("nodejs.util.inspect.custom"), isError: /* @__PURE__ */ __name(function(t3) {
+            t2.exports = { customInspectSymbol: c("nodejs.util.inspect.custom"), isError: /* @__PURE__ */ __name2(function(t3) {
               return t3 instanceof a;
-            }, "isError"), join: o, removeColors: /* @__PURE__ */ __name(function(t3) {
+            }, "isError"), join: o, removeColors: /* @__PURE__ */ __name2(function(t3) {
               return i(t3, u, "");
             }, "removeColors") };
           }, 924: (t2, e2, r) => {
@@ -25530,6 +26342,7 @@ var require_dist3 = __commonJS({
               return n2;
             }
             __name(n, "n");
+            __name2(n, "n");
             function o(t3) {
               return o = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(t4) {
                 return typeof t4;
@@ -25538,6 +26351,7 @@ var require_dist3 = __commonJS({
               }, o(t3);
             }
             __name(o, "o");
+            __name2(o, "o");
             function a(t3, e3) {
               for (var r2 = 0; r2 < e3.length; r2++) {
                 var n2 = e3[r2];
@@ -25545,6 +26359,7 @@ var require_dist3 = __commonJS({
               }
             }
             __name(a, "a");
+            __name2(a, "a");
             function i(t3) {
               var e3 = function(t4) {
                 if ("object" != o(t4) || !t4) return t4;
@@ -25559,29 +26374,33 @@ var require_dist3 = __commonJS({
               return "symbol" == o(e3) ? e3 : e3 + "";
             }
             __name(i, "i");
+            __name2(i, "i");
             function c() {
               try {
                 var t3 = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
                 }));
               } catch (t4) {
               }
-              return (c = /* @__PURE__ */ __name(function() {
+              return (c = /* @__PURE__ */ __name2(function() {
                 return !!t3;
               }, "c"))();
             }
             __name(c, "c");
+            __name2(c, "c");
             function u(t3) {
               return u = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(t4) {
                 return t4.__proto__ || Object.getPrototypeOf(t4);
               }, u(t3);
             }
             __name(u, "u");
+            __name2(u, "u");
             function l(t3, e3) {
               return l = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(t4, e4) {
                 return t4.__proto__ = e4, t4;
               }, l(t3, e3);
             }
             __name(l, "l");
+            __name2(l, "l");
             var f, s, y = r(425), p = y.ArrayIsArray, g = y.ArrayPrototypeIncludes, v = y.ArrayPrototypeIndexOf, h = y.ArrayPrototypeJoin, d = y.ArrayPrototypePush, b = y.ArrayPrototypeSlice, m = y.ArrayPrototypeSplice, S = y.Error, P = y.ErrorCaptureStackTrace, x = y.JSONStringify, w = y.ObjectDefineProperty, A = y.ReflectApply, O = y.RegExpPrototypeExec, _ = y.SafeMap, j = y.SafeWeakMap, E = y.String, k = y.StringPrototypeEndsWith, I = y.StringPrototypeIncludes, R = y.StringPrototypeIndexOf, L = y.StringPrototypeSlice, T = y.StringPrototypeToLowerCase, B = y.Symbol, z = y.TypeError, M = B("kIsNodeError"), C = new _(), D = {}, N = /^[A-Z][a-zA-Z0-9]*$/, F = ["string", "function", "number", "object", "Function", "Object", "boolean", "bigint", "symbol"], W = new j(), H = r(229), U = null;
             function G(t3, e3) {
               var r2 = function(t4) {
@@ -25602,11 +26421,12 @@ var require_dist3 = __commonJS({
                   for (var f3 = arguments.length, s3 = new Array(f3), y2 = 0; y2 < f3; y2++) s3[y2] = arguments[y2];
                   return w(t5, "message", { __proto__: null, value: Z(e3, s3, t5), enumerable: false, writable: true, configurable: true }), t5;
                 }
-                __name(r3, "r");
+                __name(r3, "r3");
+                __name2(r3, "r");
                 return function(t5, e4) {
                   if ("function" != typeof e4 && null !== e4) throw new TypeError("Super expression must either be null or a function");
                   t5.prototype = Object.create(e4 && e4.prototype, { constructor: { value: t5, writable: true, configurable: true } }), Object.defineProperty(t5, "prototype", { writable: false }), e4 && l(t5, e4);
-                }(r3, t4), n2 = r3, (f2 = [{ key: "toString", value: /* @__PURE__ */ __name(function() {
+                }(r3, t4), n2 = r3, (f2 = [{ key: "toString", value: /* @__PURE__ */ __name2(function() {
                   return "".concat(this.name, " [").concat(e3, "]: ").concat(this.message);
                 }, "value") }]) && a(n2.prototype, f2), s2 && a(n2, s2), Object.defineProperty(n2, "prototype", { writable: false }), n2;
                 var n2, f2, s2;
@@ -25614,17 +26434,20 @@ var require_dist3 = __commonJS({
               return r2;
             }
             __name(G, "G");
+            __name2(G, "G");
             function V(t3, e3, r2) {
               C.set(t3, e3);
               var n2 = G(r2, t3);
               D[t3] = n2;
             }
             __name(V, "V");
+            __name2(V, "V");
             function Z(t3, e3, r2) {
               var n2 = C.get(t3);
               if ("function" == typeof n2) return H(n2.length <= e3.length, "Code: ".concat(t3, "; The provided arguments length (").concat(e3.length, ") does not ") + "match the required ones (".concat(n2.length, ").")), A(n2, r2, e3);
             }
             __name(Z, "Z");
+            __name2(Z, "Z");
             var $ = B("kEnhanceStackBeforeInspector");
             function Y(t3) {
               if (null === t3) return "null";
@@ -25647,6 +26470,7 @@ var require_dist3 = __commonJS({
               }
             }
             __name(Y, "Y");
+            __name2(Y, "Y");
             function q(t3) {
               var e3 = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "and";
               switch (t3.length) {
@@ -25663,7 +26487,8 @@ var require_dist3 = __commonJS({
               }
             }
             __name(q, "q");
-            t2.exports = { codes: D, determineSpecificType: Y, E: V, formatList: q, getMessage: Z, hideStackFrames: /* @__PURE__ */ __name(function(t3) {
+            __name2(q, "q");
+            t2.exports = { codes: D, determineSpecificType: Y, E: V, formatList: q, getMessage: Z, hideStackFrames: /* @__PURE__ */ __name2(function(t3) {
               function e3() {
                 try {
                   for (var r2 = arguments.length, n2 = new Array(r2), o2 = 0; o2 < r2; o2++) n2[o2] = arguments[o2];
@@ -25672,11 +26497,12 @@ var require_dist3 = __commonJS({
                   throw S.stackTraceLimit && P(t4, e3), t4;
                 }
               }
-              __name(e3, "e");
+              __name(e3, "e3");
+              __name2(e3, "e");
               return e3.withoutStackTrace = t3, e3;
-            }, "hideStackFrames"), isStackOverflowError: /* @__PURE__ */ __name(function(t3) {
+            }, "hideStackFrames"), isStackOverflowError: /* @__PURE__ */ __name2(function(t3) {
               if (void 0 === s) try {
-                var e3 = /* @__PURE__ */ __name(function() {
+                var e3 = /* @__PURE__ */ __name2(function() {
                   e3();
                 }, "e");
                 e3();
@@ -25707,25 +26533,25 @@ var require_dist3 = __commonJS({
                     }
                   }(t4)) || e4 && t4 && "number" == typeof t4.length) {
                     r3 && (t4 = r3);
-                    var o3 = 0, a3 = /* @__PURE__ */ __name(function() {
+                    var o3 = 0, a3 = /* @__PURE__ */ __name2(function() {
                     }, "a");
-                    return { s: a3, n: /* @__PURE__ */ __name(function() {
+                    return { s: a3, n: /* @__PURE__ */ __name2(function() {
                       return o3 >= t4.length ? { done: true } : { done: false, value: t4[o3++] };
-                    }, "n"), e: /* @__PURE__ */ __name(function(t5) {
+                    }, "n"), e: /* @__PURE__ */ __name2(function(t5) {
                       throw t5;
                     }, "e"), f: a3 };
                   }
                   throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
                 }
                 var i3, c3 = true, u3 = false;
-                return { s: /* @__PURE__ */ __name(function() {
+                return { s: /* @__PURE__ */ __name2(function() {
                   r3 = r3.call(t4);
-                }, "s"), n: /* @__PURE__ */ __name(function() {
+                }, "s"), n: /* @__PURE__ */ __name2(function() {
                   var t5 = r3.next();
                   return c3 = t5.done, t5;
-                }, "n"), e: /* @__PURE__ */ __name(function(t5) {
+                }, "n"), e: /* @__PURE__ */ __name2(function(t5) {
                   u3 = true, i3 = t5;
-                }, "e"), f: /* @__PURE__ */ __name(function() {
+                }, "e"), f: /* @__PURE__ */ __name2(function() {
                   try {
                     c3 || null == r3.return || r3.return();
                   } finally {
@@ -25750,19 +26576,19 @@ var require_dist3 = __commonJS({
               return c2.length > 0 && (o2 += "".concat(c2.length > 1 ? "one of type" : "of type", " ").concat(q(c2, "or")), (u2.length > 0 || l2.length > 0) && (o2 += " or ")), u2.length > 0 && (o2 += "an instance of ".concat(q(u2, "or")), l2.length > 0 && (o2 += " or ")), l2.length > 0 && (l2.length > 1 ? o2 += "one of ".concat(q(l2, "or")) : (T(l2[0]) !== l2[0] && (o2 += "an "), o2 += "".concat(l2[0]))), o2 + ". Received ".concat(Y(r2));
             }, z);
           } }, e = {};
-          return (/* @__PURE__ */ __name(function r(n) {
+          return (/* @__PURE__ */ __name2(/* @__PURE__ */ __name(function r(n) {
             var o = e[n];
             if (void 0 !== o) return o.exports;
             var a = e[n] = { exports: {} };
             return t[n](a, a.exports, r), a.exports;
-          }, "r"))(33);
+          }, "r"), "r"))(33);
         })());
       }
     });
     var src_exports = {};
     __export2(src_exports, {
-      AbortError: () => AbortError,
-      AsyncEventEmitter: () => AsyncEventEmitter
+      AbortError: /* @__PURE__ */ __name(() => AbortError, "AbortError"),
+      AsyncEventEmitter: /* @__PURE__ */ __name(() => AsyncEventEmitter, "AsyncEventEmitter")
     });
     module2.exports = __toCommonJS2(src_exports);
     init_cjs_shims();
@@ -25788,12 +26614,14 @@ var require_dist3 = __commonJS({
       }
     }
     __name(validateListener, "validateListener");
+    __name2(validateListener, "validateListener");
     function validateAbortSignal(input) {
       if (input && !(input instanceof AbortSignal)) {
         throw new TypeError(`The signal option must be an AbortSignal. Received ${input}`);
       }
     }
     __name(validateAbortSignal, "validateAbortSignal");
+    __name2(validateAbortSignal, "validateAbortSignal");
     function spliceOne(list, index) {
       for (; index + 1 < list.length; index++) {
         list[index] = list[index + 1];
@@ -25801,6 +26629,7 @@ var require_dist3 = __commonJS({
       list.pop();
     }
     __name(spliceOne, "spliceOne");
+    __name2(spliceOne, "spliceOne");
     function arrayClone(arr) {
       switch (arr.length) {
         case 2:
@@ -25817,6 +26646,7 @@ var require_dist3 = __commonJS({
       return arr.slice();
     }
     __name(arrayClone, "arrayClone");
+    __name2(arrayClone, "arrayClone");
     function identicalSequenceRange(a, b) {
       for (let i = 0; i < a.length - 3; i++) {
         const pos = b.indexOf(a[i]);
@@ -25837,6 +26667,7 @@ var require_dist3 = __commonJS({
       return [0, 0];
     }
     __name(identicalSequenceRange, "identicalSequenceRange");
+    __name2(identicalSequenceRange, "identicalSequenceRange");
     function enhanceStackTrace(err, own) {
       let ctorInfo = "";
       try {
@@ -25856,11 +26687,15 @@ Emitted 'error' event${ctorInfo} at:
       return err.stack + sep + ownStack.join("\n");
     }
     __name(enhanceStackTrace, "enhanceStackTrace");
+    __name2(enhanceStackTrace, "enhanceStackTrace");
     var brandSymbol = Symbol.for("async-event-emitter.ts-brand");
     var kCapturePromiseRejections = Symbol.for("async-event-emitter.ts-capture-promise-rejections");
     var _a;
     brandSymbol, _a = kCapturePromiseRejections;
     var _AsyncEventEmitter = class _AsyncEventEmitter2 {
+      static {
+        __name(this, "_AsyncEventEmitter");
+      }
       constructor() {
         this._events = {
           __proto__: null
@@ -26157,14 +26992,14 @@ Emitted 'error' event${ctorInfo} at:
           throw new AbortError(void 0, { cause: getReason(signal) });
         }
         return new Promise((resolve, reject) => {
-          const errorListener = /* @__PURE__ */ __name((err) => {
+          const errorListener = /* @__PURE__ */ __name2((err) => {
             emitter.removeListener(eventName, resolver);
             if (signal) {
               eventTargetAgnosticRemoveListener(emitter, eventName, abortListener);
             }
             reject(err);
           }, "errorListener");
-          const resolver = /* @__PURE__ */ __name((...args) => {
+          const resolver = /* @__PURE__ */ __name2((...args) => {
             emitter.removeListener("error", errorListener);
             if (signal) {
               eventTargetAgnosticRemoveListener(signal, "abort", abortListener);
@@ -26175,7 +27010,7 @@ Emitted 'error' event${ctorInfo} at:
           if (eventName !== "error") {
             emitter.once("error", errorListener);
           }
-          const abortListener = /* @__PURE__ */ __name(() => {
+          const abortListener = /* @__PURE__ */ __name2(() => {
             eventTargetAgnosticRemoveListener(emitter, eventName, resolver);
             eventTargetAgnosticRemoveListener(emitter, "error", errorListener);
             reject(new AbortError(void 0, { cause: getReason(signal) }));
@@ -26195,10 +27030,10 @@ Emitted 'error' event${ctorInfo} at:
         const unconsumedPromises = [];
         let error = null;
         let finished = false;
-        const abortListener = /* @__PURE__ */ __name(() => {
+        const abortListener = /* @__PURE__ */ __name2(() => {
           errorHandler(new AbortError(void 0, { cause: getReason(signal) }));
         }, "abortListener");
-        const eventHandler = /* @__PURE__ */ __name((...args) => {
+        const eventHandler = /* @__PURE__ */ __name2((...args) => {
           const promise = unconsumedPromises.shift();
           if (promise) {
             promise.resolve(createIterResult(args, false));
@@ -26206,7 +27041,7 @@ Emitted 'error' event${ctorInfo} at:
             unconsumedEvents.push(args);
           }
         }, "eventHandler");
-        const errorHandler = /* @__PURE__ */ __name((err) => {
+        const errorHandler = /* @__PURE__ */ __name2((err) => {
           finished = true;
           const toError = unconsumedPromises.shift();
           if (toError) {
@@ -26274,7 +27109,7 @@ Emitted 'error' event${ctorInfo} at:
         return iterator;
       }
     };
-    __name(_AsyncEventEmitter, "AsyncEventEmitter");
+    __name2(_AsyncEventEmitter, "AsyncEventEmitter");
     var AsyncEventEmitter = _AsyncEventEmitter;
     function onceWrapper() {
       if (!this.fired) {
@@ -26287,10 +27122,12 @@ Emitted 'error' event${ctorInfo} at:
       }
     }
     __name(onceWrapper, "onceWrapper");
+    __name2(onceWrapper, "onceWrapper");
     function getReason(signal) {
       return signal?.reason;
     }
     __name(getReason, "getReason");
+    __name2(getReason, "getReason");
     function eventTargetAgnosticRemoveListener(emitter, name, listener, flags) {
       if (typeof emitter.off === "function") {
         emitter.off(name, listener);
@@ -26299,6 +27136,7 @@ Emitted 'error' event${ctorInfo} at:
       }
     }
     __name(eventTargetAgnosticRemoveListener, "eventTargetAgnosticRemoveListener");
+    __name2(eventTargetAgnosticRemoveListener, "eventTargetAgnosticRemoveListener");
     function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
       if (typeof emitter.on === "function") {
         if (flags?.once) {
@@ -26311,13 +27149,18 @@ Emitted 'error' event${ctorInfo} at:
       }
     }
     __name(eventTargetAgnosticAddListener, "eventTargetAgnosticAddListener");
+    __name2(eventTargetAgnosticAddListener, "eventTargetAgnosticAddListener");
     var AsyncIteratorPrototype = Object.getPrototypeOf(Object.getPrototypeOf(async function* () {
     }).prototype);
     function createIterResult(value, done) {
       return { value, done };
     }
     __name(createIterResult, "createIterResult");
+    __name2(createIterResult, "createIterResult");
     var _AbortError = class _AbortError extends Error {
+      static {
+        __name(this, "_AbortError");
+      }
       constructor(message = "The operation was aborted", options = void 0) {
         if (options !== void 0 && typeof options !== "object") {
           throw new TypeError(`Failed to create AbortError: options is not an object or undefined`);
@@ -26327,7 +27170,7 @@ Emitted 'error' event${ctorInfo} at:
         this.name = "AbortError";
       }
     };
-    __name(_AbortError, "AbortError");
+    __name2(_AbortError, "AbortError");
     var AbortError = _AbortError;
     function handleMaybeAsync(emitter, result) {
       if (!emitter[kCapturePromiseRejections]) {
@@ -26345,15 +27188,16 @@ Emitted 'error' event${ctorInfo} at:
         if (typeof fin === "function") {
           const promiseId = String(++emitter["_wrapperId"]);
           emitter["_internalPromiseMap"].set(promiseId, result);
-          fin.call(handledPromise, /* @__PURE__ */ __name(function final() {
+          fin.call(handledPromise, /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function final() {
             emitter["_internalPromiseMap"].delete(promiseId);
-          }, "final"));
+          }, "final"), "final"));
         }
       } catch (err) {
         emitter.emit("error", err);
       }
     }
     __name(handleMaybeAsync, "handleMaybeAsync");
+    __name2(handleMaybeAsync, "handleMaybeAsync");
     function emitErrorFromRejectionHandler(emitter, error) {
       setTimeout(() => {
         try {
@@ -26365,6 +27209,7 @@ Emitted 'error' event${ctorInfo} at:
       }, 0);
     }
     __name(emitErrorFromRejectionHandler, "emitErrorFromRejectionHandler");
+    __name2(emitErrorFromRejectionHandler, "emitErrorFromRejectionHandler");
   }
 });
 
@@ -26374,10 +27219,10 @@ var require_toHex = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.fromHex = exports2.toHex = void 0;
-    var hex = (num) => new Number(num).toString(16).toLowerCase();
-    var toHex = (num) => `0x${hex(num).length === 1 ? "0" + hex(num) : hex(num)}`;
+    var hex = /* @__PURE__ */ __name((num) => new Number(num).toString(16).toLowerCase(), "hex");
+    var toHex = /* @__PURE__ */ __name((num) => `0x${hex(num).length === 1 ? "0" + hex(num) : hex(num)}`, "toHex");
     exports2.toHex = toHex;
-    var fromHex = (hex2) => new Number(hex2);
+    var fromHex = /* @__PURE__ */ __name((hex2) => new Number(hex2), "fromHex");
     exports2.fromHex = fromHex;
   }
 });
@@ -26388,13 +27233,13 @@ var require_tree2 = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.createComplexNode = exports2.createNode = exports2.merge = void 0;
-    var createMatch = (leaf) => ({
+    var createMatch = /* @__PURE__ */ __name((leaf) => ({
       typename: leaf.typename,
       mime: leaf.info.mime,
       extension: leaf.info.extension
-    });
-    var isLeafNode = (tree, path) => tree && path.length === 0;
-    var merge = (node, tree) => {
+    }), "createMatch");
+    var isLeafNode = /* @__PURE__ */ __name((tree, path) => tree && path.length === 0, "isLeafNode");
+    var merge = /* @__PURE__ */ __name((node, tree) => {
       if (node.bytes.length === 0)
         return tree;
       const [currentByte, ...path] = node.bytes;
@@ -26416,13 +27261,13 @@ var require_tree2 = __commonJS({
         tree.bytes[currentByte] = exports2.createComplexNode(node.typename, path, node.info);
       }
       return tree;
-    };
+    }, "merge");
     exports2.merge = merge;
-    var createNode = (typename, bytes, info) => {
+    var createNode = /* @__PURE__ */ __name((typename, bytes, info) => {
       return { typename, bytes, info: info ? info : {} };
-    };
+    }, "createNode");
     exports2.createNode = createNode;
-    var createComplexNode = (typename, bytes, info) => {
+    var createComplexNode = /* @__PURE__ */ __name((typename, bytes, info) => {
       let obj = {
         bytes: {},
         matches: void 0
@@ -26441,7 +27286,7 @@ var require_tree2 = __commonJS({
       }
       obj.bytes[currentKey] = exports2.createComplexNode(typename, path, info);
       return obj;
-    };
+    }, "createComplexNode");
     exports2.createComplexNode = createComplexNode;
   }
 });
@@ -26458,7 +27303,7 @@ var require_pattern_tree = __commonJS({
       noOffset: null,
       offset: {}
     };
-    var add = (typename, signature, additionalInfo, offset) => {
+    var add = /* @__PURE__ */ __name((typename, signature, additionalInfo, offset) => {
       if (offset) {
         const existing = tree.offset[toHex_1.toHex(offset)];
         if (!existing) {
@@ -26474,7 +27319,7 @@ var require_pattern_tree = __commonJS({
           tree.noOffset = tree_1.merge(tree_1.createNode(typename, signature.map((e) => e.toLowerCase()), additionalInfo), tree.noOffset);
         }
       }
-    };
+    }, "add");
     exports2.add = add;
     exports2.add("gif", ["0x47", "0x49", "0x46", "0x38", "0x37", "0x61"], {
       mime: "image/gif",
@@ -27605,7 +28450,7 @@ var require_pattern_tree = __commonJS({
       mime: "image/avif",
       extension: "avif"
     }, 4);
-    var createTree = () => tree;
+    var createTree = /* @__PURE__ */ __name(() => tree, "createTree");
     exports2.createTree = createTree;
     exports2.default = () => tree;
   }
@@ -27620,7 +28465,7 @@ var require_dist4 = __commonJS({
     var pattern_tree_1 = require_pattern_tree();
     var toHex_1 = require_toHex();
     var patternTree = pattern_tree_1.createTree();
-    var filetypeinfo = (bytes) => {
+    var filetypeinfo = /* @__PURE__ */ __name((bytes) => {
       let tree = patternTree;
       for (const k of Object.keys(tree.offset)) {
         const offset = toHex_1.fromHex(k);
@@ -27638,9 +28483,9 @@ var require_dist4 = __commonJS({
         return [];
       }
       return walkTree(0, bytes, tree.noOffset);
-    };
+    }, "filetypeinfo");
     exports2.filetypeinfo = filetypeinfo;
-    var walkTree = (index, bytes, node) => {
+    var walkTree = /* @__PURE__ */ __name((index, bytes, node) => {
       let step = node;
       let guessFile = [];
       while (true) {
@@ -27658,17 +28503,17 @@ var require_dist4 = __commonJS({
         }
         index += 1;
       }
-    };
+    }, "walkTree");
     exports2.default = exports2.filetypeinfo;
-    var filetypename = (bytes) => exports2.filetypeinfo(bytes).map((e) => e.typename);
+    var filetypename = /* @__PURE__ */ __name((bytes) => exports2.filetypeinfo(bytes).map((e) => e.typename), "filetypename");
     exports2.filetypename = filetypename;
-    var filetypemime = (bytes) => exports2.filetypeinfo(bytes).map((e) => e.mime ? e.mime : null).filter((x) => x !== null);
+    var filetypemime = /* @__PURE__ */ __name((bytes) => exports2.filetypeinfo(bytes).map((e) => e.mime ? e.mime : null).filter((x) => x !== null), "filetypemime");
     exports2.filetypemime = filetypemime;
-    var filetypeextension = (bytes) => exports2.filetypeinfo(bytes).map((e) => e.extension ? e.extension : null).filter((x) => x !== null);
+    var filetypeextension = /* @__PURE__ */ __name((bytes) => exports2.filetypeinfo(bytes).map((e) => e.extension ? e.extension : null).filter((x) => x !== null), "filetypeextension");
     exports2.filetypeextension = filetypeextension;
-    var register = (typename, signature, additionalInfo, offset) => {
+    var register = /* @__PURE__ */ __name((typename, signature, additionalInfo, offset) => {
       pattern_tree_1.add(typename, signature, additionalInfo, offset);
-    };
+    }, "register");
     exports2.register = register;
   }
 });
@@ -27678,10 +28523,13 @@ var require_cjs2 = __commonJS({
   "../../node_modules/.pnpm/@sapphire+async-queue@1.5.5/node_modules/@sapphire/async-queue/dist/cjs/index.cjs"(exports2) {
     "use strict";
     var __defProp2 = Object.defineProperty;
-    var __defNormalProp = (obj, key, value) => key in obj ? __defProp2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-    var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
-    var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+    var __defNormalProp = /* @__PURE__ */ __name((obj, key, value) => key in obj ? __defProp2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value, "__defNormalProp");
+    var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+    var __publicField = /* @__PURE__ */ __name((obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value), "__publicField");
     var _AsyncQueueEntry = class _AsyncQueueEntry {
+      static {
+        __name(this, "_AsyncQueueEntry");
+      }
       constructor(queue) {
         __publicField(this, "promise");
         __publicField(this, "resolve");
@@ -27724,9 +28572,12 @@ var require_cjs2 = __commonJS({
         }
       }
     };
-    __name(_AsyncQueueEntry, "AsyncQueueEntry");
+    __name2(_AsyncQueueEntry, "AsyncQueueEntry");
     var AsyncQueueEntry = _AsyncQueueEntry;
     var _AsyncQueue = class _AsyncQueue {
+      static {
+        __name(this, "_AsyncQueue");
+      }
       constructor() {
         __publicField(this, "promises", []);
       }
@@ -27799,7 +28650,7 @@ var require_cjs2 = __commonJS({
         this.promises.length = 1;
       }
     };
-    __name(_AsyncQueue, "AsyncQueue");
+    __name2(_AsyncQueue, "AsyncQueue");
     var AsyncQueue = _AsyncQueue;
     exports2.AsyncQueue = AsyncQueue;
   }
@@ -27813,42 +28664,42 @@ var require_dist5 = __commonJS({
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
     var __hasOwnProp2 = Object.prototype.hasOwnProperty;
-    var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
-    var __export2 = (target, all) => {
+    var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+    var __export2 = /* @__PURE__ */ __name((target, all) => {
       for (var name in all)
         __defProp2(target, name, { get: all[name], enumerable: true });
-    };
-    var __copyProps2 = (to, from, except, desc) => {
+    }, "__export");
+    var __copyProps2 = /* @__PURE__ */ __name((to, from, except, desc) => {
       if (from && typeof from === "object" || typeof from === "function") {
         for (let key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
-            __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
+            __defProp2(to, key, { get: /* @__PURE__ */ __name(() => from[key], "get"), enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
       }
       return to;
-    };
-    var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
+    }, "__copyProps");
+    var __toCommonJS2 = /* @__PURE__ */ __name((mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod), "__toCommonJS");
     var index_exports = {};
     __export2(index_exports, {
-      ALLOWED_EXTENSIONS: () => ALLOWED_EXTENSIONS,
-      ALLOWED_SIZES: () => ALLOWED_SIZES,
-      ALLOWED_STICKER_EXTENSIONS: () => ALLOWED_STICKER_EXTENSIONS,
-      BurstHandlerMajorIdKey: () => BurstHandlerMajorIdKey,
-      CDN: () => CDN,
-      DEPRECATION_WARNING_PREFIX: () => DEPRECATION_WARNING_PREFIX,
-      DefaultRestOptions: () => DefaultRestOptions,
-      DefaultUserAgent: () => DefaultUserAgent,
-      DefaultUserAgentAppendix: () => DefaultUserAgentAppendix,
-      DiscordAPIError: () => DiscordAPIError,
-      HTTPError: () => HTTPError,
-      OverwrittenMimeTypes: () => OverwrittenMimeTypes,
-      REST: () => REST,
-      RESTEvents: () => RESTEvents,
-      RateLimitError: () => RateLimitError,
-      RequestMethod: () => RequestMethod,
-      calculateUserDefaultAvatarIndex: () => calculateUserDefaultAvatarIndex,
-      makeURLSearchParams: () => makeURLSearchParams2,
-      parseResponse: () => parseResponse,
-      version: () => version
+      ALLOWED_EXTENSIONS: /* @__PURE__ */ __name(() => ALLOWED_EXTENSIONS, "ALLOWED_EXTENSIONS"),
+      ALLOWED_SIZES: /* @__PURE__ */ __name(() => ALLOWED_SIZES, "ALLOWED_SIZES"),
+      ALLOWED_STICKER_EXTENSIONS: /* @__PURE__ */ __name(() => ALLOWED_STICKER_EXTENSIONS, "ALLOWED_STICKER_EXTENSIONS"),
+      BurstHandlerMajorIdKey: /* @__PURE__ */ __name(() => BurstHandlerMajorIdKey, "BurstHandlerMajorIdKey"),
+      CDN: /* @__PURE__ */ __name(() => CDN, "CDN"),
+      DEPRECATION_WARNING_PREFIX: /* @__PURE__ */ __name(() => DEPRECATION_WARNING_PREFIX, "DEPRECATION_WARNING_PREFIX"),
+      DefaultRestOptions: /* @__PURE__ */ __name(() => DefaultRestOptions, "DefaultRestOptions"),
+      DefaultUserAgent: /* @__PURE__ */ __name(() => DefaultUserAgent, "DefaultUserAgent"),
+      DefaultUserAgentAppendix: /* @__PURE__ */ __name(() => DefaultUserAgentAppendix, "DefaultUserAgentAppendix"),
+      DiscordAPIError: /* @__PURE__ */ __name(() => DiscordAPIError, "DiscordAPIError"),
+      HTTPError: /* @__PURE__ */ __name(() => HTTPError, "HTTPError"),
+      OverwrittenMimeTypes: /* @__PURE__ */ __name(() => OverwrittenMimeTypes, "OverwrittenMimeTypes"),
+      REST: /* @__PURE__ */ __name(() => REST, "REST"),
+      RESTEvents: /* @__PURE__ */ __name(() => RESTEvents, "RESTEvents"),
+      RateLimitError: /* @__PURE__ */ __name(() => RateLimitError, "RateLimitError"),
+      RequestMethod: /* @__PURE__ */ __name(() => RequestMethod, "RequestMethod"),
+      calculateUserDefaultAvatarIndex: /* @__PURE__ */ __name(() => calculateUserDefaultAvatarIndex, "calculateUserDefaultAvatarIndex"),
+      makeURLSearchParams: /* @__PURE__ */ __name(() => makeURLSearchParams2, "makeURLSearchParams"),
+      parseResponse: /* @__PURE__ */ __name(() => parseResponse, "parseResponse"),
+      version: /* @__PURE__ */ __name(() => version, "version")
     });
     module2.exports = __toCommonJS2(index_exports);
     var import_node_buffer = require("buffer");
@@ -27859,10 +28710,12 @@ var require_dist5 = __commonJS({
       defaultStrategy = newStrategy;
     }
     __name(setDefaultStrategy, "setDefaultStrategy");
+    __name2(setDefaultStrategy, "setDefaultStrategy");
     function getDefaultStrategy() {
       return defaultStrategy;
     }
     __name(getDefaultStrategy, "getDefaultStrategy");
+    __name2(getDefaultStrategy, "getDefaultStrategy");
     var import_node_http = require("http");
     var import_node_url = require("url");
     var import_node_util = require("util");
@@ -27894,6 +28747,7 @@ var require_dist5 = __commonJS({
       };
     }
     __name(makeRequest, "makeRequest");
+    __name2(makeRequest, "makeRequest");
     async function resolveBody(body) {
       if (body == null) {
         return null;
@@ -27924,6 +28778,7 @@ var require_dist5 = __commonJS({
       throw new TypeError(`Unable to resolve body.`);
     }
     __name(resolveBody, "resolveBody");
+    __name2(resolveBody, "resolveBody");
     var import_v102 = require_v106();
     var import_util = require_dist();
     var import_v10 = require_v106();
@@ -27984,7 +28839,10 @@ var require_dist5 = __commonJS({
     var DEPRECATION_WARNING_PREFIX = "DeprecationWarning";
     var RateLimitError = class _RateLimitError extends Error {
       static {
-        __name(this, "RateLimitError");
+        __name(this, "_RateLimitError");
+      }
+      static {
+        __name2(this, "RateLimitError");
       }
       timeToReset;
       limit;
@@ -28058,6 +28916,7 @@ var require_dist5 = __commonJS({
       }
     }
     __name(serializeSearchParam, "serializeSearchParam");
+    __name2(serializeSearchParam, "serializeSearchParam");
     function makeURLSearchParams2(options) {
       const params = new URLSearchParams();
       if (!options) return params;
@@ -28068,6 +28927,7 @@ var require_dist5 = __commonJS({
       return params;
     }
     __name(makeURLSearchParams2, "makeURLSearchParams");
+    __name2(makeURLSearchParams2, "makeURLSearchParams");
     async function parseResponse(res) {
       if (res.headers.get("Content-Type")?.startsWith("application/json")) {
         return res.json();
@@ -28075,6 +28935,7 @@ var require_dist5 = __commonJS({
       return res.arrayBuffer();
     }
     __name(parseResponse, "parseResponse");
+    __name2(parseResponse, "parseResponse");
     function hasSublimit(bucketRoute, body, method) {
       if (bucketRoute === "/channels/:id") {
         if (typeof body !== "object" || body === null) return false;
@@ -28085,11 +28946,13 @@ var require_dist5 = __commonJS({
       return true;
     }
     __name(hasSublimit, "hasSublimit");
+    __name2(hasSublimit, "hasSublimit");
     function shouldRetry(error) {
       if (error.name === "AbortError") return true;
       return "code" in error && error.code === "ECONNRESET" || error.message.includes("ECONNRESET");
     }
     __name(shouldRetry, "shouldRetry");
+    __name2(shouldRetry, "shouldRetry");
     async function onRateLimit(manager, rateLimitData) {
       const { options } = manager;
       if (!options.rejectOnRateLimit) return;
@@ -28099,20 +28962,24 @@ var require_dist5 = __commonJS({
       }
     }
     __name(onRateLimit, "onRateLimit");
+    __name2(onRateLimit, "onRateLimit");
     function calculateUserDefaultAvatarIndex(userId) {
       return Number(BigInt(userId) >> 22n) % 6;
     }
     __name(calculateUserDefaultAvatarIndex, "calculateUserDefaultAvatarIndex");
+    __name2(calculateUserDefaultAvatarIndex, "calculateUserDefaultAvatarIndex");
     async function sleep(ms) {
       return new Promise((resolve) => {
         setTimeout(() => resolve(), ms);
       });
     }
     __name(sleep, "sleep");
+    __name2(sleep, "sleep");
     function isBufferLike(value) {
       return value instanceof ArrayBuffer || value instanceof Uint8Array || value instanceof Uint8ClampedArray;
     }
     __name(isBufferLike, "isBufferLike");
+    __name2(isBufferLike, "isBufferLike");
     function deprecationWarning(message) {
       if (typeof globalThis.process === "undefined") {
         console.warn(`${DEPRECATION_WARNING_PREFIX}: ${message}`);
@@ -28121,6 +28988,7 @@ var require_dist5 = __commonJS({
       }
     }
     __name(deprecationWarning, "deprecationWarning");
+    __name2(deprecationWarning, "deprecationWarning");
     function normalizeRateLimitOffset(offset, route) {
       if (typeof offset === "number") {
         return Math.max(0, offset);
@@ -28129,14 +28997,18 @@ var require_dist5 = __commonJS({
       return Math.max(0, result);
     }
     __name(normalizeRateLimitOffset, "normalizeRateLimitOffset");
+    __name2(normalizeRateLimitOffset, "normalizeRateLimitOffset");
     var deprecationEmittedForEmoji = false;
     var CDN = class {
+      static {
+        __name(this, "CDN");
+      }
       constructor(cdn = DefaultRestOptions.cdn, mediaProxy = DefaultRestOptions.mediaProxy) {
         this.cdn = cdn;
         this.mediaProxy = mediaProxy;
       }
       static {
-        __name(this, "CDN");
+        __name2(this, "CDN");
       }
       /**
        * Generates an app asset URL for a client's asset.
@@ -28391,11 +29263,16 @@ Must be one of: ${ALLOWED_SIZES.join(", ")}`);
       return Reflect.has(error, "_errors");
     }
     __name(isErrorGroupWrapper, "isErrorGroupWrapper");
+    __name2(isErrorGroupWrapper, "isErrorGroupWrapper");
     function isErrorResponse(error) {
       return typeof Reflect.get(error, "message") === "string";
     }
     __name(isErrorResponse, "isErrorResponse");
+    __name2(isErrorResponse, "isErrorResponse");
     var DiscordAPIError = class _DiscordAPIError extends Error {
+      static {
+        __name(this, "_DiscordAPIError");
+      }
       /**
        * @param rawError - The error reported by Discord
        * @param code - The error code reported by Discord
@@ -28414,7 +29291,7 @@ Must be one of: ${ALLOWED_SIZES.join(", ")}`);
         this.requestBody = { files: bodyData.files, json: bodyData.body };
       }
       static {
-        __name(this, "DiscordAPIError");
+        __name2(this, "DiscordAPIError");
       }
       requestBody;
       /**
@@ -28453,6 +29330,9 @@ ${flattened}` : error.message || flattened || "Unknown Error";
       }
     };
     var HTTPError = class _HTTPError extends Error {
+      static {
+        __name(this, "_HTTPError");
+      }
       /**
        * @param status - The status code of the response
        * @param statusText - The status text of the response
@@ -28468,7 +29348,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
         this.requestBody = { files: bodyData.files, json: bodyData.body };
       }
       static {
-        __name(this, "HTTPError");
+        __name2(this, "HTTPError");
       }
       requestBody;
       name = _HTTPError.name;
@@ -28494,6 +29374,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
       }
     }
     __name(incrementInvalidCount, "incrementInvalidCount");
+    __name2(incrementInvalidCount, "incrementInvalidCount");
     async function makeNetworkRequest(manager, routeId, url, options, requestData, retries) {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), manager.options.timeout);
@@ -28533,6 +29414,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
       return res;
     }
     __name(makeNetworkRequest, "makeNetworkRequest");
+    __name2(makeNetworkRequest, "makeNetworkRequest");
     async function handleErrors(manager, res, method, url, requestData, retries) {
       const status = res.status;
       if (status >= 500 && status < 600) {
@@ -28552,7 +29434,11 @@ ${flattened}` : error.message || flattened || "Unknown Error";
       }
     }
     __name(handleErrors, "handleErrors");
+    __name2(handleErrors, "handleErrors");
     var BurstHandler = class {
+      static {
+        __name(this, "BurstHandler");
+      }
       /**
        * @param manager - The request manager
        * @param hash - The hash that this RequestHandler handles
@@ -28565,7 +29451,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
         this.id = `${hash}:${majorParameter}`;
       }
       static {
-        __name(this, "BurstHandler");
+        __name2(this, "BurstHandler");
       }
       /**
        * {@inheritdoc IHandler.id}
@@ -28658,6 +29544,9 @@ ${flattened}` : error.message || flattened || "Unknown Error";
     };
     var import_async_queue = require_cjs2();
     var SequentialHandler = class {
+      static {
+        __name(this, "SequentialHandler");
+      }
       /**
        * @param manager - The request manager
        * @param hash - The hash that this RequestHandler handles
@@ -28670,7 +29559,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
         this.id = `${hash}:${majorParameter}`;
       }
       static {
-        __name(this, "SequentialHandler");
+        __name2(this, "SequentialHandler");
       }
       /**
        * {@inheritDoc IHandler.id}
@@ -28953,7 +29842,10 @@ ${flattened}` : error.message || flattened || "Unknown Error";
     };
     var REST = class _REST extends import_async_event_emitter.AsyncEventEmitter {
       static {
-        __name(this, "REST");
+        __name(this, "_REST");
+      }
+      static {
+        __name2(this, "REST");
       }
       /**
        * The {@link https://undici.nodejs.org/#/docs/api/Agent | Agent} for all requests
@@ -28994,7 +29886,7 @@ ${flattened}` : error.message || flattened || "Unknown Error";
         this.setupSweepers();
       }
       setupSweepers() {
-        const validateMaxInterval = /* @__PURE__ */ __name((interval) => {
+        const validateMaxInterval = /* @__PURE__ */ __name2((interval) => {
           if (interval > 144e5) {
             throw new Error("Cannot set an interval greater than 4 hours");
           }
@@ -29571,6 +30463,7 @@ var require_DJSError = __commonJS({
         }
       };
     }
+    __name(makeDiscordjsError, "makeDiscordjsError");
     function message(code, args) {
       if (!(code in ErrorCodes2)) throw new Error("Error code must be a valid DiscordjsErrorCodes");
       const msg = Messages[code];
@@ -29580,6 +30473,7 @@ var require_DJSError = __commonJS({
       args.unshift(msg);
       return String(...args);
     }
+    __name(message, "message");
     module2.exports = {
       DiscordjsError: makeDiscordjsError(Error),
       DiscordjsTypeError: makeDiscordjsError(TypeError),
@@ -29858,21 +30752,26 @@ var require_lodash = __commonJS({
       }
       return accumulator;
     }
+    __name(arrayReduce, "arrayReduce");
     function asciiWords(string) {
       return string.match(reAsciiWord) || [];
     }
+    __name(asciiWords, "asciiWords");
     function basePropertyOf(object) {
       return function(key) {
         return object == null ? void 0 : object[key];
       };
     }
+    __name(basePropertyOf, "basePropertyOf");
     var deburrLetter = basePropertyOf(deburredLetters);
     function hasUnicodeWord(string) {
       return reHasUnicodeWord.test(string);
     }
+    __name(hasUnicodeWord, "hasUnicodeWord");
     function unicodeWords(string) {
       return string.match(reUnicodeWord) || [];
     }
+    __name(unicodeWords, "unicodeWords");
     var objectProto = Object.prototype;
     var objectToString = objectProto.toString;
     var Symbol2 = root.Symbol;
@@ -29888,24 +30787,30 @@ var require_lodash = __commonJS({
       var result = value + "";
       return result == "0" && 1 / value == -INFINITY ? "-0" : result;
     }
+    __name(baseToString, "baseToString");
     function createCompounder(callback) {
       return function(string) {
         return arrayReduce(words(deburr(string).replace(reApos, "")), callback, "");
       };
     }
+    __name(createCompounder, "createCompounder");
     function isObjectLike(value) {
       return !!value && typeof value == "object";
     }
+    __name(isObjectLike, "isObjectLike");
     function isSymbol(value) {
       return typeof value == "symbol" || isObjectLike(value) && objectToString.call(value) == symbolTag;
     }
+    __name(isSymbol, "isSymbol");
     function toString(value) {
       return value == null ? "" : baseToString(value);
     }
+    __name(toString, "toString");
     function deburr(string) {
       string = toString(string);
       return string && string.replace(reLatin, deburrLetter).replace(reComboMark, "");
     }
+    __name(deburr, "deburr");
     var snakeCase = createCompounder(function(result, word, index) {
       return result + (index ? "_" : "") + word.toLowerCase();
     });
@@ -29917,6 +30822,7 @@ var require_lodash = __commonJS({
       }
       return string.match(pattern) || [];
     }
+    __name(words, "words");
     module2.exports = snakeCase;
   }
 });
@@ -29929,29 +30835,32 @@ var require_dist6 = __commonJS({
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
     var __hasOwnProp2 = Object.prototype.hasOwnProperty;
-    var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
-    var __export2 = (target, all) => {
+    var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+    var __export2 = /* @__PURE__ */ __name((target, all) => {
       for (var name in all)
         __defProp2(target, name, { get: all[name], enumerable: true });
-    };
-    var __copyProps2 = (to, from, except, desc) => {
+    }, "__export");
+    var __copyProps2 = /* @__PURE__ */ __name((to, from, except, desc) => {
       if (from && typeof from === "object" || typeof from === "function") {
         for (let key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
-            __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
+            __defProp2(to, key, { get: /* @__PURE__ */ __name(() => from[key], "get"), enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
       }
       return to;
-    };
-    var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
+    }, "__copyProps");
+    var __toCommonJS2 = /* @__PURE__ */ __name((mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod), "__toCommonJS");
     var src_exports = {};
     __export2(src_exports, {
-      Collection: () => Collection2,
-      version: () => version
+      Collection: /* @__PURE__ */ __name(() => Collection2, "Collection"),
+      version: /* @__PURE__ */ __name(() => version, "version")
     });
     module2.exports = __toCommonJS2(src_exports);
     var Collection2 = class _Collection extends Map {
       static {
-        __name(this, "Collection");
+        __name(this, "_Collection");
+      }
+      static {
+        __name2(this, "Collection");
       }
       /**
        * Obtains the value of the given key if it exists, otherwise sets and returns the value provided by the default value generator.
@@ -30503,6 +31412,9 @@ var require_BitField = __commonJS({
     "use strict";
     var { DiscordjsRangeError: DiscordjsRangeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var BitField = class _BitField {
+      static {
+        __name(this, "BitField");
+      }
       /**
        * Numeric bitfield flags.
        * <info>Defined in extension classes</info>
@@ -30662,6 +31574,9 @@ var require_AttachmentFlagsBitField = __commonJS({
     var { AttachmentFlags } = require_v106();
     var BitField = require_BitField();
     var AttachmentFlagsBitField = class extends BitField {
+      static {
+        __name(this, "AttachmentFlagsBitField");
+      }
       /**
        * Numeric attachment flags.
        * @type {AttachmentFlags}
@@ -30680,6 +31595,9 @@ var require_Attachment = __commonJS({
     var AttachmentFlagsBitField = require_AttachmentFlagsBitField();
     var { basename, flatten } = require_Util();
     var Attachment = class {
+      static {
+        __name(this, "Attachment");
+      }
       constructor(data) {
         this.attachment = data.url;
         this.name = data.filename;
@@ -30759,12 +31677,12 @@ var require_cjs3 = __commonJS({
   "../../node_modules/.pnpm/@sapphire+snowflake@3.5.3/node_modules/@sapphire/snowflake/dist/cjs/index.cjs"(exports2) {
     "use strict";
     var __defProp2 = Object.defineProperty;
-    var __defNormalProp = (obj, key, value) => key in obj ? __defProp2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-    var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
-    var __publicField = (obj, key, value) => {
+    var __defNormalProp = /* @__PURE__ */ __name((obj, key, value) => key in obj ? __defProp2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value, "__defNormalProp");
+    var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+    var __publicField = /* @__PURE__ */ __name((obj, key, value) => {
       __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
       return value;
-    };
+    }, "__publicField");
     var IncrementSymbol = Symbol("@sapphire/snowflake.increment");
     var EpochSymbol = Symbol("@sapphire/snowflake.epoch");
     var ProcessIdSymbol = Symbol("@sapphire/snowflake.processId");
@@ -30777,6 +31695,9 @@ var require_cjs3 = __commonJS({
     var _c;
     var _d;
     var _Snowflake = class _Snowflake {
+      static {
+        __name(this, "_Snowflake");
+      }
       /**
        * @param epoch the epoch to use
        */
@@ -30906,16 +31827,18 @@ var require_cjs3 = __commonJS({
       }
     };
     _a = EpochSymbol, _b = IncrementSymbol, _c = ProcessIdSymbol, _d = WorkerIdSymbol;
-    __name(_Snowflake, "Snowflake");
+    __name2(_Snowflake, "Snowflake");
     var Snowflake = _Snowflake;
     function cmpBigInt(a, b) {
       return a === b ? 0 : a < b ? -1 : 1;
     }
     __name(cmpBigInt, "cmpBigInt");
+    __name2(cmpBigInt, "cmpBigInt");
     function cmpString(a, b) {
       return a === b ? 0 : a.length < b.length ? -1 : a.length > b.length ? 1 : a < b ? -1 : 1;
     }
     __name(cmpString, "cmpString");
+    __name2(cmpString, "cmpString");
     var DiscordSnowflake = new Snowflake(1420070400000n);
     var TwitterSnowflake = new Snowflake(1288834974657n);
     exports2.DiscordSnowflake = DiscordSnowflake;
@@ -30935,68 +31858,68 @@ var require_dist7 = __commonJS({
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
     var __hasOwnProp2 = Object.prototype.hasOwnProperty;
-    var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
-    var __export2 = (target, all) => {
+    var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+    var __export2 = /* @__PURE__ */ __name((target, all) => {
       for (var name in all)
         __defProp2(target, name, { get: all[name], enumerable: true });
-    };
-    var __copyProps2 = (to, from, except, desc) => {
+    }, "__export");
+    var __copyProps2 = /* @__PURE__ */ __name((to, from, except, desc) => {
       if (from && typeof from === "object" || typeof from === "function") {
         for (let key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
-            __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
+            __defProp2(to, key, { get: /* @__PURE__ */ __name(() => from[key], "get"), enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
       }
       return to;
-    };
-    var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
+    }, "__copyProps");
+    var __toCommonJS2 = /* @__PURE__ */ __name((mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod), "__toCommonJS");
     var index_exports = {};
     __export2(index_exports, {
-      Faces: () => Faces,
-      GuildNavigationMentions: () => GuildNavigationMentions,
-      HeadingLevel: () => HeadingLevel,
-      TimestampStyles: () => TimestampStyles,
-      applicationDirectory: () => applicationDirectory,
-      blockQuote: () => blockQuote,
-      bold: () => bold,
-      channelLink: () => channelLink,
-      channelMention: () => channelMention,
-      chatInputApplicationCommandMention: () => chatInputApplicationCommandMention,
-      codeBlock: () => codeBlock,
-      email: () => email,
-      escapeBold: () => escapeBold,
-      escapeBulletedList: () => escapeBulletedList,
-      escapeCodeBlock: () => escapeCodeBlock,
-      escapeEscape: () => escapeEscape,
-      escapeHeading: () => escapeHeading,
-      escapeInlineCode: () => escapeInlineCode,
-      escapeItalic: () => escapeItalic,
-      escapeMarkdown: () => escapeMarkdown,
-      escapeMaskedLink: () => escapeMaskedLink,
-      escapeNumberedList: () => escapeNumberedList,
-      escapeSpoiler: () => escapeSpoiler,
-      escapeStrikethrough: () => escapeStrikethrough,
-      escapeUnderline: () => escapeUnderline,
-      formatEmoji: () => formatEmoji,
-      heading: () => heading,
-      hideLinkEmbed: () => hideLinkEmbed,
-      hyperlink: () => hyperlink,
-      inlineCode: () => inlineCode,
-      italic: () => italic,
-      linkedRoleMention: () => linkedRoleMention,
-      messageLink: () => messageLink,
-      orderedList: () => orderedList,
-      phoneNumber: () => phoneNumber,
-      quote: () => quote,
-      roleMention: () => roleMention,
-      spoiler: () => spoiler,
-      strikethrough: () => strikethrough,
-      subtext: () => subtext,
-      time: () => time,
-      underline: () => underline,
-      underscore: () => underscore,
-      unorderedList: () => unorderedList,
-      userMention: () => userMention,
-      version: () => version
+      Faces: /* @__PURE__ */ __name(() => Faces, "Faces"),
+      GuildNavigationMentions: /* @__PURE__ */ __name(() => GuildNavigationMentions, "GuildNavigationMentions"),
+      HeadingLevel: /* @__PURE__ */ __name(() => HeadingLevel, "HeadingLevel"),
+      TimestampStyles: /* @__PURE__ */ __name(() => TimestampStyles, "TimestampStyles"),
+      applicationDirectory: /* @__PURE__ */ __name(() => applicationDirectory, "applicationDirectory"),
+      blockQuote: /* @__PURE__ */ __name(() => blockQuote, "blockQuote"),
+      bold: /* @__PURE__ */ __name(() => bold, "bold"),
+      channelLink: /* @__PURE__ */ __name(() => channelLink, "channelLink"),
+      channelMention: /* @__PURE__ */ __name(() => channelMention, "channelMention"),
+      chatInputApplicationCommandMention: /* @__PURE__ */ __name(() => chatInputApplicationCommandMention, "chatInputApplicationCommandMention"),
+      codeBlock: /* @__PURE__ */ __name(() => codeBlock, "codeBlock"),
+      email: /* @__PURE__ */ __name(() => email, "email"),
+      escapeBold: /* @__PURE__ */ __name(() => escapeBold, "escapeBold"),
+      escapeBulletedList: /* @__PURE__ */ __name(() => escapeBulletedList, "escapeBulletedList"),
+      escapeCodeBlock: /* @__PURE__ */ __name(() => escapeCodeBlock, "escapeCodeBlock"),
+      escapeEscape: /* @__PURE__ */ __name(() => escapeEscape, "escapeEscape"),
+      escapeHeading: /* @__PURE__ */ __name(() => escapeHeading, "escapeHeading"),
+      escapeInlineCode: /* @__PURE__ */ __name(() => escapeInlineCode, "escapeInlineCode"),
+      escapeItalic: /* @__PURE__ */ __name(() => escapeItalic, "escapeItalic"),
+      escapeMarkdown: /* @__PURE__ */ __name(() => escapeMarkdown, "escapeMarkdown"),
+      escapeMaskedLink: /* @__PURE__ */ __name(() => escapeMaskedLink, "escapeMaskedLink"),
+      escapeNumberedList: /* @__PURE__ */ __name(() => escapeNumberedList, "escapeNumberedList"),
+      escapeSpoiler: /* @__PURE__ */ __name(() => escapeSpoiler, "escapeSpoiler"),
+      escapeStrikethrough: /* @__PURE__ */ __name(() => escapeStrikethrough, "escapeStrikethrough"),
+      escapeUnderline: /* @__PURE__ */ __name(() => escapeUnderline, "escapeUnderline"),
+      formatEmoji: /* @__PURE__ */ __name(() => formatEmoji, "formatEmoji"),
+      heading: /* @__PURE__ */ __name(() => heading, "heading"),
+      hideLinkEmbed: /* @__PURE__ */ __name(() => hideLinkEmbed, "hideLinkEmbed"),
+      hyperlink: /* @__PURE__ */ __name(() => hyperlink, "hyperlink"),
+      inlineCode: /* @__PURE__ */ __name(() => inlineCode, "inlineCode"),
+      italic: /* @__PURE__ */ __name(() => italic, "italic"),
+      linkedRoleMention: /* @__PURE__ */ __name(() => linkedRoleMention, "linkedRoleMention"),
+      messageLink: /* @__PURE__ */ __name(() => messageLink, "messageLink"),
+      orderedList: /* @__PURE__ */ __name(() => orderedList, "orderedList"),
+      phoneNumber: /* @__PURE__ */ __name(() => phoneNumber, "phoneNumber"),
+      quote: /* @__PURE__ */ __name(() => quote, "quote"),
+      roleMention: /* @__PURE__ */ __name(() => roleMention, "roleMention"),
+      spoiler: /* @__PURE__ */ __name(() => spoiler, "spoiler"),
+      strikethrough: /* @__PURE__ */ __name(() => strikethrough, "strikethrough"),
+      subtext: /* @__PURE__ */ __name(() => subtext, "subtext"),
+      time: /* @__PURE__ */ __name(() => time, "time"),
+      underline: /* @__PURE__ */ __name(() => underline, "underline"),
+      underscore: /* @__PURE__ */ __name(() => underscore, "underscore"),
+      unorderedList: /* @__PURE__ */ __name(() => unorderedList, "unorderedList"),
+      userMention: /* @__PURE__ */ __name(() => userMention, "userMention"),
+      version: /* @__PURE__ */ __name(() => version, "version")
     });
     module2.exports = __toCommonJS2(index_exports);
     function escapeMarkdown(text, options = {}) {
@@ -31069,14 +31992,17 @@ var require_dist7 = __commonJS({
       return res;
     }
     __name(escapeMarkdown, "escapeMarkdown");
+    __name2(escapeMarkdown, "escapeMarkdown");
     function escapeCodeBlock(text) {
       return text.replaceAll("```", "\\`\\`\\`");
     }
     __name(escapeCodeBlock, "escapeCodeBlock");
+    __name2(escapeCodeBlock, "escapeCodeBlock");
     function escapeInlineCode(text) {
       return text.replaceAll(/(?<=^|[^`])``?(?=[^`]|$)/g, (match) => match.length === 2 ? "\\`\\`" : "\\`");
     }
     __name(escapeInlineCode, "escapeInlineCode");
+    __name2(escapeInlineCode, "escapeInlineCode");
     function escapeItalic(text) {
       let idx = 0;
       const newText = text.replaceAll(
@@ -31096,6 +32022,7 @@ var require_dist7 = __commonJS({
       );
     }
     __name(escapeItalic, "escapeItalic");
+    __name2(escapeItalic, "escapeItalic");
     function escapeBold(text) {
       let idx = 0;
       return text.replaceAll(/\*\*(\*)?/g, (_, match) => {
@@ -31104,6 +32031,7 @@ var require_dist7 = __commonJS({
       });
     }
     __name(escapeBold, "escapeBold");
+    __name2(escapeBold, "escapeBold");
     function escapeUnderline(text) {
       let idx = 0;
       return text.replaceAll(/(?<!<a?:.+|https?:\/\/\S+)__(_)?(?!:\d+>)/g, (_, match) => {
@@ -31112,34 +32040,42 @@ var require_dist7 = __commonJS({
       });
     }
     __name(escapeUnderline, "escapeUnderline");
+    __name2(escapeUnderline, "escapeUnderline");
     function escapeStrikethrough(text) {
       return text.replaceAll("~~", "\\~\\~");
     }
     __name(escapeStrikethrough, "escapeStrikethrough");
+    __name2(escapeStrikethrough, "escapeStrikethrough");
     function escapeSpoiler(text) {
       return text.replaceAll("||", "\\|\\|");
     }
     __name(escapeSpoiler, "escapeSpoiler");
+    __name2(escapeSpoiler, "escapeSpoiler");
     function escapeEscape(text) {
       return text.replaceAll("\\", "\\\\");
     }
     __name(escapeEscape, "escapeEscape");
+    __name2(escapeEscape, "escapeEscape");
     function escapeHeading(text) {
       return text.replaceAll(/^( {0,2})([*-] )?( *)(#{1,3} )/gm, "$1$2$3\\$4");
     }
     __name(escapeHeading, "escapeHeading");
+    __name2(escapeHeading, "escapeHeading");
     function escapeBulletedList(text) {
       return text.replaceAll(/^( *)([*-])( +)/gm, "$1\\$2$3");
     }
     __name(escapeBulletedList, "escapeBulletedList");
+    __name2(escapeBulletedList, "escapeBulletedList");
     function escapeNumberedList(text) {
       return text.replaceAll(/^( *\d+)\./gm, "$1\\.");
     }
     __name(escapeNumberedList, "escapeNumberedList");
+    __name2(escapeNumberedList, "escapeNumberedList");
     function escapeMaskedLink(text) {
       return text.replaceAll(/\[.+]\(.+\)/gm, "\\$&");
     }
     __name(escapeMaskedLink, "escapeMaskedLink");
+    __name2(escapeMaskedLink, "escapeMaskedLink");
     function codeBlock(language, content) {
       return content === void 0 ? `\`\`\`
 ${language}
@@ -31148,66 +32084,82 @@ ${content}
 \`\`\``;
     }
     __name(codeBlock, "codeBlock");
+    __name2(codeBlock, "codeBlock");
     function inlineCode(content) {
       return `\`${content}\``;
     }
     __name(inlineCode, "inlineCode");
+    __name2(inlineCode, "inlineCode");
     function italic(content) {
       return `_${content}_`;
     }
     __name(italic, "italic");
+    __name2(italic, "italic");
     function bold(content) {
       return `**${content}**`;
     }
     __name(bold, "bold");
+    __name2(bold, "bold");
     function underscore(content) {
       return underline(content);
     }
     __name(underscore, "underscore");
+    __name2(underscore, "underscore");
     function underline(content) {
       return `__${content}__`;
     }
     __name(underline, "underline");
+    __name2(underline, "underline");
     function strikethrough(content) {
       return `~~${content}~~`;
     }
     __name(strikethrough, "strikethrough");
+    __name2(strikethrough, "strikethrough");
     function quote(content) {
       return `> ${content}`;
     }
     __name(quote, "quote");
+    __name2(quote, "quote");
     function blockQuote(content) {
       return `>>> ${content}`;
     }
     __name(blockQuote, "blockQuote");
+    __name2(blockQuote, "blockQuote");
     function hideLinkEmbed(url) {
       return `<${url}>`;
     }
     __name(hideLinkEmbed, "hideLinkEmbed");
+    __name2(hideLinkEmbed, "hideLinkEmbed");
     function hyperlink(content, url, title) {
       return title ? `[${content}](${url} "${title}")` : `[${content}](${url})`;
     }
     __name(hyperlink, "hyperlink");
+    __name2(hyperlink, "hyperlink");
     function spoiler(content) {
       return `||${content}||`;
     }
     __name(spoiler, "spoiler");
+    __name2(spoiler, "spoiler");
     function userMention(userId) {
       return `<@${userId}>`;
     }
     __name(userMention, "userMention");
+    __name2(userMention, "userMention");
     function channelMention(channelId) {
       return `<#${channelId}>`;
     }
     __name(channelMention, "channelMention");
+    __name2(channelMention, "channelMention");
     function roleMention(roleId) {
       return `<@&${roleId}>`;
     }
     __name(roleMention, "roleMention");
+    __name2(roleMention, "roleMention");
     function linkedRoleMention(roleId) {
       return `<id:linked-roles:${roleId}>`;
     }
     __name(linkedRoleMention, "linkedRoleMention");
+    __name2(linkedRoleMention, "linkedRoleMention");
     function chatInputApplicationCommandMention(commandName, subcommandGroupName, subcommandName, commandId) {
       if (commandId !== void 0) {
         return `</${commandName} ${subcommandGroupName} ${subcommandName}:${commandId}>`;
@@ -31218,6 +32170,7 @@ ${content}
       return `</${commandName}:${subcommandGroupName}>`;
     }
     __name(chatInputApplicationCommandMention, "chatInputApplicationCommandMention");
+    __name2(chatInputApplicationCommandMention, "chatInputApplicationCommandMention");
     function formatEmoji(emojiIdOrOptions, animated) {
       const options = typeof emojiIdOrOptions === "string" ? {
         id: emojiIdOrOptions,
@@ -31227,14 +32180,17 @@ ${content}
       return `<${isAnimated ? "a" : ""}:${emojiName ?? "emoji"}:${id}>`;
     }
     __name(formatEmoji, "formatEmoji");
+    __name2(formatEmoji, "formatEmoji");
     function channelLink(channelId, guildId) {
       return `https://discord.com/channels/${guildId ?? "@me"}/${channelId}`;
     }
     __name(channelLink, "channelLink");
+    __name2(channelLink, "channelLink");
     function messageLink(channelId, messageId, guildId) {
       return `${guildId === void 0 ? channelLink(channelId) : channelLink(channelId, guildId)}/${messageId}`;
     }
     __name(messageLink, "messageLink");
+    __name2(messageLink, "messageLink");
     var HeadingLevel = /* @__PURE__ */ ((HeadingLevel2) => {
       HeadingLevel2[HeadingLevel2["One"] = 1] = "One";
       HeadingLevel2[HeadingLevel2["Two"] = 2] = "Two";
@@ -31252,6 +32208,7 @@ ${content}
       }
     }
     __name(heading, "heading");
+    __name2(heading, "heading");
     function listCallback(element, startNumber, depth = 0) {
       if (Array.isArray(element)) {
         return element.map((element2) => listCallback(element2, startNumber, depth + 1)).join("\n");
@@ -31259,18 +32216,22 @@ ${content}
       return `${"  ".repeat(depth - 1)}${startNumber ? `${startNumber}.` : "-"} ${element}`;
     }
     __name(listCallback, "listCallback");
+    __name2(listCallback, "listCallback");
     function orderedList(list, startNumber = 1) {
       return listCallback(list, Math.max(startNumber, 1));
     }
     __name(orderedList, "orderedList");
+    __name2(orderedList, "orderedList");
     function unorderedList(list) {
       return listCallback(list);
     }
     __name(unorderedList, "unorderedList");
+    __name2(unorderedList, "unorderedList");
     function subtext(content) {
       return `-# ${content}`;
     }
     __name(subtext, "subtext");
+    __name2(subtext, "subtext");
     function time(timeOrSeconds, style) {
       if (typeof timeOrSeconds !== "number") {
         timeOrSeconds = Math.floor((timeOrSeconds?.getTime() ?? Date.now()) / 1e3);
@@ -31278,11 +32239,13 @@ ${content}
       return typeof style === "string" ? `<t:${timeOrSeconds}:${style}>` : `<t:${timeOrSeconds}>`;
     }
     __name(time, "time");
+    __name2(time, "time");
     function applicationDirectory(applicationId, skuId) {
       const url = `https://discord.com/application-directory/${applicationId}/store`;
       return skuId ? `${url}/${skuId}` : url;
     }
     __name(applicationDirectory, "applicationDirectory");
+    __name2(applicationDirectory, "applicationDirectory");
     function email(email2, headers) {
       if (headers) {
         const searchParams = new URLSearchParams(
@@ -31293,6 +32256,7 @@ ${content}
       return `<${email2}>`;
     }
     __name(email, "email");
+    __name2(email, "email");
     function phoneNumber(phoneNumber2) {
       if (!phoneNumber2.startsWith("+")) {
         throw new Error('Phone number must start with a "+" sign.');
@@ -31300,6 +32264,7 @@ ${content}
       return `<${phoneNumber2}>`;
     }
     __name(phoneNumber, "phoneNumber");
+    __name2(phoneNumber, "phoneNumber");
     var TimestampStyles = {
       /**
        * Short time format, consisting of hours and minutes.
@@ -31400,6 +32365,9 @@ var require_Base = __commonJS({
     "use strict";
     var { flatten } = require_Util();
     var Base = class {
+      static {
+        __name(this, "Base");
+      }
       constructor(client2) {
         Object.defineProperty(this, "client", { value: client2 });
       }
@@ -31432,6 +32400,9 @@ var require_ChannelFlagsBitField = __commonJS({
     var { ChannelFlags } = require_v106();
     var BitField = require_BitField();
     var ChannelFlagsBitField = class extends BitField {
+      static {
+        __name(this, "ChannelFlagsBitField");
+      }
       /**
        * Numeric guild channel flags.
        * @type {ChannelFlags}
@@ -31549,6 +32520,9 @@ var require_BaseChannel = __commonJS({
     var ChannelFlagsBitField = require_ChannelFlagsBitField();
     var { ThreadChannelTypes } = require_Constants();
     var BaseChannel = class extends Base {
+      static {
+        __name(this, "BaseChannel");
+      }
       constructor(client2, data, immediatePatch = true) {
         super(client2);
         this.type = data.type;
@@ -31681,6 +32655,9 @@ var require_BaseManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/managers/BaseManager.js"(exports2, module2) {
     "use strict";
     var BaseManager = class {
+      static {
+        __name(this, "BaseManager");
+      }
       constructor(client2) {
         Object.defineProperty(this, "client", { value: client2 });
       }
@@ -31696,6 +32673,9 @@ var require_DataManager = __commonJS({
     var BaseManager = require_BaseManager();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var DataManager = class extends BaseManager {
+      static {
+        __name(this, "DataManager");
+      }
       constructor(client2, holds) {
         super(client2);
         Object.defineProperty(this, "holds", { value: holds });
@@ -31751,6 +32731,9 @@ var require_CachedManager = __commonJS({
     var DataManager = require_DataManager();
     var { MakeCacheOverrideSymbol } = require_Symbols();
     var CachedManager = class extends DataManager {
+      static {
+        __name(this, "CachedManager");
+      }
       constructor(client2, holds, iterable) {
         super(client2, holds);
         Object.defineProperty(this, "_cache", {
@@ -31801,6 +32784,9 @@ var require_PermissionsBitField = __commonJS({
     var { PermissionFlagsBits } = require_v106();
     var BitField = require_BitField();
     var PermissionsBitField2 = class extends BitField {
+      static {
+        __name(this, "PermissionsBitField");
+      }
       /**
        * Numeric permission flags.
        * @type {PermissionFlagsBits}
@@ -31891,6 +32877,9 @@ var require_RoleFlagsBitField = __commonJS({
     var { RoleFlags } = require_v106();
     var BitField = require_BitField();
     var RoleFlagsBitField = class extends BitField {
+      static {
+        __name(this, "RoleFlagsBitField");
+      }
       /**
        * Numeric role flags.
        * @type {RoleFlags}
@@ -31914,6 +32903,9 @@ var require_Role = __commonJS({
     var PermissionsBitField2 = require_PermissionsBitField();
     var RoleFlagsBitField = require_RoleFlagsBitField();
     var Role = class extends Base {
+      static {
+        __name(this, "Role");
+      }
       constructor(client2, data, guild) {
         super(client2);
         this.guild = guild;
@@ -32294,6 +33286,9 @@ var require_PermissionOverwrites = __commonJS({
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var PermissionsBitField2 = require_PermissionsBitField();
     var PermissionOverwrites = class extends Base {
+      static {
+        __name(this, "PermissionOverwrites");
+      }
       constructor(client2, data, channel) {
         super(client2);
         Object.defineProperty(this, "channel", { value: channel });
@@ -32452,6 +33447,9 @@ var require_PermissionOverwriteManager = __commonJS({
     var { Role } = require_Role();
     var cacheWarningEmitted = false;
     var PermissionOverwriteManager = class extends CachedManager {
+      static {
+        __name(this, "PermissionOverwriteManager");
+      }
       constructor(channel, iterable) {
         super(channel.client, PermissionOverwrites);
         if (!cacheWarningEmitted && this._cache.constructor.name !== "Collection") {
@@ -32599,6 +33597,9 @@ var require_GuildChannel = __commonJS({
     var PermissionsBitField2 = require_PermissionsBitField();
     var { getSortableGroupTypes } = require_Util();
     var GuildChannel = class extends BaseChannel {
+      static {
+        __name(this, "GuildChannel");
+      }
       constructor(guild, data, client2, immediatePatch = true) {
         super(client2, data, false);
         this.guild = guild;
@@ -32948,6 +33949,9 @@ var require_SKUFlagsBitField = __commonJS({
     var { SKUFlags } = require_v106();
     var BitField = require_BitField();
     var SKUFlagsBitField = class extends BitField {
+      static {
+        __name(this, "SKUFlagsBitField");
+      }
       /**
        * Numeric SKU flags.
        * @type {SKUFlags}
@@ -32966,6 +33970,9 @@ var require_SKU = __commonJS({
     var Base = require_Base();
     var { SKUFlagsBitField } = require_SKUFlagsBitField();
     var SKU = class extends Base {
+      static {
+        __name(this, "SKU");
+      }
       constructor(client2, data) {
         super(client2);
         this.id = data.id;
@@ -32991,7 +33998,7 @@ var require_Util = __commonJS({
     var { fetch: fetch2 } = require_undici();
     var Colors = require_Colors();
     var { DiscordjsError: DiscordjsError2, DiscordjsRangeError: DiscordjsRangeError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
-    var isObject = (d) => typeof d === "object" && d !== null;
+    var isObject = /* @__PURE__ */ __name((d) => typeof d === "object" && d !== null, "isObject");
     var deprecationEmittedForUserFetchFlags = false;
     var deprecationEmittedForRemoveThreadMember = false;
     function flatten(obj, ...props) {
@@ -33016,6 +34023,7 @@ var require_Util = __commonJS({
       }
       return out;
     }
+    __name(flatten, "flatten");
     async function fetchRecommendedShardCount(token2, { guildsPerShard = 1e3, multipleOf = 1 } = {}) {
       if (!token2) throw new DiscordjsError2(ErrorCodes2.TokenMissing);
       const response = await fetch2(RouteBases.api + Routes2.gatewayBot(), {
@@ -33029,12 +34037,14 @@ var require_Util = __commonJS({
       const { shards } = await response.json();
       return Math.ceil(shards * (1e3 / guildsPerShard) / multipleOf) * multipleOf;
     }
+    __name(fetchRecommendedShardCount, "fetchRecommendedShardCount");
     function parseEmoji(text) {
       if (text.includes("%")) text = decodeURIComponent(text);
       if (!text.includes(":")) return { animated: false, name: text, id: void 0 };
       const match = text.match(/<?(?:(a):)?(\w{2,32}):(\d{17,19})?>?/);
       return match && { animated: Boolean(match[1]), name: match[2], id: match[3] };
     }
+    __name(parseEmoji, "parseEmoji");
     function resolvePartialEmoji(emoji) {
       if (!emoji) return null;
       if (typeof emoji === "string") return /^\d{17,19}$/.test(emoji) ? { id: emoji } : parseEmoji(emoji);
@@ -33042,12 +34052,14 @@ var require_Util = __commonJS({
       if (!id && !name) return null;
       return { id, name, animated: Boolean(animated) };
     }
+    __name(resolvePartialEmoji, "resolvePartialEmoji");
     function makeError(obj) {
       const err = new Error(obj.message);
       err.name = obj.name;
       err.stack = obj.stack;
       return err;
     }
+    __name(makeError, "makeError");
     function makePlainError(err) {
       return {
         name: err.name,
@@ -33055,6 +34067,7 @@ var require_Util = __commonJS({
         stack: err.stack
       };
     }
+    __name(makePlainError, "makePlainError");
     var TextSortableGroupTypes = [
       ChannelType.GuildText,
       ChannelType.GuildAnnouncement,
@@ -33079,6 +34092,7 @@ var require_Util = __commonJS({
           return [type];
       }
     }
+    __name(getSortableGroupTypes, "getSortableGroupTypes");
     function moveElementInArray(array, element, newIndex, offset = false) {
       const index = array.indexOf(element);
       newIndex = (offset ? index : 0) + newIndex;
@@ -33088,11 +34102,13 @@ var require_Util = __commonJS({
       }
       return array.indexOf(element);
     }
+    __name(moveElementInArray, "moveElementInArray");
     function verifyString(data, error = Error, errorMessage = `Expected a string, got ${data} instead.`, allowEmpty = true) {
       if (typeof data !== "string") throw new error(errorMessage);
       if (!allowEmpty && data.length === 0) throw new error(errorMessage);
       return data;
     }
+    __name(verifyString, "verifyString");
     function resolveColor(color) {
       let resolvedColor;
       if (typeof color === "string") {
@@ -33113,12 +34129,14 @@ var require_Util = __commonJS({
       }
       return resolvedColor;
     }
+    __name(resolveColor, "resolveColor");
     function discordSort(collection) {
       const isGuildChannel = collection.first() instanceof GuildChannel;
       return collection.sorted(
         isGuildChannel ? (a, b) => a.rawPosition - b.rawPosition || Number(BigInt(a.id) - BigInt(b.id)) : (a, b) => a.rawPosition - b.rawPosition || Number(BigInt(b.id) - BigInt(a.id))
       );
     }
+    __name(discordSort, "discordSort");
     async function setPosition(item, position, relative, sorted, client2, route, reason) {
       let updatedItems = [...sorted.values()];
       moveElementInArray(updatedItems, item, position, relative);
@@ -33126,10 +34144,12 @@ var require_Util = __commonJS({
       await client2.rest.patch(route, { body: updatedItems, reason });
       return updatedItems;
     }
+    __name(setPosition, "setPosition");
     function basename(path, ext) {
       const res = parse(path);
       return ext && res.ext.startsWith(ext) ? res.name : res.base.split("?")[0];
     }
+    __name(basename, "basename");
     function cleanContent(str, channel) {
       return str.replaceAll(
         /* eslint-disable max-len */
@@ -33163,9 +34183,11 @@ var require_Util = __commonJS({
         }
       );
     }
+    __name(cleanContent, "cleanContent");
     function cleanCodeBlockContent(text) {
       return text.replaceAll("```", "`\u200B``");
     }
+    __name(cleanCodeBlockContent, "cleanCodeBlockContent");
     function parseWebhookURL(url) {
       const matches = url.match(
         /https?:\/\/(?:ptb\.|canary\.)?discord\.com\/api(?:\/v\d{1,2})?\/webhooks\/(\d{17,19})\/([\w-]{68})/i
@@ -33177,6 +34199,7 @@ var require_Util = __commonJS({
         token: token2
       };
     }
+    __name(parseWebhookURL, "parseWebhookURL");
     function transformResolved({ client: client2, guild, channel }, { members, users, channels, roles, messages, attachments } = {}) {
       const result = {};
       if (members) {
@@ -33219,16 +34242,19 @@ var require_Util = __commonJS({
       }
       return result;
     }
+    __name(transformResolved, "transformResolved");
     function resolveSKUId(resolvable) {
       if (typeof resolvable === "string") return resolvable;
       if (resolvable instanceof SKU) return resolvable.id;
       return null;
     }
+    __name(resolveSKUId, "resolveSKUId");
     function emitDeprecationWarningForUserFetchFlags(name) {
       if (deprecationEmittedForUserFetchFlags) return;
       process2.emitWarning(`${name}#fetchFlags() is deprecated. Use ${name}#fetch() instead.`);
       deprecationEmittedForUserFetchFlags = true;
     }
+    __name(emitDeprecationWarningForUserFetchFlags, "emitDeprecationWarningForUserFetchFlags");
     function emitDeprecationWarningForRemoveThreadMember(name) {
       if (deprecationEmittedForRemoveThreadMember) return;
       process2.emitWarning(
@@ -33236,6 +34262,7 @@ var require_Util = __commonJS({
       );
       deprecationEmittedForRemoveThreadMember = true;
     }
+    __name(emitDeprecationWarningForRemoveThreadMember, "emitDeprecationWarningForRemoveThreadMember");
     module2.exports = {
       flatten,
       fetchRecommendedShardCount,
@@ -33285,6 +34312,7 @@ var require_Transformers = __commonJS({
         ])
       );
     }
+    __name(toSnakeCase, "toSnakeCase");
     function _transformAPIAutoModerationAction(autoModerationAction) {
       return {
         type: autoModerationAction.type,
@@ -33295,6 +34323,7 @@ var require_Transformers = __commonJS({
         }
       };
     }
+    __name(_transformAPIAutoModerationAction, "_transformAPIAutoModerationAction");
     function _transformAPIMessageInteractionMetadata(client2, messageInteractionMetadata) {
       return {
         id: messageInteractionMetadata.id,
@@ -33306,6 +34335,7 @@ var require_Transformers = __commonJS({
         triggeringInteractionMetadata: messageInteractionMetadata.triggering_interaction_metadata ? _transformAPIMessageInteractionMetadata(client2, messageInteractionMetadata.triggering_interaction_metadata) : null
       };
     }
+    __name(_transformAPIMessageInteractionMetadata, "_transformAPIMessageInteractionMetadata");
     function _transformGuildScheduledEventRecurrenceRule(recurrenceRule) {
       return {
         start: new Date(recurrenceRule.startAt).toISOString(),
@@ -33317,6 +34347,7 @@ var require_Transformers = __commonJS({
         by_month_day: recurrenceRule.byMonthDay
       };
     }
+    __name(_transformGuildScheduledEventRecurrenceRule, "_transformGuildScheduledEventRecurrenceRule");
     function _transformAPIIncidentsData(data) {
       return {
         invitesDisabledUntil: data.invites_disabled_until ? new Date(data.invites_disabled_until) : null,
@@ -33325,6 +34356,7 @@ var require_Transformers = __commonJS({
         raidDetectedAt: data.raid_detected_at ? new Date(data.raid_detected_at) : null
       };
     }
+    __name(_transformAPIIncidentsData, "_transformAPIIncidentsData");
     function _transformCollectibles(collectibles) {
       if (!collectibles.nameplate) return { nameplate: null };
       return {
@@ -33336,6 +34368,7 @@ var require_Transformers = __commonJS({
         }
       };
     }
+    __name(_transformCollectibles, "_transformCollectibles");
     module2.exports = {
       toSnakeCase,
       _transformAPIAutoModerationAction,
@@ -33467,6 +34500,9 @@ var require_LimitedCollection = __commonJS({
     var { Collection: Collection2 } = require_dist6();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var LimitedCollection = class extends Collection2 {
+      static {
+        __name(this, "LimitedCollection");
+      }
       constructor(options = {}, iterable) {
         if (typeof options !== "object" || options === null) {
           throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "options", "object", true);
@@ -33511,6 +34547,9 @@ var require_Options = __commonJS({
     var { toSnakeCase } = require_Transformers();
     var { version } = require_package();
     var Options2 = class extends null {
+      static {
+        __name(this, "Options");
+      }
       /**
        * The default user agent appendix.
        * @type {string}
@@ -33635,6 +34674,9 @@ var require_BaseClient = __commonJS({
     var Options2 = require_Options();
     var { flatten } = require_Util();
     var BaseClient2 = class extends EventEmitter {
+      static {
+        __name(this, "BaseClient");
+      }
       constructor(options = {}) {
         super({ captureRejections: true });
         if (typeof options !== "object" || options === null) {
@@ -33728,6 +34770,9 @@ var require_Emoji = __commonJS({
     var Base = require_Base();
     var deprecationEmittedForURL = false;
     var Emoji = class extends Base {
+      static {
+        __name(this, "Emoji");
+      }
       constructor(client2, emoji) {
         super(client2);
         this.animated = emoji.animated ?? null;
@@ -33819,6 +34864,9 @@ var require_Collector = __commonJS({
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { flatten } = require_Util();
     var Collector = class extends EventEmitter {
+      static {
+        __name(this, "Collector");
+      }
       constructor(client2, options = {}) {
         super();
         Object.defineProperty(this, "client", { value: client2 });
@@ -33895,18 +34943,18 @@ var require_Collector = __commonJS({
             reject(this.collected);
             return;
           }
-          const cleanup = () => {
+          const cleanup = /* @__PURE__ */ __name(() => {
             this.removeListener("collect", onCollect);
             this.removeListener("end", onEnd);
-          };
-          const onCollect = (item) => {
+          }, "cleanup");
+          const onCollect = /* @__PURE__ */ __name((item) => {
             cleanup();
             resolve(item);
-          };
-          const onEnd = () => {
+          }, "onCollect");
+          const onEnd = /* @__PURE__ */ __name(() => {
             cleanup();
             reject(this.collected);
-          };
+          }, "onEnd");
           this.on("collect", onCollect);
           this.on("end", onEnd);
         });
@@ -33965,7 +35013,7 @@ var require_Collector = __commonJS({
        */
       async *[Symbol.asyncIterator]() {
         const queue = [];
-        const onCollect = (...item) => queue.push(item);
+        const onCollect = /* @__PURE__ */ __name((...item) => queue.push(item), "onCollect");
         this.on("collect", onCollect);
         try {
           while (queue.length || !this.ended) {
@@ -33973,11 +35021,11 @@ var require_Collector = __commonJS({
               yield queue.shift();
             } else {
               await new Promise((resolve) => {
-                const tick = () => {
+                const tick = /* @__PURE__ */ __name(() => {
                   this.removeListener("collect", tick);
                   this.removeListener("end", tick);
                   return resolve();
-                };
+                }, "tick");
                 this.on("collect", tick);
                 this.on("end", tick);
               });
@@ -34131,6 +35179,9 @@ var require_InteractionCollector = __commonJS({
     var Collector = require_Collector();
     var Events2 = require_Events();
     var InteractionCollector = class extends Collector {
+      static {
+        __name(this, "InteractionCollector");
+      }
       /**
        * @param {Client} client The client on which to collect interactions
        * @param {InteractionCollectorOptions} [options={}] The options to apply to this collector
@@ -34146,9 +35197,9 @@ var require_InteractionCollector = __commonJS({
         this.users = new Collection2();
         this.total = 0;
         this.client.incrementMaxListeners();
-        const bulkDeleteListener = (messages) => {
+        const bulkDeleteListener = /* @__PURE__ */ __name((messages) => {
           if (messages.has(this.messageId)) this.stop("messageDelete");
-        };
+        }, "bulkDeleteListener");
         if (this.messageId || this.messageInteractionId) {
           this._handleMessageDeletion = this._handleMessageDeletion.bind(this);
           this.client.on(Events2.MessageDelete, this._handleMessageDeletion);
@@ -34291,6 +35342,9 @@ var require_MessageCollector = __commonJS({
     var Collector = require_Collector();
     var Events2 = require_Events();
     var MessageCollector = class extends Collector {
+      static {
+        __name(this, "MessageCollector");
+      }
       /**
        * @param {TextBasedChannels} channel The channel
        * @param {MessageCollectorOptions} options The options to be applied to this collector
@@ -34300,9 +35354,9 @@ var require_MessageCollector = __commonJS({
         super(channel.client, options);
         this.channel = channel;
         this.received = 0;
-        const bulkDeleteListener = (messages) => {
+        const bulkDeleteListener = /* @__PURE__ */ __name((messages) => {
           for (const message of messages.values()) this.handleDispose(message);
-        };
+        }, "bulkDeleteListener");
         this._handleChannelDeletion = this._handleChannelDeletion.bind(this);
         this._handleThreadDeletion = this._handleThreadDeletion.bind(this);
         this._handleGuildDeletion = this._handleGuildDeletion.bind(this);
@@ -34399,6 +35453,9 @@ var require_GuildScheduledEvent = __commonJS({
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var GuildScheduledEvent = class extends Base {
+      static {
+        __name(this, "GuildScheduledEvent");
+      }
       constructor(client2, data) {
         super(client2);
         this.id = data.id;
@@ -34780,6 +35837,9 @@ var require_Application = __commonJS({
     var { DiscordSnowflake } = require_cjs3();
     var Base = require_Base();
     var Application = class extends Base {
+      static {
+        __name(this, "Application");
+      }
       constructor(client2, data) {
         super(client2);
         this._patch(data);
@@ -34884,6 +35944,9 @@ var require_IntegrationApplication = __commonJS({
     "use strict";
     var Application = require_Application();
     var IntegrationApplication = class extends Application {
+      static {
+        __name(this, "IntegrationApplication");
+      }
       _patch(data) {
         super._patch(data);
         if ("bot" in data) {
@@ -34934,6 +35997,9 @@ var require_InviteStageInstance = __commonJS({
     var { Collection: Collection2 } = require_dist6();
     var Base = require_Base();
     var InviteStageInstance = class extends Base {
+      static {
+        __name(this, "InviteStageInstance");
+      }
       constructor(client2, data, channelId, guildId) {
         super(client2);
         this.channelId = channelId;
@@ -34985,6 +36051,9 @@ var require_InviteFlagsBitField = __commonJS({
     var { InviteFlags } = require_v106();
     var BitField = require_BitField();
     var InviteFlagsBitField = class extends BitField {
+      static {
+        __name(this, "InviteFlagsBitField");
+      }
       /**
        * Numeric invite flags.
        *
@@ -35006,6 +36075,9 @@ var require_BaseGuild = __commonJS({
     var { Routes: Routes2, GuildFeature } = require_v106();
     var Base = require_Base();
     var BaseGuild = class extends Base {
+      static {
+        __name(this, "BaseGuild");
+      }
       constructor(client2, data) {
         super(client2);
         this.id = data.id;
@@ -35089,6 +36161,9 @@ var require_AnonymousGuild = __commonJS({
     "use strict";
     var BaseGuild = require_BaseGuild();
     var AnonymousGuild = class extends BaseGuild {
+      static {
+        __name(this, "AnonymousGuild");
+      }
       constructor(client2, data, immediatePatch = true) {
         super(client2, data);
         if (immediatePatch) this._patch(data);
@@ -35147,6 +36222,9 @@ var require_WelcomeChannel = __commonJS({
     var Base = require_Base();
     var { Emoji } = require_Emoji();
     var WelcomeChannel = class extends Base {
+      static {
+        __name(this, "WelcomeChannel");
+      }
       constructor(guild, data) {
         super(guild.client);
         this.guild = guild;
@@ -35185,6 +36263,9 @@ var require_WelcomeScreen = __commonJS({
     var Base = require_Base();
     var WelcomeChannel = require_WelcomeChannel();
     var WelcomeScreen = class extends Base {
+      static {
+        __name(this, "WelcomeScreen");
+      }
       constructor(guild, data) {
         super(guild.client);
         this.guild = guild;
@@ -35214,6 +36295,9 @@ var require_InviteGuild = __commonJS({
     var AnonymousGuild = require_AnonymousGuild();
     var WelcomeScreen = require_WelcomeScreen();
     var InviteGuild = class extends AnonymousGuild {
+      static {
+        __name(this, "InviteGuild");
+      }
       constructor(client2, data) {
         super(client2, data);
         this.welcomeScreen = data.welcome_screen !== void 0 ? new WelcomeScreen(this, data.welcome_screen) : null;
@@ -35235,6 +36319,9 @@ var require_Invite = __commonJS({
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { InviteFlagsBitField } = require_InviteFlagsBitField();
     var Invite2 = class extends Base {
+      static {
+        __name(this, "Invite");
+      }
       /**
        * A regular expression that matches Discord invite links.
        * The `code` group property is present on the `exec()` result of this expression.
@@ -35445,6 +36532,9 @@ var require_GuildTemplate = __commonJS({
     var { resolveImage } = require_DataResolver();
     var Events2 = require_Events();
     var GuildTemplate2 = class extends Base {
+      static {
+        __name(this, "GuildTemplate");
+      }
       /**
        * A regular expression that matches guild template links.
        * The `code` group property is present on the `exec()` result of this expression.
@@ -35508,17 +36598,17 @@ var require_GuildTemplate = __commonJS({
         });
         if (client2.guilds.cache.has(data.id)) return client2.guilds.cache.get(data.id);
         return new Promise((resolve) => {
-          const resolveGuild = (guild) => {
+          const resolveGuild = /* @__PURE__ */ __name((guild) => {
             client2.off(Events2.GuildCreate, handleGuild);
             client2.decrementMaxListeners();
             resolve(guild);
-          };
-          const handleGuild = (guild) => {
+          }, "resolveGuild");
+          const handleGuild = /* @__PURE__ */ __name((guild) => {
             if (guild.id === data.id) {
               clearTimeout2(timeout);
               resolveGuild(guild);
             }
-          };
+          }, "handleGuild");
           client2.incrementMaxListeners();
           client2.on(Events2.GuildCreate, handleGuild);
           const timeout = setTimeout2(() => resolveGuild(client2.guilds._add(data)), 1e4).unref();
@@ -35617,13 +36707,16 @@ var require_DataResolver = __commonJS({
     function resolveCode(data, regex) {
       return regex.exec(data)?.[1] ?? data;
     }
+    __name(resolveCode, "resolveCode");
     function resolveInviteCode2(data) {
       return resolveCode(data, Invite2.InvitesPattern);
     }
+    __name(resolveInviteCode2, "resolveInviteCode");
     function resolveGuildTemplateCode2(data) {
       const GuildTemplate2 = require_GuildTemplate();
       return resolveCode(data, GuildTemplate2.GuildTemplatesPattern);
     }
+    __name(resolveGuildTemplateCode2, "resolveGuildTemplateCode");
     async function resolveFile(resource) {
       if (Buffer2.isBuffer(resource)) return { data: resource };
       if (typeof resource[Symbol.asyncIterator] === "function") {
@@ -35643,10 +36736,12 @@ var require_DataResolver = __commonJS({
       }
       throw new DiscordjsTypeError2(ErrorCodes2.ReqResourceType);
     }
+    __name(resolveFile, "resolveFile");
     function resolveBase64(data, contentType = "image/jpg") {
       if (Buffer2.isBuffer(data)) return `data:${contentType};base64,${data.toString("base64")}`;
       return data;
     }
+    __name(resolveBase64, "resolveBase64");
     async function resolveImage(image) {
       if (!image) return null;
       if (typeof image === "string" && image.startsWith("data:")) {
@@ -35655,6 +36750,7 @@ var require_DataResolver = __commonJS({
       const file = await resolveFile(image);
       return resolveBase64(file.data);
     }
+    __name(resolveImage, "resolveImage");
     module2.exports = { resolveCode, resolveInviteCode: resolveInviteCode2, resolveGuildTemplateCode: resolveGuildTemplateCode2, resolveImage, resolveBase64, resolveFile };
   }
 });
@@ -35666,6 +36762,9 @@ var require_MessageFlagsBitField = __commonJS({
     var { MessageFlags } = require_v106();
     var BitField = require_BitField();
     var MessageFlagsBitField = class extends BitField {
+      static {
+        __name(this, "MessageFlagsBitField");
+      }
       /**
        * Numeric message flags.
        * @type {MessageFlags}
@@ -35689,6 +36788,9 @@ var require_BaseInteraction = __commonJS({
     var { SelectMenuTypes } = require_Constants();
     var PermissionsBitField2 = require_PermissionsBitField();
     var BaseInteraction = class extends Base {
+      static {
+        __name(this, "BaseInteraction");
+      }
       constructor(client2, data) {
         super(client2);
         this.type = data.type;
@@ -35906,6 +37008,9 @@ var require_ApplicationRoleConnectionMetadata = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/ApplicationRoleConnectionMetadata.js"(exports2) {
     "use strict";
     var ApplicationRoleConnectionMetadata = class {
+      static {
+        __name(this, "ApplicationRoleConnectionMetadata");
+      }
       constructor(data) {
         this.name = data.name;
         this.nameLocalizations = data.name_localizations ?? null;
@@ -35925,6 +37030,9 @@ var require_TeamMember = __commonJS({
     "use strict";
     var Base = require_Base();
     var TeamMember = class extends Base {
+      static {
+        __name(this, "TeamMember");
+      }
       constructor(team, data) {
         super(team.client);
         this.team = team;
@@ -35979,6 +37087,9 @@ var require_Team = __commonJS({
     var Base = require_Base();
     var TeamMember = require_TeamMember();
     var Team = class extends Base {
+      static {
+        __name(this, "Team");
+      }
       constructor(client2, data) {
         super(client2);
         this._patch(data);
@@ -36064,6 +37175,9 @@ var require_ApplicationCommandPermissionsManager = __commonJS({
     var BaseManager = require_BaseManager();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ApplicationCommandPermissionsManager = class extends BaseManager {
+      static {
+        __name(this, "ApplicationCommandPermissionsManager");
+      }
       constructor(manager) {
         super(manager.client);
         this.manager = manager;
@@ -36427,7 +37541,7 @@ var require_ApplicationCommandPermissionsManager = __commonJS({
 var require_fast_deep_equal = __commonJS({
   "../../node_modules/.pnpm/fast-deep-equal@3.1.3/node_modules/fast-deep-equal/index.js"(exports2, module2) {
     "use strict";
-    module2.exports = function equal(a, b) {
+    module2.exports = /* @__PURE__ */ __name(function equal(a, b) {
       if (a === b) return true;
       if (a && b && typeof a == "object" && typeof b == "object") {
         if (a.constructor !== b.constructor) return false;
@@ -36454,7 +37568,7 @@ var require_fast_deep_equal = __commonJS({
         return true;
       }
       return a !== a && b !== b;
-    };
+    }, "equal");
   }
 });
 
@@ -36469,6 +37583,9 @@ var require_ApplicationCommand = __commonJS({
     var ApplicationCommandPermissionsManager = require_ApplicationCommandPermissionsManager();
     var PermissionsBitField2 = require_PermissionsBitField();
     var ApplicationCommand = class extends Base {
+      static {
+        __name(this, "ApplicationCommand");
+      }
       constructor(client2, data, guild, guildId) {
         super(client2);
         this.id = data.id;
@@ -36915,6 +38032,9 @@ var require_ApplicationCommandManager = __commonJS({
     var ApplicationCommand = require_ApplicationCommand();
     var PermissionsBitField2 = require_PermissionsBitField();
     var ApplicationCommandManager = class extends CachedManager {
+      static {
+        __name(this, "ApplicationCommandManager");
+      }
       constructor(client2, iterable) {
         super(client2, ApplicationCommand, iterable);
         this.permissions = new ApplicationCommandPermissionsManager(this);
@@ -37141,6 +38261,9 @@ var require_ApplicationEmoji = __commonJS({
     "use strict";
     var { Emoji } = require_Emoji();
     var ApplicationEmoji = class _ApplicationEmoji extends Emoji {
+      static {
+        __name(this, "ApplicationEmoji");
+      }
       constructor(client2, data, application) {
         super(client2, data);
         this.application = application;
@@ -37229,6 +38352,9 @@ var require_ApplicationEmojiManager = __commonJS({
     var ApplicationEmoji = require_ApplicationEmoji();
     var { resolveImage } = require_DataResolver();
     var ApplicationEmojiManager = class extends CachedManager {
+      static {
+        __name(this, "ApplicationEmojiManager");
+      }
       constructor(application, iterable) {
         super(application.client, ApplicationEmoji, iterable);
         this.application = application;
@@ -37347,6 +38473,9 @@ var require_Entitlement = __commonJS({
     "use strict";
     var Base = require_Base();
     var Entitlement = class extends Base {
+      static {
+        __name(this, "Entitlement");
+      }
       constructor(client2, data) {
         super(client2);
         this.id = data.id;
@@ -37471,6 +38600,9 @@ var require_EntitlementManager = __commonJS({
     var { Entitlement } = require_Entitlement();
     var { resolveSKUId } = require_Util();
     var EntitlementManager = class extends CachedManager {
+      static {
+        __name(this, "EntitlementManager");
+      }
       constructor(client2, iterable) {
         super(client2, Entitlement, iterable);
       }
@@ -37616,6 +38748,9 @@ var require_Subscription = __commonJS({
     "use strict";
     var Base = require_Base();
     var Subscription = class extends Base {
+      static {
+        __name(this, "Subscription");
+      }
       constructor(client2, data) {
         super(client2);
         this.id = data.id;
@@ -37683,6 +38818,9 @@ var require_SubscriptionManager = __commonJS({
     var { Subscription } = require_Subscription();
     var { resolveSKUId } = require_Util();
     var SubscriptionManager = class extends CachedManager {
+      static {
+        __name(this, "SubscriptionManager");
+      }
       constructor(client2, iterable) {
         super(client2, Subscription, iterable);
       }
@@ -37746,6 +38884,9 @@ var require_ApplicationFlagsBitField = __commonJS({
     var { ApplicationFlags } = require_v106();
     var BitField = require_BitField();
     var ApplicationFlagsBitField = class extends BitField {
+      static {
+        __name(this, "ApplicationFlagsBitField");
+      }
       /**
        * Numeric application flags. All available properties:
        * @type {ApplicationFlags}
@@ -37775,6 +38916,9 @@ var require_ClientApplication = __commonJS({
     var { resolveImage } = require_DataResolver();
     var PermissionsBitField2 = require_PermissionsBitField();
     var ClientApplication = class extends Application {
+      static {
+        __name(this, "ClientApplication");
+      }
       constructor(client2, data) {
         super(client2, data);
         this.commands = new ApplicationCommandManager(this.client);
@@ -38072,6 +39216,7 @@ var require_getRawTag = __commonJS({
       }
       return result;
     }
+    __name(getRawTag, "getRawTag");
     module2.exports = getRawTag;
   }
 });
@@ -38084,6 +39229,7 @@ var require_objectToString = __commonJS({
     function objectToString(value) {
       return nativeObjectToString.call(value);
     }
+    __name(objectToString, "objectToString");
     module2.exports = objectToString;
   }
 });
@@ -38103,6 +39249,7 @@ var require_baseGetTag = __commonJS({
       }
       return symToStringTag && symToStringTag in Object(value) ? getRawTag(value) : objectToString(value);
     }
+    __name(baseGetTag, "baseGetTag");
     module2.exports = baseGetTag;
   }
 });
@@ -38113,6 +39260,7 @@ var require_isObjectLike = __commonJS({
     function isObjectLike(value) {
       return value != null && typeof value == "object";
     }
+    __name(isObjectLike, "isObjectLike");
     module2.exports = isObjectLike;
   }
 });
@@ -38126,6 +39274,7 @@ var require_isSymbol = __commonJS({
     function isSymbol(value) {
       return typeof value == "symbol" || isObjectLike(value) && baseGetTag(value) == symbolTag;
     }
+    __name(isSymbol, "isSymbol");
     module2.exports = isSymbol;
   }
 });
@@ -38147,6 +39296,7 @@ var require_isKey = __commonJS({
       }
       return reIsPlainProp.test(value) || !reIsDeepProp.test(value) || object != null && value in Object(object);
     }
+    __name(isKey, "isKey");
     module2.exports = isKey;
   }
 });
@@ -38158,6 +39308,7 @@ var require_isObject = __commonJS({
       var type = typeof value;
       return value != null && (type == "object" || type == "function");
     }
+    __name(isObject, "isObject");
     module2.exports = isObject;
   }
 });
@@ -38178,6 +39329,7 @@ var require_isFunction = __commonJS({
       var tag = baseGetTag(value);
       return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
     }
+    __name(isFunction, "isFunction");
     module2.exports = isFunction;
   }
 });
@@ -38202,6 +39354,7 @@ var require_isMasked = __commonJS({
     function isMasked(func) {
       return !!maskSrcKey && maskSrcKey in func;
     }
+    __name(isMasked, "isMasked");
     module2.exports = isMasked;
   }
 });
@@ -38224,6 +39377,7 @@ var require_toSource = __commonJS({
       }
       return "";
     }
+    __name(toSource, "toSource");
     module2.exports = toSource;
   }
 });
@@ -38251,6 +39405,7 @@ var require_baseIsNative = __commonJS({
       var pattern = isFunction(value) ? reIsNative : reIsHostCtor;
       return pattern.test(toSource(value));
     }
+    __name(baseIsNative, "baseIsNative");
     module2.exports = baseIsNative;
   }
 });
@@ -38261,6 +39416,7 @@ var require_getValue = __commonJS({
     function getValue(object, key) {
       return object == null ? void 0 : object[key];
     }
+    __name(getValue, "getValue");
     module2.exports = getValue;
   }
 });
@@ -38274,6 +39430,7 @@ var require_getNative = __commonJS({
       var value = getValue(object, key);
       return baseIsNative(value) ? value : void 0;
     }
+    __name(getNative, "getNative");
     module2.exports = getNative;
   }
 });
@@ -38295,6 +39452,7 @@ var require_hashClear = __commonJS({
       this.__data__ = nativeCreate ? nativeCreate(null) : {};
       this.size = 0;
     }
+    __name(hashClear, "hashClear");
     module2.exports = hashClear;
   }
 });
@@ -38307,6 +39465,7 @@ var require_hashDelete = __commonJS({
       this.size -= result ? 1 : 0;
       return result;
     }
+    __name(hashDelete, "hashDelete");
     module2.exports = hashDelete;
   }
 });
@@ -38326,6 +39485,7 @@ var require_hashGet = __commonJS({
       }
       return hasOwnProperty.call(data, key) ? data[key] : void 0;
     }
+    __name(hashGet, "hashGet");
     module2.exports = hashGet;
   }
 });
@@ -38340,6 +39500,7 @@ var require_hashHas = __commonJS({
       var data = this.__data__;
       return nativeCreate ? data[key] !== void 0 : hasOwnProperty.call(data, key);
     }
+    __name(hashHas, "hashHas");
     module2.exports = hashHas;
   }
 });
@@ -38355,6 +39516,7 @@ var require_hashSet = __commonJS({
       data[key] = nativeCreate && value === void 0 ? HASH_UNDEFINED : value;
       return this;
     }
+    __name(hashSet, "hashSet");
     module2.exports = hashSet;
   }
 });
@@ -38375,6 +39537,7 @@ var require_Hash = __commonJS({
         this.set(entry[0], entry[1]);
       }
     }
+    __name(Hash, "Hash");
     Hash.prototype.clear = hashClear;
     Hash.prototype["delete"] = hashDelete;
     Hash.prototype.get = hashGet;
@@ -38391,6 +39554,7 @@ var require_listCacheClear = __commonJS({
       this.__data__ = [];
       this.size = 0;
     }
+    __name(listCacheClear, "listCacheClear");
     module2.exports = listCacheClear;
   }
 });
@@ -38401,6 +39565,7 @@ var require_eq = __commonJS({
     function eq(value, other) {
       return value === other || value !== value && other !== other;
     }
+    __name(eq, "eq");
     module2.exports = eq;
   }
 });
@@ -38418,6 +39583,7 @@ var require_assocIndexOf = __commonJS({
       }
       return -1;
     }
+    __name(assocIndexOf, "assocIndexOf");
     module2.exports = assocIndexOf;
   }
 });
@@ -38442,6 +39608,7 @@ var require_listCacheDelete = __commonJS({
       --this.size;
       return true;
     }
+    __name(listCacheDelete, "listCacheDelete");
     module2.exports = listCacheDelete;
   }
 });
@@ -38454,6 +39621,7 @@ var require_listCacheGet = __commonJS({
       var data = this.__data__, index = assocIndexOf(data, key);
       return index < 0 ? void 0 : data[index][1];
     }
+    __name(listCacheGet, "listCacheGet");
     module2.exports = listCacheGet;
   }
 });
@@ -38465,6 +39633,7 @@ var require_listCacheHas = __commonJS({
     function listCacheHas(key) {
       return assocIndexOf(this.__data__, key) > -1;
     }
+    __name(listCacheHas, "listCacheHas");
     module2.exports = listCacheHas;
   }
 });
@@ -38483,6 +39652,7 @@ var require_listCacheSet = __commonJS({
       }
       return this;
     }
+    __name(listCacheSet, "listCacheSet");
     module2.exports = listCacheSet;
   }
 });
@@ -38503,6 +39673,7 @@ var require_ListCache = __commonJS({
         this.set(entry[0], entry[1]);
       }
     }
+    __name(ListCache, "ListCache");
     ListCache.prototype.clear = listCacheClear;
     ListCache.prototype["delete"] = listCacheDelete;
     ListCache.prototype.get = listCacheGet;
@@ -38536,6 +39707,7 @@ var require_mapCacheClear = __commonJS({
         "string": new Hash()
       };
     }
+    __name(mapCacheClear, "mapCacheClear");
     module2.exports = mapCacheClear;
   }
 });
@@ -38547,6 +39719,7 @@ var require_isKeyable = __commonJS({
       var type = typeof value;
       return type == "string" || type == "number" || type == "symbol" || type == "boolean" ? value !== "__proto__" : value === null;
     }
+    __name(isKeyable, "isKeyable");
     module2.exports = isKeyable;
   }
 });
@@ -38559,6 +39732,7 @@ var require_getMapData = __commonJS({
       var data = map.__data__;
       return isKeyable(key) ? data[typeof key == "string" ? "string" : "hash"] : data.map;
     }
+    __name(getMapData, "getMapData");
     module2.exports = getMapData;
   }
 });
@@ -38572,6 +39746,7 @@ var require_mapCacheDelete = __commonJS({
       this.size -= result ? 1 : 0;
       return result;
     }
+    __name(mapCacheDelete, "mapCacheDelete");
     module2.exports = mapCacheDelete;
   }
 });
@@ -38583,6 +39758,7 @@ var require_mapCacheGet = __commonJS({
     function mapCacheGet(key) {
       return getMapData(this, key).get(key);
     }
+    __name(mapCacheGet, "mapCacheGet");
     module2.exports = mapCacheGet;
   }
 });
@@ -38594,6 +39770,7 @@ var require_mapCacheHas = __commonJS({
     function mapCacheHas(key) {
       return getMapData(this, key).has(key);
     }
+    __name(mapCacheHas, "mapCacheHas");
     module2.exports = mapCacheHas;
   }
 });
@@ -38608,6 +39785,7 @@ var require_mapCacheSet = __commonJS({
       this.size += data.size == size ? 0 : 1;
       return this;
     }
+    __name(mapCacheSet, "mapCacheSet");
     module2.exports = mapCacheSet;
   }
 });
@@ -38628,6 +39806,7 @@ var require_MapCache = __commonJS({
         this.set(entry[0], entry[1]);
       }
     }
+    __name(MapCache, "MapCache");
     MapCache.prototype.clear = mapCacheClear;
     MapCache.prototype["delete"] = mapCacheDelete;
     MapCache.prototype.get = mapCacheGet;
@@ -38646,7 +39825,7 @@ var require_memoize = __commonJS({
       if (typeof func != "function" || resolver != null && typeof resolver != "function") {
         throw new TypeError(FUNC_ERROR_TEXT);
       }
-      var memoized = function() {
+      var memoized = /* @__PURE__ */ __name(function() {
         var args = arguments, key = resolver ? resolver.apply(this, args) : args[0], cache = memoized.cache;
         if (cache.has(key)) {
           return cache.get(key);
@@ -38654,10 +39833,11 @@ var require_memoize = __commonJS({
         var result = func.apply(this, args);
         memoized.cache = cache.set(key, result) || cache;
         return result;
-      };
+      }, "memoized");
       memoized.cache = new (memoize.Cache || MapCache)();
       return memoized;
     }
+    __name(memoize, "memoize");
     memoize.Cache = MapCache;
     module2.exports = memoize;
   }
@@ -38678,6 +39858,7 @@ var require_memoizeCapped = __commonJS({
       var cache = result.cache;
       return result;
     }
+    __name(memoizeCapped, "memoizeCapped");
     module2.exports = memoizeCapped;
   }
 });
@@ -38712,6 +39893,7 @@ var require_arrayMap = __commonJS({
       }
       return result;
     }
+    __name(arrayMap, "arrayMap");
     module2.exports = arrayMap;
   }
 });
@@ -38739,6 +39921,7 @@ var require_baseToString = __commonJS({
       var result = value + "";
       return result == "0" && 1 / value == -INFINITY ? "-0" : result;
     }
+    __name(baseToString, "baseToString");
     module2.exports = baseToString;
   }
 });
@@ -38750,6 +39933,7 @@ var require_toString = __commonJS({
     function toString(value) {
       return value == null ? "" : baseToString(value);
     }
+    __name(toString, "toString");
     module2.exports = toString;
   }
 });
@@ -38767,6 +39951,7 @@ var require_castPath = __commonJS({
       }
       return isKey(value, object) ? [value] : stringToPath(toString(value));
     }
+    __name(castPath, "castPath");
     module2.exports = castPath;
   }
 });
@@ -38783,6 +39968,7 @@ var require_toKey = __commonJS({
       var result = value + "";
       return result == "0" && 1 / value == -INFINITY ? "-0" : result;
     }
+    __name(toKey, "toKey");
     module2.exports = toKey;
   }
 });
@@ -38800,6 +39986,7 @@ var require_baseGet = __commonJS({
       }
       return index && index == length ? object : void 0;
     }
+    __name(baseGet, "baseGet");
     module2.exports = baseGet;
   }
 });
@@ -38812,6 +39999,7 @@ var require_get = __commonJS({
       var result = object == null ? void 0 : baseGet(object, path);
       return result === void 0 ? defaultValue : result;
     }
+    __name(get, "get");
     module2.exports = get;
   }
 });
@@ -38820,7 +40008,7 @@ var require_get = __commonJS({
 var require_es6 = __commonJS({
   "../../node_modules/.pnpm/fast-deep-equal@3.1.3/node_modules/fast-deep-equal/es6/index.js"(exports2, module2) {
     "use strict";
-    module2.exports = function equal(a, b) {
+    module2.exports = /* @__PURE__ */ __name(function equal(a, b) {
       if (a === b) return true;
       if (a && b && typeof a == "object" && typeof b == "object") {
         if (a.constructor !== b.constructor) return false;
@@ -38868,7 +40056,7 @@ var require_es6 = __commonJS({
         return true;
       }
       return a !== a && b !== b;
-    };
+    }, "equal");
   }
 });
 
@@ -38880,6 +40068,7 @@ var require_setCacheAdd = __commonJS({
       this.__data__.set(value, HASH_UNDEFINED);
       return this;
     }
+    __name(setCacheAdd, "setCacheAdd");
     module2.exports = setCacheAdd;
   }
 });
@@ -38890,6 +40079,7 @@ var require_setCacheHas = __commonJS({
     function setCacheHas(value) {
       return this.__data__.has(value);
     }
+    __name(setCacheHas, "setCacheHas");
     module2.exports = setCacheHas;
   }
 });
@@ -38907,6 +40097,7 @@ var require_SetCache = __commonJS({
         this.add(values[index]);
       }
     }
+    __name(SetCache, "SetCache");
     SetCache.prototype.add = SetCache.prototype.push = setCacheAdd;
     SetCache.prototype.has = setCacheHas;
     module2.exports = SetCache;
@@ -38925,6 +40116,7 @@ var require_baseFindIndex = __commonJS({
       }
       return -1;
     }
+    __name(baseFindIndex, "baseFindIndex");
     module2.exports = baseFindIndex;
   }
 });
@@ -38935,6 +40127,7 @@ var require_baseIsNaN = __commonJS({
     function baseIsNaN(value) {
       return value !== value;
     }
+    __name(baseIsNaN, "baseIsNaN");
     module2.exports = baseIsNaN;
   }
 });
@@ -38951,6 +40144,7 @@ var require_strictIndexOf = __commonJS({
       }
       return -1;
     }
+    __name(strictIndexOf, "strictIndexOf");
     module2.exports = strictIndexOf;
   }
 });
@@ -38964,6 +40158,7 @@ var require_baseIndexOf = __commonJS({
     function baseIndexOf(array, value, fromIndex) {
       return value === value ? strictIndexOf(array, value, fromIndex) : baseFindIndex(array, baseIsNaN, fromIndex);
     }
+    __name(baseIndexOf, "baseIndexOf");
     module2.exports = baseIndexOf;
   }
 });
@@ -38976,6 +40171,7 @@ var require_arrayIncludes = __commonJS({
       var length = array == null ? 0 : array.length;
       return !!length && baseIndexOf(array, value, 0) > -1;
     }
+    __name(arrayIncludes, "arrayIncludes");
     module2.exports = arrayIncludes;
   }
 });
@@ -38992,6 +40188,7 @@ var require_arrayIncludesWith = __commonJS({
       }
       return false;
     }
+    __name(arrayIncludesWith, "arrayIncludesWith");
     module2.exports = arrayIncludesWith;
   }
 });
@@ -39002,6 +40199,7 @@ var require_cacheHas = __commonJS({
     function cacheHas(cache, key) {
       return cache.has(key);
     }
+    __name(cacheHas, "cacheHas");
     module2.exports = cacheHas;
   }
 });
@@ -39021,6 +40219,7 @@ var require_noop = __commonJS({
   "../../node_modules/.pnpm/lodash@4.18.1/node_modules/lodash/noop.js"(exports2, module2) {
     function noop() {
     }
+    __name(noop, "noop");
     module2.exports = noop;
   }
 });
@@ -39035,6 +40234,7 @@ var require_setToArray = __commonJS({
       });
       return result;
     }
+    __name(setToArray, "setToArray");
     module2.exports = setToArray;
   }
 });
@@ -39103,6 +40303,7 @@ var require_baseUniq = __commonJS({
         }
       return result;
     }
+    __name(baseUniq, "baseUniq");
     module2.exports = baseUniq;
   }
 });
@@ -39115,6 +40316,7 @@ var require_uniqWith = __commonJS({
       comparator = typeof comparator == "function" ? comparator : void 0;
       return array && array.length ? baseUniq(array, void 0, comparator) : [];
     }
+    __name(uniqWith, "uniqWith");
     module2.exports = uniqWith;
   }
 });
@@ -39129,11 +40331,12 @@ var require_cjs4 = __commonJS({
     function _interopDefault(e3) {
       return e3 && e3.__esModule ? e3 : { default: e3 };
     }
+    __name(_interopDefault, "_interopDefault");
     var get__default = /* @__PURE__ */ _interopDefault(get);
     var fastDeepEqual__default = /* @__PURE__ */ _interopDefault(fastDeepEqual);
     var uniqWith__default = /* @__PURE__ */ _interopDefault(uniqWith);
     var __defProp2 = Object.defineProperty;
-    var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
+    var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
     var e;
     var t;
     var n;
@@ -39143,10 +40346,12 @@ var require_cjs4 = __commonJS({
       throw new Error("setTimeout has not been defined");
     }
     __name(i, "i");
+    __name2(i, "i");
     function u() {
       throw new Error("clearTimeout has not been defined");
     }
     __name(u, "u");
+    __name2(u, "u");
     function c(e3) {
       if (t === setTimeout)
         return setTimeout(e3, 0);
@@ -39163,6 +40368,7 @@ var require_cjs4 = __commonJS({
       }
     }
     __name(c, "c");
+    __name2(c, "c");
     !function() {
       try {
         t = "function" == typeof setTimeout ? setTimeout : i;
@@ -39183,6 +40389,7 @@ var require_cjs4 = __commonJS({
       f && l && (f = false, l.length ? s = l.concat(s) : a = -1, s.length && d());
     }
     __name(h, "h");
+    __name2(h, "h");
     function d() {
       if (!f) {
         var e3 = c(h);
@@ -39210,13 +40417,16 @@ var require_cjs4 = __commonJS({
       }
     }
     __name(d, "d");
+    __name2(d, "d");
     function m(e3, t3) {
       (this || r).fun = e3, (this || r).array = t3;
     }
     __name(m, "m");
+    __name2(m, "m");
     function p() {
     }
     __name(p, "p");
+    __name2(p, "p");
     o.nextTick = function(e3) {
       var t3 = new Array(arguments.length - 1);
       if (arguments.length > 1)
@@ -39260,10 +40470,10 @@ var require_cjs4 = __commonJS({
     T.versions;
     var t2 = "function" == typeof Symbol && "symbol" == typeof Symbol.toStringTag;
     var e2 = Object.prototype.toString;
-    var o2 = /* @__PURE__ */ __name(function(o3) {
+    var o2 = /* @__PURE__ */ __name2(function(o3) {
       return !(t2 && o3 && "object" == typeof o3 && Symbol.toStringTag in o3) && "[object Arguments]" === e2.call(o3);
     }, "o");
-    var n2 = /* @__PURE__ */ __name(function(t3) {
+    var n2 = /* @__PURE__ */ __name2(function(t3) {
       return !!o2(t3) || null !== t3 && "object" == typeof t3 && "number" == typeof t3.length && t3.length >= 0 && "[object Array]" !== e2.call(t3) && "[object Function]" === e2.call(t3.callee);
     }, "n");
     var r2 = function() {
@@ -39285,7 +40495,7 @@ var require_cjs4 = __commonJS({
       }
     }();
     var u2 = c2 ? r$1(c2) : {};
-    var i2 = /* @__PURE__ */ __name(function(c3) {
+    var i2 = /* @__PURE__ */ __name2(function(c3) {
       return "function" == typeof c3 && (!!n$1.test(o$1.call(c3)) || (e$1 ? r$1(c3) === u2 : "[object GeneratorFunction]" === t$1.call(c3)));
     }, "i");
     var t$2 = "function" == typeof Object.create ? function(t3, e3) {
@@ -39293,12 +40503,12 @@ var require_cjs4 = __commonJS({
     } : function(t3, e3) {
       if (e3) {
         t3.super_ = e3;
-        var o3 = /* @__PURE__ */ __name(function() {
+        var o3 = /* @__PURE__ */ __name2(function() {
         }, "o");
         o3.prototype = e3.prototype, t3.prototype = new o3(), t3.prototype.constructor = t3;
       }
     };
-    var i$1 = /* @__PURE__ */ __name(function(e3) {
+    var i$1 = /* @__PURE__ */ __name2(function(e3) {
       return e3 && "object" == typeof e3 && "function" == typeof e3.copy && "function" == typeof e3.fill && "function" == typeof e3.readUInt8;
     }, "i$1");
     var o$2 = {};
@@ -39309,6 +40519,7 @@ var require_cjs4 = __commonJS({
       return e3.call.bind(e3);
     }
     __name(c$1, "c$1");
+    __name2(c$1, "c$1");
     var s2 = "undefined" != typeof BigInt;
     var p2 = "undefined" != typeof Symbol;
     var y = p2 && void 0 !== Symbol.toStringTag;
@@ -39334,114 +40545,142 @@ var require_cjs4 = __commonJS({
       }
     }
     __name(O, "O");
+    __name2(O, "O");
     function S(e3) {
       return l$1 && y ? void 0 !== b(e3) : B(e3) || k(e3) || E(e3) || D(e3) || U(e3) || P(e3) || x(e3) || I(e3) || M(e3) || z(e3) || F(e3);
     }
     __name(S, "S");
+    __name2(S, "S");
     function B(e3) {
       return l$1 && y ? "Uint8Array" === b(e3) : "[object Uint8Array]" === m2(e3) || u$1(e3) && void 0 !== e3.buffer;
     }
     __name(B, "B");
+    __name2(B, "B");
     function k(e3) {
       return l$1 && y ? "Uint8ClampedArray" === b(e3) : "[object Uint8ClampedArray]" === m2(e3);
     }
     __name(k, "k");
+    __name2(k, "k");
     function E(e3) {
       return l$1 && y ? "Uint16Array" === b(e3) : "[object Uint16Array]" === m2(e3);
     }
     __name(E, "E");
+    __name2(E, "E");
     function D(e3) {
       return l$1 && y ? "Uint32Array" === b(e3) : "[object Uint32Array]" === m2(e3);
     }
     __name(D, "D");
+    __name2(D, "D");
     function U(e3) {
       return l$1 && y ? "Int8Array" === b(e3) : "[object Int8Array]" === m2(e3);
     }
     __name(U, "U");
+    __name2(U, "U");
     function P(e3) {
       return l$1 && y ? "Int16Array" === b(e3) : "[object Int16Array]" === m2(e3);
     }
     __name(P, "P");
+    __name2(P, "P");
     function x(e3) {
       return l$1 && y ? "Int32Array" === b(e3) : "[object Int32Array]" === m2(e3);
     }
     __name(x, "x");
+    __name2(x, "x");
     function I(e3) {
       return l$1 && y ? "Float32Array" === b(e3) : "[object Float32Array]" === m2(e3);
     }
     __name(I, "I");
+    __name2(I, "I");
     function M(e3) {
       return l$1 && y ? "Float64Array" === b(e3) : "[object Float64Array]" === m2(e3);
     }
     __name(M, "M");
+    __name2(M, "M");
     function z(e3) {
       return l$1 && y ? "BigInt64Array" === b(e3) : "[object BigInt64Array]" === m2(e3);
     }
     __name(z, "z");
+    __name2(z, "z");
     function F(e3) {
       return l$1 && y ? "BigUint64Array" === b(e3) : "[object BigUint64Array]" === m2(e3);
     }
     __name(F, "F");
+    __name2(F, "F");
     function T2(e3) {
       return "[object Map]" === m2(e3);
     }
-    __name(T2, "T");
+    __name(T2, "T2");
+    __name2(T2, "T");
     function N(e3) {
       return "[object Set]" === m2(e3);
     }
     __name(N, "N");
+    __name2(N, "N");
     function W(e3) {
       return "[object WeakMap]" === m2(e3);
     }
     __name(W, "W");
+    __name2(W, "W");
     function $(e3) {
       return "[object WeakSet]" === m2(e3);
     }
     __name($, "$");
+    __name2($, "$");
     function C(e3) {
       return "[object ArrayBuffer]" === m2(e3);
     }
     __name(C, "C");
+    __name2(C, "C");
     function V(e3) {
       return "undefined" != typeof ArrayBuffer && (C.working ? C(e3) : e3 instanceof ArrayBuffer);
     }
     __name(V, "V");
+    __name2(V, "V");
     function G(e3) {
       return "[object DataView]" === m2(e3);
     }
     __name(G, "G");
+    __name2(G, "G");
     function R(e3) {
       return "undefined" != typeof DataView && (G.working ? G(e3) : e3 instanceof DataView);
     }
     __name(R, "R");
+    __name2(R, "R");
     function J(e3) {
       return "[object SharedArrayBuffer]" === m2(e3);
     }
     __name(J, "J");
+    __name2(J, "J");
     function _(e3) {
       return "undefined" != typeof SharedArrayBuffer && (J.working ? J(e3) : e3 instanceof SharedArrayBuffer);
     }
     __name(_, "_");
+    __name2(_, "_");
     function H(e3) {
       return O(e3, h2);
     }
     __name(H, "H");
+    __name2(H, "H");
     function Z(e3) {
       return O(e3, j);
     }
     __name(Z, "Z");
+    __name2(Z, "Z");
     function q(e3) {
       return O(e3, A);
     }
     __name(q, "q");
+    __name2(q, "q");
     function K(e3) {
       return s2 && O(e3, w);
     }
     __name(K, "K");
+    __name2(K, "K");
     function L(e3) {
       return p2 && O(e3, v);
     }
     __name(L, "L");
+    __name2(L, "L");
     o$2.isArgumentsObject = f2, o$2.isGeneratorFunction = a2, o$2.isPromise = function(e3) {
       return "undefined" != typeof Promise && e3 instanceof Promise || null !== e3 && "object" == typeof e3 && "function" == typeof e3.then && "function" == typeof e3.catch;
     }, o$2.isArrayBufferView = function(e3) {
@@ -39469,9 +40708,9 @@ var require_cjs4 = __commonJS({
     }, o$2.isAnyArrayBuffer = function(e3) {
       return l$1 && (V(e3) || _(e3));
     }, ["isProxy", "isExternal", "isModuleNamespaceObject"].forEach(function(e3) {
-      Object.defineProperty(o$2, e3, { enumerable: false, value: function() {
+      Object.defineProperty(o$2, e3, { enumerable: false, value: /* @__PURE__ */ __name(function() {
         throw new Error(e3 + " is not supported in userland");
-      } });
+      }, "value") });
     });
     var Q = "undefined" != typeof globalThis ? globalThis : "undefined" != typeof self ? self : globalThis;
     var X = {};
@@ -39540,15 +40779,18 @@ var require_cjs4 = __commonJS({
       return arguments.length >= 3 && (r3.depth = arguments[2]), arguments.length >= 4 && (r3.colors = arguments[3]), ye(t3) ? r3.showHidden = t3 : t3 && X._extend(r3, t3), be(r3.showHidden) && (r3.showHidden = false), be(r3.depth) && (r3.depth = 2), be(r3.colors) && (r3.colors = false), be(r3.customInspect) && (r3.customInspect = true), r3.colors && (r3.stylize = ue), ae(r3, e3, r3.depth);
     }
     __name(oe, "oe");
+    __name2(oe, "oe");
     function ue(e3, t3) {
       var r3 = oe.styles[t3];
       return r3 ? "\x1B[" + oe.colors[r3][0] + "m" + e3 + "\x1B[" + oe.colors[r3][1] + "m" : e3;
     }
     __name(ue, "ue");
+    __name2(ue, "ue");
     function fe(e3, t3) {
       return e3;
     }
     __name(fe, "fe");
+    __name2(fe, "fe");
     function ae(e3, t3, r3) {
       if (e3.customInspect && t3 && we(t3.inspect) && t3.inspect !== X.inspect && (!t3.constructor || t3.constructor.prototype !== t3)) {
         var n3 = t3.inspect(r3, e3);
@@ -39610,10 +40852,12 @@ var require_cjs4 = __commonJS({
       }(a3, c3, p3)) : p3[0] + c3 + p3[1];
     }
     __name(ae, "ae");
+    __name2(ae, "ae");
     function ce(e3) {
       return "[" + Error.prototype.toString.call(e3) + "]";
     }
     __name(ce, "ce");
+    __name2(ce, "ce");
     function se(e3, t3, r3, n3, i3, o3) {
       var u3, f3, a3;
       if ((a3 = Object.getOwnPropertyDescriptor(t3, i3) || { value: t3[i3] }).get ? f3 = a3.set ? e3.stylize("[Getter/Setter]", "special") : e3.stylize("[Getter]", "special") : a3.set && (f3 = e3.stylize("[Setter]", "special")), ke(n3, i3) || (u3 = "[" + i3 + "]"), f3 || (e3.seen.indexOf(a3.value) < 0 ? (f3 = le(r3) ? ae(e3, a3.value, null) : ae(e3, a3.value, r3 - 1)).indexOf("\n") > -1 && (f3 = o3 ? f3.split("\n").map(function(e4) {
@@ -39628,58 +40872,72 @@ var require_cjs4 = __commonJS({
       return u3 + ": " + f3;
     }
     __name(se, "se");
+    __name2(se, "se");
     function pe(e3) {
       return Array.isArray(e3);
     }
     __name(pe, "pe");
+    __name2(pe, "pe");
     function ye(e3) {
       return "boolean" == typeof e3;
     }
     __name(ye, "ye");
+    __name2(ye, "ye");
     function le(e3) {
       return null === e3;
     }
     __name(le, "le");
+    __name2(le, "le");
     function de(e3) {
       return "number" == typeof e3;
     }
     __name(de, "de");
+    __name2(de, "de");
     function ge(e3) {
       return "string" == typeof e3;
     }
     __name(ge, "ge");
+    __name2(ge, "ge");
     function be(e3) {
       return void 0 === e3;
     }
     __name(be, "be");
+    __name2(be, "be");
     function me(e3) {
       return he(e3) && "[object RegExp]" === ve(e3);
     }
     __name(me, "me");
+    __name2(me, "me");
     function he(e3) {
       return "object" == typeof e3 && null !== e3;
     }
     __name(he, "he");
+    __name2(he, "he");
     function je(e3) {
       return he(e3) && "[object Date]" === ve(e3);
     }
     __name(je, "je");
+    __name2(je, "je");
     function Ae(e3) {
       return he(e3) && ("[object Error]" === ve(e3) || e3 instanceof Error);
     }
     __name(Ae, "Ae");
+    __name2(Ae, "Ae");
     function we(e3) {
       return "function" == typeof e3;
     }
     __name(we, "we");
+    __name2(we, "we");
     function ve(e3) {
       return Object.prototype.toString.call(e3);
     }
     __name(ve, "ve");
+    __name2(ve, "ve");
     function Oe(e3) {
       return e3 < 10 ? "0" + e3.toString(10) : e3.toString(10);
     }
     __name(Oe, "Oe");
+    __name2(Oe, "Oe");
     X.debuglog = function(e3) {
       if (e3 = e3.toUpperCase(), !re[e3])
         if (ne.test(e3)) {
@@ -39705,10 +40963,12 @@ var require_cjs4 = __commonJS({
       return [e3.getDate(), Se[e3.getMonth()], t3].join(" ");
     }
     __name(Be, "Be");
+    __name2(Be, "Be");
     function ke(e3, t3) {
       return Object.prototype.hasOwnProperty.call(e3, t3);
     }
     __name(ke, "ke");
+    __name2(ke, "ke");
     X.log = function() {
       console.log("%s - %s", Be(), X.format.apply(X, arguments));
     }, X.inherits = t$2, X._extend = function(e3, t3) {
@@ -39727,6 +40987,7 @@ var require_cjs4 = __commonJS({
       return t3(e3);
     }
     __name(De, "De");
+    __name2(De, "De");
     X.promisify = function(e3) {
       if ("function" != typeof e3)
         throw new TypeError('The "original" argument must be of type Function');
@@ -39751,7 +41012,8 @@ var require_cjs4 = __commonJS({
         }
         return n3;
       }
-      __name(t3, "t");
+      __name(t3, "t3");
+      __name2(t3, "t");
       return Object.setPrototypeOf(t3, Object.getPrototypeOf(e3)), Ee && Object.defineProperty(t3, Ee, { value: t3, enumerable: false, writable: false, configurable: true }), Object.defineProperties(t3, ee(e3));
     }, X.promisify.custom = Ee, X.callbackify = function(e3) {
       if ("function" != typeof e3)
@@ -39762,7 +41024,7 @@ var require_cjs4 = __commonJS({
         var n3 = t4.pop();
         if ("function" != typeof n3)
           throw new TypeError("The last argument must be of type Function");
-        var i3 = this || Q, o3 = /* @__PURE__ */ __name(function() {
+        var i3 = this || Q, o3 = /* @__PURE__ */ __name2(function() {
           return n3.apply(i3, arguments);
         }, "o");
         e3.apply(this || Q, t4).then(function(e4) {
@@ -39771,7 +41033,8 @@ var require_cjs4 = __commonJS({
           Y.nextTick(De.bind(null, e4, o3));
         });
       }
-      __name(t3, "t");
+      __name(t3, "t3");
+      __name2(t3, "t");
       return Object.setPrototypeOf(t3, Object.getPrototypeOf(e3)), Object.defineProperties(t3, ee(e3)), t3;
     };
     X._extend;
@@ -39853,6 +41116,9 @@ var require_cjs4 = __commonJS({
     var customInspectSymbol = Symbol.for("nodejs.util.inspect.custom");
     var customInspectSymbolStackLess = Symbol.for("nodejs.util.inspect.custom.stack-less");
     var _BaseError = class _BaseError extends Error {
+      static {
+        __name(this, "_BaseError");
+      }
       toJSON() {
         return {
           name: this.name,
@@ -39864,9 +41130,12 @@ var require_cjs4 = __commonJS({
 ${this.stack.slice(this.stack.indexOf("\n"))}`;
       }
     };
-    __name(_BaseError, "BaseError");
+    __name2(_BaseError, "BaseError");
     var BaseError = _BaseError;
     var _BaseConstraintError = class _BaseConstraintError extends BaseError {
+      static {
+        __name(this, "_BaseConstraintError");
+      }
       constructor(constraint, message, given) {
         super(message);
         this.constraint = constraint;
@@ -39881,9 +41150,12 @@ ${this.stack.slice(this.stack.indexOf("\n"))}`;
         };
       }
     };
-    __name(_BaseConstraintError, "BaseConstraintError");
+    __name2(_BaseConstraintError, "BaseConstraintError");
     var BaseConstraintError = _BaseConstraintError;
     var _ExpectedConstraintError = class _ExpectedConstraintError extends BaseConstraintError {
+      static {
+        __name(this, "_ExpectedConstraintError");
+      }
       constructor(constraint, message, given, expected) {
         super(constraint, message, given);
         this.expected = expected;
@@ -39918,9 +41190,12 @@ ${expectedBlock}
 ${givenBlock}`;
       }
     };
-    __name(_ExpectedConstraintError, "ExpectedConstraintError");
+    __name2(_ExpectedConstraintError, "ExpectedConstraintError");
     var ExpectedConstraintError = _ExpectedConstraintError;
     var _Result = class _Result2 {
+      static {
+        __name(this, "_Result");
+      }
       constructor(success, value, error) {
         this.success = success;
         if (success) {
@@ -39947,7 +41222,7 @@ ${givenBlock}`;
         return new _Result2(false, void 0, error);
       }
     };
-    __name(_Result, "Result");
+    __name2(_Result, "Result");
     var Result = _Result;
     function whenConstraint(key, options, validator, validatorOptions) {
       return {
@@ -39973,6 +41248,7 @@ ${givenBlock}`;
       };
     }
     __name(whenConstraint, "whenConstraint");
+    __name2(whenConstraint, "whenConstraint");
     function resolveBooleanIs(options, value, isKeyArray) {
       if (options.is === void 0) {
         return isKeyArray ? !value.some((val) => !val) : Boolean(value);
@@ -39983,20 +41259,27 @@ ${givenBlock}`;
       return value === options.is;
     }
     __name(resolveBooleanIs, "resolveBooleanIs");
+    __name2(resolveBooleanIs, "resolveBooleanIs");
     var validationEnabled = true;
     function setGlobalValidationEnabled(enabled) {
       validationEnabled = enabled;
     }
     __name(setGlobalValidationEnabled, "setGlobalValidationEnabled");
+    __name2(setGlobalValidationEnabled, "setGlobalValidationEnabled");
     function getGlobalValidationEnabled() {
       return validationEnabled;
     }
     __name(getGlobalValidationEnabled, "getGlobalValidationEnabled");
+    __name2(getGlobalValidationEnabled, "getGlobalValidationEnabled");
     function getValue(valueOrFn) {
       return typeof valueOrFn === "function" ? valueOrFn() : valueOrFn;
     }
     __name(getValue, "getValue");
+    __name2(getValue, "getValue");
     var _BaseValidator = class _BaseValidator {
+      static {
+        __name(this, "_BaseValidator");
+      }
       constructor(validatorOptions = {}, constraints = []) {
         this.constraints = [];
         this.isValidationEnabled = null;
@@ -40028,7 +41311,7 @@ ${givenBlock}`;
       transform(cb, options = this.validatorOptions) {
         return this.addConstraint(
           {
-            run: (input) => Result.ok(cb(input))
+            run: /* @__PURE__ */ __name((input) => Result.ok(cb(input)), "run")
           },
           options
         );
@@ -40100,7 +41383,7 @@ ${givenBlock}`;
         return clone;
       }
     };
-    __name(_BaseValidator, "BaseValidator");
+    __name2(_BaseValidator, "BaseValidator");
     var BaseValidator = _BaseValidator;
     function isUnique(input) {
       if (input.length < 2)
@@ -40109,30 +41392,37 @@ ${givenBlock}`;
       return uniqueArray2.length === input.length;
     }
     __name(isUnique, "isUnique");
+    __name2(isUnique, "isUnique");
     function lessThan(a3, b2) {
       return a3 < b2;
     }
     __name(lessThan, "lessThan");
+    __name2(lessThan, "lessThan");
     function lessThanOrEqual(a3, b2) {
       return a3 <= b2;
     }
     __name(lessThanOrEqual, "lessThanOrEqual");
+    __name2(lessThanOrEqual, "lessThanOrEqual");
     function greaterThan(a3, b2) {
       return a3 > b2;
     }
     __name(greaterThan, "greaterThan");
+    __name2(greaterThan, "greaterThan");
     function greaterThanOrEqual(a3, b2) {
       return a3 >= b2;
     }
     __name(greaterThanOrEqual, "greaterThanOrEqual");
+    __name2(greaterThanOrEqual, "greaterThanOrEqual");
     function equal(a3, b2) {
       return a3 === b2;
     }
     __name(equal, "equal");
+    __name2(equal, "equal");
     function notEqual(a3, b2) {
       return a3 !== b2;
     }
     __name(notEqual, "notEqual");
+    __name2(notEqual, "notEqual");
     function arrayLengthComparator(comparator, name, expected, length, options) {
       return {
         run(input) {
@@ -40141,36 +41431,43 @@ ${givenBlock}`;
       };
     }
     __name(arrayLengthComparator, "arrayLengthComparator");
+    __name2(arrayLengthComparator, "arrayLengthComparator");
     function arrayLengthLessThan(value, options) {
       const expected = `expected.length < ${value}`;
       return arrayLengthComparator(lessThan, "s.array(T).lengthLessThan()", expected, value, options);
     }
     __name(arrayLengthLessThan, "arrayLengthLessThan");
+    __name2(arrayLengthLessThan, "arrayLengthLessThan");
     function arrayLengthLessThanOrEqual(value, options) {
       const expected = `expected.length <= ${value}`;
       return arrayLengthComparator(lessThanOrEqual, "s.array(T).lengthLessThanOrEqual()", expected, value, options);
     }
     __name(arrayLengthLessThanOrEqual, "arrayLengthLessThanOrEqual");
+    __name2(arrayLengthLessThanOrEqual, "arrayLengthLessThanOrEqual");
     function arrayLengthGreaterThan(value, options) {
       const expected = `expected.length > ${value}`;
       return arrayLengthComparator(greaterThan, "s.array(T).lengthGreaterThan()", expected, value, options);
     }
     __name(arrayLengthGreaterThan, "arrayLengthGreaterThan");
+    __name2(arrayLengthGreaterThan, "arrayLengthGreaterThan");
     function arrayLengthGreaterThanOrEqual(value, options) {
       const expected = `expected.length >= ${value}`;
       return arrayLengthComparator(greaterThanOrEqual, "s.array(T).lengthGreaterThanOrEqual()", expected, value, options);
     }
     __name(arrayLengthGreaterThanOrEqual, "arrayLengthGreaterThanOrEqual");
+    __name2(arrayLengthGreaterThanOrEqual, "arrayLengthGreaterThanOrEqual");
     function arrayLengthEqual(value, options) {
       const expected = `expected.length === ${value}`;
       return arrayLengthComparator(equal, "s.array(T).lengthEqual()", expected, value, options);
     }
     __name(arrayLengthEqual, "arrayLengthEqual");
+    __name2(arrayLengthEqual, "arrayLengthEqual");
     function arrayLengthNotEqual(value, options) {
       const expected = `expected.length !== ${value}`;
       return arrayLengthComparator(notEqual, "s.array(T).lengthNotEqual()", expected, value, options);
     }
     __name(arrayLengthNotEqual, "arrayLengthNotEqual");
+    __name2(arrayLengthNotEqual, "arrayLengthNotEqual");
     function arrayLengthRange(start, endBefore, options) {
       const expected = `expected.length >= ${start} && expected.length < ${endBefore}`;
       return {
@@ -40180,6 +41477,7 @@ ${givenBlock}`;
       };
     }
     __name(arrayLengthRange, "arrayLengthRange");
+    __name2(arrayLengthRange, "arrayLengthRange");
     function arrayLengthRangeInclusive(start, end, options) {
       const expected = `expected.length >= ${start} && expected.length <= ${end}`;
       return {
@@ -40191,6 +41489,7 @@ ${givenBlock}`;
       };
     }
     __name(arrayLengthRangeInclusive, "arrayLengthRangeInclusive");
+    __name2(arrayLengthRangeInclusive, "arrayLengthRangeInclusive");
     function arrayLengthRangeExclusive(startAfter, endBefore, options) {
       const expected = `expected.length > ${startAfter} && expected.length < ${endBefore}`;
       return {
@@ -40202,6 +41501,7 @@ ${givenBlock}`;
       };
     }
     __name(arrayLengthRangeExclusive, "arrayLengthRangeExclusive");
+    __name2(arrayLengthRangeExclusive, "arrayLengthRangeExclusive");
     function uniqueArray(options) {
       return {
         run(input) {
@@ -40217,7 +41517,11 @@ ${givenBlock}`;
       };
     }
     __name(uniqueArray, "uniqueArray");
+    __name2(uniqueArray, "uniqueArray");
     var _CombinedPropertyError = class _CombinedPropertyError2 extends BaseError {
+      static {
+        __name(this, "_CombinedPropertyError");
+      }
       constructor(errors, validatorOptions) {
         super(validatorOptions?.message ?? "Received one or more errors");
         this.errors = errors;
@@ -40249,9 +41553,12 @@ ${errors}`;
         return `[${options.stylize("Symbol", "symbol")}(${key.description})]`;
       }
     };
-    __name(_CombinedPropertyError, "CombinedPropertyError");
+    __name2(_CombinedPropertyError, "CombinedPropertyError");
     var CombinedPropertyError = _CombinedPropertyError;
     var _ValidationError = class _ValidationError extends BaseError {
+      static {
+        __name(this, "_ValidationError");
+      }
       constructor(validator, message, given) {
         super(message);
         this.validator = validator;
@@ -40283,9 +41590,12 @@ ${errors}`;
 ${givenBlock}`;
       }
     };
-    __name(_ValidationError, "ValidationError");
+    __name2(_ValidationError, "ValidationError");
     var ValidationError = _ValidationError;
     var _ArrayValidator = class _ArrayValidator extends BaseValidator {
+      static {
+        __name(this, "_ArrayValidator");
+      }
       constructor(validator, validatorOptions = {}, constraints = []) {
         super(validatorOptions, constraints);
         this.validator = validator;
@@ -40342,7 +41652,7 @@ ${givenBlock}`;
         return errors.length === 0 ? Result.ok(transformed) : Result.err(new CombinedPropertyError(errors, this.validatorOptions));
       }
     };
-    __name(_ArrayValidator, "ArrayValidator");
+    __name2(_ArrayValidator, "ArrayValidator");
     var ArrayValidator = _ArrayValidator;
     function bigintComparator(comparator, name, expected, number, options) {
       return {
@@ -40352,36 +41662,43 @@ ${givenBlock}`;
       };
     }
     __name(bigintComparator, "bigintComparator");
+    __name2(bigintComparator, "bigintComparator");
     function bigintLessThan(value, options) {
       const expected = `expected < ${value}n`;
       return bigintComparator(lessThan, "s.bigint().lessThan()", expected, value, options);
     }
     __name(bigintLessThan, "bigintLessThan");
+    __name2(bigintLessThan, "bigintLessThan");
     function bigintLessThanOrEqual(value, options) {
       const expected = `expected <= ${value}n`;
       return bigintComparator(lessThanOrEqual, "s.bigint().lessThanOrEqual()", expected, value, options);
     }
     __name(bigintLessThanOrEqual, "bigintLessThanOrEqual");
+    __name2(bigintLessThanOrEqual, "bigintLessThanOrEqual");
     function bigintGreaterThan(value, options) {
       const expected = `expected > ${value}n`;
       return bigintComparator(greaterThan, "s.bigint().greaterThan()", expected, value, options);
     }
     __name(bigintGreaterThan, "bigintGreaterThan");
+    __name2(bigintGreaterThan, "bigintGreaterThan");
     function bigintGreaterThanOrEqual(value, options) {
       const expected = `expected >= ${value}n`;
       return bigintComparator(greaterThanOrEqual, "s.bigint().greaterThanOrEqual()", expected, value, options);
     }
     __name(bigintGreaterThanOrEqual, "bigintGreaterThanOrEqual");
+    __name2(bigintGreaterThanOrEqual, "bigintGreaterThanOrEqual");
     function bigintEqual(value, options) {
       const expected = `expected === ${value}n`;
       return bigintComparator(equal, "s.bigint().equal()", expected, value, options);
     }
     __name(bigintEqual, "bigintEqual");
+    __name2(bigintEqual, "bigintEqual");
     function bigintNotEqual(value, options) {
       const expected = `expected !== ${value}n`;
       return bigintComparator(notEqual, "s.bigint().notEqual()", expected, value, options);
     }
     __name(bigintNotEqual, "bigintNotEqual");
+    __name2(bigintNotEqual, "bigintNotEqual");
     function bigintDivisibleBy(divider, options) {
       const expected = `expected % ${divider}n === 0n`;
       return {
@@ -40391,7 +41708,11 @@ ${givenBlock}`;
       };
     }
     __name(bigintDivisibleBy, "bigintDivisibleBy");
+    __name2(bigintDivisibleBy, "bigintDivisibleBy");
     var _BigIntValidator = class _BigIntValidator extends BaseValidator {
+      static {
+        __name(this, "_BigIntValidator");
+      }
       lessThan(number, options = this.validatorOptions) {
         return this.addConstraint(bigintLessThan(number, options));
       }
@@ -40432,7 +41753,7 @@ ${givenBlock}`;
         return typeof value === "bigint" ? Result.ok(value) : Result.err(new ValidationError("s.bigint()", this.validatorOptions.message ?? "Expected a bigint primitive", value));
       }
     };
-    __name(_BigIntValidator, "BigIntValidator");
+    __name2(_BigIntValidator, "BigIntValidator");
     var BigIntValidator = _BigIntValidator;
     function booleanTrue(options) {
       return {
@@ -40442,6 +41763,7 @@ ${givenBlock}`;
       };
     }
     __name(booleanTrue, "booleanTrue");
+    __name2(booleanTrue, "booleanTrue");
     function booleanFalse(options) {
       return {
         run(input) {
@@ -40450,7 +41772,11 @@ ${givenBlock}`;
       };
     }
     __name(booleanFalse, "booleanFalse");
+    __name2(booleanFalse, "booleanFalse");
     var _BooleanValidator = class _BooleanValidator extends BaseValidator {
+      static {
+        __name(this, "_BooleanValidator");
+      }
       true(options = this.validatorOptions) {
         return this.addConstraint(booleanTrue(options));
       }
@@ -40467,7 +41793,7 @@ ${givenBlock}`;
         return typeof value === "boolean" ? Result.ok(value) : Result.err(new ValidationError("s.boolean()", this.validatorOptions.message ?? "Expected a boolean primitive", value));
       }
     };
-    __name(_BooleanValidator, "BooleanValidator");
+    __name2(_BooleanValidator, "BooleanValidator");
     var BooleanValidator = _BooleanValidator;
     function dateComparator(comparator, name, expected, number, options) {
       return {
@@ -40477,36 +41803,43 @@ ${givenBlock}`;
       };
     }
     __name(dateComparator, "dateComparator");
+    __name2(dateComparator, "dateComparator");
     function dateLessThan(value, options) {
       const expected = `expected < ${value.toISOString()}`;
       return dateComparator(lessThan, "s.date().lessThan()", expected, value.getTime(), options);
     }
     __name(dateLessThan, "dateLessThan");
+    __name2(dateLessThan, "dateLessThan");
     function dateLessThanOrEqual(value, options) {
       const expected = `expected <= ${value.toISOString()}`;
       return dateComparator(lessThanOrEqual, "s.date().lessThanOrEqual()", expected, value.getTime(), options);
     }
     __name(dateLessThanOrEqual, "dateLessThanOrEqual");
+    __name2(dateLessThanOrEqual, "dateLessThanOrEqual");
     function dateGreaterThan(value, options) {
       const expected = `expected > ${value.toISOString()}`;
       return dateComparator(greaterThan, "s.date().greaterThan()", expected, value.getTime(), options);
     }
     __name(dateGreaterThan, "dateGreaterThan");
+    __name2(dateGreaterThan, "dateGreaterThan");
     function dateGreaterThanOrEqual(value, options) {
       const expected = `expected >= ${value.toISOString()}`;
       return dateComparator(greaterThanOrEqual, "s.date().greaterThanOrEqual()", expected, value.getTime(), options);
     }
     __name(dateGreaterThanOrEqual, "dateGreaterThanOrEqual");
+    __name2(dateGreaterThanOrEqual, "dateGreaterThanOrEqual");
     function dateEqual(value, options) {
       const expected = `expected === ${value.toISOString()}`;
       return dateComparator(equal, "s.date().equal()", expected, value.getTime(), options);
     }
     __name(dateEqual, "dateEqual");
+    __name2(dateEqual, "dateEqual");
     function dateNotEqual(value, options) {
       const expected = `expected !== ${value.toISOString()}`;
       return dateComparator(notEqual, "s.date().notEqual()", expected, value.getTime(), options);
     }
     __name(dateNotEqual, "dateNotEqual");
+    __name2(dateNotEqual, "dateNotEqual");
     function dateInvalid(options) {
       return {
         run(input) {
@@ -40515,6 +41848,7 @@ ${givenBlock}`;
       };
     }
     __name(dateInvalid, "dateInvalid");
+    __name2(dateInvalid, "dateInvalid");
     function dateValid(options) {
       return {
         run(input) {
@@ -40523,7 +41857,11 @@ ${givenBlock}`;
       };
     }
     __name(dateValid, "dateValid");
+    __name2(dateValid, "dateValid");
     var _DateValidator = class _DateValidator extends BaseValidator {
+      static {
+        __name(this, "_DateValidator");
+      }
       lessThan(date, options = this.validatorOptions) {
         return this.addConstraint(dateLessThan(new Date(date), options));
       }
@@ -40554,9 +41892,12 @@ ${givenBlock}`;
         return value instanceof Date ? Result.ok(value) : Result.err(new ValidationError("s.date()", this.validatorOptions.message ?? "Expected a Date", value));
       }
     };
-    __name(_DateValidator, "DateValidator");
+    __name2(_DateValidator, "DateValidator");
     var DateValidator = _DateValidator;
     var _ExpectedValidationError = class _ExpectedValidationError extends ValidationError {
+      static {
+        __name(this, "_ExpectedValidationError");
+      }
       constructor(validator, message, given, expected) {
         super(validator, message, given);
         this.expected = expected;
@@ -40592,9 +41933,12 @@ ${expectedBlock}
 ${givenBlock}`;
       }
     };
-    __name(_ExpectedValidationError, "ExpectedValidationError");
+    __name2(_ExpectedValidationError, "ExpectedValidationError");
     var ExpectedValidationError = _ExpectedValidationError;
     var _InstanceValidator = class _InstanceValidator extends BaseValidator {
+      static {
+        __name(this, "_InstanceValidator");
+      }
       constructor(expected, validatorOptions = {}, constraints = []) {
         super(validatorOptions, constraints);
         this.expected = expected;
@@ -40606,9 +41950,12 @@ ${givenBlock}`;
         return Reflect.construct(this.constructor, [this.expected, this.validatorOptions, this.constraints]);
       }
     };
-    __name(_InstanceValidator, "InstanceValidator");
+    __name2(_InstanceValidator, "InstanceValidator");
     var InstanceValidator = _InstanceValidator;
     var _LiteralValidator = class _LiteralValidator extends BaseValidator {
+      static {
+        __name(this, "_LiteralValidator");
+      }
       constructor(literal, validatorOptions = {}, constraints = []) {
         super(validatorOptions, constraints);
         this.expected = literal;
@@ -40622,21 +41969,27 @@ ${givenBlock}`;
         return Reflect.construct(this.constructor, [this.expected, this.validatorOptions, this.constraints]);
       }
     };
-    __name(_LiteralValidator, "LiteralValidator");
+    __name2(_LiteralValidator, "LiteralValidator");
     var LiteralValidator = _LiteralValidator;
     var _NeverValidator = class _NeverValidator extends BaseValidator {
+      static {
+        __name(this, "_NeverValidator");
+      }
       handle(value) {
         return Result.err(new ValidationError("s.never()", this.validatorOptions.message ?? "Expected a value to not be passed", value));
       }
     };
-    __name(_NeverValidator, "NeverValidator");
+    __name2(_NeverValidator, "NeverValidator");
     var NeverValidator = _NeverValidator;
     var _NullishValidator = class _NullishValidator extends BaseValidator {
+      static {
+        __name(this, "_NullishValidator");
+      }
       handle(value) {
         return value === void 0 || value === null ? Result.ok(value) : Result.err(new ValidationError("s.nullish()", this.validatorOptions.message ?? "Expected undefined or null", value));
       }
     };
-    __name(_NullishValidator, "NullishValidator");
+    __name2(_NullishValidator, "NullishValidator");
     var NullishValidator = _NullishValidator;
     function numberComparator(comparator, name, expected, number, options) {
       return {
@@ -40646,36 +41999,43 @@ ${givenBlock}`;
       };
     }
     __name(numberComparator, "numberComparator");
+    __name2(numberComparator, "numberComparator");
     function numberLessThan(value, options) {
       const expected = `expected < ${value}`;
       return numberComparator(lessThan, "s.number().lessThan()", expected, value, options);
     }
     __name(numberLessThan, "numberLessThan");
+    __name2(numberLessThan, "numberLessThan");
     function numberLessThanOrEqual(value, options) {
       const expected = `expected <= ${value}`;
       return numberComparator(lessThanOrEqual, "s.number().lessThanOrEqual()", expected, value, options);
     }
     __name(numberLessThanOrEqual, "numberLessThanOrEqual");
+    __name2(numberLessThanOrEqual, "numberLessThanOrEqual");
     function numberGreaterThan(value, options) {
       const expected = `expected > ${value}`;
       return numberComparator(greaterThan, "s.number().greaterThan()", expected, value, options);
     }
     __name(numberGreaterThan, "numberGreaterThan");
+    __name2(numberGreaterThan, "numberGreaterThan");
     function numberGreaterThanOrEqual(value, options) {
       const expected = `expected >= ${value}`;
       return numberComparator(greaterThanOrEqual, "s.number().greaterThanOrEqual()", expected, value, options);
     }
     __name(numberGreaterThanOrEqual, "numberGreaterThanOrEqual");
+    __name2(numberGreaterThanOrEqual, "numberGreaterThanOrEqual");
     function numberEqual(value, options) {
       const expected = `expected === ${value}`;
       return numberComparator(equal, "s.number().equal()", expected, value, options);
     }
     __name(numberEqual, "numberEqual");
+    __name2(numberEqual, "numberEqual");
     function numberNotEqual(value, options) {
       const expected = `expected !== ${value}`;
       return numberComparator(notEqual, "s.number().notEqual()", expected, value, options);
     }
     __name(numberNotEqual, "numberNotEqual");
+    __name2(numberNotEqual, "numberNotEqual");
     function numberInt(options) {
       return {
         run(input) {
@@ -40691,6 +42051,7 @@ ${givenBlock}`;
       };
     }
     __name(numberInt, "numberInt");
+    __name2(numberInt, "numberInt");
     function numberSafeInt(options) {
       return {
         run(input) {
@@ -40706,6 +42067,7 @@ ${givenBlock}`;
       };
     }
     __name(numberSafeInt, "numberSafeInt");
+    __name2(numberSafeInt, "numberSafeInt");
     function numberFinite(options) {
       return {
         run(input) {
@@ -40721,6 +42083,7 @@ ${givenBlock}`;
       };
     }
     __name(numberFinite, "numberFinite");
+    __name2(numberFinite, "numberFinite");
     function numberNaN(options) {
       return {
         run(input) {
@@ -40731,6 +42094,7 @@ ${givenBlock}`;
       };
     }
     __name(numberNaN, "numberNaN");
+    __name2(numberNaN, "numberNaN");
     function numberNotNaN(options) {
       return {
         run(input) {
@@ -40741,6 +42105,7 @@ ${givenBlock}`;
       };
     }
     __name(numberNotNaN, "numberNotNaN");
+    __name2(numberNotNaN, "numberNotNaN");
     function numberDivisibleBy(divider, options) {
       const expected = `expected % ${divider} === 0`;
       return {
@@ -40750,7 +42115,11 @@ ${givenBlock}`;
       };
     }
     __name(numberDivisibleBy, "numberDivisibleBy");
+    __name2(numberDivisibleBy, "numberDivisibleBy");
     var _NumberValidator = class _NumberValidator extends BaseValidator {
+      static {
+        __name(this, "_NumberValidator");
+      }
       lessThan(number, options = this.validatorOptions) {
         return this.addConstraint(numberLessThan(number, options));
       }
@@ -40812,9 +42181,12 @@ ${givenBlock}`;
         return typeof value === "number" ? Result.ok(value) : Result.err(new ValidationError("s.number()", this.validatorOptions.message ?? "Expected a number primitive", value));
       }
     };
-    __name(_NumberValidator, "NumberValidator");
+    __name2(_NumberValidator, "NumberValidator");
     var NumberValidator = _NumberValidator;
     var _MissingPropertyError = class _MissingPropertyError extends BaseError {
+      static {
+        __name(this, "_MissingPropertyError");
+      }
       constructor(property, validatorOptions) {
         super(validatorOptions?.message ?? "A required property is missing");
         this.property = property;
@@ -40837,9 +42209,12 @@ ${givenBlock}`;
   ${message}`;
       }
     };
-    __name(_MissingPropertyError, "MissingPropertyError");
+    __name2(_MissingPropertyError, "MissingPropertyError");
     var MissingPropertyError = _MissingPropertyError;
     var _UnknownPropertyError = class _UnknownPropertyError extends BaseError {
+      static {
+        __name(this, "_UnknownPropertyError");
+      }
       constructor(property, value, options) {
         super(options?.message ?? "Received unexpected property");
         this.property = property;
@@ -40871,9 +42246,12 @@ ${givenBlock}`;
 ${givenBlock}`;
       }
     };
-    __name(_UnknownPropertyError, "UnknownPropertyError");
+    __name2(_UnknownPropertyError, "UnknownPropertyError");
     var UnknownPropertyError = _UnknownPropertyError;
     var _DefaultValidator = class _DefaultValidator extends BaseValidator {
+      static {
+        __name(this, "_DefaultValidator");
+      }
       constructor(validator, value, validatorOptions = {}, constraints = []) {
         super(validatorOptions, constraints);
         this.validator = validator;
@@ -40892,9 +42270,12 @@ ${givenBlock}`;
         return Reflect.construct(this.constructor, [this.validator, this.defaultValue, this.validatorOptions, this.constraints]);
       }
     };
-    __name(_DefaultValidator, "DefaultValidator");
+    __name2(_DefaultValidator, "DefaultValidator");
     var DefaultValidator = _DefaultValidator;
     var _CombinedError = class _CombinedError extends BaseError {
+      static {
+        __name(this, "_CombinedError");
+      }
       constructor(errors, validatorOptions) {
         super(validatorOptions?.message ?? "Received one or more errors");
         this.errors = errors;
@@ -40919,9 +42300,12 @@ ${givenBlock}`;
 ${errors}`;
       }
     };
-    __name(_CombinedError, "CombinedError");
+    __name2(_CombinedError, "CombinedError");
     var CombinedError = _CombinedError;
     var _UnionValidator = class _UnionValidator2 extends BaseValidator {
+      static {
+        __name(this, "_UnionValidator");
+      }
       constructor(validators, validatorOptions, constraints = []) {
         super(validatorOptions, constraints);
         this.validators = validators;
@@ -41017,9 +42401,12 @@ ${errors}`;
         return Result.err(new CombinedError(errors, this.validatorOptions));
       }
     };
-    __name(_UnionValidator, "UnionValidator");
+    __name2(_UnionValidator, "UnionValidator");
     var UnionValidator = _UnionValidator;
     var _ObjectValidator = class _ObjectValidator2 extends BaseValidator {
+      static {
+        __name(this, "_ObjectValidator");
+      }
       constructor(shape, strategy = 0, validatorOptions = {}, constraints = []) {
         super(validatorOptions, constraints);
         this.keys = [];
@@ -41145,7 +42532,7 @@ ${errors}`;
         const errors = [];
         const finalObject = {};
         const inputEntries = new Map(Object.entries(value));
-        const runPredicate = /* @__PURE__ */ __name((key, predicate) => {
+        const runPredicate = /* @__PURE__ */ __name2((key, predicate) => {
           const result = predicate.run(value[key]);
           if (result.isOk()) {
             finalObject[key] = result.value;
@@ -41189,7 +42576,7 @@ ${errors}`;
         const errors = [];
         const finalResult = {};
         const inputEntries = new Map(Object.entries(value));
-        const runPredicate = /* @__PURE__ */ __name((key, predicate) => {
+        const runPredicate = /* @__PURE__ */ __name2((key, predicate) => {
           const result = predicate.run(value[key]);
           if (result.isOk()) {
             finalResult[key] = result.value;
@@ -41229,16 +42616,22 @@ ${errors}`;
         return result.isErr() ? result : Result.ok({ ...value, ...result.value });
       }
     };
-    __name(_ObjectValidator, "ObjectValidator");
+    __name2(_ObjectValidator, "ObjectValidator");
     var ObjectValidator = _ObjectValidator;
     var _PassthroughValidator = class _PassthroughValidator extends BaseValidator {
+      static {
+        __name(this, "_PassthroughValidator");
+      }
       handle(value) {
         return Result.ok(value);
       }
     };
-    __name(_PassthroughValidator, "PassthroughValidator");
+    __name2(_PassthroughValidator, "PassthroughValidator");
     var PassthroughValidator = _PassthroughValidator;
     var _RecordValidator = class _RecordValidator extends BaseValidator {
+      static {
+        __name(this, "_RecordValidator");
+      }
       constructor(validator, validatorOptions = {}, constraints = []) {
         super(validatorOptions, constraints);
         this.validator = validator;
@@ -41271,9 +42664,12 @@ ${errors}`;
         return errors.length === 0 ? Result.ok(transformed) : Result.err(new CombinedPropertyError(errors, this.validatorOptions));
       }
     };
-    __name(_RecordValidator, "RecordValidator");
+    __name2(_RecordValidator, "RecordValidator");
     var RecordValidator = _RecordValidator;
     var _SetValidator = class _SetValidator extends BaseValidator {
+      static {
+        __name(this, "_SetValidator");
+      }
       constructor(validator, validatorOptions, constraints = []) {
         super(validatorOptions, constraints);
         this.validator = validator;
@@ -41300,7 +42696,7 @@ ${errors}`;
         return errors.length === 0 ? Result.ok(transformed) : Result.err(new CombinedError(errors, this.validatorOptions));
       }
     };
-    __name(_SetValidator, "SetValidator");
+    __name2(_SetValidator, "SetValidator");
     var SetValidator = _SetValidator;
     var accountRegex = /^(?!\.)(?!.*\.\.)([A-Z0-9_+-\.]*)[A-Z0-9_+-]$/i;
     function validateEmail(email) {
@@ -41330,6 +42726,7 @@ ${errors}`;
       return accountRegex.test(email.slice(0, atIndex)) && validateEmailDomain(email.slice(domainIndex));
     }
     __name(validateEmail, "validateEmail");
+    __name2(validateEmail, "validateEmail");
     function validateEmailDomain(domain) {
       try {
         return new URL(`http://${domain}`).hostname === domain;
@@ -41338,6 +42735,7 @@ ${errors}`;
       }
     }
     __name(validateEmailDomain, "validateEmailDomain");
+    __name2(validateEmailDomain, "validateEmailDomain");
     var v4Seg = "(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])";
     var v4Str = `(${v4Seg}[.]){3}${v4Seg}`;
     var IPv4Reg = new RegExp(`^${v4Str}$`);
@@ -41349,10 +42747,12 @@ ${errors}`;
       return IPv4Reg.test(s4);
     }
     __name(isIPv4, "isIPv4");
+    __name2(isIPv4, "isIPv4");
     function isIPv6(s4) {
       return IPv6Reg.test(s4);
     }
     __name(isIPv6, "isIPv6");
+    __name2(isIPv6, "isIPv6");
     function isIP(s4) {
       if (isIPv4(s4))
         return 4;
@@ -41361,12 +42761,17 @@ ${errors}`;
       return 0;
     }
     __name(isIP, "isIP");
+    __name2(isIP, "isIP");
     var phoneNumberRegex = /^((?:\+|0{0,2})\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
     function validatePhoneNumber(input) {
       return phoneNumberRegex.test(input);
     }
     __name(validatePhoneNumber, "validatePhoneNumber");
+    __name2(validatePhoneNumber, "validatePhoneNumber");
     var _MultiplePossibilitiesConstraintError = class _MultiplePossibilitiesConstraintError extends BaseConstraintError {
+      static {
+        __name(this, "_MultiplePossibilitiesConstraintError");
+      }
       constructor(constraint, message, given, expected) {
         super(constraint, message, given);
         this.expected = expected;
@@ -41404,7 +42809,7 @@ ${expectedBlock}
 ${givenBlock}`;
       }
     };
-    __name(_MultiplePossibilitiesConstraintError, "MultiplePossibilitiesConstraintError");
+    __name2(_MultiplePossibilitiesConstraintError, "MultiplePossibilitiesConstraintError");
     var MultiplePossibilitiesConstraintError = _MultiplePossibilitiesConstraintError;
     function combinedErrorFn(...fns) {
       switch (fns.length) {
@@ -41429,6 +42834,7 @@ ${givenBlock}`;
       }
     }
     __name(combinedErrorFn, "combinedErrorFn");
+    __name2(combinedErrorFn, "combinedErrorFn");
     function createUrlValidators(options, validatorOptions) {
       const fns = [];
       if (options?.allowedProtocols?.length)
@@ -41438,14 +42844,17 @@ ${givenBlock}`;
       return combinedErrorFn(...fns);
     }
     __name(createUrlValidators, "createUrlValidators");
+    __name2(createUrlValidators, "createUrlValidators");
     function allowedProtocolsFn(allowedProtocols, options) {
       return (input, url) => allowedProtocols.includes(url.protocol) ? null : new MultiplePossibilitiesConstraintError("s.string().url()", options?.message ?? "Invalid URL protocol", input, allowedProtocols);
     }
     __name(allowedProtocolsFn, "allowedProtocolsFn");
+    __name2(allowedProtocolsFn, "allowedProtocolsFn");
     function allowedDomainsFn(allowedDomains, options) {
       return (input, url) => allowedDomains.includes(url.hostname) ? null : new MultiplePossibilitiesConstraintError("s.string().url()", options?.message ?? "Invalid URL domain", input, allowedDomains);
     }
     __name(allowedDomainsFn, "allowedDomainsFn");
+    __name2(allowedDomainsFn, "allowedDomainsFn");
     function stringLengthComparator(comparator, name, expected, length, options) {
       return {
         run(input) {
@@ -41454,36 +42863,43 @@ ${givenBlock}`;
       };
     }
     __name(stringLengthComparator, "stringLengthComparator");
+    __name2(stringLengthComparator, "stringLengthComparator");
     function stringLengthLessThan(length, options) {
       const expected = `expected.length < ${length}`;
       return stringLengthComparator(lessThan, "s.string().lengthLessThan()", expected, length, options);
     }
     __name(stringLengthLessThan, "stringLengthLessThan");
+    __name2(stringLengthLessThan, "stringLengthLessThan");
     function stringLengthLessThanOrEqual(length, options) {
       const expected = `expected.length <= ${length}`;
       return stringLengthComparator(lessThanOrEqual, "s.string().lengthLessThanOrEqual()", expected, length, options);
     }
     __name(stringLengthLessThanOrEqual, "stringLengthLessThanOrEqual");
+    __name2(stringLengthLessThanOrEqual, "stringLengthLessThanOrEqual");
     function stringLengthGreaterThan(length, options) {
       const expected = `expected.length > ${length}`;
       return stringLengthComparator(greaterThan, "s.string().lengthGreaterThan()", expected, length, options);
     }
     __name(stringLengthGreaterThan, "stringLengthGreaterThan");
+    __name2(stringLengthGreaterThan, "stringLengthGreaterThan");
     function stringLengthGreaterThanOrEqual(length, options) {
       const expected = `expected.length >= ${length}`;
       return stringLengthComparator(greaterThanOrEqual, "s.string().lengthGreaterThanOrEqual()", expected, length, options);
     }
     __name(stringLengthGreaterThanOrEqual, "stringLengthGreaterThanOrEqual");
+    __name2(stringLengthGreaterThanOrEqual, "stringLengthGreaterThanOrEqual");
     function stringLengthEqual(length, options) {
       const expected = `expected.length === ${length}`;
       return stringLengthComparator(equal, "s.string().lengthEqual()", expected, length, options);
     }
     __name(stringLengthEqual, "stringLengthEqual");
+    __name2(stringLengthEqual, "stringLengthEqual");
     function stringLengthNotEqual(length, options) {
       const expected = `expected.length !== ${length}`;
       return stringLengthComparator(notEqual, "s.string().lengthNotEqual()", expected, length, options);
     }
     __name(stringLengthNotEqual, "stringLengthNotEqual");
+    __name2(stringLengthNotEqual, "stringLengthNotEqual");
     function stringEmail(options) {
       return {
         run(input) {
@@ -41499,6 +42915,7 @@ ${givenBlock}`;
       };
     }
     __name(stringEmail, "stringEmail");
+    __name2(stringEmail, "stringEmail");
     function stringRegexValidator(type, expected, regex, options) {
       return {
         run(input) {
@@ -41507,6 +42924,7 @@ ${givenBlock}`;
       };
     }
     __name(stringRegexValidator, "stringRegexValidator");
+    __name2(stringRegexValidator, "stringRegexValidator");
     function stringUrl(options, validatorOptions) {
       const validatorFn = createUrlValidators(options, validatorOptions);
       return {
@@ -41527,6 +42945,7 @@ ${givenBlock}`;
       };
     }
     __name(stringUrl, "stringUrl");
+    __name2(stringUrl, "stringUrl");
     function stringIp(version, options) {
       const ipVersion = version ? `v${version}` : "";
       const validatorFn = version === 4 ? isIPv4 : version === 6 ? isIPv6 : isIP;
@@ -41540,10 +42959,12 @@ ${givenBlock}`;
       };
     }
     __name(stringIp, "stringIp");
+    __name2(stringIp, "stringIp");
     function stringRegex(regex, options) {
       return stringRegexValidator("s.string().regex()", `expected ${regex}.test(expected) to be true`, regex, options);
     }
     __name(stringRegex, "stringRegex");
+    __name2(stringRegex, "stringRegex");
     function stringUuid({ version = 4, nullable = false } = {}, options) {
       version ?? (version = "1-5");
       const regex = new RegExp(
@@ -41554,6 +42975,7 @@ ${givenBlock}`;
       return stringRegexValidator("s.string().uuid()", expected, regex, options);
     }
     __name(stringUuid, "stringUuid");
+    __name2(stringUuid, "stringUuid");
     function stringDate(options) {
       return {
         run(input) {
@@ -41570,6 +42992,7 @@ ${givenBlock}`;
       };
     }
     __name(stringDate, "stringDate");
+    __name2(stringDate, "stringDate");
     function stringPhone(options) {
       return {
         run(input) {
@@ -41585,7 +43008,11 @@ ${givenBlock}`;
       };
     }
     __name(stringPhone, "stringPhone");
+    __name2(stringPhone, "stringPhone");
     var _StringValidator = class _StringValidator extends BaseValidator {
+      static {
+        __name(this, "_StringValidator");
+      }
       lengthLessThan(length, options = this.validatorOptions) {
         return this.addConstraint(stringLengthLessThan(length, options));
       }
@@ -41649,9 +43076,12 @@ ${givenBlock}`;
         return options?.message === void 0;
       }
     };
-    __name(_StringValidator, "StringValidator");
+    __name2(_StringValidator, "StringValidator");
     var StringValidator = _StringValidator;
     var _TupleValidator = class _TupleValidator extends BaseValidator {
+      static {
+        __name(this, "_TupleValidator");
+      }
       constructor(validators, validatorOptions = {}, constraints = []) {
         super(validatorOptions, constraints);
         this.validators = [];
@@ -41684,9 +43114,12 @@ ${givenBlock}`;
         return errors.length === 0 ? Result.ok(transformed) : Result.err(new CombinedPropertyError(errors, this.validatorOptions));
       }
     };
-    __name(_TupleValidator, "TupleValidator");
+    __name2(_TupleValidator, "TupleValidator");
     var TupleValidator = _TupleValidator;
     var _MapValidator = class _MapValidator extends BaseValidator {
+      static {
+        __name(this, "_MapValidator");
+      }
       constructor(keyValidator, valueValidator, validatorOptions = {}, constraints = []) {
         super(validatorOptions, constraints);
         this.keyValidator = keyValidator;
@@ -41718,9 +43151,12 @@ ${givenBlock}`;
         return errors.length === 0 ? Result.ok(transformed) : Result.err(new CombinedPropertyError(errors, this.validatorOptions));
       }
     };
-    __name(_MapValidator, "MapValidator");
+    __name2(_MapValidator, "MapValidator");
     var MapValidator = _MapValidator;
     var _LazyValidator = class _LazyValidator extends BaseValidator {
+      static {
+        __name(this, "_LazyValidator");
+      }
       constructor(validator, validatorOptions = {}, constraints = []) {
         super(validatorOptions, constraints);
         this.validator = validator;
@@ -41732,9 +43168,12 @@ ${givenBlock}`;
         return this.validator(values).run(values);
       }
     };
-    __name(_LazyValidator, "LazyValidator");
+    __name2(_LazyValidator, "LazyValidator");
     var LazyValidator = _LazyValidator;
     var _UnknownEnumValueError = class _UnknownEnumValueError extends BaseError {
+      static {
+        __name(this, "_UnknownEnumValueError");
+      }
       constructor(value, keys, enumMappings, validatorOptions) {
         super(validatorOptions?.message ?? "Expected the value to be one of the following enum values:");
         this.value = value;
@@ -41772,9 +43211,12 @@ ${givenBlock}`;
 ${pairsBlock}`;
       }
     };
-    __name(_UnknownEnumValueError, "UnknownEnumValueError");
+    __name2(_UnknownEnumValueError, "UnknownEnumValueError");
     var UnknownEnumValueError = _UnknownEnumValueError;
     var _NativeEnumValidator = class _NativeEnumValidator extends BaseValidator {
+      static {
+        __name(this, "_NativeEnumValidator");
+      }
       constructor(enumShape, validatorOptions = {}) {
         super(validatorOptions);
         this.hasNumericElements = false;
@@ -41814,7 +43256,7 @@ ${pairsBlock}`;
         return Reflect.construct(this.constructor, [this.enumShape, this.validatorOptions]);
       }
     };
-    __name(_NativeEnumValidator, "NativeEnumValidator");
+    __name2(_NativeEnumValidator, "NativeEnumValidator");
     var NativeEnumValidator = _NativeEnumValidator;
     function typedArrayByteLengthComparator(comparator, name, expected, length, options) {
       return {
@@ -41824,36 +43266,43 @@ ${pairsBlock}`;
       };
     }
     __name(typedArrayByteLengthComparator, "typedArrayByteLengthComparator");
+    __name2(typedArrayByteLengthComparator, "typedArrayByteLengthComparator");
     function typedArrayByteLengthLessThan(value, options) {
       const expected = `expected.byteLength < ${value}`;
       return typedArrayByteLengthComparator(lessThan, "s.typedArray(T).byteLengthLessThan()", expected, value, options);
     }
     __name(typedArrayByteLengthLessThan, "typedArrayByteLengthLessThan");
+    __name2(typedArrayByteLengthLessThan, "typedArrayByteLengthLessThan");
     function typedArrayByteLengthLessThanOrEqual(value, options) {
       const expected = `expected.byteLength <= ${value}`;
       return typedArrayByteLengthComparator(lessThanOrEqual, "s.typedArray(T).byteLengthLessThanOrEqual()", expected, value, options);
     }
     __name(typedArrayByteLengthLessThanOrEqual, "typedArrayByteLengthLessThanOrEqual");
+    __name2(typedArrayByteLengthLessThanOrEqual, "typedArrayByteLengthLessThanOrEqual");
     function typedArrayByteLengthGreaterThan(value, options) {
       const expected = `expected.byteLength > ${value}`;
       return typedArrayByteLengthComparator(greaterThan, "s.typedArray(T).byteLengthGreaterThan()", expected, value, options);
     }
     __name(typedArrayByteLengthGreaterThan, "typedArrayByteLengthGreaterThan");
+    __name2(typedArrayByteLengthGreaterThan, "typedArrayByteLengthGreaterThan");
     function typedArrayByteLengthGreaterThanOrEqual(value, options) {
       const expected = `expected.byteLength >= ${value}`;
       return typedArrayByteLengthComparator(greaterThanOrEqual, "s.typedArray(T).byteLengthGreaterThanOrEqual()", expected, value, options);
     }
     __name(typedArrayByteLengthGreaterThanOrEqual, "typedArrayByteLengthGreaterThanOrEqual");
+    __name2(typedArrayByteLengthGreaterThanOrEqual, "typedArrayByteLengthGreaterThanOrEqual");
     function typedArrayByteLengthEqual(value, options) {
       const expected = `expected.byteLength === ${value}`;
       return typedArrayByteLengthComparator(equal, "s.typedArray(T).byteLengthEqual()", expected, value, options);
     }
     __name(typedArrayByteLengthEqual, "typedArrayByteLengthEqual");
+    __name2(typedArrayByteLengthEqual, "typedArrayByteLengthEqual");
     function typedArrayByteLengthNotEqual(value, options) {
       const expected = `expected.byteLength !== ${value}`;
       return typedArrayByteLengthComparator(notEqual, "s.typedArray(T).byteLengthNotEqual()", expected, value, options);
     }
     __name(typedArrayByteLengthNotEqual, "typedArrayByteLengthNotEqual");
+    __name2(typedArrayByteLengthNotEqual, "typedArrayByteLengthNotEqual");
     function typedArrayByteLengthRange(start, endBefore, options) {
       const expected = `expected.byteLength >= ${start} && expected.byteLength < ${endBefore}`;
       return {
@@ -41870,6 +43319,7 @@ ${pairsBlock}`;
       };
     }
     __name(typedArrayByteLengthRange, "typedArrayByteLengthRange");
+    __name2(typedArrayByteLengthRange, "typedArrayByteLengthRange");
     function typedArrayByteLengthRangeInclusive(start, end, options) {
       const expected = `expected.byteLength >= ${start} && expected.byteLength <= ${end}`;
       return {
@@ -41886,6 +43336,7 @@ ${pairsBlock}`;
       };
     }
     __name(typedArrayByteLengthRangeInclusive, "typedArrayByteLengthRangeInclusive");
+    __name2(typedArrayByteLengthRangeInclusive, "typedArrayByteLengthRangeInclusive");
     function typedArrayByteLengthRangeExclusive(startAfter, endBefore, options) {
       const expected = `expected.byteLength > ${startAfter} && expected.byteLength < ${endBefore}`;
       return {
@@ -41902,6 +43353,7 @@ ${pairsBlock}`;
       };
     }
     __name(typedArrayByteLengthRangeExclusive, "typedArrayByteLengthRangeExclusive");
+    __name2(typedArrayByteLengthRangeExclusive, "typedArrayByteLengthRangeExclusive");
     function typedArrayLengthComparator(comparator, name, expected, length, options) {
       return {
         run(input) {
@@ -41910,36 +43362,43 @@ ${pairsBlock}`;
       };
     }
     __name(typedArrayLengthComparator, "typedArrayLengthComparator");
+    __name2(typedArrayLengthComparator, "typedArrayLengthComparator");
     function typedArrayLengthLessThan(value, options) {
       const expected = `expected.length < ${value}`;
       return typedArrayLengthComparator(lessThan, "s.typedArray(T).lengthLessThan()", expected, value, options);
     }
     __name(typedArrayLengthLessThan, "typedArrayLengthLessThan");
+    __name2(typedArrayLengthLessThan, "typedArrayLengthLessThan");
     function typedArrayLengthLessThanOrEqual(value, options) {
       const expected = `expected.length <= ${value}`;
       return typedArrayLengthComparator(lessThanOrEqual, "s.typedArray(T).lengthLessThanOrEqual()", expected, value, options);
     }
     __name(typedArrayLengthLessThanOrEqual, "typedArrayLengthLessThanOrEqual");
+    __name2(typedArrayLengthLessThanOrEqual, "typedArrayLengthLessThanOrEqual");
     function typedArrayLengthGreaterThan(value, options) {
       const expected = `expected.length > ${value}`;
       return typedArrayLengthComparator(greaterThan, "s.typedArray(T).lengthGreaterThan()", expected, value, options);
     }
     __name(typedArrayLengthGreaterThan, "typedArrayLengthGreaterThan");
+    __name2(typedArrayLengthGreaterThan, "typedArrayLengthGreaterThan");
     function typedArrayLengthGreaterThanOrEqual(value, options) {
       const expected = `expected.length >= ${value}`;
       return typedArrayLengthComparator(greaterThanOrEqual, "s.typedArray(T).lengthGreaterThanOrEqual()", expected, value, options);
     }
     __name(typedArrayLengthGreaterThanOrEqual, "typedArrayLengthGreaterThanOrEqual");
+    __name2(typedArrayLengthGreaterThanOrEqual, "typedArrayLengthGreaterThanOrEqual");
     function typedArrayLengthEqual(value, options) {
       const expected = `expected.length === ${value}`;
       return typedArrayLengthComparator(equal, "s.typedArray(T).lengthEqual()", expected, value, options);
     }
     __name(typedArrayLengthEqual, "typedArrayLengthEqual");
+    __name2(typedArrayLengthEqual, "typedArrayLengthEqual");
     function typedArrayLengthNotEqual(value, options) {
       const expected = `expected.length !== ${value}`;
       return typedArrayLengthComparator(notEqual, "s.typedArray(T).lengthNotEqual()", expected, value, options);
     }
     __name(typedArrayLengthNotEqual, "typedArrayLengthNotEqual");
+    __name2(typedArrayLengthNotEqual, "typedArrayLengthNotEqual");
     function typedArrayLengthRange(start, endBefore, options) {
       const expected = `expected.length >= ${start} && expected.length < ${endBefore}`;
       return {
@@ -41956,6 +43415,7 @@ ${pairsBlock}`;
       };
     }
     __name(typedArrayLengthRange, "typedArrayLengthRange");
+    __name2(typedArrayLengthRange, "typedArrayLengthRange");
     function typedArrayLengthRangeInclusive(start, end, options) {
       const expected = `expected.length >= ${start} && expected.length <= ${end}`;
       return {
@@ -41972,6 +43432,7 @@ ${pairsBlock}`;
       };
     }
     __name(typedArrayLengthRangeInclusive, "typedArrayLengthRangeInclusive");
+    __name2(typedArrayLengthRangeInclusive, "typedArrayLengthRangeInclusive");
     function typedArrayLengthRangeExclusive(startAfter, endBefore, options) {
       const expected = `expected.length > ${startAfter} && expected.length < ${endBefore}`;
       return {
@@ -41988,25 +43449,29 @@ ${pairsBlock}`;
       };
     }
     __name(typedArrayLengthRangeExclusive, "typedArrayLengthRangeExclusive");
+    __name2(typedArrayLengthRangeExclusive, "typedArrayLengthRangeExclusive");
     var vowels = ["a", "e", "i", "o", "u"];
-    var aOrAn = /* @__PURE__ */ __name((word) => {
+    var aOrAn = /* @__PURE__ */ __name2((word) => {
       return `${vowels.includes(word[0].toLowerCase()) ? "an" : "a"} ${word}`;
     }, "aOrAn");
     var TypedArrays = {
-      Int8Array: (x2) => x2 instanceof Int8Array,
-      Uint8Array: (x2) => x2 instanceof Uint8Array,
-      Uint8ClampedArray: (x2) => x2 instanceof Uint8ClampedArray,
-      Int16Array: (x2) => x2 instanceof Int16Array,
-      Uint16Array: (x2) => x2 instanceof Uint16Array,
-      Int32Array: (x2) => x2 instanceof Int32Array,
-      Uint32Array: (x2) => x2 instanceof Uint32Array,
-      Float32Array: (x2) => x2 instanceof Float32Array,
-      Float64Array: (x2) => x2 instanceof Float64Array,
-      BigInt64Array: (x2) => x2 instanceof BigInt64Array,
-      BigUint64Array: (x2) => x2 instanceof BigUint64Array,
-      TypedArray: (x2) => ArrayBuffer.isView(x2) && !(x2 instanceof DataView)
+      Int8Array: /* @__PURE__ */ __name((x2) => x2 instanceof Int8Array, "Int8Array"),
+      Uint8Array: /* @__PURE__ */ __name((x2) => x2 instanceof Uint8Array, "Uint8Array"),
+      Uint8ClampedArray: /* @__PURE__ */ __name((x2) => x2 instanceof Uint8ClampedArray, "Uint8ClampedArray"),
+      Int16Array: /* @__PURE__ */ __name((x2) => x2 instanceof Int16Array, "Int16Array"),
+      Uint16Array: /* @__PURE__ */ __name((x2) => x2 instanceof Uint16Array, "Uint16Array"),
+      Int32Array: /* @__PURE__ */ __name((x2) => x2 instanceof Int32Array, "Int32Array"),
+      Uint32Array: /* @__PURE__ */ __name((x2) => x2 instanceof Uint32Array, "Uint32Array"),
+      Float32Array: /* @__PURE__ */ __name((x2) => x2 instanceof Float32Array, "Float32Array"),
+      Float64Array: /* @__PURE__ */ __name((x2) => x2 instanceof Float64Array, "Float64Array"),
+      BigInt64Array: /* @__PURE__ */ __name((x2) => x2 instanceof BigInt64Array, "BigInt64Array"),
+      BigUint64Array: /* @__PURE__ */ __name((x2) => x2 instanceof BigUint64Array, "BigUint64Array"),
+      TypedArray: /* @__PURE__ */ __name((x2) => ArrayBuffer.isView(x2) && !(x2 instanceof DataView), "TypedArray")
     };
     var _TypedArrayValidator = class _TypedArrayValidator extends BaseValidator {
+      static {
+        __name(this, "_TypedArrayValidator");
+      }
       constructor(type, validatorOptions = {}, constraints = []) {
         super(validatorOptions, constraints);
         this.type = type;
@@ -42072,9 +43537,12 @@ ${pairsBlock}`;
         return TypedArrays[this.type](value) ? Result.ok(value) : Result.err(new ValidationError("s.typedArray()", this.validatorOptions.message ?? `Expected ${aOrAn(this.type)}`, value));
       }
     };
-    __name(_TypedArrayValidator, "TypedArrayValidator");
+    __name2(_TypedArrayValidator, "TypedArrayValidator");
     var TypedArrayValidator = _TypedArrayValidator;
     var _Shapes = class _Shapes {
+      static {
+        __name(this, "_Shapes");
+      }
       string(options) {
         return new StringValidator(options);
       }
@@ -42187,7 +43655,7 @@ ${pairsBlock}`;
         return new LazyValidator(validator, options);
       }
     };
-    __name(_Shapes, "Shapes");
+    __name2(_Shapes, "Shapes");
     var Shapes = _Shapes;
     var s3 = new Shapes();
     exports2.BaseError = BaseError;
@@ -42215,21 +43683,21 @@ var require_util9 = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.flatten = exports2.unique = exports2.hardMixProtos = exports2.nearestCommonProto = exports2.protoChain = exports2.copyProps = void 0;
-    var copyProps = (dest, src, exclude = []) => {
+    var copyProps = /* @__PURE__ */ __name((dest, src, exclude = []) => {
       const props = Object.getOwnPropertyDescriptors(src);
       for (let prop of exclude)
         delete props[prop];
       Object.defineProperties(dest, props);
-    };
+    }, "copyProps");
     exports2.copyProps = copyProps;
-    var protoChain = (obj, currentChain = [obj]) => {
+    var protoChain = /* @__PURE__ */ __name((obj, currentChain = [obj]) => {
       const proto = Object.getPrototypeOf(obj);
       if (proto === null)
         return currentChain;
       return (0, exports2.protoChain)(proto, [...currentChain, proto]);
-    };
+    }, "protoChain");
     exports2.protoChain = protoChain;
-    var nearestCommonProto = (...objs) => {
+    var nearestCommonProto = /* @__PURE__ */ __name((...objs) => {
       if (objs.length === 0)
         return void 0;
       let commonProto = void 0;
@@ -42243,9 +43711,9 @@ var require_util9 = __commonJS({
           break;
       }
       return commonProto;
-    };
+    }, "nearestCommonProto");
     exports2.nearestCommonProto = nearestCommonProto;
-    var hardMixProtos = (ingredients, constructor, exclude = []) => {
+    var hardMixProtos = /* @__PURE__ */ __name((ingredients, constructor, exclude = []) => {
       var _a;
       const base = (_a = (0, exports2.nearestCommonProto)(...ingredients)) !== null && _a !== void 0 ? _a : Object.prototype;
       const mixedProto = Object.create(base);
@@ -42262,11 +43730,11 @@ var require_util9 = __commonJS({
       }
       mixedProto.constructor = constructor;
       return mixedProto;
-    };
+    }, "hardMixProtos");
     exports2.hardMixProtos = hardMixProtos;
-    var unique = (arr) => arr.filter((e, i) => arr.indexOf(e) == i);
+    var unique = /* @__PURE__ */ __name((arr) => arr.filter((e, i) => arr.indexOf(e) == i), "unique");
     exports2.unique = unique;
-    var flatten = (arr) => arr.length === 0 ? [] : arr.length === 1 ? arr[0] : arr.reduce((a1, a2) => [...a1, ...a2]);
+    var flatten = /* @__PURE__ */ __name((arr) => arr.length === 0 ? [] : arr.length === 1 ? arr[0] : arr.reduce((a1, a2) => [...a1, ...a2]), "flatten");
     exports2.flatten = flatten;
   }
 });
@@ -42278,7 +43746,7 @@ var require_proxy = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.softMixProtos = exports2.proxyMix = exports2.getIngredientWithProp = void 0;
     var util_1 = require_util9();
-    var getIngredientWithProp = (prop, ingredients) => {
+    var getIngredientWithProp = /* @__PURE__ */ __name((prop, ingredients) => {
       const protoChains = ingredients.map((ingredient) => (0, util_1.protoChain)(ingredient));
       let protoDepth = 0;
       let protosAreLeftToSearch = true;
@@ -42296,9 +43764,9 @@ var require_proxy = __commonJS({
         protoDepth++;
       }
       return void 0;
-    };
+    }, "getIngredientWithProp");
     exports2.getIngredientWithProp = getIngredientWithProp;
-    var proxyMix = (ingredients, prototype = Object.prototype) => new Proxy({}, {
+    var proxyMix = /* @__PURE__ */ __name((ingredients, prototype = Object.prototype) => new Proxy({}, {
       getPrototypeOf() {
         return prototype;
       },
@@ -42330,9 +43798,9 @@ var require_proxy = __commonJS({
       ownKeys() {
         return ingredients.map(Object.getOwnPropertyNames).reduce((prev, curr) => curr.concat(prev.filter((key) => curr.indexOf(key) < 0)));
       }
-    });
+    }), "proxyMix");
     exports2.proxyMix = proxyMix;
-    var softMixProtos = (ingredients, constructor) => (0, exports2.proxyMix)([...ingredients, { constructor }]);
+    var softMixProtos = /* @__PURE__ */ __name((ingredients, constructor) => (0, exports2.proxyMix)([...ingredients, { constructor }]), "softMixProtos");
     exports2.softMixProtos = softMixProtos;
   }
 });
@@ -42360,11 +43828,11 @@ var require_mixin_tracking = __commonJS({
     exports2.hasMixin = exports2.registerMixins = exports2.getMixinsForClass = void 0;
     var util_1 = require_util9();
     var mixins = /* @__PURE__ */ new WeakMap();
-    var getMixinsForClass = (clazz) => mixins.get(clazz);
+    var getMixinsForClass = /* @__PURE__ */ __name((clazz) => mixins.get(clazz), "getMixinsForClass");
     exports2.getMixinsForClass = getMixinsForClass;
-    var registerMixins = (mixedClass, constituents) => mixins.set(mixedClass, constituents);
+    var registerMixins = /* @__PURE__ */ __name((mixedClass, constituents) => mixins.set(mixedClass, constituents), "registerMixins");
     exports2.registerMixins = registerMixins;
-    var hasMixin = (instance, mixin) => {
+    var hasMixin = /* @__PURE__ */ __name((instance, mixin) => {
       if (instance instanceof mixin)
         return true;
       const constructor = instance.constructor;
@@ -42388,7 +43856,7 @@ var require_mixin_tracking = __commonJS({
         frontier = newFrontier;
       }
       return false;
-    };
+    }, "hasMixin");
     exports2.hasMixin = hasMixin;
   }
 });
@@ -42401,31 +43869,31 @@ var require_decorator = __commonJS({
     exports2.decorate = exports2.getDecoratorsForClass = exports2.directDecoratorSearch = exports2.deepDecoratorSearch = void 0;
     var util_1 = require_util9();
     var mixin_tracking_1 = require_mixin_tracking();
-    var mergeObjectsOfDecorators = (o1, o2) => {
+    var mergeObjectsOfDecorators = /* @__PURE__ */ __name((o1, o2) => {
       var _a, _b;
       const allKeys = (0, util_1.unique)([...Object.getOwnPropertyNames(o1), ...Object.getOwnPropertyNames(o2)]);
       const mergedObject = {};
       for (let key of allKeys)
         mergedObject[key] = (0, util_1.unique)([...(_a = o1 === null || o1 === void 0 ? void 0 : o1[key]) !== null && _a !== void 0 ? _a : [], ...(_b = o2 === null || o2 === void 0 ? void 0 : o2[key]) !== null && _b !== void 0 ? _b : []]);
       return mergedObject;
-    };
-    var mergePropertyAndMethodDecorators = (d1, d2) => {
+    }, "mergeObjectsOfDecorators");
+    var mergePropertyAndMethodDecorators = /* @__PURE__ */ __name((d1, d2) => {
       var _a, _b, _c, _d;
       return {
         property: mergeObjectsOfDecorators((_a = d1 === null || d1 === void 0 ? void 0 : d1.property) !== null && _a !== void 0 ? _a : {}, (_b = d2 === null || d2 === void 0 ? void 0 : d2.property) !== null && _b !== void 0 ? _b : {}),
         method: mergeObjectsOfDecorators((_c = d1 === null || d1 === void 0 ? void 0 : d1.method) !== null && _c !== void 0 ? _c : {}, (_d = d2 === null || d2 === void 0 ? void 0 : d2.method) !== null && _d !== void 0 ? _d : {})
       };
-    };
-    var mergeDecorators = (d1, d2) => {
+    }, "mergePropertyAndMethodDecorators");
+    var mergeDecorators = /* @__PURE__ */ __name((d1, d2) => {
       var _a, _b, _c, _d, _e, _f;
       return {
         class: (0, util_1.unique)([...(_a = d1 === null || d1 === void 0 ? void 0 : d1.class) !== null && _a !== void 0 ? _a : [], ...(_b = d2 === null || d2 === void 0 ? void 0 : d2.class) !== null && _b !== void 0 ? _b : []]),
         static: mergePropertyAndMethodDecorators((_c = d1 === null || d1 === void 0 ? void 0 : d1.static) !== null && _c !== void 0 ? _c : {}, (_d = d2 === null || d2 === void 0 ? void 0 : d2.static) !== null && _d !== void 0 ? _d : {}),
         instance: mergePropertyAndMethodDecorators((_e = d1 === null || d1 === void 0 ? void 0 : d1.instance) !== null && _e !== void 0 ? _e : {}, (_f = d2 === null || d2 === void 0 ? void 0 : d2.instance) !== null && _f !== void 0 ? _f : {})
       };
-    };
+    }, "mergeDecorators");
     var decorators = /* @__PURE__ */ new Map();
-    var findAllConstituentClasses = (...classes) => {
+    var findAllConstituentClasses = /* @__PURE__ */ __name((...classes) => {
       var _a;
       const allClasses = /* @__PURE__ */ new Set();
       const frontier = /* @__PURE__ */ new Set([...classes]);
@@ -42442,35 +43910,35 @@ var require_decorator = __commonJS({
         }
       }
       return [...allClasses];
-    };
-    var deepDecoratorSearch = (...classes) => {
+    }, "findAllConstituentClasses");
+    var deepDecoratorSearch = /* @__PURE__ */ __name((...classes) => {
       const decoratorsForClassChain = findAllConstituentClasses(...classes).map((clazz) => decorators.get(clazz)).filter((decorators2) => !!decorators2);
       if (decoratorsForClassChain.length == 0)
         return {};
       if (decoratorsForClassChain.length == 1)
         return decoratorsForClassChain[0];
       return decoratorsForClassChain.reduce((d1, d2) => mergeDecorators(d1, d2));
-    };
+    }, "deepDecoratorSearch");
     exports2.deepDecoratorSearch = deepDecoratorSearch;
-    var directDecoratorSearch = (...classes) => {
+    var directDecoratorSearch = /* @__PURE__ */ __name((...classes) => {
       const classDecorators = classes.map((clazz) => (0, exports2.getDecoratorsForClass)(clazz));
       if (classDecorators.length === 0)
         return {};
       if (classDecorators.length === 1)
         return classDecorators[0];
       return classDecorators.reduce((d1, d2) => mergeDecorators(d1, d2));
-    };
+    }, "directDecoratorSearch");
     exports2.directDecoratorSearch = directDecoratorSearch;
-    var getDecoratorsForClass = (clazz) => {
+    var getDecoratorsForClass = /* @__PURE__ */ __name((clazz) => {
       let decoratorsForClass = decorators.get(clazz);
       if (!decoratorsForClass) {
         decoratorsForClass = {};
         decorators.set(clazz, decoratorsForClass);
       }
       return decoratorsForClass;
-    };
+    }, "getDecoratorsForClass");
     exports2.getDecoratorsForClass = getDecoratorsForClass;
-    var decorateClass = (decorator) => (clazz) => {
+    var decorateClass = /* @__PURE__ */ __name((decorator) => (clazz) => {
       const decoratorsForClass = (0, exports2.getDecoratorsForClass)(clazz);
       let classDecorators = decoratorsForClass.class;
       if (!classDecorators) {
@@ -42479,8 +43947,8 @@ var require_decorator = __commonJS({
       }
       classDecorators.push(decorator);
       return decorator(clazz);
-    };
-    var decorateMember = (decorator) => (object, key, ...otherArgs) => {
+    }, "decorateClass");
+    var decorateMember = /* @__PURE__ */ __name((decorator) => (object, key, ...otherArgs) => {
       var _a, _b, _c;
       const decoratorTargetType = typeof object === "function" ? "static" : "instance";
       const decoratorType = typeof object[key] === "function" ? "method" : "property";
@@ -42494,12 +43962,12 @@ var require_decorator = __commonJS({
       decoratorsForType[key] = decoratorsForKey;
       decoratorsForKey.push(decorator);
       return decorator(object, key, ...otherArgs);
-    };
-    var decorate = (decorator) => (...args) => {
+    }, "decorateMember");
+    var decorate = /* @__PURE__ */ __name((decorator) => (...args) => {
       if (args.length === 1)
         return decorateClass(decorator)(args[0]);
       return decorateMember(decorator)(...args);
-    };
+    }, "decorate");
     exports2.decorate = decorate;
   }
 });
@@ -42521,10 +43989,10 @@ var require_mixins = __commonJS({
       const initFunctionName = settings_1.settings.initFunction;
       if (initFunctionName !== null) {
         const initFunctions = prototypes.map((proto) => proto[initFunctionName]).filter((func) => typeof func === "function");
-        const combinedInitFunction = function(...args) {
+        const combinedInitFunction = /* @__PURE__ */ __name(function(...args) {
           for (let initFunction of initFunctions)
             initFunction.apply(this, args);
-        };
+        }, "combinedInitFunction");
         const extraProto = { [initFunctionName]: combinedInitFunction };
         prototypes.push(extraProto);
       }
@@ -42534,6 +44002,7 @@ var require_mixins = __commonJS({
         if (initFunctionName !== null && typeof this[initFunctionName] === "function")
           this[initFunctionName].apply(this, args);
       }
+      __name(MixedClass, "MixedClass");
       MixedClass.prototype = settings_1.settings.prototypeStrategy === "copy" ? (0, util_1.hardMixProtos)(prototypes, MixedClass) : (0, proxy_1.softMixProtos)(prototypes, MixedClass);
       Object.setPrototypeOf(MixedClass, settings_1.settings.staticsStrategy === "copy" ? (0, util_1.hardMixProtos)(constructors, null, ["prototype"]) : (0, proxy_1.proxyMix)(constructors, Function.prototype));
       let DecoratedMixedClass = MixedClass;
@@ -42551,8 +44020,9 @@ var require_mixins = __commonJS({
       (0, mixin_tracking_1.registerMixins)(DecoratedMixedClass, constructors);
       return DecoratedMixedClass;
     }
+    __name(Mixin, "Mixin");
     exports2.Mixin = Mixin;
-    var applyPropAndMethodDecorators = (propAndMethodDecorators, target) => {
+    var applyPropAndMethodDecorators = /* @__PURE__ */ __name((propAndMethodDecorators, target) => {
       const propDecorators = propAndMethodDecorators.property;
       const methodDecorators = propAndMethodDecorators.method;
       if (propDecorators)
@@ -42563,15 +44033,15 @@ var require_mixins = __commonJS({
         for (let key in methodDecorators)
           for (let decorator of methodDecorators[key])
             decorator(target, key, Object.getOwnPropertyDescriptor(target, key));
-    };
-    var mix = (...ingredients) => (decoratedClass) => {
+    }, "applyPropAndMethodDecorators");
+    var mix = /* @__PURE__ */ __name((...ingredients) => (decoratedClass) => {
       const mixedClass = Mixin(...ingredients.concat([decoratedClass]));
       Object.defineProperty(mixedClass, "name", {
         value: decoratedClass.name,
         writable: false
       });
       return mixedClass;
-    };
+    }, "mix");
     exports2.mix = mix;
   }
 });
@@ -42583,24 +44053,24 @@ var require_cjs5 = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.hasMixin = exports2.decorate = exports2.settings = exports2.mix = exports2.Mixin = void 0;
     var mixins_1 = require_mixins();
-    Object.defineProperty(exports2, "Mixin", { enumerable: true, get: function() {
+    Object.defineProperty(exports2, "Mixin", { enumerable: true, get: /* @__PURE__ */ __name(function() {
       return mixins_1.Mixin;
-    } });
-    Object.defineProperty(exports2, "mix", { enumerable: true, get: function() {
+    }, "get") });
+    Object.defineProperty(exports2, "mix", { enumerable: true, get: /* @__PURE__ */ __name(function() {
       return mixins_1.mix;
-    } });
+    }, "get") });
     var settings_1 = require_settings();
-    Object.defineProperty(exports2, "settings", { enumerable: true, get: function() {
+    Object.defineProperty(exports2, "settings", { enumerable: true, get: /* @__PURE__ */ __name(function() {
       return settings_1.settings;
-    } });
+    }, "get") });
     var decorator_1 = require_decorator();
-    Object.defineProperty(exports2, "decorate", { enumerable: true, get: function() {
+    Object.defineProperty(exports2, "decorate", { enumerable: true, get: /* @__PURE__ */ __name(function() {
       return decorator_1.decorate;
-    } });
+    }, "get") });
     var mixin_tracking_1 = require_mixin_tracking();
-    Object.defineProperty(exports2, "hasMixin", { enumerable: true, get: function() {
+    Object.defineProperty(exports2, "hasMixin", { enumerable: true, get: /* @__PURE__ */ __name(function() {
       return mixin_tracking_1.hasMixin;
-    } });
+    }, "get") });
   }
 });
 
@@ -42614,132 +44084,132 @@ var require_dist8 = __commonJS({
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
     var __getProtoOf2 = Object.getPrototypeOf;
     var __hasOwnProp2 = Object.prototype.hasOwnProperty;
-    var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
-    var __export2 = (target, all) => {
+    var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+    var __export2 = /* @__PURE__ */ __name((target, all) => {
       for (var name in all)
         __defProp2(target, name, { get: all[name], enumerable: true });
-    };
-    var __copyProps2 = (to, from, except, desc) => {
+    }, "__export");
+    var __copyProps2 = /* @__PURE__ */ __name((to, from, except, desc) => {
       if (from && typeof from === "object" || typeof from === "function") {
         for (let key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
-            __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
+            __defProp2(to, key, { get: /* @__PURE__ */ __name(() => from[key], "get"), enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
       }
       return to;
-    };
-    var __reExport = (target, mod, secondTarget) => (__copyProps2(target, mod, "default"), secondTarget && __copyProps2(secondTarget, mod, "default"));
-    var __toESM2 = (mod, isNodeMode, target) => (target = mod != null ? __create2(__getProtoOf2(mod)) : {}, __copyProps2(
+    }, "__copyProps");
+    var __reExport = /* @__PURE__ */ __name((target, mod, secondTarget) => (__copyProps2(target, mod, "default"), secondTarget && __copyProps2(secondTarget, mod, "default")), "__reExport");
+    var __toESM2 = /* @__PURE__ */ __name((mod, isNodeMode, target) => (target = mod != null ? __create2(__getProtoOf2(mod)) : {}, __copyProps2(
       // If the importer is in node compatibility mode or this is not an ESM
       // file that has been converted to a CommonJS file using a Babel-
       // compatible transform (i.e. "__esModule" has not been set), then set
       // "default" to the CommonJS "module.exports" for node compatibility.
       isNodeMode || !mod || !mod.__esModule ? __defProp2(target, "default", { value: mod, enumerable: true }) : target,
       mod
-    ));
-    var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
-    var __decorateClass = (decorators, target, key, kind) => {
+    )), "__toESM");
+    var __toCommonJS2 = /* @__PURE__ */ __name((mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod), "__toCommonJS");
+    var __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
       var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc2(target, key) : target;
       for (var i = decorators.length - 1, decorator; i >= 0; i--)
         if (decorator = decorators[i])
           result = (kind ? decorator(target, key, result) : decorator(result)) || result;
       if (kind && result) __defProp2(target, key, result);
       return result;
-    };
+    }, "__decorateClass");
     var index_exports = {};
     __export2(index_exports, {
-      ActionRowBuilder: () => ActionRowBuilder,
-      ApplicationCommandNumericOptionMinMaxValueMixin: () => ApplicationCommandNumericOptionMinMaxValueMixin,
-      ApplicationCommandOptionBase: () => ApplicationCommandOptionBase,
-      ApplicationCommandOptionChannelTypesMixin: () => ApplicationCommandOptionChannelTypesMixin,
-      ApplicationCommandOptionWithAutocompleteMixin: () => ApplicationCommandOptionWithAutocompleteMixin,
-      ApplicationCommandOptionWithChoicesMixin: () => ApplicationCommandOptionWithChoicesMixin,
-      BaseSelectMenuBuilder: () => BaseSelectMenuBuilder,
-      ButtonBuilder: () => ButtonBuilder,
-      ChannelSelectMenuBuilder: () => ChannelSelectMenuBuilder,
-      CheckboxAssertions: () => Assertions_exports3,
-      CheckboxBuilder: () => CheckboxBuilder,
-      CheckboxGroupBuilder: () => CheckboxGroupBuilder,
-      CheckboxGroupOptionBuilder: () => CheckboxGroupOptionBuilder,
-      ComponentAssertions: () => Assertions_exports2,
-      ComponentBuilder: () => ComponentBuilder,
-      ComponentsV2Assertions: () => Assertions_exports8,
-      ContainerBuilder: () => ContainerBuilder,
-      ContextMenuCommandAssertions: () => Assertions_exports11,
-      ContextMenuCommandBuilder: () => ContextMenuCommandBuilder,
-      EmbedAssertions: () => Assertions_exports,
-      EmbedBuilder: () => EmbedBuilder,
-      FileBuilder: () => FileBuilder,
-      FileUploadAssertions: () => Assertions_exports4,
-      FileUploadBuilder: () => FileUploadBuilder,
-      LabelAssertions: () => Assertions_exports7,
-      LabelBuilder: () => LabelBuilder,
-      MediaGalleryBuilder: () => MediaGalleryBuilder,
-      MediaGalleryItemBuilder: () => MediaGalleryItemBuilder,
-      MentionableSelectMenuBuilder: () => MentionableSelectMenuBuilder,
-      ModalAssertions: () => Assertions_exports9,
-      ModalBuilder: () => ModalBuilder,
-      RadioGroupBuilder: () => RadioGroupBuilder,
-      RadioGroupOptionBuilder: () => RadioGroupOptionBuilder,
-      RoleSelectMenuBuilder: () => RoleSelectMenuBuilder,
-      SectionBuilder: () => SectionBuilder,
-      SelectMenuAssertions: () => Assertions_exports6,
-      SelectMenuBuilder: () => StringSelectMenuBuilder,
-      SelectMenuOptionBuilder: () => StringSelectMenuOptionBuilder,
-      SeparatorBuilder: () => SeparatorBuilder,
-      SharedNameAndDescription: () => SharedNameAndDescription,
-      SharedSlashCommand: () => SharedSlashCommand,
-      SharedSlashCommandOptions: () => SharedSlashCommandOptions,
-      SharedSlashCommandSubcommands: () => SharedSlashCommandSubcommands,
-      SlashCommandAssertions: () => Assertions_exports10,
-      SlashCommandAttachmentOption: () => SlashCommandAttachmentOption,
-      SlashCommandBooleanOption: () => SlashCommandBooleanOption,
-      SlashCommandBuilder: () => SlashCommandBuilder,
-      SlashCommandChannelOption: () => SlashCommandChannelOption,
-      SlashCommandIntegerOption: () => SlashCommandIntegerOption,
-      SlashCommandMentionableOption: () => SlashCommandMentionableOption,
-      SlashCommandNumberOption: () => SlashCommandNumberOption,
-      SlashCommandRoleOption: () => SlashCommandRoleOption,
-      SlashCommandStringOption: () => SlashCommandStringOption,
-      SlashCommandSubcommandBuilder: () => SlashCommandSubcommandBuilder,
-      SlashCommandSubcommandGroupBuilder: () => SlashCommandSubcommandGroupBuilder,
-      SlashCommandUserOption: () => SlashCommandUserOption,
-      StringSelectMenuBuilder: () => StringSelectMenuBuilder,
-      StringSelectMenuOptionBuilder: () => StringSelectMenuOptionBuilder,
-      TextDisplayBuilder: () => TextDisplayBuilder,
-      TextInputAssertions: () => Assertions_exports5,
-      TextInputBuilder: () => TextInputBuilder,
-      ThumbnailBuilder: () => ThumbnailBuilder,
-      UserSelectMenuBuilder: () => UserSelectMenuBuilder,
-      createComponentBuilder: () => createComponentBuilder,
-      disableValidators: () => disableValidators,
-      embedLength: () => embedLength,
-      enableValidators: () => enableValidators,
-      isValidationEnabled: () => isValidationEnabled,
-      normalizeArray: () => normalizeArray,
-      resolveBuilder: () => resolveBuilder,
-      version: () => version
+      ActionRowBuilder: /* @__PURE__ */ __name(() => ActionRowBuilder, "ActionRowBuilder"),
+      ApplicationCommandNumericOptionMinMaxValueMixin: /* @__PURE__ */ __name(() => ApplicationCommandNumericOptionMinMaxValueMixin, "ApplicationCommandNumericOptionMinMaxValueMixin"),
+      ApplicationCommandOptionBase: /* @__PURE__ */ __name(() => ApplicationCommandOptionBase, "ApplicationCommandOptionBase"),
+      ApplicationCommandOptionChannelTypesMixin: /* @__PURE__ */ __name(() => ApplicationCommandOptionChannelTypesMixin, "ApplicationCommandOptionChannelTypesMixin"),
+      ApplicationCommandOptionWithAutocompleteMixin: /* @__PURE__ */ __name(() => ApplicationCommandOptionWithAutocompleteMixin, "ApplicationCommandOptionWithAutocompleteMixin"),
+      ApplicationCommandOptionWithChoicesMixin: /* @__PURE__ */ __name(() => ApplicationCommandOptionWithChoicesMixin, "ApplicationCommandOptionWithChoicesMixin"),
+      BaseSelectMenuBuilder: /* @__PURE__ */ __name(() => BaseSelectMenuBuilder, "BaseSelectMenuBuilder"),
+      ButtonBuilder: /* @__PURE__ */ __name(() => ButtonBuilder, "ButtonBuilder"),
+      ChannelSelectMenuBuilder: /* @__PURE__ */ __name(() => ChannelSelectMenuBuilder, "ChannelSelectMenuBuilder"),
+      CheckboxAssertions: /* @__PURE__ */ __name(() => Assertions_exports3, "CheckboxAssertions"),
+      CheckboxBuilder: /* @__PURE__ */ __name(() => CheckboxBuilder, "CheckboxBuilder"),
+      CheckboxGroupBuilder: /* @__PURE__ */ __name(() => CheckboxGroupBuilder, "CheckboxGroupBuilder"),
+      CheckboxGroupOptionBuilder: /* @__PURE__ */ __name(() => CheckboxGroupOptionBuilder, "CheckboxGroupOptionBuilder"),
+      ComponentAssertions: /* @__PURE__ */ __name(() => Assertions_exports2, "ComponentAssertions"),
+      ComponentBuilder: /* @__PURE__ */ __name(() => ComponentBuilder, "ComponentBuilder"),
+      ComponentsV2Assertions: /* @__PURE__ */ __name(() => Assertions_exports8, "ComponentsV2Assertions"),
+      ContainerBuilder: /* @__PURE__ */ __name(() => ContainerBuilder, "ContainerBuilder"),
+      ContextMenuCommandAssertions: /* @__PURE__ */ __name(() => Assertions_exports11, "ContextMenuCommandAssertions"),
+      ContextMenuCommandBuilder: /* @__PURE__ */ __name(() => ContextMenuCommandBuilder, "ContextMenuCommandBuilder"),
+      EmbedAssertions: /* @__PURE__ */ __name(() => Assertions_exports, "EmbedAssertions"),
+      EmbedBuilder: /* @__PURE__ */ __name(() => EmbedBuilder, "EmbedBuilder"),
+      FileBuilder: /* @__PURE__ */ __name(() => FileBuilder, "FileBuilder"),
+      FileUploadAssertions: /* @__PURE__ */ __name(() => Assertions_exports4, "FileUploadAssertions"),
+      FileUploadBuilder: /* @__PURE__ */ __name(() => FileUploadBuilder, "FileUploadBuilder"),
+      LabelAssertions: /* @__PURE__ */ __name(() => Assertions_exports7, "LabelAssertions"),
+      LabelBuilder: /* @__PURE__ */ __name(() => LabelBuilder, "LabelBuilder"),
+      MediaGalleryBuilder: /* @__PURE__ */ __name(() => MediaGalleryBuilder, "MediaGalleryBuilder"),
+      MediaGalleryItemBuilder: /* @__PURE__ */ __name(() => MediaGalleryItemBuilder, "MediaGalleryItemBuilder"),
+      MentionableSelectMenuBuilder: /* @__PURE__ */ __name(() => MentionableSelectMenuBuilder, "MentionableSelectMenuBuilder"),
+      ModalAssertions: /* @__PURE__ */ __name(() => Assertions_exports9, "ModalAssertions"),
+      ModalBuilder: /* @__PURE__ */ __name(() => ModalBuilder, "ModalBuilder"),
+      RadioGroupBuilder: /* @__PURE__ */ __name(() => RadioGroupBuilder, "RadioGroupBuilder"),
+      RadioGroupOptionBuilder: /* @__PURE__ */ __name(() => RadioGroupOptionBuilder, "RadioGroupOptionBuilder"),
+      RoleSelectMenuBuilder: /* @__PURE__ */ __name(() => RoleSelectMenuBuilder, "RoleSelectMenuBuilder"),
+      SectionBuilder: /* @__PURE__ */ __name(() => SectionBuilder, "SectionBuilder"),
+      SelectMenuAssertions: /* @__PURE__ */ __name(() => Assertions_exports6, "SelectMenuAssertions"),
+      SelectMenuBuilder: /* @__PURE__ */ __name(() => StringSelectMenuBuilder, "SelectMenuBuilder"),
+      SelectMenuOptionBuilder: /* @__PURE__ */ __name(() => StringSelectMenuOptionBuilder, "SelectMenuOptionBuilder"),
+      SeparatorBuilder: /* @__PURE__ */ __name(() => SeparatorBuilder, "SeparatorBuilder"),
+      SharedNameAndDescription: /* @__PURE__ */ __name(() => SharedNameAndDescription, "SharedNameAndDescription"),
+      SharedSlashCommand: /* @__PURE__ */ __name(() => SharedSlashCommand, "SharedSlashCommand"),
+      SharedSlashCommandOptions: /* @__PURE__ */ __name(() => SharedSlashCommandOptions, "SharedSlashCommandOptions"),
+      SharedSlashCommandSubcommands: /* @__PURE__ */ __name(() => SharedSlashCommandSubcommands, "SharedSlashCommandSubcommands"),
+      SlashCommandAssertions: /* @__PURE__ */ __name(() => Assertions_exports10, "SlashCommandAssertions"),
+      SlashCommandAttachmentOption: /* @__PURE__ */ __name(() => SlashCommandAttachmentOption, "SlashCommandAttachmentOption"),
+      SlashCommandBooleanOption: /* @__PURE__ */ __name(() => SlashCommandBooleanOption, "SlashCommandBooleanOption"),
+      SlashCommandBuilder: /* @__PURE__ */ __name(() => SlashCommandBuilder, "SlashCommandBuilder"),
+      SlashCommandChannelOption: /* @__PURE__ */ __name(() => SlashCommandChannelOption, "SlashCommandChannelOption"),
+      SlashCommandIntegerOption: /* @__PURE__ */ __name(() => SlashCommandIntegerOption, "SlashCommandIntegerOption"),
+      SlashCommandMentionableOption: /* @__PURE__ */ __name(() => SlashCommandMentionableOption, "SlashCommandMentionableOption"),
+      SlashCommandNumberOption: /* @__PURE__ */ __name(() => SlashCommandNumberOption, "SlashCommandNumberOption"),
+      SlashCommandRoleOption: /* @__PURE__ */ __name(() => SlashCommandRoleOption, "SlashCommandRoleOption"),
+      SlashCommandStringOption: /* @__PURE__ */ __name(() => SlashCommandStringOption, "SlashCommandStringOption"),
+      SlashCommandSubcommandBuilder: /* @__PURE__ */ __name(() => SlashCommandSubcommandBuilder, "SlashCommandSubcommandBuilder"),
+      SlashCommandSubcommandGroupBuilder: /* @__PURE__ */ __name(() => SlashCommandSubcommandGroupBuilder, "SlashCommandSubcommandGroupBuilder"),
+      SlashCommandUserOption: /* @__PURE__ */ __name(() => SlashCommandUserOption, "SlashCommandUserOption"),
+      StringSelectMenuBuilder: /* @__PURE__ */ __name(() => StringSelectMenuBuilder, "StringSelectMenuBuilder"),
+      StringSelectMenuOptionBuilder: /* @__PURE__ */ __name(() => StringSelectMenuOptionBuilder, "StringSelectMenuOptionBuilder"),
+      TextDisplayBuilder: /* @__PURE__ */ __name(() => TextDisplayBuilder, "TextDisplayBuilder"),
+      TextInputAssertions: /* @__PURE__ */ __name(() => Assertions_exports5, "TextInputAssertions"),
+      TextInputBuilder: /* @__PURE__ */ __name(() => TextInputBuilder, "TextInputBuilder"),
+      ThumbnailBuilder: /* @__PURE__ */ __name(() => ThumbnailBuilder, "ThumbnailBuilder"),
+      UserSelectMenuBuilder: /* @__PURE__ */ __name(() => UserSelectMenuBuilder, "UserSelectMenuBuilder"),
+      createComponentBuilder: /* @__PURE__ */ __name(() => createComponentBuilder, "createComponentBuilder"),
+      disableValidators: /* @__PURE__ */ __name(() => disableValidators, "disableValidators"),
+      embedLength: /* @__PURE__ */ __name(() => embedLength, "embedLength"),
+      enableValidators: /* @__PURE__ */ __name(() => enableValidators, "enableValidators"),
+      isValidationEnabled: /* @__PURE__ */ __name(() => isValidationEnabled, "isValidationEnabled"),
+      normalizeArray: /* @__PURE__ */ __name(() => normalizeArray, "normalizeArray"),
+      resolveBuilder: /* @__PURE__ */ __name(() => resolveBuilder, "resolveBuilder"),
+      version: /* @__PURE__ */ __name(() => version, "version")
     });
     module2.exports = __toCommonJS2(index_exports);
     var Assertions_exports = {};
     __export2(Assertions_exports, {
-      RGBPredicate: () => RGBPredicate,
-      authorNamePredicate: () => authorNamePredicate,
-      colorPredicate: () => colorPredicate,
-      descriptionPredicate: () => descriptionPredicate,
-      embedAuthorPredicate: () => embedAuthorPredicate,
-      embedFieldPredicate: () => embedFieldPredicate,
-      embedFieldsArrayPredicate: () => embedFieldsArrayPredicate,
-      embedFooterPredicate: () => embedFooterPredicate,
-      fieldInlinePredicate: () => fieldInlinePredicate,
-      fieldLengthPredicate: () => fieldLengthPredicate,
-      fieldNamePredicate: () => fieldNamePredicate,
-      fieldValuePredicate: () => fieldValuePredicate,
-      footerTextPredicate: () => footerTextPredicate,
-      imageURLPredicate: () => imageURLPredicate,
-      timestampPredicate: () => timestampPredicate,
-      titlePredicate: () => titlePredicate,
-      urlPredicate: () => urlPredicate,
-      validateFieldLength: () => validateFieldLength
+      RGBPredicate: /* @__PURE__ */ __name(() => RGBPredicate, "RGBPredicate"),
+      authorNamePredicate: /* @__PURE__ */ __name(() => authorNamePredicate, "authorNamePredicate"),
+      colorPredicate: /* @__PURE__ */ __name(() => colorPredicate, "colorPredicate"),
+      descriptionPredicate: /* @__PURE__ */ __name(() => descriptionPredicate, "descriptionPredicate"),
+      embedAuthorPredicate: /* @__PURE__ */ __name(() => embedAuthorPredicate, "embedAuthorPredicate"),
+      embedFieldPredicate: /* @__PURE__ */ __name(() => embedFieldPredicate, "embedFieldPredicate"),
+      embedFieldsArrayPredicate: /* @__PURE__ */ __name(() => embedFieldsArrayPredicate, "embedFieldsArrayPredicate"),
+      embedFooterPredicate: /* @__PURE__ */ __name(() => embedFooterPredicate, "embedFooterPredicate"),
+      fieldInlinePredicate: /* @__PURE__ */ __name(() => fieldInlinePredicate, "fieldInlinePredicate"),
+      fieldLengthPredicate: /* @__PURE__ */ __name(() => fieldLengthPredicate, "fieldLengthPredicate"),
+      fieldNamePredicate: /* @__PURE__ */ __name(() => fieldNamePredicate, "fieldNamePredicate"),
+      fieldValuePredicate: /* @__PURE__ */ __name(() => fieldValuePredicate, "fieldValuePredicate"),
+      footerTextPredicate: /* @__PURE__ */ __name(() => footerTextPredicate, "footerTextPredicate"),
+      imageURLPredicate: /* @__PURE__ */ __name(() => imageURLPredicate, "imageURLPredicate"),
+      timestampPredicate: /* @__PURE__ */ __name(() => timestampPredicate, "timestampPredicate"),
+      titlePredicate: /* @__PURE__ */ __name(() => titlePredicate, "titlePredicate"),
+      urlPredicate: /* @__PURE__ */ __name(() => urlPredicate, "urlPredicate"),
+      validateFieldLength: /* @__PURE__ */ __name(() => validateFieldLength, "validateFieldLength")
     });
     var import_shapeshift = require_cjs4();
     var validate = true;
@@ -42747,14 +44217,17 @@ var require_dist8 = __commonJS({
       return validate = true;
     }
     __name(enableValidators, "enableValidators");
+    __name2(enableValidators, "enableValidators");
     function disableValidators() {
       return validate = false;
     }
     __name(disableValidators, "disableValidators");
+    __name2(disableValidators, "disableValidators");
     function isValidationEnabled() {
       return validate;
     }
     __name(isValidationEnabled, "isValidationEnabled");
+    __name2(isValidationEnabled, "isValidationEnabled");
     var fieldNamePredicate = import_shapeshift.s.string().lengthLessThanOrEqual(256).setValidationEnabled(isValidationEnabled);
     var fieldValuePredicate = import_shapeshift.s.string().lengthLessThanOrEqual(1024).setValidationEnabled(isValidationEnabled);
     var fieldInlinePredicate = import_shapeshift.s.boolean().optional();
@@ -42769,6 +44242,7 @@ var require_dist8 = __commonJS({
       fieldLengthPredicate.parse((fields?.length ?? 0) + amountAdding);
     }
     __name(validateFieldLength, "validateFieldLength");
+    __name2(validateFieldLength, "validateFieldLength");
     var authorNamePredicate = fieldNamePredicate.lengthGreaterThanOrEqual(1).nullable().setValidationEnabled(isValidationEnabled);
     var imageURLPredicate = import_shapeshift.s.string().url({
       allowedProtocols: ["http:", "https:", "attachment:"]
@@ -42796,9 +44270,13 @@ var require_dist8 = __commonJS({
       return arr;
     }
     __name(normalizeArray, "normalizeArray");
+    __name2(normalizeArray, "normalizeArray");
     var EmbedBuilder = class {
       static {
         __name(this, "EmbedBuilder");
+      }
+      static {
+        __name2(this, "EmbedBuilder");
       }
       /**
        * The API data associated with this embed.
@@ -43012,29 +44490,32 @@ var require_dist8 = __commonJS({
     __reExport(index_exports, require_dist7(), module2.exports);
     var Assertions_exports2 = {};
     __export2(Assertions_exports2, {
-      buttonLabelValidator: () => buttonLabelValidator,
-      buttonStyleValidator: () => buttonStyleValidator,
-      channelTypesValidator: () => channelTypesValidator,
-      customIdValidator: () => customIdValidator,
-      defaultValidator: () => defaultValidator,
-      disabledValidator: () => disabledValidator,
-      emojiValidator: () => emojiValidator,
-      idValidator: () => idValidator,
-      jsonOptionValidator: () => jsonOptionValidator,
-      labelValueDescriptionValidator: () => labelValueDescriptionValidator,
-      minMaxValidator: () => minMaxValidator,
-      optionValidator: () => optionValidator,
-      optionsLengthValidator: () => optionsLengthValidator,
-      optionsValidator: () => optionsValidator,
-      placeholderValidator: () => placeholderValidator,
-      urlValidator: () => urlValidator,
-      validateRequiredButtonParameters: () => validateRequiredButtonParameters,
-      validateRequiredSelectMenuOptionParameters: () => validateRequiredSelectMenuOptionParameters,
-      validateRequiredSelectMenuParameters: () => validateRequiredSelectMenuParameters
+      buttonLabelValidator: /* @__PURE__ */ __name(() => buttonLabelValidator, "buttonLabelValidator"),
+      buttonStyleValidator: /* @__PURE__ */ __name(() => buttonStyleValidator, "buttonStyleValidator"),
+      channelTypesValidator: /* @__PURE__ */ __name(() => channelTypesValidator, "channelTypesValidator"),
+      customIdValidator: /* @__PURE__ */ __name(() => customIdValidator, "customIdValidator"),
+      defaultValidator: /* @__PURE__ */ __name(() => defaultValidator, "defaultValidator"),
+      disabledValidator: /* @__PURE__ */ __name(() => disabledValidator, "disabledValidator"),
+      emojiValidator: /* @__PURE__ */ __name(() => emojiValidator, "emojiValidator"),
+      idValidator: /* @__PURE__ */ __name(() => idValidator, "idValidator"),
+      jsonOptionValidator: /* @__PURE__ */ __name(() => jsonOptionValidator, "jsonOptionValidator"),
+      labelValueDescriptionValidator: /* @__PURE__ */ __name(() => labelValueDescriptionValidator, "labelValueDescriptionValidator"),
+      minMaxValidator: /* @__PURE__ */ __name(() => minMaxValidator, "minMaxValidator"),
+      optionValidator: /* @__PURE__ */ __name(() => optionValidator, "optionValidator"),
+      optionsLengthValidator: /* @__PURE__ */ __name(() => optionsLengthValidator, "optionsLengthValidator"),
+      optionsValidator: /* @__PURE__ */ __name(() => optionsValidator, "optionsValidator"),
+      placeholderValidator: /* @__PURE__ */ __name(() => placeholderValidator, "placeholderValidator"),
+      urlValidator: /* @__PURE__ */ __name(() => urlValidator, "urlValidator"),
+      validateRequiredButtonParameters: /* @__PURE__ */ __name(() => validateRequiredButtonParameters, "validateRequiredButtonParameters"),
+      validateRequiredSelectMenuOptionParameters: /* @__PURE__ */ __name(() => validateRequiredSelectMenuOptionParameters, "validateRequiredSelectMenuOptionParameters"),
+      validateRequiredSelectMenuParameters: /* @__PURE__ */ __name(() => validateRequiredSelectMenuParameters, "validateRequiredSelectMenuParameters")
     });
     var import_shapeshift2 = require_cjs4();
     var import_v10 = require_v106();
     var StringSelectMenuOptionBuilder = class {
+      static {
+        __name(this, "StringSelectMenuOptionBuilder");
+      }
       /**
        * Creates a new string select menu option from API data.
        *
@@ -43061,7 +44542,7 @@ var require_dist8 = __commonJS({
         this.data = data;
       }
       static {
-        __name(this, "StringSelectMenuOptionBuilder");
+        __name2(this, "StringSelectMenuOptionBuilder");
       }
       /**
        * Sets the label for this option.
@@ -43146,12 +44627,14 @@ var require_dist8 = __commonJS({
       optionsValidator.parse(options);
     }
     __name(validateRequiredSelectMenuParameters, "validateRequiredSelectMenuParameters");
+    __name2(validateRequiredSelectMenuParameters, "validateRequiredSelectMenuParameters");
     var defaultValidator = import_shapeshift2.s.boolean();
     function validateRequiredSelectMenuOptionParameters(label, value) {
       labelValueDescriptionValidator.parse(label);
       labelValueDescriptionValidator.parse(value);
     }
     __name(validateRequiredSelectMenuOptionParameters, "validateRequiredSelectMenuOptionParameters");
+    __name2(validateRequiredSelectMenuOptionParameters, "validateRequiredSelectMenuOptionParameters");
     var channelTypesValidator = import_shapeshift2.s.nativeEnum(import_v10.ChannelType).array().setValidationEnabled(isValidationEnabled);
     var urlValidator = import_shapeshift2.s.string().url({
       allowedProtocols: ["http:", "https:", "discord:"]
@@ -43184,10 +44667,14 @@ var require_dist8 = __commonJS({
       }
     }
     __name(validateRequiredButtonParameters, "validateRequiredButtonParameters");
+    __name2(validateRequiredButtonParameters, "validateRequiredButtonParameters");
     var import_v1028 = require_v106();
     var ComponentBuilder = class {
       static {
         __name(this, "ComponentBuilder");
+      }
+      static {
+        __name2(this, "ComponentBuilder");
       }
       /**
        * The API data associated with this component.
@@ -43223,6 +44710,9 @@ var require_dist8 = __commonJS({
     var ButtonBuilder = class extends ComponentBuilder {
       static {
         __name(this, "ButtonBuilder");
+      }
+      static {
+        __name2(this, "ButtonBuilder");
       }
       /**
        * Creates a new button from API data.
@@ -43344,11 +44834,11 @@ var require_dist8 = __commonJS({
     var import_v104 = require_v106();
     var Assertions_exports3 = {};
     __export2(Assertions_exports3, {
-      checkboxGroupOptionPredicate: () => checkboxGroupOptionPredicate,
-      checkboxGroupPredicate: () => checkboxGroupPredicate,
-      checkboxPredicate: () => checkboxPredicate,
-      radioGroupOptionPredicate: () => radioGroupOptionPredicate,
-      radioGroupPredicate: () => radioGroupPredicate
+      checkboxGroupOptionPredicate: /* @__PURE__ */ __name(() => checkboxGroupOptionPredicate, "checkboxGroupOptionPredicate"),
+      checkboxGroupPredicate: /* @__PURE__ */ __name(() => checkboxGroupPredicate, "checkboxGroupPredicate"),
+      checkboxPredicate: /* @__PURE__ */ __name(() => checkboxPredicate, "checkboxPredicate"),
+      radioGroupOptionPredicate: /* @__PURE__ */ __name(() => radioGroupOptionPredicate, "radioGroupOptionPredicate"),
+      radioGroupPredicate: /* @__PURE__ */ __name(() => radioGroupPredicate, "radioGroupPredicate")
     });
     var import_shapeshift3 = require_cjs4();
     var import_v103 = require_v106();
@@ -43419,6 +44909,9 @@ var require_dist8 = __commonJS({
       static {
         __name(this, "CheckboxBuilder");
       }
+      static {
+        __name2(this, "CheckboxBuilder");
+      }
       /**
        * Creates a new checkbox from API data.
        *
@@ -43472,6 +44965,9 @@ var require_dist8 = __commonJS({
     };
     var import_v105 = require_v106();
     var CheckboxGroupOptionBuilder = class {
+      static {
+        __name(this, "CheckboxGroupOptionBuilder");
+      }
       /**
        * Creates a new checkbox group option from API data.
        *
@@ -43496,7 +44992,7 @@ var require_dist8 = __commonJS({
         this.data = data;
       }
       static {
-        __name(this, "CheckboxGroupOptionBuilder");
+        __name2(this, "CheckboxGroupOptionBuilder");
       }
       /**
        * Sets the label for this option.
@@ -43547,6 +45043,9 @@ var require_dist8 = __commonJS({
     var CheckboxGroupBuilder = class extends ComponentBuilder {
       static {
         __name(this, "CheckboxGroupBuilder");
+      }
+      static {
+        __name2(this, "CheckboxGroupBuilder");
       }
       /**
        * The options within this checkbox group.
@@ -43687,6 +45186,9 @@ var require_dist8 = __commonJS({
     };
     var import_v106 = require_v106();
     var RadioGroupOptionBuilder = class {
+      static {
+        __name(this, "RadioGroupOptionBuilder");
+      }
       /**
        * Creates a new radio group option from API data.
        *
@@ -43711,7 +45213,7 @@ var require_dist8 = __commonJS({
         this.data = data;
       }
       static {
-        __name(this, "RadioGroupOptionBuilder");
+        __name2(this, "RadioGroupOptionBuilder");
       }
       /**
        * Sets the label for this option.
@@ -43762,6 +45264,9 @@ var require_dist8 = __commonJS({
     var RadioGroupBuilder = class extends ComponentBuilder {
       static {
         __name(this, "RadioGroupBuilder");
+      }
+      static {
+        __name2(this, "RadioGroupBuilder");
       }
       /**
        * The options within this radio group.
@@ -43883,7 +45388,7 @@ var require_dist8 = __commonJS({
     var import_v108 = require_v106();
     var Assertions_exports4 = {};
     __export2(Assertions_exports4, {
-      fileUploadPredicate: () => fileUploadPredicate
+      fileUploadPredicate: /* @__PURE__ */ __name(() => fileUploadPredicate, "fileUploadPredicate")
     });
     var import_shapeshift4 = require_cjs4();
     var import_v107 = require_v106();
@@ -43898,6 +45403,9 @@ var require_dist8 = __commonJS({
     var FileUploadBuilder = class extends ComponentBuilder {
       static {
         __name(this, "FileUploadBuilder");
+      }
+      static {
+        __name2(this, "FileUploadBuilder");
       }
       /**
        * Creates a new file upload.
@@ -43987,15 +45495,15 @@ var require_dist8 = __commonJS({
     var import_v1010 = require_v106();
     var Assertions_exports5 = {};
     __export2(Assertions_exports5, {
-      labelValidator: () => labelValidator,
-      maxLengthValidator: () => maxLengthValidator,
-      minLengthValidator: () => minLengthValidator,
-      placeholderValidator: () => placeholderValidator2,
-      requiredValidator: () => requiredValidator,
-      textInputPredicate: () => textInputPredicate,
-      textInputStyleValidator: () => textInputStyleValidator,
-      validateRequiredParameters: () => validateRequiredParameters,
-      valueValidator: () => valueValidator
+      labelValidator: /* @__PURE__ */ __name(() => labelValidator, "labelValidator"),
+      maxLengthValidator: /* @__PURE__ */ __name(() => maxLengthValidator, "maxLengthValidator"),
+      minLengthValidator: /* @__PURE__ */ __name(() => minLengthValidator, "minLengthValidator"),
+      placeholderValidator: /* @__PURE__ */ __name(() => placeholderValidator2, "placeholderValidator"),
+      requiredValidator: /* @__PURE__ */ __name(() => requiredValidator, "requiredValidator"),
+      textInputPredicate: /* @__PURE__ */ __name(() => textInputPredicate, "textInputPredicate"),
+      textInputStyleValidator: /* @__PURE__ */ __name(() => textInputStyleValidator, "textInputStyleValidator"),
+      validateRequiredParameters: /* @__PURE__ */ __name(() => validateRequiredParameters, "validateRequiredParameters"),
+      valueValidator: /* @__PURE__ */ __name(() => valueValidator, "valueValidator")
     });
     var import_shapeshift5 = require_cjs4();
     var import_v109 = require_v106();
@@ -44022,9 +45530,13 @@ var require_dist8 = __commonJS({
       textInputStyleValidator.parse(style);
     }
     __name(validateRequiredParameters, "validateRequiredParameters");
+    __name2(validateRequiredParameters, "validateRequiredParameters");
     var BaseSelectMenuBuilder = class extends ComponentBuilder {
       static {
         __name(this, "BaseSelectMenuBuilder");
+      }
+      static {
+        __name2(this, "BaseSelectMenuBuilder");
       }
       /**
        * Sets the placeholder for this select menu.
@@ -44094,6 +45606,9 @@ var require_dist8 = __commonJS({
     var ChannelSelectMenuBuilder = class extends BaseSelectMenuBuilder {
       static {
         __name(this, "ChannelSelectMenuBuilder");
+      }
+      static {
+        __name2(this, "ChannelSelectMenuBuilder");
       }
       /**
        * Creates a new select menu from API data.
@@ -44189,6 +45704,9 @@ var require_dist8 = __commonJS({
       static {
         __name(this, "MentionableSelectMenuBuilder");
       }
+      static {
+        __name2(this, "MentionableSelectMenuBuilder");
+      }
       /**
        * Creates a new select menu from API data.
        *
@@ -44277,6 +45795,9 @@ var require_dist8 = __commonJS({
       static {
         __name(this, "RoleSelectMenuBuilder");
       }
+      static {
+        __name2(this, "RoleSelectMenuBuilder");
+      }
       /**
        * Creates a new select menu from API data.
        *
@@ -44337,12 +45858,12 @@ var require_dist8 = __commonJS({
     var import_v1014 = require_v106();
     var Assertions_exports6 = {};
     __export2(Assertions_exports6, {
-      selectMenuChannelPredicate: () => selectMenuChannelPredicate,
-      selectMenuMentionablePredicate: () => selectMenuMentionablePredicate,
-      selectMenuRolePredicate: () => selectMenuRolePredicate,
-      selectMenuStringOptionPredicate: () => selectMenuStringOptionPredicate,
-      selectMenuStringPredicate: () => selectMenuStringPredicate,
-      selectMenuUserPredicate: () => selectMenuUserPredicate
+      selectMenuChannelPredicate: /* @__PURE__ */ __name(() => selectMenuChannelPredicate, "selectMenuChannelPredicate"),
+      selectMenuMentionablePredicate: /* @__PURE__ */ __name(() => selectMenuMentionablePredicate, "selectMenuMentionablePredicate"),
+      selectMenuRolePredicate: /* @__PURE__ */ __name(() => selectMenuRolePredicate, "selectMenuRolePredicate"),
+      selectMenuStringOptionPredicate: /* @__PURE__ */ __name(() => selectMenuStringOptionPredicate, "selectMenuStringOptionPredicate"),
+      selectMenuStringPredicate: /* @__PURE__ */ __name(() => selectMenuStringPredicate, "selectMenuStringPredicate"),
+      selectMenuUserPredicate: /* @__PURE__ */ __name(() => selectMenuUserPredicate, "selectMenuUserPredicate")
     });
     var import_shapeshift6 = require_cjs4();
     var import_v1013 = require_v106();
@@ -44398,6 +45919,9 @@ var require_dist8 = __commonJS({
     var StringSelectMenuBuilder = class extends BaseSelectMenuBuilder {
       static {
         __name(this, "StringSelectMenuBuilder");
+      }
+      static {
+        __name2(this, "StringSelectMenuBuilder");
       }
       /**
        * The options within this select menu.
@@ -44519,6 +46043,9 @@ var require_dist8 = __commonJS({
       static {
         __name(this, "UserSelectMenuBuilder");
       }
+      static {
+        __name2(this, "UserSelectMenuBuilder");
+      }
       /**
        * Creates a new select menu from API data.
        *
@@ -44582,6 +46109,9 @@ var require_dist8 = __commonJS({
     var TextInputBuilder = class extends ComponentBuilder {
       static {
         __name(this, "TextInputBuilder");
+      }
+      static {
+        __name2(this, "TextInputBuilder");
       }
       /**
        * Creates a new text input from API data.
@@ -44703,7 +46233,7 @@ var require_dist8 = __commonJS({
     };
     var Assertions_exports7 = {};
     __export2(Assertions_exports7, {
-      labelPredicate: () => labelPredicate
+      labelPredicate: /* @__PURE__ */ __name(() => labelPredicate, "labelPredicate")
     });
     var import_shapeshift7 = require_cjs4();
     var import_v1017 = require_v106();
@@ -44728,6 +46258,9 @@ var require_dist8 = __commonJS({
     var LabelBuilder = class extends ComponentBuilder {
       static {
         __name(this, "LabelBuilder");
+      }
+      static {
+        __name2(this, "LabelBuilder");
       }
       /**
        * @internal
@@ -44895,17 +46428,17 @@ var require_dist8 = __commonJS({
     var import_v1024 = require_v106();
     var Assertions_exports8 = {};
     __export2(Assertions_exports8, {
-      accessoryPredicate: () => accessoryPredicate,
-      assertReturnOfBuilder: () => assertReturnOfBuilder,
-      containerColorPredicate: () => containerColorPredicate,
-      descriptionPredicate: () => descriptionPredicate2,
-      dividerPredicate: () => dividerPredicate,
-      filePredicate: () => filePredicate,
-      spacingPredicate: () => spacingPredicate,
-      spoilerPredicate: () => spoilerPredicate,
-      textDisplayContentPredicate: () => textDisplayContentPredicate,
-      unfurledMediaItemPredicate: () => unfurledMediaItemPredicate,
-      validateComponentArray: () => validateComponentArray
+      accessoryPredicate: /* @__PURE__ */ __name(() => accessoryPredicate, "accessoryPredicate"),
+      assertReturnOfBuilder: /* @__PURE__ */ __name(() => assertReturnOfBuilder, "assertReturnOfBuilder"),
+      containerColorPredicate: /* @__PURE__ */ __name(() => containerColorPredicate, "containerColorPredicate"),
+      descriptionPredicate: /* @__PURE__ */ __name(() => descriptionPredicate2, "descriptionPredicate"),
+      dividerPredicate: /* @__PURE__ */ __name(() => dividerPredicate, "dividerPredicate"),
+      filePredicate: /* @__PURE__ */ __name(() => filePredicate, "filePredicate"),
+      spacingPredicate: /* @__PURE__ */ __name(() => spacingPredicate, "spacingPredicate"),
+      spoilerPredicate: /* @__PURE__ */ __name(() => spoilerPredicate, "spoilerPredicate"),
+      textDisplayContentPredicate: /* @__PURE__ */ __name(() => textDisplayContentPredicate, "textDisplayContentPredicate"),
+      unfurledMediaItemPredicate: /* @__PURE__ */ __name(() => unfurledMediaItemPredicate, "unfurledMediaItemPredicate"),
+      validateComponentArray: /* @__PURE__ */ __name(() => validateComponentArray, "validateComponentArray")
     });
     var import_shapeshift8 = require_cjs4();
     var import_v1020 = require_v106();
@@ -44913,6 +46446,9 @@ var require_dist8 = __commonJS({
     var ThumbnailBuilder = class extends ComponentBuilder {
       static {
         __name(this, "ThumbnailBuilder");
+      }
+      static {
+        __name2(this, "ThumbnailBuilder");
       }
       /**
        * Creates a new thumbnail from API data.
@@ -45008,14 +46544,19 @@ var require_dist8 = __commonJS({
       import_shapeshift8.s.instance(ExpectedInstanceOf).setValidationEnabled(isValidationEnabled).parse(input);
     }
     __name(assertReturnOfBuilder, "assertReturnOfBuilder");
+    __name2(assertReturnOfBuilder, "assertReturnOfBuilder");
     function validateComponentArray(input, min, max, ExpectedInstanceOf) {
       (ExpectedInstanceOf ? import_shapeshift8.s.instance(ExpectedInstanceOf) : import_shapeshift8.s.instance(ComponentBuilder)).array().lengthGreaterThanOrEqual(min).lengthLessThanOrEqual(max).setValidationEnabled(isValidationEnabled).parse(input);
     }
     __name(validateComponentArray, "validateComponentArray");
+    __name2(validateComponentArray, "validateComponentArray");
     var import_v1021 = require_v106();
     var FileBuilder = class extends ComponentBuilder {
       static {
         __name(this, "FileBuilder");
+      }
+      static {
+        __name2(this, "FileBuilder");
       }
       /**
        * Creates a new file from API data.
@@ -45075,6 +46616,9 @@ var require_dist8 = __commonJS({
     var SeparatorBuilder = class extends ComponentBuilder {
       static {
         __name(this, "SeparatorBuilder");
+      }
+      static {
+        __name2(this, "SeparatorBuilder");
       }
       /**
        * Creates a new separator from API data.
@@ -45140,6 +46684,9 @@ var require_dist8 = __commonJS({
       static {
         __name(this, "TextDisplayBuilder");
       }
+      static {
+        __name2(this, "TextDisplayBuilder");
+      }
       /**
        * Creates a new text display from API data.
        *
@@ -45186,6 +46733,9 @@ var require_dist8 = __commonJS({
     var ContainerBuilder = class extends ComponentBuilder {
       static {
         __name(this, "ContainerBuilder");
+      }
+      static {
+        __name2(this, "ContainerBuilder");
       }
       /**
        * The components within this container.
@@ -45349,6 +46899,9 @@ var require_dist8 = __commonJS({
       static {
         __name(this, "MediaGalleryItemBuilder");
       }
+      static {
+        __name2(this, "MediaGalleryItemBuilder");
+      }
       /**
        * The API data associated with this media gallery item.
        */
@@ -45430,6 +46983,9 @@ var require_dist8 = __commonJS({
     var MediaGalleryBuilder = class extends ComponentBuilder {
       static {
         __name(this, "MediaGalleryBuilder");
+      }
+      static {
+        __name2(this, "MediaGalleryBuilder");
       }
       /**
        * The components within this container.
@@ -45522,6 +47078,9 @@ var require_dist8 = __commonJS({
     var SectionBuilder = class extends ComponentBuilder {
       static {
         __name(this, "SectionBuilder");
+      }
+      static {
+        __name2(this, "SectionBuilder");
       }
       /**
        * The components within this section.
@@ -45685,10 +47244,12 @@ var require_dist8 = __commonJS({
       }
     }
     __name(createComponentBuilder, "createComponentBuilder");
+    __name2(createComponentBuilder, "createComponentBuilder");
     function isBuilder(builder, Constructor) {
       return builder instanceof Constructor;
     }
     __name(isBuilder, "isBuilder");
+    __name2(isBuilder, "isBuilder");
     function resolveBuilder(builder, Constructor) {
       if (isBuilder(builder, Constructor)) {
         return builder;
@@ -45699,9 +47260,13 @@ var require_dist8 = __commonJS({
       return new Constructor(builder);
     }
     __name(resolveBuilder, "resolveBuilder");
+    __name2(resolveBuilder, "resolveBuilder");
     var ActionRowBuilder = class extends ComponentBuilder {
       static {
         __name(this, "ActionRowBuilder");
+      }
+      static {
+        __name2(this, "ActionRowBuilder");
       }
       /**
        * The components within this action row.
@@ -45776,9 +47341,9 @@ var require_dist8 = __commonJS({
     var import_v1029 = require_v106();
     var Assertions_exports9 = {};
     __export2(Assertions_exports9, {
-      componentsValidator: () => componentsValidator,
-      titleValidator: () => titleValidator,
-      validateRequiredParameters: () => validateRequiredParameters2
+      componentsValidator: /* @__PURE__ */ __name(() => componentsValidator, "componentsValidator"),
+      titleValidator: /* @__PURE__ */ __name(() => titleValidator, "titleValidator"),
+      validateRequiredParameters: /* @__PURE__ */ __name(() => validateRequiredParameters2, "validateRequiredParameters")
     });
     var import_shapeshift9 = require_cjs4();
     var titleValidator = import_shapeshift9.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(45).setValidationEnabled(isValidationEnabled);
@@ -45788,10 +47353,14 @@ var require_dist8 = __commonJS({
       titleValidator.parse(title);
       componentsValidator.parse(components);
     }
-    __name(validateRequiredParameters2, "validateRequiredParameters");
+    __name(validateRequiredParameters2, "validateRequiredParameters2");
+    __name2(validateRequiredParameters2, "validateRequiredParameters");
     var ModalBuilder = class {
       static {
         __name(this, "ModalBuilder");
+      }
+      static {
+        __name2(this, "ModalBuilder");
       }
       /**
        * The API data associated with this modal.
@@ -45965,22 +47534,22 @@ var require_dist8 = __commonJS({
     };
     var Assertions_exports10 = {};
     __export2(Assertions_exports10, {
-      assertReturnOfBuilder: () => assertReturnOfBuilder2,
-      contextsPredicate: () => contextsPredicate,
-      integrationTypesPredicate: () => integrationTypesPredicate,
-      localizationMapPredicate: () => localizationMapPredicate,
-      validateChoicesLength: () => validateChoicesLength,
-      validateDMPermission: () => validateDMPermission,
-      validateDefaultMemberPermissions: () => validateDefaultMemberPermissions,
-      validateDefaultPermission: () => validateDefaultPermission,
-      validateDescription: () => validateDescription,
-      validateLocale: () => validateLocale,
-      validateLocalizationMap: () => validateLocalizationMap,
-      validateMaxOptionsLength: () => validateMaxOptionsLength,
-      validateNSFW: () => validateNSFW,
-      validateName: () => validateName,
-      validateRequired: () => validateRequired,
-      validateRequiredParameters: () => validateRequiredParameters3
+      assertReturnOfBuilder: /* @__PURE__ */ __name(() => assertReturnOfBuilder2, "assertReturnOfBuilder"),
+      contextsPredicate: /* @__PURE__ */ __name(() => contextsPredicate, "contextsPredicate"),
+      integrationTypesPredicate: /* @__PURE__ */ __name(() => integrationTypesPredicate, "integrationTypesPredicate"),
+      localizationMapPredicate: /* @__PURE__ */ __name(() => localizationMapPredicate, "localizationMapPredicate"),
+      validateChoicesLength: /* @__PURE__ */ __name(() => validateChoicesLength, "validateChoicesLength"),
+      validateDMPermission: /* @__PURE__ */ __name(() => validateDMPermission, "validateDMPermission"),
+      validateDefaultMemberPermissions: /* @__PURE__ */ __name(() => validateDefaultMemberPermissions, "validateDefaultMemberPermissions"),
+      validateDefaultPermission: /* @__PURE__ */ __name(() => validateDefaultPermission, "validateDefaultPermission"),
+      validateDescription: /* @__PURE__ */ __name(() => validateDescription, "validateDescription"),
+      validateLocale: /* @__PURE__ */ __name(() => validateLocale, "validateLocale"),
+      validateLocalizationMap: /* @__PURE__ */ __name(() => validateLocalizationMap, "validateLocalizationMap"),
+      validateMaxOptionsLength: /* @__PURE__ */ __name(() => validateMaxOptionsLength, "validateMaxOptionsLength"),
+      validateNSFW: /* @__PURE__ */ __name(() => validateNSFW, "validateNSFW"),
+      validateName: /* @__PURE__ */ __name(() => validateName, "validateName"),
+      validateRequired: /* @__PURE__ */ __name(() => validateRequired, "validateRequired"),
+      validateRequiredParameters: /* @__PURE__ */ __name(() => validateRequiredParameters3, "validateRequiredParameters")
     });
     var import_shapeshift10 = require_cjs4();
     var import_v1030 = require_v106();
@@ -45989,55 +47558,66 @@ var require_dist8 = __commonJS({
       namePredicate.parse(name);
     }
     __name(validateName, "validateName");
+    __name2(validateName, "validateName");
     var descriptionPredicate3 = import_shapeshift10.s.string().lengthGreaterThanOrEqual(1).lengthLessThanOrEqual(100).setValidationEnabled(isValidationEnabled);
     var localePredicate = import_shapeshift10.s.nativeEnum(import_v1030.Locale);
     function validateDescription(description) {
       descriptionPredicate3.parse(description);
     }
     __name(validateDescription, "validateDescription");
+    __name2(validateDescription, "validateDescription");
     var maxArrayLengthPredicate = import_shapeshift10.s.unknown().array().lengthLessThanOrEqual(25).setValidationEnabled(isValidationEnabled);
     function validateLocale(locale) {
       return localePredicate.parse(locale);
     }
     __name(validateLocale, "validateLocale");
+    __name2(validateLocale, "validateLocale");
     function validateMaxOptionsLength(options) {
       maxArrayLengthPredicate.parse(options);
     }
     __name(validateMaxOptionsLength, "validateMaxOptionsLength");
+    __name2(validateMaxOptionsLength, "validateMaxOptionsLength");
     function validateRequiredParameters3(name, description, options) {
       validateName(name);
       validateDescription(description);
       validateMaxOptionsLength(options);
     }
-    __name(validateRequiredParameters3, "validateRequiredParameters");
+    __name(validateRequiredParameters3, "validateRequiredParameters3");
+    __name2(validateRequiredParameters3, "validateRequiredParameters");
     var booleanPredicate = import_shapeshift10.s.boolean();
     function validateDefaultPermission(value) {
       booleanPredicate.parse(value);
     }
     __name(validateDefaultPermission, "validateDefaultPermission");
+    __name2(validateDefaultPermission, "validateDefaultPermission");
     function validateRequired(required) {
       booleanPredicate.parse(required);
     }
     __name(validateRequired, "validateRequired");
+    __name2(validateRequired, "validateRequired");
     var choicesLengthPredicate = import_shapeshift10.s.number().lessThanOrEqual(25).setValidationEnabled(isValidationEnabled);
     function validateChoicesLength(amountAdding, choices) {
       choicesLengthPredicate.parse((choices?.length ?? 0) + amountAdding);
     }
     __name(validateChoicesLength, "validateChoicesLength");
+    __name2(validateChoicesLength, "validateChoicesLength");
     function assertReturnOfBuilder2(input, ExpectedInstanceOf) {
       import_shapeshift10.s.instance(ExpectedInstanceOf).parse(input);
     }
-    __name(assertReturnOfBuilder2, "assertReturnOfBuilder");
+    __name(assertReturnOfBuilder2, "assertReturnOfBuilder2");
+    __name2(assertReturnOfBuilder2, "assertReturnOfBuilder");
     var localizationMapPredicate = import_shapeshift10.s.object(Object.fromEntries(Object.values(import_v1030.Locale).map((locale) => [locale, import_shapeshift10.s.string().nullish()]))).strict().nullish().setValidationEnabled(isValidationEnabled);
     function validateLocalizationMap(value) {
       localizationMapPredicate.parse(value);
     }
     __name(validateLocalizationMap, "validateLocalizationMap");
+    __name2(validateLocalizationMap, "validateLocalizationMap");
     var dmPermissionPredicate = import_shapeshift10.s.boolean().nullish();
     function validateDMPermission(value) {
       dmPermissionPredicate.parse(value);
     }
     __name(validateDMPermission, "validateDMPermission");
+    __name2(validateDMPermission, "validateDMPermission");
     var memberPermissionPredicate = import_shapeshift10.s.union([
       import_shapeshift10.s.bigint().transform((value) => value.toString()),
       import_shapeshift10.s.number().safeInt().transform((value) => value.toString()),
@@ -46047,10 +47627,12 @@ var require_dist8 = __commonJS({
       return memberPermissionPredicate.parse(permissions);
     }
     __name(validateDefaultMemberPermissions, "validateDefaultMemberPermissions");
+    __name2(validateDefaultMemberPermissions, "validateDefaultMemberPermissions");
     function validateNSFW(value) {
       booleanPredicate.parse(value);
     }
     __name(validateNSFW, "validateNSFW");
+    __name2(validateNSFW, "validateNSFW");
     var contextsPredicate = import_shapeshift10.s.array(
       import_shapeshift10.s.nativeEnum(import_v1030.InteractionContextType).setValidationEnabled(isValidationEnabled)
     );
@@ -46061,6 +47643,9 @@ var require_dist8 = __commonJS({
     var SharedNameAndDescription = class {
       static {
         __name(this, "SharedNameAndDescription");
+      }
+      static {
+        __name2(this, "SharedNameAndDescription");
       }
       /**
        * The name of this command.
@@ -46174,6 +47759,9 @@ var require_dist8 = __commonJS({
       static {
         __name(this, "SharedSlashCommand");
       }
+      static {
+        __name2(this, "SharedSlashCommand");
+      }
       name = void 0;
       name_localizations;
       description = void 0;
@@ -46284,6 +47872,9 @@ var require_dist8 = __commonJS({
       static {
         __name(this, "ApplicationCommandOptionBase");
       }
+      static {
+        __name2(this, "ApplicationCommandOptionBase");
+      }
       /**
        * Whether this option is required.
        *
@@ -46314,6 +47905,9 @@ var require_dist8 = __commonJS({
       static {
         __name(this, "SlashCommandAttachmentOption");
       }
+      static {
+        __name2(this, "SlashCommandAttachmentOption");
+      }
       /**
        * The type of this option.
        */
@@ -46330,6 +47924,9 @@ var require_dist8 = __commonJS({
     var SlashCommandBooleanOption = class extends ApplicationCommandOptionBase {
       static {
         __name(this, "SlashCommandBooleanOption");
+      }
+      static {
+        __name2(this, "SlashCommandBooleanOption");
       }
       /**
        * The type of this option.
@@ -46364,6 +47961,9 @@ var require_dist8 = __commonJS({
       static {
         __name(this, "ApplicationCommandOptionChannelTypesMixin");
       }
+      static {
+        __name2(this, "ApplicationCommandOptionChannelTypesMixin");
+      }
       /**
        * The channel types of this option.
        */
@@ -46382,6 +47982,9 @@ var require_dist8 = __commonJS({
       }
     };
     var SlashCommandChannelOption = class extends ApplicationCommandOptionBase {
+      static {
+        __name(this, "SlashCommandChannelOption");
+      }
       /**
        * The type of this option.
        */
@@ -46394,7 +47997,7 @@ var require_dist8 = __commonJS({
         return { ...this };
       }
     };
-    __name(SlashCommandChannelOption, "SlashCommandChannelOption");
+    __name2(SlashCommandChannelOption, "SlashCommandChannelOption");
     SlashCommandChannelOption = __decorateClass([
       (0, import_ts_mixer.mix)(ApplicationCommandOptionChannelTypesMixin)
     ], SlashCommandChannelOption);
@@ -46404,6 +48007,9 @@ var require_dist8 = __commonJS({
     var ApplicationCommandNumericOptionMinMaxValueMixin = class {
       static {
         __name(this, "ApplicationCommandNumericOptionMinMaxValueMixin");
+      }
+      static {
+        __name2(this, "ApplicationCommandNumericOptionMinMaxValueMixin");
       }
       /**
        * The maximum value of this option.
@@ -46419,6 +48025,9 @@ var require_dist8 = __commonJS({
     var ApplicationCommandOptionWithAutocompleteMixin = class {
       static {
         __name(this, "ApplicationCommandOptionWithAutocompleteMixin");
+      }
+      static {
+        __name2(this, "ApplicationCommandOptionWithAutocompleteMixin");
       }
       /**
        * Whether this option utilizes autocomplete.
@@ -46456,6 +48065,9 @@ var require_dist8 = __commonJS({
     var ApplicationCommandOptionWithChoicesMixin = class {
       static {
         __name(this, "ApplicationCommandOptionWithChoicesMixin");
+      }
+      static {
+        __name2(this, "ApplicationCommandOptionWithChoicesMixin");
       }
       /**
        * The choices of this option.
@@ -46510,6 +48122,9 @@ var require_dist8 = __commonJS({
     };
     var numberValidator = import_shapeshift14.s.number().int();
     var SlashCommandIntegerOption = class extends ApplicationCommandOptionBase {
+      static {
+        __name(this, "SlashCommandIntegerOption");
+      }
       /**
        * The type of this option.
        */
@@ -46541,7 +48156,7 @@ var require_dist8 = __commonJS({
         return { ...this };
       }
     };
-    __name(SlashCommandIntegerOption, "SlashCommandIntegerOption");
+    __name2(SlashCommandIntegerOption, "SlashCommandIntegerOption");
     SlashCommandIntegerOption = __decorateClass([
       (0, import_ts_mixer2.mix)(
         ApplicationCommandNumericOptionMinMaxValueMixin,
@@ -46553,6 +48168,9 @@ var require_dist8 = __commonJS({
     var SlashCommandMentionableOption = class extends ApplicationCommandOptionBase {
       static {
         __name(this, "SlashCommandMentionableOption");
+      }
+      static {
+        __name2(this, "SlashCommandMentionableOption");
       }
       /**
        * The type of this option.
@@ -46571,6 +48189,9 @@ var require_dist8 = __commonJS({
     var import_ts_mixer3 = require_cjs5();
     var numberValidator2 = import_shapeshift15.s.number();
     var SlashCommandNumberOption = class extends ApplicationCommandOptionBase {
+      static {
+        __name(this, "SlashCommandNumberOption");
+      }
       /**
        * The type of this option.
        */
@@ -46602,7 +48223,7 @@ var require_dist8 = __commonJS({
         return { ...this };
       }
     };
-    __name(SlashCommandNumberOption, "SlashCommandNumberOption");
+    __name2(SlashCommandNumberOption, "SlashCommandNumberOption");
     SlashCommandNumberOption = __decorateClass([
       (0, import_ts_mixer3.mix)(
         ApplicationCommandNumericOptionMinMaxValueMixin,
@@ -46614,6 +48235,9 @@ var require_dist8 = __commonJS({
     var SlashCommandRoleOption = class extends ApplicationCommandOptionBase {
       static {
         __name(this, "SlashCommandRoleOption");
+      }
+      static {
+        __name2(this, "SlashCommandRoleOption");
       }
       /**
        * The type of this option.
@@ -46633,6 +48257,9 @@ var require_dist8 = __commonJS({
     var minLengthValidator2 = import_shapeshift16.s.number().greaterThanOrEqual(0).lessThanOrEqual(6e3);
     var maxLengthValidator2 = import_shapeshift16.s.number().greaterThanOrEqual(1).lessThanOrEqual(6e3);
     var SlashCommandStringOption = class extends ApplicationCommandOptionBase {
+      static {
+        __name(this, "SlashCommandStringOption");
+      }
       /**
        * The type of this option.
        */
@@ -46676,7 +48303,7 @@ var require_dist8 = __commonJS({
         return { ...this };
       }
     };
-    __name(SlashCommandStringOption, "SlashCommandStringOption");
+    __name2(SlashCommandStringOption, "SlashCommandStringOption");
     SlashCommandStringOption = __decorateClass([
       (0, import_ts_mixer4.mix)(ApplicationCommandOptionWithAutocompleteMixin, ApplicationCommandOptionWithChoicesMixin)
     ], SlashCommandStringOption);
@@ -46684,6 +48311,9 @@ var require_dist8 = __commonJS({
     var SlashCommandUserOption = class extends ApplicationCommandOptionBase {
       static {
         __name(this, "SlashCommandUserOption");
+      }
+      static {
+        __name2(this, "SlashCommandUserOption");
       }
       /**
        * The type of this option.
@@ -46700,6 +48330,9 @@ var require_dist8 = __commonJS({
     var SharedSlashCommandOptions = class {
       static {
         __name(this, "SharedSlashCommandOptions");
+      }
+      static {
+        __name2(this, "SharedSlashCommandOptions");
       }
       options;
       /**
@@ -46793,6 +48426,9 @@ var require_dist8 = __commonJS({
     var import_v1043 = require_v106();
     var import_ts_mixer5 = require_cjs5();
     var SlashCommandSubcommandGroupBuilder = class {
+      static {
+        __name(this, "SlashCommandSubcommandGroupBuilder");
+      }
       /**
        * The name of this subcommand group.
        */
@@ -46837,11 +48473,14 @@ var require_dist8 = __commonJS({
         };
       }
     };
-    __name(SlashCommandSubcommandGroupBuilder, "SlashCommandSubcommandGroupBuilder");
+    __name2(SlashCommandSubcommandGroupBuilder, "SlashCommandSubcommandGroupBuilder");
     SlashCommandSubcommandGroupBuilder = __decorateClass([
       (0, import_ts_mixer5.mix)(SharedNameAndDescription)
     ], SlashCommandSubcommandGroupBuilder);
     var SlashCommandSubcommandBuilder = class {
+      static {
+        __name(this, "SlashCommandSubcommandBuilder");
+      }
       /**
        * The name of this subcommand.
        */
@@ -46873,13 +48512,16 @@ var require_dist8 = __commonJS({
         };
       }
     };
-    __name(SlashCommandSubcommandBuilder, "SlashCommandSubcommandBuilder");
+    __name2(SlashCommandSubcommandBuilder, "SlashCommandSubcommandBuilder");
     SlashCommandSubcommandBuilder = __decorateClass([
       (0, import_ts_mixer5.mix)(SharedNameAndDescription, SharedSlashCommandOptions)
     ], SlashCommandSubcommandBuilder);
     var SharedSlashCommandSubcommands = class {
       static {
         __name(this, "SharedSlashCommandSubcommands");
+      }
+      static {
+        __name2(this, "SharedSlashCommandSubcommands");
       }
       options = [];
       /**
@@ -46910,6 +48552,9 @@ var require_dist8 = __commonJS({
       }
     };
     var SlashCommandBuilder = class {
+      static {
+        __name(this, "SlashCommandBuilder");
+      }
       /**
        * The name of this command.
        */
@@ -46962,20 +48607,20 @@ var require_dist8 = __commonJS({
        */
       nsfw = void 0;
     };
-    __name(SlashCommandBuilder, "SlashCommandBuilder");
+    __name2(SlashCommandBuilder, "SlashCommandBuilder");
     SlashCommandBuilder = __decorateClass([
       (0, import_ts_mixer6.mix)(SharedSlashCommandOptions, SharedNameAndDescription, SharedSlashCommandSubcommands, SharedSlashCommand)
     ], SlashCommandBuilder);
     var Assertions_exports11 = {};
     __export2(Assertions_exports11, {
-      contextsPredicate: () => contextsPredicate2,
-      integrationTypesPredicate: () => integrationTypesPredicate2,
-      validateDMPermission: () => validateDMPermission2,
-      validateDefaultMemberPermissions: () => validateDefaultMemberPermissions2,
-      validateDefaultPermission: () => validateDefaultPermission2,
-      validateName: () => validateName2,
-      validateRequiredParameters: () => validateRequiredParameters4,
-      validateType: () => validateType
+      contextsPredicate: /* @__PURE__ */ __name(() => contextsPredicate2, "contextsPredicate"),
+      integrationTypesPredicate: /* @__PURE__ */ __name(() => integrationTypesPredicate2, "integrationTypesPredicate"),
+      validateDMPermission: /* @__PURE__ */ __name(() => validateDMPermission2, "validateDMPermission"),
+      validateDefaultMemberPermissions: /* @__PURE__ */ __name(() => validateDefaultMemberPermissions2, "validateDefaultMemberPermissions"),
+      validateDefaultPermission: /* @__PURE__ */ __name(() => validateDefaultPermission2, "validateDefaultPermission"),
+      validateName: /* @__PURE__ */ __name(() => validateName2, "validateName"),
+      validateRequiredParameters: /* @__PURE__ */ __name(() => validateRequiredParameters4, "validateRequiredParameters"),
+      validateType: /* @__PURE__ */ __name(() => validateType, "validateType")
     });
     var import_shapeshift17 = require_cjs4();
     var import_v1044 = require_v106();
@@ -46985,25 +48630,30 @@ var require_dist8 = __commonJS({
     function validateDefaultPermission2(value) {
       booleanPredicate3.parse(value);
     }
-    __name(validateDefaultPermission2, "validateDefaultPermission");
+    __name(validateDefaultPermission2, "validateDefaultPermission2");
+    __name2(validateDefaultPermission2, "validateDefaultPermission");
     function validateName2(name) {
       namePredicate2.parse(name);
     }
-    __name(validateName2, "validateName");
+    __name(validateName2, "validateName2");
+    __name2(validateName2, "validateName");
     function validateType(type) {
       typePredicate.parse(type);
     }
     __name(validateType, "validateType");
+    __name2(validateType, "validateType");
     function validateRequiredParameters4(name, type) {
       validateName2(name);
       validateType(type);
     }
-    __name(validateRequiredParameters4, "validateRequiredParameters");
+    __name(validateRequiredParameters4, "validateRequiredParameters4");
+    __name2(validateRequiredParameters4, "validateRequiredParameters");
     var dmPermissionPredicate2 = import_shapeshift17.s.boolean().nullish();
     function validateDMPermission2(value) {
       dmPermissionPredicate2.parse(value);
     }
-    __name(validateDMPermission2, "validateDMPermission");
+    __name(validateDMPermission2, "validateDMPermission2");
+    __name2(validateDMPermission2, "validateDMPermission");
     var memberPermissionPredicate2 = import_shapeshift17.s.union([
       import_shapeshift17.s.bigint().transform((value) => value.toString()),
       import_shapeshift17.s.number().safeInt().transform((value) => value.toString()),
@@ -47012,7 +48662,8 @@ var require_dist8 = __commonJS({
     function validateDefaultMemberPermissions2(permissions) {
       return memberPermissionPredicate2.parse(permissions);
     }
-    __name(validateDefaultMemberPermissions2, "validateDefaultMemberPermissions");
+    __name(validateDefaultMemberPermissions2, "validateDefaultMemberPermissions2");
+    __name2(validateDefaultMemberPermissions2, "validateDefaultMemberPermissions");
     var contextsPredicate2 = import_shapeshift17.s.array(
       import_shapeshift17.s.nativeEnum(import_v1044.InteractionContextType).setValidationEnabled(isValidationEnabled)
     );
@@ -47022,6 +48673,9 @@ var require_dist8 = __commonJS({
     var ContextMenuCommandBuilder = class {
       static {
         __name(this, "ContextMenuCommandBuilder");
+      }
+      static {
+        __name2(this, "ContextMenuCommandBuilder");
       }
       /**
        * The name of this command.
@@ -47192,6 +48846,7 @@ var require_dist8 = __commonJS({
       return (data.title?.length ?? 0) + (data.description?.length ?? 0) + (data.fields?.reduce((prev, curr) => prev + curr.name.length + curr.value.length, 0) ?? 0) + (data.footer?.text.length ?? 0) + (data.author?.name.length ?? 0);
     }
     __name(embedLength, "embedLength");
+    __name2(embedLength, "embedLength");
     var version = "1.14.1";
   }
 });
@@ -47203,6 +48858,9 @@ var require_Embed = __commonJS({
     var { embedLength } = require_dist8();
     var isEqual = require_fast_deep_equal();
     var Embed = class _Embed {
+      static {
+        __name(this, "Embed");
+      }
       constructor(data) {
         this.data = { ...data };
       }
@@ -47398,6 +49056,9 @@ var require_MessageMentions = __commonJS({
     var { FormattingPatterns } = require_v106();
     var { flatten } = require_Util();
     var MessageMentions = class {
+      static {
+        __name(this, "MessageMentions");
+      }
       /**
        * A regular expression that matches `@everyone` and `@here`.
        * The `mention` group property is present on the `exec` result of this expression.
@@ -47600,6 +49261,9 @@ var require_ReactionCollector = __commonJS({
     var Collector = require_Collector();
     var Events2 = require_Events();
     var ReactionCollector = class _ReactionCollector extends Collector {
+      static {
+        __name(this, "ReactionCollector");
+      }
       /**
        * @param {Message} message The message upon which to collect reactions
        * @param {ReactionCollectorOptions} [options={}] The options to apply to this collector
@@ -47614,9 +49278,9 @@ var require_ReactionCollector = __commonJS({
         this._handleThreadDeletion = this._handleThreadDeletion.bind(this);
         this._handleGuildDeletion = this._handleGuildDeletion.bind(this);
         this._handleMessageDeletion = this._handleMessageDeletion.bind(this);
-        const bulkDeleteListener = (messages) => {
+        const bulkDeleteListener = /* @__PURE__ */ __name((messages) => {
           if (messages.has(this.message.id)) this.stop("messageDelete");
-        };
+        }, "bulkDeleteListener");
         this.client.incrementMaxListeners();
         this.client.on(Events2.MessageReactionAdd, this.handleCollect);
         this.client.on(Events2.MessageReactionRemove, this.handleDispose);
@@ -47760,6 +49424,9 @@ var require_Sticker = __commonJS({
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { StickerFormatExtensionMap } = require_Constants();
     var Sticker2 = class _Sticker extends Base {
+      static {
+        __name(this, "Sticker");
+      }
       constructor(client2, sticker) {
         super(client2);
         this._patch(sticker);
@@ -47939,6 +49606,9 @@ var require_BaseGuildEmoji = __commonJS({
     "use strict";
     var { Emoji } = require_Emoji();
     var BaseGuildEmoji = class extends Emoji {
+      static {
+        __name(this, "BaseGuildEmoji");
+      }
       constructor(client2, data, guild) {
         super(client2, data);
         this.guild = guild;
@@ -47973,6 +49643,9 @@ var require_GuildEmojiRoleManager = __commonJS({
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { Role } = require_Role();
     var GuildEmojiRoleManager = class extends DataManager {
+      static {
+        __name(this, "GuildEmojiRoleManager");
+      }
       constructor(emoji) {
         super(emoji.client, Role);
         this.emoji = emoji;
@@ -48077,6 +49750,9 @@ var require_GuildEmoji = __commonJS({
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var GuildEmojiRoleManager = require_GuildEmojiRoleManager();
     var GuildEmoji = class _GuildEmoji extends BaseGuildEmoji {
+      static {
+        __name(this, "GuildEmoji");
+      }
       constructor(client2, data, guild) {
         super(client2, data, guild);
         this.author = null;
@@ -48184,6 +49860,9 @@ var require_ReactionEmoji = __commonJS({
     var { Emoji } = require_Emoji();
     var { flatten } = require_Util();
     var ReactionEmoji = class extends Emoji {
+      static {
+        __name(this, "ReactionEmoji");
+      }
       constructor(reaction, emoji) {
         super(reaction.message.client, emoji);
         this.reaction = reaction;
@@ -48210,6 +49889,9 @@ var require_ReactionUserManager = __commonJS({
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var User = require_User();
     var ReactionUserManager = class extends CachedManager {
+      static {
+        __name(this, "ReactionUserManager");
+      }
       constructor(reaction, iterable) {
         super(reaction.client, User, iterable);
         this.reaction = reaction;
@@ -48275,6 +49957,9 @@ var require_MessageReaction = __commonJS({
     var ReactionUserManager = require_ReactionUserManager();
     var { flatten } = require_Util();
     var MessageReaction = class {
+      static {
+        __name(this, "MessageReaction");
+      }
       constructor(client2, data, message) {
         Object.defineProperty(this, "client", { value: client2 });
         this.message = message;
@@ -48411,6 +50096,9 @@ var require_ReactionManager = __commonJS({
     var CachedManager = require_CachedManager();
     var MessageReaction = require_MessageReaction();
     var ReactionManager = class extends CachedManager {
+      static {
+        __name(this, "ReactionManager");
+      }
       constructor(message, iterable) {
         super(message.client, MessageReaction, iterable);
         this.message = message;
@@ -48465,6 +50153,9 @@ var require_Component = __commonJS({
     "use strict";
     var isEqual = require_fast_deep_equal();
     var Component = class _Component {
+      static {
+        __name(this, "Component");
+      }
       constructor(data) {
         this.data = data;
       }
@@ -48516,6 +50207,9 @@ var require_ActionRow = __commonJS({
     var Component = require_Component();
     var { createComponent } = require_Components();
     var ActionRow = class extends Component {
+      static {
+        __name(this, "ActionRow");
+      }
       constructor({ components, ...data }) {
         super(data);
         this.components = components.map((component) => createComponent(component));
@@ -48553,6 +50247,9 @@ var require_ActionRowBuilder = __commonJS({
     var { createComponentBuilder } = require_Components();
     var { toSnakeCase } = require_Transformers();
     var ActionRowBuilder = class extends BuildersActionRow {
+      static {
+        __name(this, "ActionRowBuilder");
+      }
       constructor({ components, ...data } = {}) {
         super({
           ...toSnakeCase(data),
@@ -48581,6 +50278,9 @@ var require_ButtonBuilder = __commonJS({
     var { toSnakeCase } = require_Transformers();
     var { resolvePartialEmoji } = require_Util();
     var ButtonBuilder = class extends BuildersButton {
+      static {
+        __name(this, "ButtonBuilder");
+      }
       constructor({ emoji, ...data } = {}) {
         super(toSnakeCase({ ...data, emoji: emoji && typeof emoji === "string" ? resolvePartialEmoji(emoji) : emoji }));
       }
@@ -48614,6 +50314,9 @@ var require_ButtonComponent = __commonJS({
     "use strict";
     var Component = require_Component();
     var ButtonComponent = class extends Component {
+      static {
+        __name(this, "ButtonComponent");
+      }
       /**
        * The style of this button
        * @type {ButtonStyle}
@@ -48675,6 +50378,9 @@ var require_ChannelSelectMenuBuilder = __commonJS({
     var { isJSONEncodable } = require_dist();
     var { toSnakeCase } = require_Transformers();
     var ChannelSelectMenuBuilder = class extends BuildersChannelSelectMenu {
+      static {
+        __name(this, "ChannelSelectMenuBuilder");
+      }
       constructor(data = {}) {
         super(toSnakeCase(data));
       }
@@ -48697,6 +50403,9 @@ var require_BaseSelectMenuComponent = __commonJS({
     "use strict";
     var Component = require_Component();
     var BaseSelectMenuComponent = class extends Component {
+      static {
+        __name(this, "BaseSelectMenuComponent");
+      }
       /**
        * The placeholder for this select menu
        * @type {?string}
@@ -48748,6 +50457,9 @@ var require_ChannelSelectMenuComponent = __commonJS({
     "use strict";
     var BaseSelectMenuComponent = require_BaseSelectMenuComponent();
     var ChannelSelectMenuComponent = class extends BaseSelectMenuComponent {
+      static {
+        __name(this, "ChannelSelectMenuComponent");
+      }
       /**
        * The options in this select menu
        * @type {?(ChannelType[])}
@@ -48768,6 +50480,9 @@ var require_ContainerComponent = __commonJS({
     var Component = require_Component();
     var { createComponent } = require_Components();
     var ContainerComponent = class extends Component {
+      static {
+        __name(this, "ContainerComponent");
+      }
       constructor({ components, ...data }) {
         super(data);
         this.components = components.map((component) => createComponent(component));
@@ -48813,6 +50528,9 @@ var require_UnfurledMediaItem = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/UnfurledMediaItem.js"(exports2, module2) {
     "use strict";
     var UnfurledMediaItem = class {
+      static {
+        __name(this, "UnfurledMediaItem");
+      }
       constructor(data) {
         this.data = data;
       }
@@ -48843,6 +50561,9 @@ var require_FileComponent = __commonJS({
     var Component = require_Component();
     var UnfurledMediaItem = require_UnfurledMediaItem();
     var FileComponent = class extends Component {
+      static {
+        __name(this, "FileComponent");
+      }
       constructor({ file, ...data }) {
         super(data);
         this.file = new UnfurledMediaItem(file);
@@ -48874,6 +50595,9 @@ var require_LabelComponent = __commonJS({
     var Component = require_Component();
     var { createComponent } = require_Components();
     var LabelComponent = class extends Component {
+      static {
+        __name(this, "LabelComponent");
+      }
       constructor({ component, ...data }) {
         super(data);
         this.component = createComponent(component);
@@ -48915,6 +50639,9 @@ var require_MediaGalleryItem = __commonJS({
     "use strict";
     var UnfurledMediaItem = require_UnfurledMediaItem();
     var MediaGalleryItem = class {
+      static {
+        __name(this, "MediaGalleryItem");
+      }
       constructor({ media, ...data }) {
         this.data = data;
         this.media = new UnfurledMediaItem(media);
@@ -48954,6 +50681,9 @@ var require_MediaGalleryComponent = __commonJS({
     var Component = require_Component();
     var MediaGalleryItem = require_MediaGalleryItem();
     var MediaGalleryComponent = class extends Component {
+      static {
+        __name(this, "MediaGalleryComponent");
+      }
       constructor({ items, ...data }) {
         super(data);
         this.items = items.map((item) => new MediaGalleryItem(item));
@@ -48978,6 +50708,9 @@ var require_MentionableSelectMenuBuilder = __commonJS({
     var { isJSONEncodable } = require_dist();
     var { toSnakeCase } = require_Transformers();
     var MentionableSelectMenuBuilder = class extends BuildersMentionableSelectMenu {
+      static {
+        __name(this, "MentionableSelectMenuBuilder");
+      }
       constructor(data = {}) {
         super(toSnakeCase(data));
       }
@@ -49001,6 +50734,9 @@ var require_MentionableSelectMenuComponent = __commonJS({
     "use strict";
     var BaseSelectMenuComponent = require_BaseSelectMenuComponent();
     var MentionableSelectMenuComponent = class extends BaseSelectMenuComponent {
+      static {
+        __name(this, "MentionableSelectMenuComponent");
+      }
     };
     module2.exports = MentionableSelectMenuComponent;
   }
@@ -49014,6 +50750,9 @@ var require_RoleSelectMenuBuilder = __commonJS({
     var { isJSONEncodable } = require_dist();
     var { toSnakeCase } = require_Transformers();
     var RoleSelectMenuBuilder = class extends BuildersRoleSelectMenu {
+      static {
+        __name(this, "RoleSelectMenuBuilder");
+      }
       constructor(data = {}) {
         super(toSnakeCase(data));
       }
@@ -49036,6 +50775,9 @@ var require_RoleSelectMenuComponent = __commonJS({
     "use strict";
     var BaseSelectMenuComponent = require_BaseSelectMenuComponent();
     var RoleSelectMenuComponent = class extends BaseSelectMenuComponent {
+      static {
+        __name(this, "RoleSelectMenuComponent");
+      }
     };
     module2.exports = RoleSelectMenuComponent;
   }
@@ -49048,6 +50790,9 @@ var require_SectionComponent = __commonJS({
     var Component = require_Component();
     var { createComponent } = require_Components();
     var SectionComponent = class extends Component {
+      static {
+        __name(this, "SectionComponent");
+      }
       constructor({ accessory, components, ...data }) {
         super(data);
         this.components = components.map((component) => createComponent(component));
@@ -49076,6 +50821,9 @@ var require_SeparatorComponent = __commonJS({
     var { SeparatorSpacingSize } = require_v106();
     var Component = require_Component();
     var SeparatorComponent = class extends Component {
+      static {
+        __name(this, "SeparatorComponent");
+      }
       /**
        * The spacing of this separator
        * @type {SeparatorSpacingSize}
@@ -49106,6 +50854,9 @@ var require_StringSelectMenuBuilder = __commonJS({
     var { toSnakeCase } = require_Transformers();
     var { resolvePartialEmoji } = require_Util();
     var StringSelectMenuBuilder = class _StringSelectMenuBuilder extends BuildersSelectMenu {
+      static {
+        __name(this, "StringSelectMenuBuilder");
+      }
       constructor({ options, ...data } = {}) {
         super(
           toSnakeCase({
@@ -49171,6 +50922,9 @@ var require_StringSelectMenuComponent = __commonJS({
     "use strict";
     var BaseSelectMenuComponent = require_BaseSelectMenuComponent();
     var StringSelectMenuComponent = class extends BaseSelectMenuComponent {
+      static {
+        __name(this, "StringSelectMenuComponent");
+      }
       /**
        * The options in this select menu
        * @type {APISelectMenuOption[]}
@@ -49190,6 +50944,9 @@ var require_TextDisplayComponent = __commonJS({
     "use strict";
     var Component = require_Component();
     var TextDisplayComponent = class extends Component {
+      static {
+        __name(this, "TextDisplayComponent");
+      }
       /**
        * The content of this text display
        * @type {string}
@@ -49211,6 +50968,9 @@ var require_TextInputBuilder = __commonJS({
     var { isJSONEncodable } = require_dist();
     var { toSnakeCase } = require_Transformers();
     var TextInputBuilder = class extends BuildersTextInput {
+      static {
+        __name(this, "TextInputBuilder");
+      }
       constructor(data) {
         super(toSnakeCase(data));
       }
@@ -49233,6 +50993,9 @@ var require_TextInputComponent = __commonJS({
     "use strict";
     var Component = require_Component();
     var TextInputComponent = class extends Component {
+      static {
+        __name(this, "TextInputComponent");
+      }
       /**
        * The custom id of this text input
        * @type {string}
@@ -49261,6 +51024,9 @@ var require_ThumbnailComponent = __commonJS({
     var Component = require_Component();
     var UnfurledMediaItem = require_UnfurledMediaItem();
     var ThumbnailComponent = class extends Component {
+      static {
+        __name(this, "ThumbnailComponent");
+      }
       constructor({ media, ...data }) {
         super(data);
         this.media = new UnfurledMediaItem(media);
@@ -49301,6 +51067,9 @@ var require_UserSelectMenuBuilder = __commonJS({
     var { isJSONEncodable } = require_dist();
     var { toSnakeCase } = require_Transformers();
     var UserSelectMenuBuilder = class extends BuildersUserSelectMenu {
+      static {
+        __name(this, "UserSelectMenuBuilder");
+      }
       constructor(data = {}) {
         super(toSnakeCase(data));
       }
@@ -49323,6 +51092,9 @@ var require_UserSelectMenuComponent = __commonJS({
     "use strict";
     var BaseSelectMenuComponent = require_BaseSelectMenuComponent();
     var UserSelectMenuComponent = class extends BaseSelectMenuComponent {
+      static {
+        __name(this, "UserSelectMenuComponent");
+      }
     };
     module2.exports = UserSelectMenuComponent;
   }
@@ -49337,9 +51109,11 @@ var require_Components = __commonJS({
     function createComponent(data) {
       return data instanceof Component ? data : new (ComponentTypeToComponent[data.type] ?? Component)(data);
     }
+    __name(createComponent, "createComponent");
     function createComponentBuilder(data) {
       return data instanceof ComponentBuilder ? data : new (ComponentTypeToBuilder[data.type] ?? ComponentBuilder)(data);
     }
+    __name(createComponentBuilder, "createComponentBuilder");
     function extractInteractiveComponents(component) {
       switch (component.type) {
         case ComponentType.ActionRow:
@@ -49352,9 +51126,11 @@ var require_Components = __commonJS({
           return [component];
       }
     }
+    __name(extractInteractiveComponents, "extractInteractiveComponents");
     function findComponentByCustomId(components, customId) {
       return components.flatMap(extractInteractiveComponents).find((component) => (component.customId ?? component.custom_id) === customId) ?? null;
     }
+    __name(findComponentByCustomId, "findComponentByCustomId");
     module2.exports = { createComponent, createComponentBuilder, findComponentByCustomId };
     var ActionRow = require_ActionRow();
     var ActionRowBuilder = require_ActionRowBuilder();
@@ -49446,6 +51222,9 @@ var require_Message = __commonJS({
     var { _transformAPIMessageInteractionMetadata } = require_Transformers();
     var { cleanContent, resolvePartialEmoji, transformResolved } = require_Util();
     var Message = class extends Base {
+      static {
+        __name(this, "Message");
+      }
       constructor(client2, data) {
         super(client2);
         this.channelId = data.channel_id;
@@ -50224,6 +52003,9 @@ var require_Webhook = __commonJS({
     var { resolveImage } = require_DataResolver();
     var getMessage = lazy(() => require_Message().Message);
     var Webhook2 = class _Webhook {
+      static {
+        __name(this, "Webhook");
+      }
       constructor(client2, data) {
         Object.defineProperty(this, "client", { value: client2 });
         this._patch(data);
@@ -50602,6 +52384,9 @@ var require_WebhookClient = __commonJS({
     var Webhook2 = require_Webhook();
     var { parseWebhookURL } = require_Util();
     var WebhookClient = class extends BaseClient2 {
+      static {
+        __name(this, "WebhookClient");
+      }
       /**
        * Represents the credentials used for a webhook in the form of its id and token.
        * @typedef {Object} WebhookClientDataIdWithToken
@@ -50699,6 +52484,9 @@ var require_VoiceState = __commonJS({
     var Base = require_Base();
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var VoiceState = class extends Base {
+      static {
+        __name(this, "VoiceState");
+      }
       constructor(guild, data) {
         super(guild.client);
         this.guild = guild;
@@ -50928,6 +52716,9 @@ var require_GuildMemberRoleManager = __commonJS({
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { Role } = require_Role();
     var GuildMemberRoleManager = class extends DataManager {
+      static {
+        __name(this, "GuildMemberRoleManager");
+      }
       constructor(member) {
         super(member.client, Role);
         this.member = member;
@@ -51112,6 +52903,9 @@ var require_GuildMemberFlagsBitField = __commonJS({
     var { GuildMemberFlags } = require_v106();
     var BitField = require_BitField();
     var GuildMemberFlagsBitField = class extends BitField {
+      static {
+        __name(this, "GuildMemberFlagsBitField");
+      }
       /**
        * Numeric guild member flags.
        *
@@ -51137,6 +52931,9 @@ var require_GuildMember = __commonJS({
     var { GuildMemberFlagsBitField } = require_GuildMemberFlagsBitField();
     var PermissionsBitField2 = require_PermissionsBitField();
     var GuildMember = class extends Base {
+      static {
+        __name(this, "GuildMember");
+      }
       constructor(client2, data, guild) {
         super(client2);
         this.guild = guild;
@@ -51582,6 +53379,9 @@ var require_MessageManager = __commonJS({
     var { resolvePartialEmoji } = require_Util();
     var deprecationEmittedForFetchPinned = false;
     var MessageManager = class _MessageManager extends CachedManager {
+      static {
+        __name(this, "MessageManager");
+      }
       static [MakeCacheOverrideSymbol] = _MessageManager;
       constructor(channel, iterable) {
         super(channel.client, Message, iterable);
@@ -51882,6 +53682,9 @@ var require_InteractionWebhook = __commonJS({
     "use strict";
     var Webhook2 = require_Webhook();
     var InteractionWebhook = class {
+      static {
+        __name(this, "InteractionWebhook");
+      }
       /**
        * @param {Client} client The instantiating client
        * @param {Snowflake} id The application's id
@@ -51940,6 +53743,9 @@ var require_MessagePayload = __commonJS({
     var { basename, verifyString, resolvePartialEmoji } = require_Util();
     var getBaseInteraction = lazy(() => require_BaseInteraction());
     var MessagePayload = class {
+      static {
+        __name(this, "MessagePayload");
+      }
       /**
        * @param {MessageTarget} target The target for this message to be sent to
        * @param {MessagePayloadOption} options The payload of this message
@@ -52154,7 +53960,7 @@ var require_MessagePayload = __commonJS({
       static async resolveFile(fileLike) {
         let attachment;
         let name;
-        const findName = (thing) => {
+        const findName = /* @__PURE__ */ __name((thing) => {
           if (typeof thing === "string") {
             return basename(thing);
           }
@@ -52162,7 +53968,7 @@ var require_MessagePayload = __commonJS({
             return basename(thing.path);
           }
           return "file.jpg";
-        };
+        }, "findName");
         const ownAttachment = typeof fileLike === "string" || fileLike instanceof Buffer2 || typeof fileLike.pipe === "function";
         if (ownAttachment) {
           attachment = fileLike;
@@ -52198,6 +54004,9 @@ var require_GuildMessageManager = __commonJS({
     "use strict";
     var MessageManager = require_MessageManager();
     var GuildMessageManager = class extends MessageManager {
+      static {
+        __name(this, "GuildMessageManager");
+      }
       /**
        * The channel that the messages belong to
        * @name GuildMessageManager#channel
@@ -52221,6 +54030,9 @@ var require_TextBasedChannel = __commonJS({
     var MessageCollector = require_MessageCollector();
     var MessagePayload = require_MessagePayload();
     var TextBasedChannel = class _TextBasedChannel {
+      static {
+        __name(this, "TextBasedChannel");
+      }
       constructor() {
         this.messages = new GuildMessageManager(this);
         this.lastMessageId = null;
@@ -52611,6 +54423,9 @@ var require_UserFlagsBitField = __commonJS({
     var { UserFlags } = require_v106();
     var BitField = require_BitField();
     var UserFlagsBitField = class extends BitField {
+      static {
+        __name(this, "UserFlagsBitField");
+      }
       /**
        * Numeric user flags.
        * @type {UserFlags}
@@ -52635,6 +54450,9 @@ var require_User = __commonJS({
     var UserFlagsBitField = require_UserFlagsBitField();
     var { emitDeprecationWarningForUserFetchFlags } = require_Util();
     var User = class extends Base {
+      static {
+        __name(this, "User");
+      }
       constructor(client2, data) {
         super(client2);
         this.id = data.id;
@@ -52933,6 +54751,9 @@ var require_PollAnswerVoterManager = __commonJS({
     var CachedManager = require_CachedManager();
     var User = require_User();
     var PollAnswerVoterManager = class extends CachedManager {
+      static {
+        __name(this, "PollAnswerVoterManager");
+      }
       constructor(answer) {
         super(answer.client, User);
         this.answer = answer;
@@ -52974,6 +54795,9 @@ var require_PollAnswer = __commonJS({
     var { PollAnswerVoterManager } = require_PollAnswerVoterManager();
     var deprecationEmittedForFetchVoters = false;
     var PollAnswer = class extends Base {
+      static {
+        __name(this, "PollAnswer");
+      }
       constructor(client2, data, poll) {
         super(client2);
         Object.defineProperty(this, "poll", { value: poll });
@@ -53043,6 +54867,9 @@ var require_Poll = __commonJS({
     var { DiscordjsError: DiscordjsError2 } = require_DJSError();
     var { ErrorCodes: ErrorCodes2 } = require_errors2();
     var Poll = class extends Base {
+      static {
+        __name(this, "Poll");
+      }
       constructor(client2, data, message, channel) {
         super(client2);
         this.channelId = data.channel_id ?? channel.id;
@@ -53149,6 +54976,7 @@ var require_Enums = __commonJS({
       }
       return obj;
     }
+    __name(createEnum, "createEnum");
     module2.exports = { createEnum };
   }
 });
@@ -53182,6 +55010,9 @@ var require_Action = __commonJS({
     var { PollAnswer } = require_PollAnswer();
     var Partials = require_Partials();
     var GenericAction = class {
+      static {
+        __name(this, "GenericAction");
+      }
       constructor(client2) {
         this.client = client2;
       }
@@ -53294,6 +55125,9 @@ var require_ApplicationCommandPermissionsUpdate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var ApplicationCommandPermissionsUpdateAction = class extends Action {
+      static {
+        __name(this, "ApplicationCommandPermissionsUpdateAction");
+      }
       handle(data) {
         const client2 = this.client;
         client2.emit(Events2.ApplicationCommandPermissionsUpdate, {
@@ -53314,6 +55148,9 @@ var require_AutoModerationActionExecution = __commonJS({
     "use strict";
     var { _transformAPIAutoModerationAction } = require_Transformers();
     var AutoModerationActionExecution = class {
+      static {
+        __name(this, "AutoModerationActionExecution");
+      }
       constructor(data, guild) {
         this.guild = guild;
         this.action = _transformAPIAutoModerationAction(data.action);
@@ -53372,6 +55209,9 @@ var require_AutoModerationActionExecution2 = __commonJS({
     var AutoModerationActionExecution = require_AutoModerationActionExecution();
     var Events2 = require_Events();
     var AutoModerationActionExecutionAction = class extends Action {
+      static {
+        __name(this, "AutoModerationActionExecutionAction");
+      }
       handle(data) {
         const { client: client2 } = this;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -53392,6 +55232,9 @@ var require_AutoModerationRuleCreate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var AutoModerationRuleCreateAction = class extends Action {
+      static {
+        __name(this, "AutoModerationRuleCreateAction");
+      }
       handle(data) {
         const { client: client2 } = this;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -53413,6 +55256,9 @@ var require_AutoModerationRuleDelete = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var AutoModerationRuleDeleteAction = class extends Action {
+      static {
+        __name(this, "AutoModerationRuleDeleteAction");
+      }
       handle(data) {
         const { client: client2 } = this;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -53437,6 +55283,9 @@ var require_AutoModerationRuleUpdate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var AutoModerationRuleUpdateAction = class extends Action {
+      static {
+        __name(this, "AutoModerationRuleUpdateAction");
+      }
       handle(data) {
         const { client: client2 } = this;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -53459,6 +55308,9 @@ var require_ChannelCreate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var ChannelCreateAction = class extends Action {
+      static {
+        __name(this, "ChannelCreateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const existing = client2.channels.cache.has(data.id);
@@ -53480,6 +55332,9 @@ var require_ChannelDelete = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var ChannelDeleteAction = class extends Action {
+      static {
+        __name(this, "ChannelDeleteAction");
+      }
       handle(data) {
         const client2 = this.client;
         const channel = client2.channels.cache.get(data.id);
@@ -53500,6 +55355,9 @@ var require_CategoryChannelChildManager = __commonJS({
     var DataManager = require_DataManager();
     var GuildChannel = require_GuildChannel();
     var CategoryChannelChildManager = class extends DataManager {
+      static {
+        __name(this, "CategoryChannelChildManager");
+      }
       constructor(channel) {
         super(channel.client, GuildChannel);
         this.channel = channel;
@@ -53570,6 +55428,9 @@ var require_CategoryChannel = __commonJS({
     var GuildChannel = require_GuildChannel();
     var CategoryChannelChildManager = require_CategoryChannelChildManager();
     var CategoryChannel = class extends GuildChannel {
+      static {
+        __name(this, "CategoryChannel");
+      }
       /**
        * The id of the parent of this channel.
        * @name CategoryChannel#parentId
@@ -53610,6 +55471,9 @@ var require_DMMessageManager = __commonJS({
     "use strict";
     var MessageManager = require_MessageManager();
     var DMMessageManager = class extends MessageManager {
+      static {
+        __name(this, "DMMessageManager");
+      }
       /**
        * The channel that the messages belong to
        * @name DMMessageManager#channel
@@ -53631,6 +55495,9 @@ var require_DMChannel = __commonJS({
     var DMMessageManager = require_DMMessageManager();
     var Partials = require_Partials();
     var DMChannel = class extends BaseChannel {
+      static {
+        __name(this, "DMChannel");
+      }
       constructor(client2, data) {
         super(client2, data);
         this.type = ChannelType.DM;
@@ -53746,6 +55613,9 @@ var require_GuildForumThreadManager = __commonJS({
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var MessagePayload = require_MessagePayload();
     var GuildForumThreadManager = class extends ThreadManager {
+      static {
+        __name(this, "GuildForumThreadManager");
+      }
       /**
        * The channel this Manager belongs to
        * @name GuildForumThreadManager#channel
@@ -53820,6 +55690,9 @@ var require_ThreadOnlyChannel = __commonJS({
     var GuildForumThreadManager = require_GuildForumThreadManager();
     var { transformAPIGuildForumTag, transformAPIGuildDefaultReaction } = require_Channels();
     var ThreadOnlyChannel = class extends GuildChannel {
+      static {
+        __name(this, "ThreadOnlyChannel");
+      }
       constructor(guild, data, client2) {
         super(guild, data, client2, false);
         this.threads = new GuildForumThreadManager(this);
@@ -53980,6 +55853,9 @@ var require_ThreadMemberFlagsBitField = __commonJS({
     var { ThreadMemberFlags } = require_v106();
     var BitField = require_BitField();
     var ThreadMemberFlagsBitField = class extends BitField {
+      static {
+        __name(this, "ThreadMemberFlagsBitField");
+      }
       /**
        * Numeric thread member flags. There are currently no bitflags relevant to bots for this.
        * @type {ThreadMemberFlags}
@@ -53999,6 +55875,9 @@ var require_ThreadMember = __commonJS({
     var ThreadMemberFlagsBitField = require_ThreadMemberFlagsBitField();
     var { emitDeprecationWarningForRemoveThreadMember } = require_Util();
     var ThreadMember = class extends Base {
+      static {
+        __name(this, "ThreadMember");
+      }
       constructor(thread, data, extra = {}) {
         super(thread.client);
         this.thread = thread;
@@ -54088,6 +55967,9 @@ var require_ThreadMemberManager = __commonJS({
     var { emitDeprecationWarningForRemoveThreadMember } = require_Util();
     var deprecationEmittedForAdd = false;
     var ThreadMemberManager = class extends CachedManager {
+      static {
+        __name(this, "ThreadMemberManager");
+      }
       constructor(thread, iterable) {
         super(thread.client, ThreadMember, iterable);
         this.thread = thread;
@@ -54263,6 +56145,9 @@ var require_ThreadChannel = __commonJS({
     var ThreadMemberManager = require_ThreadMemberManager();
     var ChannelFlagsBitField = require_ChannelFlagsBitField();
     var ThreadChannel = class extends BaseChannel {
+      static {
+        __name(this, "ThreadChannel");
+      }
       constructor(guild, data, client2) {
         super(guild?.client ?? client2, data, false);
         this.guild = guild;
@@ -54713,6 +56598,9 @@ var require_ThreadManager = __commonJS({
     var ThreadChannel = require_ThreadChannel();
     var { MakeCacheOverrideSymbol } = require_Symbols();
     var ThreadManager = class _ThreadManager extends CachedManager {
+      static {
+        __name(this, "ThreadManager");
+      }
       static [MakeCacheOverrideSymbol] = _ThreadManager;
       constructor(channel, iterable) {
         super(channel.client, ThreadChannel, iterable);
@@ -54876,6 +56764,9 @@ var require_GuildTextThreadManager = __commonJS({
     var ThreadManager = require_ThreadManager();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var GuildTextThreadManager = class extends ThreadManager {
+      static {
+        __name(this, "GuildTextThreadManager");
+      }
       /**
        * The channel this Manager belongs to
        * @name GuildTextThreadManager#channel
@@ -54962,6 +56853,9 @@ var require_BaseGuildTextChannel = __commonJS({
     var GuildMessageManager = require_GuildMessageManager();
     var GuildTextThreadManager = require_GuildTextThreadManager();
     var BaseGuildTextChannel = class extends GuildChannel {
+      static {
+        __name(this, "BaseGuildTextChannel");
+      }
       constructor(guild, data, client2) {
         super(guild, data, client2, false);
         this.messages = new GuildMessageManager(this);
@@ -55115,6 +57009,9 @@ var require_NewsChannel = __commonJS({
     var BaseGuildTextChannel = require_BaseGuildTextChannel();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var NewsChannel = class extends BaseGuildTextChannel {
+      static {
+        __name(this, "NewsChannel");
+      }
       /**
        * Adds the target to this channel's followers.
        * @param {TextChannelResolvable} channel The channel where the webhook should be created
@@ -55148,6 +57045,9 @@ var require_BaseGuildVoiceChannel = __commonJS({
     var TextBasedChannel = require_TextBasedChannel();
     var GuildMessageManager = require_GuildMessageManager();
     var BaseGuildVoiceChannel = class extends GuildChannel {
+      static {
+        __name(this, "BaseGuildVoiceChannel");
+      }
       constructor(guild, data, client2) {
         super(guild, data, client2, false);
         this.messages = new GuildMessageManager(this);
@@ -55328,6 +57228,9 @@ var require_StageChannel = __commonJS({
     "use strict";
     var BaseGuildVoiceChannel = require_BaseGuildVoiceChannel();
     var StageChannel = class extends BaseGuildVoiceChannel {
+      static {
+        __name(this, "StageChannel");
+      }
       _patch(data) {
         super._patch(data);
         if ("topic" in data) {
@@ -55375,6 +57278,9 @@ var require_TextChannel = __commonJS({
     "use strict";
     var BaseGuildTextChannel = require_BaseGuildTextChannel();
     var TextChannel = class extends BaseGuildTextChannel {
+      static {
+        __name(this, "TextChannel");
+      }
       _patch(data) {
         super._patch(data);
         if ("rate_limit_per_user" in data) {
@@ -55402,6 +57308,9 @@ var require_VoiceChannel = __commonJS({
     var { PermissionFlagsBits, Routes: Routes2 } = require_v106();
     var BaseGuildVoiceChannel = require_BaseGuildVoiceChannel();
     var VoiceChannel = class extends BaseGuildVoiceChannel {
+      static {
+        __name(this, "VoiceChannel");
+      }
       /**
        * Whether the channel is joinable by the client user
        * @type {boolean}
@@ -55452,6 +57361,9 @@ var require_DirectoryChannel = __commonJS({
     "use strict";
     var { BaseChannel } = require_BaseChannel();
     var DirectoryChannel = class extends BaseChannel {
+      static {
+        __name(this, "DirectoryChannel");
+      }
       constructor(guild, data, client2) {
         super(client2, data);
         this.guild = guild;
@@ -55472,6 +57384,9 @@ var require_PartialGroupDMMessageManager = __commonJS({
     "use strict";
     var MessageManager = require_MessageManager();
     var PartialGroupDMMessageManager = class extends MessageManager {
+      static {
+        __name(this, "PartialGroupDMMessageManager");
+      }
       /**
        * The channel that the messages belong to
        * @name PartialGroupDMMessageManager#channel
@@ -55491,6 +57406,9 @@ var require_PartialGroupDMChannel = __commonJS({
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var PartialGroupDMMessageManager = require_PartialGroupDMMessageManager();
     var PartialGroupDMChannel = class extends BaseChannel {
+      static {
+        __name(this, "PartialGroupDMChannel");
+      }
       constructor(client2, data) {
         super(client2, data);
         this.flags = null;
@@ -55571,6 +57489,9 @@ var require_ForumChannel = __commonJS({
     "use strict";
     var ThreadOnlyChannel = require_ThreadOnlyChannel();
     var ForumChannel = class extends ThreadOnlyChannel {
+      static {
+        __name(this, "ForumChannel");
+      }
       _patch(data) {
         super._patch(data);
         this.defaultForumLayout = data.default_forum_layout;
@@ -55595,6 +57516,9 @@ var require_MediaChannel = __commonJS({
     "use strict";
     var ThreadOnlyChannel = require_ThreadOnlyChannel();
     var MediaChannel = class extends ThreadOnlyChannel {
+      static {
+        __name(this, "MediaChannel");
+      }
     };
     module2.exports = MediaChannel;
   }
@@ -55671,6 +57595,7 @@ var require_Channels = __commonJS({
       }
       return channel;
     }
+    __name(createChannel, "createChannel");
     function transformAPIGuildForumTag(tag) {
       return {
         id: tag.id,
@@ -55682,6 +57607,7 @@ var require_Channels = __commonJS({
         } : null
       };
     }
+    __name(transformAPIGuildForumTag, "transformAPIGuildForumTag");
     function transformGuildForumTag(tag) {
       return {
         id: tag.id,
@@ -55691,18 +57617,21 @@ var require_Channels = __commonJS({
         emoji_name: tag.emoji?.name ?? null
       };
     }
+    __name(transformGuildForumTag, "transformGuildForumTag");
     function transformAPIGuildDefaultReaction(defaultReaction) {
       return {
         id: defaultReaction.emoji_id,
         name: defaultReaction.emoji_name
       };
     }
+    __name(transformAPIGuildDefaultReaction, "transformAPIGuildDefaultReaction");
     function transformGuildDefaultReaction(defaultReaction) {
       return {
         emoji_id: defaultReaction.id,
         emoji_name: defaultReaction.name
       };
     }
+    __name(transformGuildDefaultReaction, "transformGuildDefaultReaction");
     module2.exports = {
       createChannel,
       transformAPIGuildForumTag,
@@ -55720,6 +57649,9 @@ var require_ChannelUpdate = __commonJS({
     var Action = require_Action();
     var { createChannel } = require_Channels();
     var ChannelUpdateAction = class extends Action {
+      static {
+        __name(this, "ChannelUpdateAction");
+      }
       handle(data) {
         const client2 = this.client;
         let channel = client2.channels.cache.get(data.id);
@@ -55758,6 +57690,9 @@ var require_EntitlementCreate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var EntitlementCreateAction = class extends Action {
+      static {
+        __name(this, "EntitlementCreateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const entitlement = client2.application.entitlements._add(data);
@@ -55776,6 +57711,9 @@ var require_EntitlementDelete = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var EntitlementDeleteAction = class extends Action {
+      static {
+        __name(this, "EntitlementDeleteAction");
+      }
       handle(data) {
         const client2 = this.client;
         const entitlement = client2.application.entitlements._add(data, false);
@@ -55795,6 +57733,9 @@ var require_EntitlementUpdate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var EntitlementUpdateAction = class extends Action {
+      static {
+        __name(this, "EntitlementUpdateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const oldEntitlement = client2.application.entitlements.cache.get(data.id)?._clone() ?? null;
@@ -55815,6 +57756,9 @@ var require_AutoModerationRule = __commonJS({
     var Base = require_Base();
     var { _transformAPIAutoModerationAction } = require_Transformers();
     var AutoModerationRule = class extends Base {
+      static {
+        __name(this, "AutoModerationRule");
+      }
       constructor(client2, data, guild) {
         super(client2);
         this.id = data.id;
@@ -56001,6 +57945,9 @@ var require_GuildOnboardingPromptOption = __commonJS({
     var Base = require_Base();
     var { Emoji } = require_Emoji();
     var GuildOnboardingPromptOption = class extends Base {
+      static {
+        __name(this, "GuildOnboardingPromptOption");
+      }
       constructor(client2, data, guildId) {
         super(client2);
         this.guildId = guildId;
@@ -56047,6 +57994,9 @@ var require_GuildOnboardingPrompt = __commonJS({
     var Base = require_Base();
     var { GuildOnboardingPromptOption } = require_GuildOnboardingPromptOption();
     var GuildOnboardingPrompt = class extends Base {
+      static {
+        __name(this, "GuildOnboardingPrompt");
+      }
       constructor(client2, data, guildId) {
         super(client2);
         this.guildId = guildId;
@@ -56082,6 +58032,9 @@ var require_Integration = __commonJS({
     var Base = require_Base();
     var IntegrationApplication = require_IntegrationApplication();
     var Integration = class extends Base {
+      static {
+        __name(this, "Integration");
+      }
       constructor(client2, data, guild) {
         super(client2);
         this.guild = guild;
@@ -56194,6 +58147,9 @@ var require_StageInstance = __commonJS({
     var { DiscordSnowflake } = require_cjs3();
     var Base = require_Base();
     var StageInstance = class extends Base {
+      static {
+        __name(this, "StageInstance");
+      }
       constructor(client2, data) {
         super(client2);
         this.id = data.id;
@@ -56352,7 +58308,11 @@ var require_GuildAuditLogsEntry = __commonJS({
         return accumulator;
       }, initialData);
     }
+    __name(changesReduce, "changesReduce");
     var GuildAuditLogsEntry = class _GuildAuditLogsEntry {
+      static {
+        __name(this, "GuildAuditLogsEntry");
+      }
       /**
        * Key mirror of all available audit log targets.
        * @type {Object<string, string>}
@@ -56656,6 +58616,9 @@ var require_GuildAuditLogEntryCreate = __commonJS({
     var GuildAuditLogsEntry = require_GuildAuditLogsEntry();
     var Events2 = require_Events();
     var GuildAuditLogEntryCreateAction = class extends Action {
+      static {
+        __name(this, "GuildAuditLogEntryCreateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -56678,6 +58641,9 @@ var require_GuildBanAdd = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildBanAdd = class extends Action {
+      static {
+        __name(this, "GuildBanAdd");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -56694,6 +58660,9 @@ var require_GuildBan = __commonJS({
     "use strict";
     var Base = require_Base();
     var GuildBan = class extends Base {
+      static {
+        __name(this, "GuildBan");
+      }
       constructor(client2, data, guild) {
         super(client2);
         this.guild = guild;
@@ -56736,6 +58705,9 @@ var require_GuildBanRemove = __commonJS({
     var GuildBan = require_GuildBan();
     var Events2 = require_Events();
     var GuildBanRemove = class extends Action {
+      static {
+        __name(this, "GuildBanRemove");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -56756,6 +58728,9 @@ var require_GuildChannelsPositionUpdate = __commonJS({
     "use strict";
     var Action = require_Action();
     var GuildChannelsPositionUpdate = class extends Action {
+      static {
+        __name(this, "GuildChannelsPositionUpdate");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -56779,6 +58754,9 @@ var require_GuildDelete = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildDeleteAction = class extends Action {
+      static {
+        __name(this, "GuildDeleteAction");
+      }
       handle(data) {
         const client2 = this.client;
         let guild = client2.guilds.cache.get(data.id);
@@ -56806,6 +58784,9 @@ var require_GuildEmojiCreate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildEmojiCreateAction = class extends Action {
+      static {
+        __name(this, "GuildEmojiCreateAction");
+      }
       handle(guild, createdEmoji) {
         const already = guild.emojis.cache.has(createdEmoji.id);
         const emoji = guild.emojis._add(createdEmoji);
@@ -56824,6 +58805,9 @@ var require_GuildEmojiDelete = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildEmojiDeleteAction = class extends Action {
+      static {
+        __name(this, "GuildEmojiDeleteAction");
+      }
       handle(emoji) {
         emoji.guild.emojis.cache.delete(emoji.id);
         this.client.emit(Events2.GuildEmojiDelete, emoji);
@@ -56841,6 +58825,9 @@ var require_GuildEmojiUpdate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildEmojiUpdateAction = class extends Action {
+      static {
+        __name(this, "GuildEmojiUpdateAction");
+      }
       handle(current, data) {
         const old = current._update(data);
         this.client.emit(Events2.GuildEmojiUpdate, old, current);
@@ -56857,6 +58844,9 @@ var require_GuildEmojisUpdate = __commonJS({
     "use strict";
     var Action = require_Action();
     var GuildEmojisUpdateAction = class extends Action {
+      static {
+        __name(this, "GuildEmojisUpdateAction");
+      }
       handle(data) {
         const guild = this.client.guilds.cache.get(data.guild_id);
         if (!guild?.emojis) return;
@@ -56888,6 +58878,9 @@ var require_GuildIntegrationsUpdate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildIntegrationsUpdate = class extends Action {
+      static {
+        __name(this, "GuildIntegrationsUpdate");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -56925,6 +58918,9 @@ var require_GuildMemberRemove = __commonJS({
     var Events2 = require_Events();
     var Status2 = require_Status();
     var GuildMemberRemoveAction = class extends Action {
+      static {
+        __name(this, "GuildMemberRemoveAction");
+      }
       handle(data, shard) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -56954,6 +58950,9 @@ var require_GuildMemberUpdate = __commonJS({
     var Events2 = require_Events();
     var Status2 = require_Status();
     var GuildMemberUpdateAction = class extends Action {
+      static {
+        __name(this, "GuildMemberUpdateAction");
+      }
       handle(data, shard) {
         const { client: client2 } = this;
         if (data.user.username) {
@@ -56988,6 +58987,9 @@ var require_GuildRoleCreate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildRoleCreate = class extends Action {
+      static {
+        __name(this, "GuildRoleCreate");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -57011,6 +59013,9 @@ var require_GuildRoleDelete = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildRoleDeleteAction = class extends Action {
+      static {
+        __name(this, "GuildRoleDeleteAction");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -57036,6 +59041,9 @@ var require_GuildRoleUpdate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildRoleUpdateAction = class extends Action {
+      static {
+        __name(this, "GuildRoleUpdateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -57067,6 +59075,9 @@ var require_GuildRolesPositionUpdate = __commonJS({
     "use strict";
     var Action = require_Action();
     var GuildRolesPositionUpdate = class extends Action {
+      static {
+        __name(this, "GuildRolesPositionUpdate");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -57090,6 +59101,9 @@ var require_GuildScheduledEventCreate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildScheduledEventCreateAction = class extends Action {
+      static {
+        __name(this, "GuildScheduledEventCreateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -57112,6 +59126,9 @@ var require_GuildScheduledEventDelete = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildScheduledEventDeleteAction = class extends Action {
+      static {
+        __name(this, "GuildScheduledEventDeleteAction");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -57137,6 +59154,9 @@ var require_GuildScheduledEventUpdate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildScheduledEventUpdateAction = class extends Action {
+      static {
+        __name(this, "GuildScheduledEventUpdateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -57160,6 +59180,9 @@ var require_GuildScheduledEventUserAdd = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildScheduledEventUserAddAction = class extends Action {
+      static {
+        __name(this, "GuildScheduledEventUserAddAction");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -57185,6 +59208,9 @@ var require_GuildScheduledEventUserRemove = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildScheduledEventUserRemoveAction = class extends Action {
+      static {
+        __name(this, "GuildScheduledEventUserRemoveAction");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -57210,6 +59236,9 @@ var require_GuildSoundboardSoundDelete = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildSoundboardSoundDeleteAction = class extends Action {
+      static {
+        __name(this, "GuildSoundboardSoundDeleteAction");
+      }
       handle(data) {
         const guild = this.client.guilds.cache.get(data.guild_id);
         if (!guild) return {};
@@ -57232,6 +59261,9 @@ var require_GuildStickerCreate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildStickerCreateAction = class extends Action {
+      static {
+        __name(this, "GuildStickerCreateAction");
+      }
       handle(guild, createdSticker) {
         const already = guild.stickers.cache.has(createdSticker.id);
         const sticker = guild.stickers._add(createdSticker);
@@ -57250,6 +59282,9 @@ var require_GuildStickerDelete = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildStickerDeleteAction = class extends Action {
+      static {
+        __name(this, "GuildStickerDeleteAction");
+      }
       handle(sticker) {
         sticker.guild.stickers.cache.delete(sticker.id);
         this.client.emit(Events2.GuildStickerDelete, sticker);
@@ -57267,6 +59302,9 @@ var require_GuildStickerUpdate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildStickerUpdateAction = class extends Action {
+      static {
+        __name(this, "GuildStickerUpdateAction");
+      }
       handle(current, data) {
         const old = current._update(data);
         this.client.emit(Events2.GuildStickerUpdate, old, current);
@@ -57283,6 +59321,9 @@ var require_GuildStickersUpdate = __commonJS({
     "use strict";
     var Action = require_Action();
     var GuildStickersUpdateAction = class extends Action {
+      static {
+        __name(this, "GuildStickersUpdateAction");
+      }
       handle(data) {
         const guild = this.client.guilds.cache.get(data.guild_id);
         if (!guild?.stickers) return;
@@ -57314,6 +59355,9 @@ var require_GuildUpdate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var GuildUpdateAction = class extends Action {
+      static {
+        __name(this, "GuildUpdateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.id);
@@ -57342,6 +59386,9 @@ var require_CommandInteractionOptionResolver = __commonJS({
     var { ApplicationCommandOptionType } = require_v106();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var CommandInteractionOptionResolver = class {
+      static {
+        __name(this, "CommandInteractionOptionResolver");
+      }
       constructor(client2, options, resolved) {
         Object.defineProperty(this, "client", { value: client2 });
         this._group = null;
@@ -57592,6 +59639,9 @@ var require_AutocompleteInteraction = __commonJS({
     var CommandInteractionOptionResolver = require_CommandInteractionOptionResolver();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var AutocompleteInteraction = class extends BaseInteraction {
+      static {
+        __name(this, "AutocompleteInteraction");
+      }
       constructor(client2, data) {
         super(client2, data);
         this.commandId = data.data.id;
@@ -57651,6 +59701,9 @@ var require_InteractionCallback = __commonJS({
     "use strict";
     var { DiscordSnowflake } = require_cjs3();
     var InteractionCallback = class {
+      static {
+        __name(this, "InteractionCallback");
+      }
       constructor(client2, data) {
         Object.defineProperty(this, "client", { value: client2 });
         this.id = data.id;
@@ -57688,6 +59741,9 @@ var require_InteractionCallbackResource = __commonJS({
     var { lazy } = require_dist();
     var getMessage = lazy(() => require_Message().Message);
     var InteractionCallbackResource = class {
+      static {
+        __name(this, "InteractionCallbackResource");
+      }
       constructor(client2, data) {
         Object.defineProperty(this, "client", { value: client2 });
         this.type = data.type;
@@ -57710,6 +59766,9 @@ var require_InteractionCallbackResponse = __commonJS({
     var InteractionCallback = require_InteractionCallback();
     var InteractionCallbackResource = require_InteractionCallbackResource();
     var InteractionCallbackResponse = class {
+      static {
+        __name(this, "InteractionCallbackResponse");
+      }
       constructor(client2, data) {
         Object.defineProperty(this, "client", { value: client2 });
         this.interaction = new InteractionCallback(client2, data.interaction);
@@ -57728,6 +59787,9 @@ var require_InteractionResponse = __commonJS({
     var { InteractionType } = require_v106();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var InteractionResponse = class {
+      static {
+        __name(this, "InteractionResponse");
+      }
       constructor(interaction, id) {
         this.interaction = interaction;
         this.id = id ?? interaction.id;
@@ -57824,6 +59886,9 @@ var require_InteractionResponses = __commonJS({
     var deprecationEmittedForEphemeralOption = false;
     var deprecationEmittedForFetchReplyOption = false;
     var InteractionResponses = class _InteractionResponses {
+      static {
+        __name(this, "InteractionResponses");
+      }
       /**
        * Options for deferring the reply to an {@link BaseInteraction}.
        * @typedef {Object} InteractionDeferReplyOptions
@@ -58240,6 +60305,9 @@ var require_MessageComponentInteraction = __commonJS({
     var { findComponentByCustomId } = require_Components();
     var getMessage = lazy(() => require_Message().Message);
     var MessageComponentInteraction = class extends BaseInteraction {
+      static {
+        __name(this, "MessageComponentInteraction");
+      }
       constructor(client2, data) {
         super(client2, data);
         this.message = this.channel?.messages._add(data.message) ?? new (getMessage())(client2, data.message);
@@ -58307,6 +60375,9 @@ var require_ButtonInteraction = __commonJS({
     "use strict";
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var ButtonInteraction = class extends MessageComponentInteraction {
+      static {
+        __name(this, "ButtonInteraction");
+      }
     };
     module2.exports = ButtonInteraction;
   }
@@ -58319,6 +60390,9 @@ var require_ChannelSelectMenuInteraction = __commonJS({
     var { Collection: Collection2 } = require_dist6();
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var ChannelSelectMenuInteraction = class extends MessageComponentInteraction {
+      static {
+        __name(this, "ChannelSelectMenuInteraction");
+      }
       constructor(client2, data) {
         super(client2, data);
         const { resolved, values } = data.data;
@@ -58342,6 +60416,9 @@ var require_CommandInteraction = __commonJS({
     var InteractionWebhook = require_InteractionWebhook();
     var InteractionResponses = require_InteractionResponses();
     var CommandInteraction = class extends BaseInteraction {
+      static {
+        __name(this, "CommandInteraction");
+      }
       constructor(client2, data) {
         super(client2, data);
         this.commandId = data.data.id;
@@ -58456,6 +60533,9 @@ var require_ChatInputCommandInteraction = __commonJS({
     var CommandInteractionOptionResolver = require_CommandInteractionOptionResolver();
     var { transformResolved } = require_Util();
     var ChatInputCommandInteraction = class extends CommandInteraction {
+      static {
+        __name(this, "ChatInputCommandInteraction");
+      }
       constructor(client2, data) {
         super(client2, data);
         this.options = new CommandInteractionOptionResolver(
@@ -58491,6 +60571,9 @@ var require_MentionableSelectMenuInteraction = __commonJS({
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var Events2 = require_Events();
     var MentionableSelectMenuInteraction = class extends MessageComponentInteraction {
+      static {
+        __name(this, "MentionableSelectMenuInteraction");
+      }
       constructor(client2, data) {
         super(client2, data);
         const { resolved, values } = data.data;
@@ -58539,6 +60622,9 @@ var require_ContextMenuCommandInteraction = __commonJS({
     var { transformResolved } = require_Util();
     var getMessage = lazy(() => require_Message().Message);
     var ContextMenuCommandInteraction = class extends CommandInteraction {
+      static {
+        __name(this, "ContextMenuCommandInteraction");
+      }
       constructor(client2, data) {
         super(client2, data);
         this.options = new CommandInteractionOptionResolver(
@@ -58582,6 +60668,9 @@ var require_MessageContextMenuCommandInteraction = __commonJS({
     "use strict";
     var ContextMenuCommandInteraction = require_ContextMenuCommandInteraction();
     var MessageContextMenuCommandInteraction = class extends ContextMenuCommandInteraction {
+      static {
+        __name(this, "MessageContextMenuCommandInteraction");
+      }
       /**
        * The message this interaction was sent from
        * @type {Message|APIMessage}
@@ -58603,6 +60692,9 @@ var require_ModalSubmitFields = __commonJS({
     var { ComponentType } = require_v106();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ModalSubmitFields = class {
+      static {
+        __name(this, "ModalSubmitFields");
+      }
       constructor(components, resolved) {
         this.components = components;
         Object.defineProperty(this, "resolved", { value: resolved ? Object.freeze(resolved) : null });
@@ -58825,6 +60917,9 @@ var require_ModalSubmitInteraction = __commonJS({
     var getMessage = lazy(() => require_Message().Message);
     var getAttachment = lazy(() => require_Attachment());
     var ModalSubmitInteraction = class _ModalSubmitInteraction extends BaseInteraction {
+      static {
+        __name(this, "ModalSubmitInteraction");
+      }
       constructor(client2, data) {
         super(client2, data);
         this.customId = data.data.custom_id;
@@ -58969,6 +61064,9 @@ var require_PrimaryEntryPointCommandInteraction = __commonJS({
     "use strict";
     var CommandInteraction = require_CommandInteraction();
     var PrimaryEntryPointCommandInteraction = class extends CommandInteraction {
+      static {
+        __name(this, "PrimaryEntryPointCommandInteraction");
+      }
     };
     module2.exports = PrimaryEntryPointCommandInteraction;
   }
@@ -58981,6 +61079,9 @@ var require_RoleSelectMenuInteraction = __commonJS({
     var { Collection: Collection2 } = require_dist6();
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var RoleSelectMenuInteraction = class extends MessageComponentInteraction {
+      static {
+        __name(this, "RoleSelectMenuInteraction");
+      }
       constructor(client2, data) {
         super(client2, data);
         const { resolved, values } = data.data;
@@ -59001,6 +61102,9 @@ var require_StringSelectMenuInteraction = __commonJS({
     "use strict";
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var StringSelectMenuInteraction = class extends MessageComponentInteraction {
+      static {
+        __name(this, "StringSelectMenuInteraction");
+      }
       constructor(client2, data) {
         super(client2, data);
         this.values = data.data.values ?? [];
@@ -59016,6 +61120,9 @@ var require_UserContextMenuCommandInteraction = __commonJS({
     "use strict";
     var ContextMenuCommandInteraction = require_ContextMenuCommandInteraction();
     var UserContextMenuCommandInteraction = class extends ContextMenuCommandInteraction {
+      static {
+        __name(this, "UserContextMenuCommandInteraction");
+      }
       /**
        * The target user from this interaction
        * @type {User}
@@ -59045,6 +61152,9 @@ var require_UserSelectMenuInteraction = __commonJS({
     var MessageComponentInteraction = require_MessageComponentInteraction();
     var Events2 = require_Events();
     var UserSelectMenuInteraction = class extends MessageComponentInteraction {
+      static {
+        __name(this, "UserSelectMenuInteraction");
+      }
       constructor(client2, data) {
         super(client2, data);
         const { resolved, values } = data.data;
@@ -59088,6 +61198,9 @@ var require_InteractionCreate = __commonJS({
     var UserSelectMenuInteraction = require_UserSelectMenuInteraction();
     var Events2 = require_Events();
     var InteractionCreateAction = class extends Action {
+      static {
+        __name(this, "InteractionCreateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const channel = data.channel && this.getChannel({ ...data.channel, ..."recipients" in data.channel ? { user: data.user } : void 0 });
@@ -59170,6 +61283,9 @@ var require_InviteCreate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var InviteCreateAction = class extends Action {
+      static {
+        __name(this, "InviteCreateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const channel = client2.channels.cache.get(data.channel_id);
@@ -59193,6 +61309,9 @@ var require_InviteDelete = __commonJS({
     var Invite2 = require_Invite();
     var Events2 = require_Events();
     var InviteDeleteAction = class extends Action {
+      static {
+        __name(this, "InviteDeleteAction");
+      }
       handle(data) {
         const client2 = this.client;
         const channel = client2.channels.cache.get(data.channel_id);
@@ -59216,6 +61335,9 @@ var require_MessageCreate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var MessageCreateAction = class extends Action {
+      static {
+        __name(this, "MessageCreateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const channel = this.getChannel({
@@ -59251,6 +61373,9 @@ var require_MessageDelete = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var MessageDeleteAction = class extends Action {
+      static {
+        __name(this, "MessageDeleteAction");
+      }
       handle(data) {
         const client2 = this.client;
         const channel = this.getChannel({ id: data.channel_id, ..."guild_id" in data && { guild_id: data.guild_id } });
@@ -59279,6 +61404,9 @@ var require_MessageDeleteBulk = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var MessageDeleteBulkAction = class extends Action {
+      static {
+        __name(this, "MessageDeleteBulkAction");
+      }
       handle(data) {
         const client2 = this.client;
         const channel = client2.channels.cache.get(data.channel_id);
@@ -59318,6 +61446,9 @@ var require_MessagePollVoteAdd = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var MessagePollVoteAddAction = class extends Action {
+      static {
+        __name(this, "MessagePollVoteAddAction");
+      }
       handle(data) {
         const channel = this.getChannel({ id: data.channel_id, ..."guild_id" in data && { guild_id: data.guild_id } });
         if (!channel?.isTextBased()) return false;
@@ -59347,6 +61478,9 @@ var require_MessagePollVoteRemove = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var MessagePollVoteRemoveAction = class extends Action {
+      static {
+        __name(this, "MessagePollVoteRemoveAction");
+      }
       handle(data) {
         const channel = this.getChannel({ id: data.channel_id, ..."guild_id" in data && { guild_id: data.guild_id } });
         if (!channel?.isTextBased()) return false;
@@ -59376,6 +61510,9 @@ var require_MessageReactionAdd = __commonJS({
     var Events2 = require_Events();
     var Partials = require_Partials();
     var MessageReactionAdd = class extends Action {
+      static {
+        __name(this, "MessageReactionAdd");
+      }
       handle(data, fromStructure = false) {
         if (!data.emoji) return false;
         const user = this.getUserFromMember(data);
@@ -59415,6 +61552,9 @@ var require_MessageReactionRemove = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var MessageReactionRemove = class extends Action {
+      static {
+        __name(this, "MessageReactionRemove");
+      }
       handle(data) {
         if (!data.emoji) return false;
         const user = this.getUser(data);
@@ -59445,6 +61585,9 @@ var require_MessageReactionRemoveAll = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var MessageReactionRemoveAll = class extends Action {
+      static {
+        __name(this, "MessageReactionRemoveAll");
+      }
       handle(data) {
         const channel = this.getChannel({ id: data.channel_id, ..."guild_id" in data && { guild_id: data.guild_id } });
         if (!channel?.isTextBased()) return false;
@@ -59467,6 +61610,9 @@ var require_MessageReactionRemoveEmoji = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var MessageReactionRemoveEmoji = class extends Action {
+      static {
+        __name(this, "MessageReactionRemoveEmoji");
+      }
       handle(data) {
         const channel = this.getChannel({ id: data.channel_id, ..."guild_id" in data && { guild_id: data.guild_id } });
         if (!channel?.isTextBased()) return false;
@@ -59489,6 +61635,9 @@ var require_MessageUpdate = __commonJS({
     "use strict";
     var Action = require_Action();
     var MessageUpdateAction = class extends Action {
+      static {
+        __name(this, "MessageUpdateAction");
+      }
       handle(data) {
         const channel = this.getChannel({ id: data.channel_id, ..."guild_id" in data && { guild_id: data.guild_id } });
         if (channel) {
@@ -59518,6 +61667,9 @@ var require_PresenceUpdate = __commonJS({
     var Events2 = require_Events();
     var Partials = require_Partials();
     var PresenceUpdateAction = class extends Action {
+      static {
+        __name(this, "PresenceUpdateAction");
+      }
       handle(data) {
         let user = this.client.users.cache.get(data.user.id);
         if (!user && ("username" in data.user || this.client.options.partials.includes(Partials.User))) {
@@ -59556,6 +61708,9 @@ var require_StageInstanceCreate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var StageInstanceCreateAction = class extends Action {
+      static {
+        __name(this, "StageInstanceCreateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const channel = this.getChannel({ id: data.channel_id, guild_id: data.guild_id });
@@ -59578,6 +61733,9 @@ var require_StageInstanceDelete = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var StageInstanceDeleteAction = class extends Action {
+      static {
+        __name(this, "StageInstanceDeleteAction");
+      }
       handle(data) {
         const client2 = this.client;
         const channel = this.getChannel({ id: data.channel_id, guild_id: data.guild_id });
@@ -59603,6 +61761,9 @@ var require_StageInstanceUpdate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var StageInstanceUpdateAction = class extends Action {
+      static {
+        __name(this, "StageInstanceUpdateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const channel = this.getChannel({ id: data.channel_id, guild_id: data.guild_id });
@@ -59626,6 +61787,9 @@ var require_ThreadCreate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var ThreadCreateAction = class extends Action {
+      static {
+        __name(this, "ThreadCreateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const existing = client2.channels.cache.has(data.id);
@@ -59647,6 +61811,9 @@ var require_ThreadDelete = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var ThreadDeleteAction = class extends Action {
+      static {
+        __name(this, "ThreadDeleteAction");
+      }
       handle(data) {
         const client2 = this.client;
         const thread = client2.channels.cache.get(data.id);
@@ -59669,6 +61836,9 @@ var require_ThreadListSync = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var ThreadListSyncAction = class extends Action {
+      static {
+        __name(this, "ThreadListSyncAction");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -59717,6 +61887,9 @@ var require_ThreadMemberUpdate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var ThreadMemberUpdateAction = class extends Action {
+      static {
+        __name(this, "ThreadMemberUpdateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const thread = client2.channels.cache.get(data.id);
@@ -59744,6 +61917,9 @@ var require_ThreadMembersUpdate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var ThreadMembersUpdateAction = class extends Action {
+      static {
+        __name(this, "ThreadMembersUpdateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const thread = client2.channels.cache.get(data.id);
@@ -59779,6 +61955,9 @@ var require_Typing = __commonJS({
     "use strict";
     var Base = require_Base();
     var Typing = class extends Base {
+      static {
+        __name(this, "Typing");
+      }
       constructor(channel, user, data) {
         super(channel.client);
         this.channel = channel;
@@ -59834,6 +62013,9 @@ var require_TypingStart = __commonJS({
     var Typing = require_Typing();
     var Events2 = require_Events();
     var TypingStart = class extends Action {
+      static {
+        __name(this, "TypingStart");
+      }
       handle(data) {
         const channel = this.getChannel({ id: data.channel_id, ..."guild_id" in data && { guild_id: data.guild_id } });
         if (!channel) return;
@@ -59858,6 +62040,9 @@ var require_UserUpdate = __commonJS({
     var Action = require_Action();
     var Events2 = require_Events();
     var UserUpdateAction = class extends Action {
+      static {
+        __name(this, "UserUpdateAction");
+      }
       handle(data) {
         const client2 = this.client;
         const newUser = data.id === client2.user.id ? client2.user : client2.users.cache.get(data.id);
@@ -59887,6 +62072,9 @@ var require_VoiceStateUpdate = __commonJS({
     var VoiceState = require_VoiceState();
     var Events2 = require_Events();
     var VoiceStateUpdate = class extends Action {
+      static {
+        __name(this, "VoiceStateUpdate");
+      }
       handle(data) {
         const client2 = this.client;
         const guild = client2.guilds.cache.get(data.guild_id);
@@ -59919,6 +62107,9 @@ var require_WebhooksUpdate = __commonJS({
     var Action = require_Action();
     var deprecationEmitted = false;
     var WebhooksUpdate = class extends Action {
+      static {
+        __name(this, "WebhooksUpdate");
+      }
       handle(data) {
         const client2 = this.client;
         const channel = client2.channels.cache.get(data.channel_id);
@@ -59939,6 +62130,9 @@ var require_ActionsManager = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/client/actions/ActionsManager.js"(exports2, module2) {
     "use strict";
     var ActionsManager2 = class {
+      static {
+        __name(this, "ActionsManager");
+      }
       // These symbols represent fully built data that we inject at times when calling actions manually.
       // Action#getUser, for example, will return the injected data (which is assumed to be a built structure)
       // instead of trying to make it from provided data
@@ -60026,6 +62220,9 @@ var require_ClientVoiceManager = __commonJS({
     "use strict";
     var Events2 = require_Events();
     var ClientVoiceManager2 = class {
+      static {
+        __name(this, "ClientVoiceManager");
+      }
       constructor(client2) {
         Object.defineProperty(this, "client", { value: client2 });
         this.adapters = /* @__PURE__ */ new Map();
@@ -60067,8 +62264,8 @@ var require_constants6 = __commonJS({
       kListener: Symbol("kListener"),
       kStatusCode: Symbol("status-code"),
       kWebSocket: Symbol("websocket"),
-      NOOP: () => {
-      }
+      NOOP: /* @__PURE__ */ __name(() => {
+      }, "NOOP")
     };
   }
 });
@@ -60094,22 +62291,26 @@ var require_buffer_util = __commonJS({
       }
       return target;
     }
+    __name(concat, "concat");
     function _mask(source, mask, output, offset, length) {
       for (let i = 0; i < length; i++) {
         output[offset + i] = source[i] ^ mask[i & 3];
       }
     }
+    __name(_mask, "_mask");
     function _unmask(buffer, mask) {
       for (let i = 0; i < buffer.length; i++) {
         buffer[i] ^= mask[i & 3];
       }
     }
+    __name(_unmask, "_unmask");
     function toArrayBuffer(buf) {
       if (buf.length === buf.buffer.byteLength) {
         return buf.buffer;
       }
       return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.length);
     }
+    __name(toArrayBuffer, "toArrayBuffer");
     function toBuffer(data) {
       toBuffer.readOnly = true;
       if (Buffer.isBuffer(data)) return data;
@@ -60124,6 +62325,7 @@ var require_buffer_util = __commonJS({
       }
       return buf;
     }
+    __name(toBuffer, "toBuffer");
     module2.exports = {
       concat,
       mask: _mask,
@@ -60155,6 +62357,9 @@ var require_limiter = __commonJS({
     var kDone = Symbol("kDone");
     var kRun = Symbol("kRun");
     var Limiter = class {
+      static {
+        __name(this, "Limiter");
+      }
       /**
        * Creates a new `Limiter`.
        *
@@ -60215,6 +62420,9 @@ var require_permessage_deflate2 = __commonJS({
     var kError = Symbol("error");
     var zlibLimiter;
     var PerMessageDeflate = class {
+      static {
+        __name(this, "PerMessageDeflate");
+      }
       /**
        * Creates a PerMessageDeflate instance.
        *
@@ -60557,6 +62765,7 @@ var require_permessage_deflate2 = __commonJS({
       this[kBuffers].push(chunk);
       this[kTotalLength] += chunk.length;
     }
+    __name(deflateOnData, "deflateOnData");
     function inflateOnData(chunk) {
       this[kTotalLength] += chunk.length;
       if (this[kPerMessageDeflate]._maxPayload < 1 || this[kTotalLength] <= this[kPerMessageDeflate]._maxPayload) {
@@ -60569,6 +62778,7 @@ var require_permessage_deflate2 = __commonJS({
       this.removeListener("data", inflateOnData);
       this.reset();
     }
+    __name(inflateOnData, "inflateOnData");
     function inflateOnError(err) {
       this[kPerMessageDeflate]._inflate = null;
       if (this[kError]) {
@@ -60578,6 +62788,7 @@ var require_permessage_deflate2 = __commonJS({
       err[kStatusCode] = 1007;
       this[kCallback](err);
     }
+    __name(inflateOnError, "inflateOnError");
   }
 });
 
@@ -60728,6 +62939,7 @@ var require_validation = __commonJS({
     function isValidStatusCode(code) {
       return code >= 1e3 && code <= 1014 && code !== 1004 && code !== 1005 && code !== 1006 || code >= 3e3 && code <= 4999;
     }
+    __name(isValidStatusCode, "isValidStatusCode");
     function _isValidUTF8(buf) {
       const len = buf.length;
       let i = 0;
@@ -60757,9 +62969,11 @@ var require_validation = __commonJS({
       }
       return true;
     }
+    __name(_isValidUTF8, "_isValidUTF8");
     function isBlob(value) {
       return hasBlob && typeof value === "object" && typeof value.arrayBuffer === "function" && typeof value.type === "string" && typeof value.stream === "function" && (value[Symbol.toStringTag] === "Blob" || value[Symbol.toStringTag] === "File");
     }
+    __name(isBlob, "isBlob");
     module2.exports = {
       isBlob,
       isValidStatusCode,
@@ -60805,6 +63019,9 @@ var require_receiver2 = __commonJS({
     var INFLATING = 5;
     var DEFER_EVENT = 6;
     var Receiver = class extends Writable {
+      static {
+        __name(this, "Receiver");
+      }
       /**
        * Creates a Receiver instance.
        *
@@ -61436,6 +63653,9 @@ var require_sender2 = __commonJS({
     var DEFLATING = 1;
     var GET_BLOB_DATA = 2;
     var Sender = class _Sender {
+      static {
+        __name(this, "Sender");
+      }
       /**
        * Creates a Sender instance.
        *
@@ -61900,10 +64120,12 @@ var require_sender2 = __commonJS({
         if (typeof callback === "function") callback(err);
       }
     }
+    __name(callCallbacks, "callCallbacks");
     function onError(sender, err, cb) {
       callCallbacks(sender, err, cb);
       sender.onerror(err);
     }
+    __name(onError, "onError");
   }
 });
 
@@ -61921,6 +64143,9 @@ var require_event_target = __commonJS({
     var kType = Symbol("kType");
     var kWasClean = Symbol("kWasClean");
     var Event2 = class {
+      static {
+        __name(this, "Event");
+      }
       /**
        * Create a new `Event`.
        *
@@ -61947,6 +64172,9 @@ var require_event_target = __commonJS({
     Object.defineProperty(Event2.prototype, "target", { enumerable: true });
     Object.defineProperty(Event2.prototype, "type", { enumerable: true });
     var CloseEvent = class extends Event2 {
+      static {
+        __name(this, "CloseEvent");
+      }
       /**
        * Create a new `CloseEvent`.
        *
@@ -61989,6 +64217,9 @@ var require_event_target = __commonJS({
     Object.defineProperty(CloseEvent.prototype, "reason", { enumerable: true });
     Object.defineProperty(CloseEvent.prototype, "wasClean", { enumerable: true });
     var ErrorEvent = class extends Event2 {
+      static {
+        __name(this, "ErrorEvent");
+      }
       /**
        * Create a new `ErrorEvent`.
        *
@@ -62019,6 +64250,9 @@ var require_event_target = __commonJS({
     Object.defineProperty(ErrorEvent.prototype, "error", { enumerable: true });
     Object.defineProperty(ErrorEvent.prototype, "message", { enumerable: true });
     var MessageEvent = class extends Event2 {
+      static {
+        __name(this, "MessageEvent");
+      }
       /**
        * Create a new `MessageEvent`.
        *
@@ -62060,15 +64294,15 @@ var require_event_target = __commonJS({
         }
         let wrapper;
         if (type === "message") {
-          wrapper = function onMessage(data, isBinary) {
+          wrapper = /* @__PURE__ */ __name(function onMessage(data, isBinary) {
             const event = new MessageEvent("message", {
               data: isBinary ? data : data.toString()
             });
             event[kTarget] = this;
             callListener(handler, this, event);
-          };
+          }, "onMessage");
         } else if (type === "close") {
-          wrapper = function onClose(code, message) {
+          wrapper = /* @__PURE__ */ __name(function onClose(code, message) {
             const event = new CloseEvent("close", {
               code,
               reason: message.toString(),
@@ -62076,22 +64310,22 @@ var require_event_target = __commonJS({
             });
             event[kTarget] = this;
             callListener(handler, this, event);
-          };
+          }, "onClose");
         } else if (type === "error") {
-          wrapper = function onError(error) {
+          wrapper = /* @__PURE__ */ __name(function onError(error) {
             const event = new ErrorEvent("error", {
               error,
               message: error.message
             });
             event[kTarget] = this;
             callListener(handler, this, event);
-          };
+          }, "onError");
         } else if (type === "open") {
-          wrapper = function onOpen() {
+          wrapper = /* @__PURE__ */ __name(function onOpen() {
             const event = new Event2("open");
             event[kTarget] = this;
             callListener(handler, this, event);
-          };
+          }, "onOpen");
         } else {
           return;
         }
@@ -62133,6 +64367,7 @@ var require_event_target = __commonJS({
         listener.call(thisArg, event);
       }
     }
+    __name(callListener, "callListener");
   }
 });
 
@@ -62145,6 +64380,7 @@ var require_extension = __commonJS({
       if (dest[name] === void 0) dest[name] = [elem];
       else dest[name].push(elem);
     }
+    __name(push, "push");
     function parse(header) {
       const offers = /* @__PURE__ */ Object.create(null);
       let params = /* @__PURE__ */ Object.create(null);
@@ -62270,6 +64506,7 @@ var require_extension = __commonJS({
       }
       return offers;
     }
+    __name(parse, "parse");
     function format(extensions) {
       return Object.keys(extensions).map((extension) => {
         let configurations = extensions[extension];
@@ -62285,6 +64522,7 @@ var require_extension = __commonJS({
         }).join(", ");
       }).join(", ");
     }
+    __name(format, "format");
     module2.exports = { format, parse };
   }
 });
@@ -62326,6 +64564,9 @@ var require_websocket2 = __commonJS({
     var readyStates = ["CONNECTING", "OPEN", "CLOSING", "CLOSED"];
     var subprotocolRegex = /^[!#$%&'*+\-.0-9A-Z^_`|a-z~]+$/;
     var WebSocket = class _WebSocket extends EventEmitter {
+      static {
+        __name(this, "WebSocket");
+      }
       /**
        * Create a new `WebSocket`.
        *
@@ -63032,16 +65273,19 @@ var require_websocket2 = __commonJS({
         req.end();
       }
     }
+    __name(initAsClient, "initAsClient");
     function emitErrorAndClose(websocket, err) {
       websocket._readyState = WebSocket.CLOSING;
       websocket._errorEmitted = true;
       websocket.emit("error", err);
       websocket.emitClose();
     }
+    __name(emitErrorAndClose, "emitErrorAndClose");
     function netConnect(options) {
       options.path = options.socketPath;
       return net.connect(options);
     }
+    __name(netConnect, "netConnect");
     function tlsConnect(options) {
       options.path = void 0;
       if (!options.servername && options.servername !== "") {
@@ -63049,6 +65293,7 @@ var require_websocket2 = __commonJS({
       }
       return tls.connect(options);
     }
+    __name(tlsConnect, "tlsConnect");
     function abortHandshake(websocket, stream, message) {
       websocket._readyState = WebSocket.CLOSING;
       const err = new Error(message);
@@ -63066,6 +65311,7 @@ var require_websocket2 = __commonJS({
         stream.once("close", websocket.emitClose.bind(websocket));
       }
     }
+    __name(abortHandshake, "abortHandshake");
     function sendAfterClose(websocket, data, cb) {
       if (data) {
         const length = isBlob(data) ? data.size : toBuffer(data).length;
@@ -63079,6 +65325,7 @@ var require_websocket2 = __commonJS({
         process.nextTick(cb, err);
       }
     }
+    __name(sendAfterClose, "sendAfterClose");
     function receiverOnConclude(code, reason) {
       const websocket = this[kWebSocket];
       websocket._closeFrameReceived = true;
@@ -63090,10 +65337,12 @@ var require_websocket2 = __commonJS({
       if (code === 1005) websocket.close();
       else websocket.close(code, reason);
     }
+    __name(receiverOnConclude, "receiverOnConclude");
     function receiverOnDrain() {
       const websocket = this[kWebSocket];
       if (!websocket.isPaused) websocket._socket.resume();
     }
+    __name(receiverOnDrain, "receiverOnDrain");
     function receiverOnError(err) {
       const websocket = this[kWebSocket];
       if (websocket._socket[kWebSocket] !== void 0) {
@@ -63106,23 +65355,29 @@ var require_websocket2 = __commonJS({
         websocket.emit("error", err);
       }
     }
+    __name(receiverOnError, "receiverOnError");
     function receiverOnFinish() {
       this[kWebSocket].emitClose();
     }
+    __name(receiverOnFinish, "receiverOnFinish");
     function receiverOnMessage(data, isBinary) {
       this[kWebSocket].emit("message", data, isBinary);
     }
+    __name(receiverOnMessage, "receiverOnMessage");
     function receiverOnPing(data) {
       const websocket = this[kWebSocket];
       if (websocket._autoPong) websocket.pong(data, !this._isServer, NOOP);
       websocket.emit("ping", data);
     }
+    __name(receiverOnPing, "receiverOnPing");
     function receiverOnPong(data) {
       this[kWebSocket].emit("pong", data);
     }
+    __name(receiverOnPong, "receiverOnPong");
     function resume(stream) {
       stream.resume();
     }
+    __name(resume, "resume");
     function senderOnError(err) {
       const websocket = this[kWebSocket];
       if (websocket.readyState === WebSocket.CLOSED) return;
@@ -63136,12 +65391,14 @@ var require_websocket2 = __commonJS({
         websocket.emit("error", err);
       }
     }
+    __name(senderOnError, "senderOnError");
     function setCloseTimer(websocket) {
       websocket._closeTimer = setTimeout(
         websocket._socket.destroy.bind(websocket._socket),
         websocket._closeTimeout
       );
     }
+    __name(setCloseTimer, "setCloseTimer");
     function socketOnClose() {
       const websocket = this[kWebSocket];
       this.removeListener("close", socketOnClose);
@@ -63162,17 +65419,20 @@ var require_websocket2 = __commonJS({
         websocket._receiver.on("finish", receiverOnFinish);
       }
     }
+    __name(socketOnClose, "socketOnClose");
     function socketOnData(chunk) {
       if (!this[kWebSocket]._receiver.write(chunk)) {
         this.pause();
       }
     }
+    __name(socketOnData, "socketOnData");
     function socketOnEnd() {
       const websocket = this[kWebSocket];
       websocket._readyState = WebSocket.CLOSING;
       websocket._receiver.end();
       this.end();
     }
+    __name(socketOnEnd, "socketOnEnd");
     function socketOnError() {
       const websocket = this[kWebSocket];
       this.removeListener("error", socketOnError);
@@ -63182,6 +65442,7 @@ var require_websocket2 = __commonJS({
         this.destroy();
       }
     }
+    __name(socketOnError, "socketOnError");
   }
 });
 
@@ -63194,11 +65455,13 @@ var require_stream = __commonJS({
     function emitClose(stream) {
       stream.emit("close");
     }
+    __name(emitClose, "emitClose");
     function duplexOnEnd() {
       if (!this.destroyed && this._writableState.finished) {
         this.destroy();
       }
     }
+    __name(duplexOnEnd, "duplexOnEnd");
     function duplexOnError(err) {
       this.removeListener("error", duplexOnError);
       this.destroy();
@@ -63206,6 +65469,7 @@ var require_stream = __commonJS({
         this.emit("error", err);
       }
     }
+    __name(duplexOnError, "duplexOnError");
     function createWebSocketStream(ws, options) {
       let terminateOnDestroy = true;
       const duplex = new Duplex({
@@ -63215,19 +65479,19 @@ var require_stream = __commonJS({
         objectMode: false,
         writableObjectMode: false
       });
-      ws.on("message", function message(msg, isBinary) {
+      ws.on("message", /* @__PURE__ */ __name(function message(msg, isBinary) {
         const data = !isBinary && duplex._readableState.objectMode ? msg.toString() : msg;
         if (!duplex.push(data)) ws.pause();
-      });
-      ws.once("error", function error(err) {
+      }, "message"));
+      ws.once("error", /* @__PURE__ */ __name(function error(err) {
         if (duplex.destroyed) return;
         terminateOnDestroy = false;
         duplex.destroy(err);
-      });
-      ws.once("close", function close() {
+      }, "error"));
+      ws.once("close", /* @__PURE__ */ __name(function close() {
         if (duplex.destroyed) return;
         duplex.push(null);
-      });
+      }, "close"));
       duplex._destroy = function(err, callback) {
         if (ws.readyState === ws.CLOSED) {
           callback(err);
@@ -63235,21 +65499,21 @@ var require_stream = __commonJS({
           return;
         }
         let called = false;
-        ws.once("error", function error(err2) {
+        ws.once("error", /* @__PURE__ */ __name(function error(err2) {
           called = true;
           callback(err2);
-        });
-        ws.once("close", function close() {
+        }, "error"));
+        ws.once("close", /* @__PURE__ */ __name(function close() {
           if (!called) callback(err);
           process.nextTick(emitClose, duplex);
-        });
+        }, "close"));
         if (terminateOnDestroy) ws.terminate();
       };
       duplex._final = function(callback) {
         if (ws.readyState === ws.CONNECTING) {
-          ws.once("open", function open() {
+          ws.once("open", /* @__PURE__ */ __name(function open() {
             duplex._final(callback);
-          });
+          }, "open"));
           return;
         }
         if (ws._socket === null) return;
@@ -63257,9 +65521,9 @@ var require_stream = __commonJS({
           callback();
           if (duplex._readableState.endEmitted) duplex.destroy();
         } else {
-          ws._socket.once("finish", function finish() {
+          ws._socket.once("finish", /* @__PURE__ */ __name(function finish() {
             callback();
-          });
+          }, "finish"));
           ws.close();
         }
       };
@@ -63268,9 +65532,9 @@ var require_stream = __commonJS({
       };
       duplex._write = function(chunk, encoding, callback) {
         if (ws.readyState === ws.CONNECTING) {
-          ws.once("open", function open() {
+          ws.once("open", /* @__PURE__ */ __name(function open() {
             duplex._write(chunk, encoding, callback);
-          });
+          }, "open"));
           return;
         }
         ws.send(chunk, callback);
@@ -63279,6 +65543,7 @@ var require_stream = __commonJS({
       duplex.on("error", duplexOnError);
       return duplex;
     }
+    __name(createWebSocketStream, "createWebSocketStream");
     module2.exports = createWebSocketStream;
   }
 });
@@ -63324,6 +65589,7 @@ var require_subprotocol = __commonJS({
       protocols.add(protocol);
       return protocols;
     }
+    __name(parse, "parse");
     module2.exports = { parse };
   }
 });
@@ -63346,6 +65612,9 @@ var require_websocket_server = __commonJS({
     var CLOSING = 1;
     var CLOSED = 2;
     var WebSocketServer = class extends EventEmitter {
+      static {
+        __name(this, "WebSocketServer");
+      }
       /**
        * Create a `WebSocketServer` instance.
        *
@@ -63436,9 +65705,9 @@ var require_websocket_server = __commonJS({
           this._removeListeners = addListeners(this._server, {
             listening: this.emit.bind(this, "listening"),
             error: this.emit.bind(this, "error"),
-            upgrade: (req, socket, head) => {
+            upgrade: /* @__PURE__ */ __name((req, socket, head) => {
               this.handleUpgrade(req, socket, head, emitConnection);
-            }
+            }, "upgrade")
           });
         }
         if (options.perMessageDeflate === true) options.perMessageDeflate = {};
@@ -63690,19 +65959,22 @@ var require_websocket_server = __commonJS({
     module2.exports = WebSocketServer;
     function addListeners(server, map) {
       for (const event of Object.keys(map)) server.on(event, map[event]);
-      return function removeListeners() {
+      return /* @__PURE__ */ __name(function removeListeners() {
         for (const event of Object.keys(map)) {
           server.removeListener(event, map[event]);
         }
-      };
+      }, "removeListeners");
     }
+    __name(addListeners, "addListeners");
     function emitClose(server) {
       server._state = CLOSED;
       server.emit("close");
     }
+    __name(emitClose, "emitClose");
     function socketOnError() {
       this.destroy();
     }
+    __name(socketOnError, "socketOnError");
     function abortHandshake(socket, code, message, headers) {
       message = message || http.STATUS_CODES[code];
       headers = {
@@ -63717,6 +65989,7 @@ var require_websocket_server = __commonJS({
 ` + Object.keys(headers).map((h) => `${h}: ${headers[h]}`).join("\r\n") + "\r\n\r\n" + message
       );
     }
+    __name(abortHandshake, "abortHandshake");
     function abortHandshakeOrEmitwsClientError(server, req, socket, code, message, headers) {
       if (server.listenerCount("wsClientError")) {
         const err = new Error(message);
@@ -63726,6 +65999,7 @@ var require_websocket_server = __commonJS({
         abortHandshake(socket, code, message, headers);
       }
     }
+    __name(abortHandshakeOrEmitwsClientError, "abortHandshakeOrEmitwsClientError");
   }
 });
 
@@ -63764,53 +66038,53 @@ var require_dist9 = __commonJS({
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
     var __getProtoOf2 = Object.getPrototypeOf;
     var __hasOwnProp2 = Object.prototype.hasOwnProperty;
-    var __name = (target, value) => __defProp2(target, "name", { value, configurable: true });
-    var __export2 = (target, all) => {
+    var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+    var __export2 = /* @__PURE__ */ __name((target, all) => {
       for (var name in all)
         __defProp2(target, name, { get: all[name], enumerable: true });
-    };
-    var __copyProps2 = (to, from, except, desc) => {
+    }, "__export");
+    var __copyProps2 = /* @__PURE__ */ __name((to, from, except, desc) => {
       if (from && typeof from === "object" || typeof from === "function") {
         for (let key of __getOwnPropNames2(from))
           if (!__hasOwnProp2.call(to, key) && key !== except)
-            __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
+            __defProp2(to, key, { get: /* @__PURE__ */ __name(() => from[key], "get"), enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
       }
       return to;
-    };
-    var __toESM2 = (mod, isNodeMode, target) => (target = mod != null ? __create2(__getProtoOf2(mod)) : {}, __copyProps2(
+    }, "__copyProps");
+    var __toESM2 = /* @__PURE__ */ __name((mod, isNodeMode, target) => (target = mod != null ? __create2(__getProtoOf2(mod)) : {}, __copyProps2(
       // If the importer is in node compatibility mode or this is not an ESM
       // file that has been converted to a CommonJS file using a Babel-
       // compatible transform (i.e. "__esModule" has not been set), then set
       // "default" to the CommonJS "module.exports" for node compatibility.
       isNodeMode || !mod || !mod.__esModule ? __defProp2(target, "default", { value: mod, enumerable: true }) : target,
       mod
-    ));
-    var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
+    )), "__toESM");
+    var __toCommonJS2 = /* @__PURE__ */ __name((mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod), "__toCommonJS");
     var src_exports = {};
     __export2(src_exports, {
-      CloseCodes: () => CloseCodes,
-      CompressionMethod: () => CompressionMethod,
-      DefaultDeviceProperty: () => DefaultDeviceProperty,
-      DefaultWebSocketManagerOptions: () => DefaultWebSocketManagerOptions,
-      Encoding: () => Encoding,
-      ImportantGatewayOpcodes: () => ImportantGatewayOpcodes,
-      KnownNetworkErrorCodes: () => KnownNetworkErrorCodes,
-      SimpleContextFetchingStrategy: () => SimpleContextFetchingStrategy,
-      SimpleIdentifyThrottler: () => SimpleIdentifyThrottler,
-      SimpleShardingStrategy: () => SimpleShardingStrategy,
-      WebSocketManager: () => WebSocketManager2,
-      WebSocketShard: () => WebSocketShard,
-      WebSocketShardDestroyRecovery: () => WebSocketShardDestroyRecovery,
-      WebSocketShardEvents: () => WebSocketShardEvents,
-      WebSocketShardStatus: () => WebSocketShardStatus,
-      WorkerBootstrapper: () => WorkerBootstrapper,
-      WorkerContextFetchingStrategy: () => WorkerContextFetchingStrategy,
-      WorkerReceivePayloadOp: () => WorkerReceivePayloadOp,
-      WorkerSendPayloadOp: () => WorkerSendPayloadOp,
-      WorkerShardingStrategy: () => WorkerShardingStrategy,
-      getInitialSendRateLimitState: () => getInitialSendRateLimitState,
-      managerToFetchingStrategyOptions: () => managerToFetchingStrategyOptions,
-      version: () => version
+      CloseCodes: /* @__PURE__ */ __name(() => CloseCodes, "CloseCodes"),
+      CompressionMethod: /* @__PURE__ */ __name(() => CompressionMethod, "CompressionMethod"),
+      DefaultDeviceProperty: /* @__PURE__ */ __name(() => DefaultDeviceProperty, "DefaultDeviceProperty"),
+      DefaultWebSocketManagerOptions: /* @__PURE__ */ __name(() => DefaultWebSocketManagerOptions, "DefaultWebSocketManagerOptions"),
+      Encoding: /* @__PURE__ */ __name(() => Encoding, "Encoding"),
+      ImportantGatewayOpcodes: /* @__PURE__ */ __name(() => ImportantGatewayOpcodes, "ImportantGatewayOpcodes"),
+      KnownNetworkErrorCodes: /* @__PURE__ */ __name(() => KnownNetworkErrorCodes, "KnownNetworkErrorCodes"),
+      SimpleContextFetchingStrategy: /* @__PURE__ */ __name(() => SimpleContextFetchingStrategy, "SimpleContextFetchingStrategy"),
+      SimpleIdentifyThrottler: /* @__PURE__ */ __name(() => SimpleIdentifyThrottler, "SimpleIdentifyThrottler"),
+      SimpleShardingStrategy: /* @__PURE__ */ __name(() => SimpleShardingStrategy, "SimpleShardingStrategy"),
+      WebSocketManager: /* @__PURE__ */ __name(() => WebSocketManager2, "WebSocketManager"),
+      WebSocketShard: /* @__PURE__ */ __name(() => WebSocketShard, "WebSocketShard"),
+      WebSocketShardDestroyRecovery: /* @__PURE__ */ __name(() => WebSocketShardDestroyRecovery, "WebSocketShardDestroyRecovery"),
+      WebSocketShardEvents: /* @__PURE__ */ __name(() => WebSocketShardEvents, "WebSocketShardEvents"),
+      WebSocketShardStatus: /* @__PURE__ */ __name(() => WebSocketShardStatus, "WebSocketShardStatus"),
+      WorkerBootstrapper: /* @__PURE__ */ __name(() => WorkerBootstrapper, "WorkerBootstrapper"),
+      WorkerContextFetchingStrategy: /* @__PURE__ */ __name(() => WorkerContextFetchingStrategy, "WorkerContextFetchingStrategy"),
+      WorkerReceivePayloadOp: /* @__PURE__ */ __name(() => WorkerReceivePayloadOp, "WorkerReceivePayloadOp"),
+      WorkerSendPayloadOp: /* @__PURE__ */ __name(() => WorkerSendPayloadOp, "WorkerSendPayloadOp"),
+      WorkerShardingStrategy: /* @__PURE__ */ __name(() => WorkerShardingStrategy, "WorkerShardingStrategy"),
+      getInitialSendRateLimitState: /* @__PURE__ */ __name(() => getInitialSendRateLimitState, "getInitialSendRateLimitState"),
+      managerToFetchingStrategyOptions: /* @__PURE__ */ __name(() => managerToFetchingStrategyOptions, "managerToFetchingStrategyOptions"),
+      version: /* @__PURE__ */ __name(() => version, "version")
     });
     module2.exports = __toCommonJS2(src_exports);
     async function managerToFetchingStrategyOptions(manager) {
@@ -63831,13 +66105,17 @@ var require_dist9 = __commonJS({
       };
     }
     __name(managerToFetchingStrategyOptions, "managerToFetchingStrategyOptions");
+    __name2(managerToFetchingStrategyOptions, "managerToFetchingStrategyOptions");
     var SimpleContextFetchingStrategy = class _SimpleContextFetchingStrategy {
+      static {
+        __name(this, "_SimpleContextFetchingStrategy");
+      }
       constructor(manager, options) {
         this.manager = manager;
         this.options = options;
       }
       static {
-        __name(this, "SimpleContextFetchingStrategy");
+        __name2(this, "SimpleContextFetchingStrategy");
       }
       // This strategy assumes every shard is running under the same process - therefore we need a single
       // IdentifyThrottler per manager.
@@ -63892,6 +66170,9 @@ var require_dist9 = __commonJS({
     var WorkerShardingStrategy = class {
       static {
         __name(this, "WorkerShardingStrategy");
+      }
+      static {
+        __name2(this, "WorkerShardingStrategy");
       }
       manager;
       options;
@@ -64034,7 +66315,7 @@ var require_dist9 = __commonJS({
       }
       async waitForWorkerReady(worker) {
         return new Promise((resolve2) => {
-          const handler = /* @__PURE__ */ __name((payload) => {
+          const handler = /* @__PURE__ */ __name2((payload) => {
             if (payload.op === 7) {
               resolve2();
               worker.off("message", handler);
@@ -64121,6 +66402,9 @@ var require_dist9 = __commonJS({
       }
     };
     var WorkerContextFetchingStrategy = class {
+      static {
+        __name(this, "WorkerContextFetchingStrategy");
+      }
       constructor(options) {
         this.options = options;
         if (import_node_worker_threads2.isMainThread) {
@@ -64143,7 +66427,7 @@ var require_dist9 = __commonJS({
         });
       }
       static {
-        __name(this, "WorkerContextFetchingStrategy");
+        __name2(this, "WorkerContextFetchingStrategy");
       }
       sessionPromises = new import_collection2.Collection();
       waitForIdentifyPromises = new import_collection2.Collection();
@@ -64180,7 +66464,7 @@ var require_dist9 = __commonJS({
           )
         );
         import_node_worker_threads2.parentPort.postMessage(payload);
-        const listener = /* @__PURE__ */ __name(() => {
+        const listener = /* @__PURE__ */ __name2(() => {
           const payload2 = {
             op: 8,
             nonce
@@ -64217,11 +66501,14 @@ var require_dist9 = __commonJS({
     var import_collection3 = require_dist2();
     var import_async_queue = require_cjs2();
     var SimpleIdentifyThrottler = class {
+      static {
+        __name(this, "SimpleIdentifyThrottler");
+      }
       constructor(maxConcurrency) {
         this.maxConcurrency = maxConcurrency;
       }
       static {
-        __name(this, "SimpleIdentifyThrottler");
+        __name2(this, "SimpleIdentifyThrottler");
       }
       states = new import_collection3.Collection();
       /**
@@ -64263,7 +66550,7 @@ var require_dist9 = __commonJS({
         const info = await manager.fetchGatewayInformation();
         return new SimpleIdentifyThrottler(info.session_start_limit.max_concurrency);
       },
-      buildStrategy: /* @__PURE__ */ __name((manager) => new SimpleShardingStrategy(manager), "buildStrategy"),
+      buildStrategy: /* @__PURE__ */ __name2((manager) => new SimpleShardingStrategy(manager), "buildStrategy"),
       shardCount: null,
       shardIds: null,
       largeThreshold: null,
@@ -64304,6 +66591,7 @@ var require_dist9 = __commonJS({
       };
     }
     __name(getInitialSendRateLimitState, "getInitialSendRateLimitState");
+    __name2(getInitialSendRateLimitState, "getInitialSendRateLimitState");
     var KnownNetworkErrorCodes = /* @__PURE__ */ new Set(["ECONNRESET", "ECONNREFUSED", "ETIMEDOUT", "EAI_AGAIN"]);
     var getZlibSync = (0, import_util2.lazy)(async () => import("zlib-sync").then((mod) => mod.default).catch(() => null));
     var WebSocketShardEvents = /* @__PURE__ */ ((WebSocketShardEvents2) => {
@@ -64338,6 +66626,9 @@ var require_dist9 = __commonJS({
     var WebSocketShard = class extends import_async_event_emitter.AsyncEventEmitter {
       static {
         __name(this, "WebSocketShard");
+      }
+      static {
+        __name2(this, "WebSocketShard");
       }
       connection = null;
       useIdentifyCompress = false;
@@ -64574,7 +66865,7 @@ var require_dist9 = __commonJS({
       async identify() {
         this.debug(["Waiting for identify throttle"]);
         const controller = new AbortController();
-        const closeHandler = /* @__PURE__ */ __name(() => {
+        const closeHandler = /* @__PURE__ */ __name2(() => {
           controller.abort();
         }, "closeHandler");
         this.on("closed", closeHandler);
@@ -64958,6 +67249,9 @@ var require_dist9 = __commonJS({
       static {
         __name(this, "SimpleShardingStrategy");
       }
+      static {
+        __name2(this, "SimpleShardingStrategy");
+      }
       manager;
       shards = new import_collection6.Collection();
       constructor(manager) {
@@ -65020,6 +67314,9 @@ var require_dist9 = __commonJS({
     var WorkerBootstrapper = class {
       static {
         __name(this, "WorkerBootstrapper");
+      }
+      static {
+        __name2(this, "WorkerBootstrapper");
       }
       /**
        * The data passed to the worker thread
@@ -65146,6 +67443,9 @@ var require_dist9 = __commonJS({
     var WebSocketManager2 = class extends import_async_event_emitter2.AsyncEventEmitter {
       static {
         __name(this, "WebSocketManager");
+      }
+      static {
+        __name2(this, "WebSocketManager");
       }
       /**
        * The options being used by this manager
@@ -65287,6 +67587,9 @@ var require_WebSocketShard = __commonJS({
     var WebSocketShardEvents = require_WebSocketShardEvents();
     var deprecationEmittedForImportant = false;
     var WebSocketShard = class extends EventEmitter {
+      static {
+        __name(this, "WebSocketShard");
+      }
       constructor(manager, id) {
         super();
         this.manager = manager;
@@ -66020,6 +68323,9 @@ var require_ClientUser = __commonJS({
     var User = require_User();
     var { resolveImage } = require_DataResolver();
     var ClientUser = class extends User {
+      static {
+        __name(this, "ClientUser");
+      }
       _patch(data) {
         super._patch(data);
         if ("verified" in data) {
@@ -66404,6 +68710,9 @@ var require_VoiceChannelEffect = __commonJS({
     "use strict";
     var { Emoji } = require_Emoji();
     var VoiceChannelEffect = class {
+      static {
+        __name(this, "VoiceChannelEffect");
+      }
       constructor(data, guild) {
         this.guild = guild;
         this.channelId = data.channel_id;
@@ -66612,6 +68921,9 @@ var require_WebSocketManager = __commonJS({
     var deprecationEmittedForInvalidSessionEvent = false;
     var deprecationEmittedForDestroyedEvent = false;
     var WebSocketManager2 = class extends EventEmitter {
+      static {
+        __name(this, "WebSocketManager");
+      }
       constructor(client2) {
         super();
         Object.defineProperty(this, "client", { value: client2 });
@@ -66664,10 +68976,10 @@ var require_WebSocketManager = __commonJS({
             shardIds: shards === "auto" ? null : shards,
             shardCount: shards === "auto" ? null : shardCount,
             initialPresence: ws.presence,
-            retrieveSessionInfo: (shardId) => this.shards.get(shardId).sessionInfo,
-            updateSessionInfo: (shardId, sessionInfo) => {
+            retrieveSessionInfo: /* @__PURE__ */ __name((shardId) => this.shards.get(shardId).sessionInfo, "retrieveSessionInfo"),
+            updateSessionInfo: /* @__PURE__ */ __name((shardId, sessionInfo) => {
               this.shards.get(shardId).sessionInfo = sessionInfo;
-            },
+            }, "updateSessionInfo"),
             compression: zlib ? CompressionMethod.ZlibStream : null
           };
           if (ws.buildIdentifyThrottler) wsOptions.buildIdentifyThrottler = ws.buildIdentifyThrottler;
@@ -66859,6 +69171,9 @@ var require_BaseGuildEmojiManager = __commonJS({
     var ReactionEmoji = require_ReactionEmoji();
     var { parseEmoji } = require_Util();
     var BaseGuildEmojiManager2 = class extends CachedManager {
+      static {
+        __name(this, "BaseGuildEmojiManager");
+      }
       constructor(client2, iterable) {
         super(client2, GuildEmoji, iterable);
       }
@@ -66940,6 +69255,9 @@ var require_ChannelManager = __commonJS({
     var Events2 = require_Events();
     var cacheWarningEmitted = false;
     var ChannelManager2 = class extends CachedManager {
+      static {
+        __name(this, "ChannelManager");
+      }
       constructor(client2, iterable) {
         super(client2, BaseChannel, iterable);
         const defaultCaching = this._cache.constructor.name === "Collection" || this._cache.maxSize === void 0 || this._cache.maxSize === Infinity;
@@ -67051,6 +69369,9 @@ var require_ShardClientUtil = __commonJS({
     var Events2 = require_Events();
     var { makeError, makePlainError } = require_Util();
     var ShardClientUtil2 = class {
+      static {
+        __name(this, "ShardClientUtil");
+      }
       constructor(client2, mode) {
         this.client = client2;
         this.mode = mode;
@@ -67141,13 +69462,13 @@ var require_ShardClientUtil = __commonJS({
       fetchClientValues(prop, shard) {
         return new Promise((resolve, reject) => {
           const parent = this.parentPort ?? process2;
-          const listener = (message) => {
+          const listener = /* @__PURE__ */ __name((message) => {
             if (message?._sFetchProp !== prop || message._sFetchPropShard !== shard) return;
             parent.removeListener("message", listener);
             this.decrementMaxListeners(parent);
             if (!message._error) resolve(message._result);
             else reject(makeError(message._error));
-          };
+          }, "listener");
           this.incrementMaxListeners(parent);
           parent.on("message", listener);
           this.send({ _sFetchProp: prop, _sFetchPropShard: shard }).catch((err) => {
@@ -67176,13 +69497,13 @@ var require_ShardClientUtil = __commonJS({
             return;
           }
           script2 = `(${script2})(this, ${JSON.stringify(options.context)})`;
-          const listener = (message) => {
+          const listener = /* @__PURE__ */ __name((message) => {
             if (message?._sEval !== script2 || message._sEvalShard !== options.shard) return;
             parent.removeListener("message", listener);
             this.decrementMaxListeners(parent);
             if (!message._error) resolve(message._result);
             else reject(makeError(message._error));
-          };
+          }, "listener");
           this.incrementMaxListeners(parent);
           parent.on("message", listener);
           this.send({ _sEval: script2, _sEvalShard: options.shard }).catch((err) => {
@@ -67304,6 +69625,9 @@ var require_GuildAuditLogs = __commonJS({
     var Webhook2 = require_Webhook();
     var { flatten } = require_Util();
     var GuildAuditLogs = class {
+      static {
+        __name(this, "GuildAuditLogs");
+      }
       constructor(guild, data) {
         if (data.users) for (const user of data.users) guild.client.users._add(user);
         if (data.threads) for (const thread of data.threads) guild.client.channels._add(thread, guild);
@@ -67355,6 +69679,9 @@ var require_GuildOnboarding = __commonJS({
     var Base = require_Base();
     var { GuildOnboardingPrompt } = require_GuildOnboardingPrompt();
     var GuildOnboarding = class extends Base {
+      static {
+        __name(this, "GuildOnboarding");
+      }
       constructor(client2, data) {
         super(client2);
         this.guildId = data.guild_id;
@@ -67389,6 +69716,9 @@ var require_GuildPreviewEmoji = __commonJS({
     "use strict";
     var BaseGuildEmoji = require_BaseGuildEmoji();
     var GuildPreviewEmoji = class extends BaseGuildEmoji {
+      static {
+        __name(this, "GuildPreviewEmoji");
+      }
       /**
        * The public guild this emoji is part of
        * @type {GuildPreview}
@@ -67414,6 +69744,9 @@ var require_GuildPreview = __commonJS({
     var GuildPreviewEmoji = require_GuildPreviewEmoji();
     var { Sticker: Sticker2 } = require_Sticker();
     var GuildPreview2 = class extends Base {
+      static {
+        __name(this, "GuildPreview");
+      }
       constructor(client2, data) {
         super(client2);
         if (!data) return;
@@ -67539,6 +69872,9 @@ var require_AutoModerationRuleManager = __commonJS({
     var CachedManager = require_CachedManager();
     var AutoModerationRule = require_AutoModerationRule();
     var AutoModerationRuleManager = class extends CachedManager {
+      static {
+        __name(this, "AutoModerationRuleManager");
+      }
       constructor(guild, iterable) {
         super(guild.client, AutoModerationRule, iterable);
         this.guild = guild;
@@ -67797,6 +70133,9 @@ var require_GuildApplicationCommandManager = __commonJS({
     var ApplicationCommandManager = require_ApplicationCommandManager();
     var ApplicationCommandPermissionsManager = require_ApplicationCommandPermissionsManager();
     var GuildApplicationCommandManager = class extends ApplicationCommandManager {
+      static {
+        __name(this, "GuildApplicationCommandManager");
+      }
       constructor(guild, iterable) {
         super(guild.client, iterable);
         this.guild = guild;
@@ -67821,6 +70160,9 @@ var require_GuildBanManager = __commonJS({
     var { GuildMember } = require_GuildMember();
     var deprecationEmittedForDeleteMessageDays = false;
     var GuildBanManager = class extends CachedManager {
+      static {
+        __name(this, "GuildBanManager");
+      }
       constructor(guild, iterable) {
         super(guild.client, GuildBan, iterable);
         this.guild = guild;
@@ -68044,6 +70386,9 @@ var require_GuildChannelManager = __commonJS({
     var { setPosition } = require_Util();
     var cacheWarningEmitted = false;
     var GuildChannelManager = class extends CachedManager {
+      static {
+        __name(this, "GuildChannelManager");
+      }
       constructor(guild, iterable) {
         super(guild.client, GuildChannel, iterable);
         const defaultCaching = this._cache.constructor.name === "Collection" || this._cache.maxSize === void 0 || this._cache.maxSize === Infinity;
@@ -68503,6 +70848,9 @@ var require_GuildEmojiManager = __commonJS({
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { resolveImage } = require_DataResolver();
     var GuildEmojiManager = class extends BaseGuildEmojiManager2 {
+      static {
+        __name(this, "GuildEmojiManager");
+      }
       constructor(guild, iterable) {
         super(guild.client, iterable);
         this.guild = guild;
@@ -68660,6 +71008,9 @@ var require_GuildInviteManager = __commonJS({
     var Invite2 = require_Invite();
     var { resolveInviteCode: resolveInviteCode2 } = require_DataResolver();
     var GuildInviteManager = class extends CachedManager {
+      static {
+        __name(this, "GuildInviteManager");
+      }
       constructor(guild, iterable) {
         super(guild.client, Invite2, iterable);
         this.guild = guild;
@@ -68859,6 +71210,9 @@ var require_GuildMemberManager = __commonJS({
     var Partials = require_Partials();
     var deprecatedEmittedForEditSoleNickname = false;
     var GuildMemberManager = class extends CachedManager {
+      static {
+        __name(this, "GuildMemberManager");
+      }
       constructor(guild, iterable) {
         super(guild.client, GuildMember, iterable);
         this.guild = guild;
@@ -69046,18 +71400,18 @@ var require_GuildMemberManager = __commonJS({
           if (!query && !users) query = "";
           const fetchedMembers = new Collection2();
           let i = 0;
-          const cleanup = () => {
+          const cleanup = /* @__PURE__ */ __name(() => {
             clearTimeout2(timeout);
             this.client.removeListener(Events2.Raw, rateLimitHandler);
             this.client.decrementMaxListeners();
             this.client.removeListener(Events2.GuildMembersChunk, handler);
             this.client.decrementMaxListeners();
-          };
+          }, "cleanup");
           const timeout = setTimeout2(() => {
             cleanup();
             reject(new DiscordjsError2(ErrorCodes2.GuildMembersTimeout));
           }, time).unref();
-          const handler = (members, _, chunk) => {
+          const handler = /* @__PURE__ */ __name((members, _, chunk) => {
             if (chunk.nonce !== nonce) return;
             timeout.refresh();
             i++;
@@ -69068,7 +71422,7 @@ var require_GuildMemberManager = __commonJS({
               cleanup();
               resolve(users && !Array.isArray(users) && fetchedMembers.size ? fetchedMembers.first() : fetchedMembers);
             }
-          };
+          }, "handler");
           const requestData = {
             guild_id: this.guild.id,
             presences,
@@ -69077,12 +71431,12 @@ var require_GuildMemberManager = __commonJS({
             nonce,
             limit
           };
-          const rateLimitHandler = (payload) => {
+          const rateLimitHandler = /* @__PURE__ */ __name((payload) => {
             if (payload.t === GatewayDispatchEvents.RateLimited && payload.d.meta.nonce === nonce) {
               cleanup();
               reject(new GatewayRateLimitError(payload.d, requestData));
             }
-          };
+          }, "rateLimitHandler");
           this.client.incrementMaxListeners();
           this.client.on(Events2.Raw, rateLimitHandler);
           this.client.incrementMaxListeners();
@@ -69396,6 +71750,9 @@ var require_GuildScheduledEventManager = __commonJS({
     var { resolveImage } = require_DataResolver();
     var { _transformGuildScheduledEventRecurrenceRule } = require_Transformers();
     var GuildScheduledEventManager = class extends CachedManager {
+      static {
+        __name(this, "GuildScheduledEventManager");
+      }
       constructor(guild, iterable) {
         super(guild.client, GuildScheduledEvent, iterable);
         this.guild = guild;
@@ -69669,6 +72026,9 @@ var require_SoundboardSound = __commonJS({
     var { Emoji } = require_Emoji();
     var { DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var SoundboardSound2 = class _SoundboardSound extends Base {
+      static {
+        __name(this, "SoundboardSound");
+      }
       constructor(client2, data) {
         super(client2);
         this.soundId = data.sound_id;
@@ -69808,6 +72168,9 @@ var require_GuildSoundboardSoundManager = __commonJS({
     var { resolveBase64, resolveFile } = require_DataResolver();
     var fileTypeMime = lazy(() => require_dist4().filetypemime);
     var GuildSoundboardSoundManager = class extends CachedManager {
+      static {
+        __name(this, "GuildSoundboardSoundManager");
+      }
       constructor(guild, iterable) {
         super(guild.client, SoundboardSound2, iterable);
         this.guild = guild;
@@ -69981,6 +72344,9 @@ var require_GuildStickerManager = __commonJS({
     var MessagePayload = require_MessagePayload();
     var { Sticker: Sticker2 } = require_Sticker();
     var GuildStickerManager = class extends CachedManager {
+      static {
+        __name(this, "GuildStickerManager");
+      }
       constructor(guild, iterable) {
         super(guild.client, Sticker2, iterable);
         this.guild = guild;
@@ -70136,6 +72502,9 @@ var require_ActivityFlagsBitField = __commonJS({
     var { ActivityFlags } = require_v106();
     var BitField = require_BitField();
     var ActivityFlagsBitField = class extends BitField {
+      static {
+        __name(this, "ActivityFlagsBitField");
+      }
       /**
        * Numeric activity flags.
        * @type {ActivityFlags}
@@ -70156,6 +72525,9 @@ var require_Presence = __commonJS({
     var ActivityFlagsBitField = require_ActivityFlagsBitField();
     var { flatten } = require_Util();
     var Presence = class extends Base {
+      static {
+        __name(this, "Presence");
+      }
       constructor(client2, data = {}) {
         super(client2);
         this.userId = data.user.id;
@@ -70214,6 +72586,9 @@ var require_Presence = __commonJS({
       }
     };
     var Activity = class {
+      static {
+        __name(this, "Activity");
+      }
       constructor(presence, data) {
         Object.defineProperty(this, "presence", { value: presence });
         this.name = data.name;
@@ -70262,6 +72637,9 @@ var require_Presence = __commonJS({
       }
     };
     var RichPresenceAssets = class {
+      static {
+        __name(this, "RichPresenceAssets");
+      }
       constructor(activity, assets) {
         Object.defineProperty(this, "activity", { value: activity });
         this.largeText = assets.large_text ?? null;
@@ -70325,6 +72703,9 @@ var require_PresenceManager = __commonJS({
     var CachedManager = require_CachedManager();
     var { Presence } = require_Presence();
     var PresenceManager = class extends CachedManager {
+      static {
+        __name(this, "PresenceManager");
+      }
       constructor(client2, iterable) {
         super(client2, Presence, iterable);
       }
@@ -70388,6 +72769,9 @@ var require_RoleManager = __commonJS({
     var deprecationEmittedForCreate = false;
     var deprecationEmittedForEdit = false;
     var RoleManager = class extends CachedManager {
+      static {
+        __name(this, "RoleManager");
+      }
       constructor(guild, iterable) {
         super(guild.client, Role, iterable);
         if (!cacheWarningEmitted && this._cache.constructor.name !== "Collection") {
@@ -70771,6 +73155,9 @@ var require_StageInstanceManager = __commonJS({
     var { DiscordjsTypeError: DiscordjsTypeError2, DiscordjsError: DiscordjsError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { StageInstance } = require_StageInstance();
     var StageInstanceManager = class extends CachedManager {
+      static {
+        __name(this, "StageInstanceManager");
+      }
       constructor(guild, iterable) {
         super(guild.client, StageInstance, iterable);
         this.guild = guild;
@@ -70905,6 +73292,9 @@ var require_VoiceStateManager = __commonJS({
     var CachedManager = require_CachedManager();
     var VoiceState = require_VoiceState();
     var VoiceStateManager = class extends CachedManager {
+      static {
+        __name(this, "VoiceStateManager");
+      }
       constructor(guild, iterable) {
         super(guild.client, VoiceState, iterable);
         this.guild = guild;
@@ -70953,6 +73343,9 @@ var require_SystemChannelFlagsBitField = __commonJS({
     var { GuildSystemChannelFlags } = require_v106();
     var BitField = require_BitField();
     var SystemChannelFlagsBitField = class extends BitField {
+      static {
+        __name(this, "SystemChannelFlagsBitField");
+      }
       /**
        * Numeric system channel flags.
        * @type {GuildSystemChannelFlags}
@@ -71001,6 +73394,9 @@ var require_Guild = __commonJS({
     var { _transformAPIIncidentsData } = require_Transformers();
     var { discordSort, getSortableGroupTypes, resolvePartialEmoji } = require_Util();
     var Guild = class extends AnonymousGuild {
+      static {
+        __name(this, "Guild");
+      }
       constructor(client2, data) {
         super(client2, data, false);
         this.commands = new GuildApplicationCommandManager(this);
@@ -72071,14 +74467,14 @@ var require_Guild = __commonJS({
         return (methods) => {
           this.client.voice.adapters.set(this.id, methods);
           return {
-            sendPayload: (data) => {
+            sendPayload: /* @__PURE__ */ __name((data) => {
               if (this.shard.status !== Status2.Ready) return false;
               this.shard.send(data);
               return true;
-            },
-            destroy: () => {
+            }, "sendPayload"),
+            destroy: /* @__PURE__ */ __name(() => {
               this.client.voice.adapters.delete(this.id);
-            }
+            }, "destroy")
           };
         };
       }
@@ -72117,6 +74513,9 @@ var require_OAuth2Guild = __commonJS({
     var BaseGuild = require_BaseGuild();
     var PermissionsBitField2 = require_PermissionsBitField();
     var OAuth2Guild = class extends BaseGuild {
+      static {
+        __name(this, "OAuth2Guild");
+      }
       constructor(client2, data) {
         super(client2, data);
         this.owner = data.owner;
@@ -72154,6 +74553,9 @@ var require_GuildManager = __commonJS({
     var { resolveColor } = require_Util();
     var cacheWarningEmitted = false;
     var GuildManager2 = class extends CachedManager {
+      static {
+        __name(this, "GuildManager");
+      }
       constructor(client2, iterable) {
         super(client2, Guild, iterable);
         if (!cacheWarningEmitted && this._cache.constructor.name !== "Collection") {
@@ -72325,13 +74727,13 @@ var require_GuildManager = __commonJS({
           }
         });
         return this.client.guilds.cache.get(data.id) ?? new Promise((resolve) => {
-          const handleGuild = (guild) => {
+          const handleGuild = /* @__PURE__ */ __name((guild) => {
             if (guild.id === data.id) {
               clearTimeout2(timeout);
               this.client.decrementMaxListeners();
               resolve(guild);
             }
-          };
+          }, "handleGuild");
           this.client.incrementMaxListeners();
           this.client.once(Events2.GuildCreate, handleGuild);
           const timeout = setTimeout2(() => {
@@ -72412,7 +74814,7 @@ var require_GuildManager = __commonJS({
         return new Promise((resolve, reject) => {
           const remainingGuildIds = new Set(guildIds);
           const fetchedSoundboardSounds = new Collection2();
-          const handler = (soundboardSounds, guild) => {
+          const handler = /* @__PURE__ */ __name((soundboardSounds, guild) => {
             timeout.refresh();
             if (!remainingGuildIds.has(guild.id)) return;
             fetchedSoundboardSounds.set(guild.id, soundboardSounds);
@@ -72423,7 +74825,7 @@ var require_GuildManager = __commonJS({
               this.client.decrementMaxListeners();
               resolve(fetchedSoundboardSounds);
             }
-          };
+          }, "handler");
           const timeout = setTimeout2(() => {
             this.client.removeListener(Events2.SoundboardSounds, handler);
             this.client.decrementMaxListeners();
@@ -72488,6 +74890,9 @@ var require_UserManager = __commonJS({
     var User = require_User();
     var { emitDeprecationWarningForUserFetchFlags } = require_Util();
     var UserManager2 = class extends CachedManager {
+      static {
+        __name(this, "UserManager");
+      }
       constructor(client2, iterable) {
         super(client2, User, iterable);
       }
@@ -72615,6 +75020,9 @@ var require_ClientPresence = __commonJS({
     var { Presence } = require_Presence();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var ClientPresence2 = class extends Presence {
+      static {
+        __name(this, "ClientPresence");
+      }
       constructor(client2, data = {}) {
         super(client2, Object.assign(data, { status: data.status ?? "online", user: { id: null } }));
       }
@@ -72693,6 +75101,9 @@ var require_StickerPack = __commonJS({
     var Base = require_Base();
     var { Sticker: Sticker2 } = require_Sticker();
     var StickerPack2 = class extends Base {
+      static {
+        __name(this, "StickerPack");
+      }
       constructor(client2, pack) {
         super(client2);
         this.id = pack.id;
@@ -72746,6 +75157,9 @@ var require_VoiceRegion = __commonJS({
     "use strict";
     var { flatten } = require_Util();
     var VoiceRegion2 = class {
+      static {
+        __name(this, "VoiceRegion");
+      }
       constructor(data) {
         this.id = data.id;
         this.name = data.name;
@@ -72767,6 +75181,9 @@ var require_WidgetMember = __commonJS({
     "use strict";
     var Base = require_Base();
     var WidgetMember = class extends Base {
+      static {
+        __name(this, "WidgetMember");
+      }
       /**
        * Activity sent in a {@link WidgetMember}.
        * @typedef {Object} WidgetActivity
@@ -72802,6 +75219,9 @@ var require_Widget = __commonJS({
     var Base = require_Base();
     var WidgetMember = require_WidgetMember();
     var Widget2 = class extends Base {
+      static {
+        __name(this, "Widget");
+      }
       constructor(client2, data) {
         super(client2);
         this._patch(data);
@@ -72862,6 +75282,9 @@ var require_IntentsBitField = __commonJS({
     var { GatewayIntentBits: GatewayIntentBits2 } = require_v106();
     var BitField = require_BitField();
     var IntentsBitField2 = class extends BitField {
+      static {
+        __name(this, "IntentsBitField");
+      }
       /**
        * Numeric WebSocket intents
        * @type {GatewayIntentBits}
@@ -72882,6 +75305,9 @@ var require_Sweepers = __commonJS({
     var Events2 = require_Events();
     var { DiscordjsTypeError: DiscordjsTypeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var Sweepers2 = class {
+      static {
+        __name(this, "Sweepers");
+      }
       constructor(client2, options) {
         Object.defineProperty(this, "client", { value: client2 });
         this.options = options;
@@ -73148,8 +75574,8 @@ var require_Sweepers = __commonJS({
        */
       static filterByLifetime({
         lifetime = 14400,
-        getComparisonTimestamp = (e) => e?.createdTimestamp,
-        excludeFromSweep = () => false
+        getComparisonTimestamp = /* @__PURE__ */ __name((e) => e?.createdTimestamp, "getComparisonTimestamp"),
+        excludeFromSweep = /* @__PURE__ */ __name(() => false, "excludeFromSweep")
       } = {}) {
         if (typeof lifetime !== "number") {
           throw new DiscordjsTypeError2(ErrorCodes2.InvalidType, "lifetime", "number");
@@ -73182,8 +75608,8 @@ var require_Sweepers = __commonJS({
       static archivedThreadSweepFilter(lifetime = 14400) {
         return this.filterByLifetime({
           lifetime,
-          getComparisonTimestamp: (e) => e.archiveTimestamp,
-          excludeFromSweep: (e) => !e.archived
+          getComparisonTimestamp: /* @__PURE__ */ __name((e) => e.archiveTimestamp, "getComparisonTimestamp"),
+          excludeFromSweep: /* @__PURE__ */ __name((e) => !e.archived, "excludeFromSweep")
         });
       }
       /**
@@ -73194,7 +75620,7 @@ var require_Sweepers = __commonJS({
       static expiredInviteSweepFilter(lifetime = 14400) {
         return this.filterByLifetime({
           lifetime,
-          getComparisonTimestamp: (i) => i.expiresTimestamp
+          getComparisonTimestamp: /* @__PURE__ */ __name((i) => i.expiresTimestamp, "getComparisonTimestamp")
         });
       }
       /**
@@ -73205,7 +75631,7 @@ var require_Sweepers = __commonJS({
       static outdatedMessageSweepFilter(lifetime = 3600) {
         return this.filterByLifetime({
           lifetime,
-          getComparisonTimestamp: (m) => m.editedTimestamp ?? m.createdTimestamp
+          getComparisonTimestamp: /* @__PURE__ */ __name((m) => m.editedTimestamp ?? m.createdTimestamp, "getComparisonTimestamp")
         });
       }
       /**
@@ -73321,6 +75747,9 @@ var require_Client = __commonJS({
     var Sweepers = require_Sweepers();
     var deprecationEmittedForPremiumStickerPacks = false;
     var Client = class extends BaseClient {
+      static {
+        __name(this, "Client");
+      }
       /**
        * @param {ClientOptions} options Options for the client
        */
@@ -73781,6 +76210,9 @@ var require_Shard = __commonJS({
     var childProcess = null;
     var Worker = null;
     var Shard = class extends EventEmitter {
+      static {
+        __name(this, "Shard");
+      }
       constructor(manager, id) {
         super();
         switch (manager.mode) {
@@ -73843,28 +76275,28 @@ var require_Shard = __commonJS({
         this.emit(ShardEvents.Spawn, child);
         if (timeout === -1 || timeout === Infinity) return child;
         return new Promise((resolve, reject) => {
-          const cleanup = () => {
+          const cleanup = /* @__PURE__ */ __name(() => {
             clearTimeout2(spawnTimeoutTimer);
             this.off("ready", onReady);
             this.off("disconnect", onDisconnect);
             this.off("death", onDeath);
-          };
-          const onReady = () => {
+          }, "cleanup");
+          const onReady = /* @__PURE__ */ __name(() => {
             cleanup();
             resolve(child);
-          };
-          const onDisconnect = () => {
+          }, "onReady");
+          const onDisconnect = /* @__PURE__ */ __name(() => {
             cleanup();
             reject(new DiscordjsError2(ErrorCodes2.ShardingReadyDisconnected, this.id));
-          };
-          const onDeath = () => {
+          }, "onDisconnect");
+          const onDeath = /* @__PURE__ */ __name(() => {
             cleanup();
             reject(new DiscordjsError2(ErrorCodes2.ShardingReadyDied, this.id));
-          };
-          const onTimeout = () => {
+          }, "onDeath");
+          const onTimeout = /* @__PURE__ */ __name(() => {
             cleanup();
             reject(new DiscordjsError2(ErrorCodes2.ShardingReadyTimeout, this.id));
-          };
+          }, "onTimeout");
           const spawnTimeoutTimer = setTimeout2(onTimeout, timeout);
           this.once("ready", onReady);
           this.once("disconnect", onDisconnect);
@@ -73936,14 +76368,14 @@ var require_Shard = __commonJS({
         if (this._fetches.has(prop)) return this._fetches.get(prop);
         const promise = new Promise((resolve, reject) => {
           const child = this.process ?? this.worker;
-          const listener = (message) => {
+          const listener = /* @__PURE__ */ __name((message) => {
             if (message?._fetchProp !== prop) return;
             child.removeListener("message", listener);
             this.decrementMaxListeners(child);
             this._fetches.delete(prop);
             if (!message._error) resolve(message._result);
             else reject(makeError(message._error));
-          };
+          }, "listener");
           this.incrementMaxListeners(child);
           child.on("message", listener);
           this.send({ _fetchProp: prop }).catch((err) => {
@@ -73970,14 +76402,14 @@ var require_Shard = __commonJS({
         if (this._evals.has(_eval)) return this._evals.get(_eval);
         const promise = new Promise((resolve, reject) => {
           const child = this.process ?? this.worker;
-          const listener = (message) => {
+          const listener = /* @__PURE__ */ __name((message) => {
             if (message?._eval !== _eval) return;
             child.removeListener("message", listener);
             this.decrementMaxListeners(child);
             this._evals.delete(_eval);
             if (!message._error) resolve(message._result);
             else reject(makeError(message._error));
-          };
+          }, "listener");
           this.incrementMaxListeners(child);
           child.on("message", listener);
           this.send({ _eval }).catch((err) => {
@@ -74099,6 +76531,9 @@ var require_ShardingManager = __commonJS({
     var { DiscordjsError: DiscordjsError2, DiscordjsTypeError: DiscordjsTypeError2, DiscordjsRangeError: DiscordjsRangeError2, ErrorCodes: ErrorCodes2 } = require_errors2();
     var { fetchRecommendedShardCount } = require_Util();
     var ShardingManager = class extends EventEmitter {
+      static {
+        __name(this, "ShardingManager");
+      }
       /**
        * The mode to spawn shards with for a {@link ShardingManager}. Can be either one of:
        * * 'process' to use child processes
@@ -74355,6 +76790,9 @@ var require_Formatters = __commonJS({
       userMention
     } = require_dist7();
     var Formatters = class extends null {
+      static {
+        __name(this, "Formatters");
+      }
       /**
        * Formats the content into a block quote.
        * <info>This needs to be at the start of the line for Discord to format it.</info>
@@ -74575,6 +77013,9 @@ var require_EmbedBuilder = __commonJS({
     var { toSnakeCase } = require_Transformers();
     var { resolveColor } = require_Util();
     var EmbedBuilder = class extends BuildersEmbed {
+      static {
+        __name(this, "EmbedBuilder");
+      }
       constructor(data) {
         super(toSnakeCase(data));
       }
@@ -74613,6 +77054,9 @@ var require_AttachmentBuilder = __commonJS({
     "use strict";
     var { basename, flatten } = require_Util();
     var AttachmentBuilder = class _AttachmentBuilder {
+      static {
+        __name(this, "AttachmentBuilder");
+      }
       /**
        * @param {BufferResolvable|Stream} attachment The file
        * @param {AttachmentData} [data] Extra data
@@ -74700,6 +77144,9 @@ var require_ModalBuilder = __commonJS({
     var { isJSONEncodable } = require_dist();
     var { toSnakeCase } = require_Transformers();
     var ModalBuilder = class extends BuildersModal {
+      static {
+        __name(this, "ModalBuilder");
+      }
       constructor({ components, ...data } = {}) {
         super({
           ...toSnakeCase(data),
@@ -74729,6 +77176,9 @@ var require_SelectMenuBuilder = __commonJS({
     var StringSelectMenuBuilder = require_StringSelectMenuBuilder();
     var deprecationEmitted = false;
     var SelectMenuBuilder2 = class extends StringSelectMenuBuilder {
+      static {
+        __name(this, "SelectMenuBuilder");
+      }
       constructor(...params) {
         super(...params);
         if (!deprecationEmitted) {
@@ -74752,6 +77202,9 @@ var require_SelectMenuComponent = __commonJS({
     var StringSelectMenuComponent = require_StringSelectMenuComponent();
     var deprecationEmitted = false;
     var SelectMenuComponent = class extends StringSelectMenuComponent {
+      static {
+        __name(this, "SelectMenuComponent");
+      }
       constructor(...params) {
         super(...params);
         if (!deprecationEmitted) {
@@ -74775,6 +77228,9 @@ var require_SelectMenuInteraction = __commonJS({
     var StringSelectMenuInteraction = require_StringSelectMenuInteraction();
     var deprecationEmitted = false;
     var SelectMenuInteraction = class extends StringSelectMenuInteraction {
+      static {
+        __name(this, "SelectMenuInteraction");
+      }
       constructor(...params) {
         super(...params);
         if (!deprecationEmitted) {
@@ -74799,6 +77255,9 @@ var require_StringSelectMenuOptionBuilder = __commonJS({
     var { toSnakeCase } = require_Transformers();
     var { resolvePartialEmoji } = require_Util();
     var StringSelectMenuOptionBuilder = class extends BuildersSelectMenuOption {
+      static {
+        __name(this, "StringSelectMenuOptionBuilder");
+      }
       constructor({ emoji, ...data } = {}) {
         super(
           toSnakeCase({
@@ -74839,6 +77298,9 @@ var require_SelectMenuOptionBuilder = __commonJS({
     var StringSelectMenuOptionBuilder = require_StringSelectMenuOptionBuilder();
     var deprecationEmitted = false;
     var SelectMenuOptionBuilder2 = class extends StringSelectMenuOptionBuilder {
+      static {
+        __name(this, "SelectMenuOptionBuilder");
+      }
       constructor(...params) {
         super(...params);
         if (!deprecationEmitted) {
@@ -75114,40 +77576,17 @@ var client = new Client2({
   ]
 });
 var PREFIX = "-";
-var OWNER = ".luckyyy_";
-var CD = 2e4;
-var NO_CD = ["d", "cf"];
-var userCd = /* @__PURE__ */ new Map();
 client.once("ready", () => {
-  console.log("Bot online as: " + client.user.tag);
+  console.log("Bot online: " + client.user.tag);
 });
 client.on("messageCreate", async (msg) => {
   if (msg.author.bot) return;
-  if (msg.author.username === OWNER) {
-    const parts2 = msg.content.slice(PREFIX.length).trim().split(/\s+/);
-    const cmd2 = parts2[0] ? parts2[0].toLowerCase() : "";
-    if (cmd2 === "help") return msg.reply("Commands: -d -cf -help");
-    if (cmd2 === "d") return msg.reply("Roll: " + (Math.floor(Math.random() * 100) + 1));
-    if (cmd2 === "cf") return msg.reply("Coinflip: " + (Math.random() < 0.5 ? "Heads" : "Tails"));
-    return;
-  }
   if (!msg.content.startsWith(PREFIX)) return;
-  const parts = msg.content.slice(PREFIX.length).trim().split(/\s+/);
-  const cmd = parts[0] ? parts[0].toLowerCase() : "";
-  if (!cmd) return;
-  if (!NO_CD.includes(cmd)) {
-    const now = Date.now();
-    const last = userCd.get(msg.author.id) || 0;
-    if (now - last < CD) {
-      const wait = Math.ceil((CD - now + last) / 1e3);
-      return msg.reply("Wait " + wait + "s").catch(() => {
-      });
-    }
-    userCd.set(msg.author.id, now);
-  }
-  if (cmd === "help") return msg.reply("Commands: -d -cf -help");
-  if (cmd === "d") return msg.reply("Roll: " + (Math.floor(Math.random() * 100) + 1));
-  if (cmd === "cf") return msg.reply("Coinflip: " + (Math.random() < 0.5 ? "Heads" : "Tails"));
+  const input = msg.content.slice(PREFIX.length).trim().toLowerCase();
+  if (!input) return;
+  if (input === "help") return msg.reply("Commands:\n-d = Roll dice\n-cf = Flip coin");
+  if (input === "d") return msg.reply("Roll: " + (Math.floor(Math.random() * 100) + 1));
+  if (input === "cf") return msg.reply("Coinflip: " + (Math.random() < 0.5 ? "Heads" : "Tails"));
 });
 client.login(token).catch((err) => {
   console.error("Login error:", err);
