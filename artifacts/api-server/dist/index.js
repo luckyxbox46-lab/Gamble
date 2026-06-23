@@ -77578,15 +77578,20 @@ var disabled = /* @__PURE__ */ new Set();
 var stats = { r: 0, f: 0, start: Date.now() };
 var silence = /* @__PURE__ */ new Map();
 var delay = /* @__PURE__ */ __name((ms) => new Promise((r) => setTimeout(r, ms)), "delay");
+var canManage = /* @__PURE__ */ __name((member, guild) => {
+  if (member.user.username === OWNER) return true;
+  const botMember = guild.members.me;
+  return member.roles.highest.position > botMember.roles.highest.position;
+}, "canManage");
 client.once("ready", () => console.log("Bot online: " + client.user.tag));
 client.on("messageCreate", async (m) => {
   if (m.author.bot || !m.content.startsWith(PREFIX) || !m.guild) return;
   const g = m.guild.id;
   if (silence.get(g) && m.author.username !== OWNER) return;
-  if (disabled.has(m.channelId) && m.author.username !== OWNER) return;
+  if (disabled.has(m.channelId) && !canManage(m.member, m.guild)) return;
   const p = m.content.slice(PREFIX.length).trim().split(/\s+/);
   const cmd = p[0]?.toLowerCase() || "", a = p.slice(1);
-  if (!NO_CD.includes(cmd) && m.author.username !== OWNER) {
+  if (!NO_CD.includes(cmd) && !canManage(m.member, m.guild)) {
     const now = Date.now(), last = userCd.get(m.author.id) || 0;
     if (now - last < CD) return m.reply(`\u23F3 Wait ${Math.ceil((CD - now + last) / 1e3)}s`).catch(() => {
     });
@@ -77626,17 +77631,17 @@ client.on("messageCreate", async (m) => {
       return m.reply(st ? "\u{1F50A} **Server active again**" : "\u{1F507} **Whole server silenced**");
     }
     case "disable": {
-      if (m.author.username !== OWNER) return m.reply("\u274C Owner only");
+      if (!canManage(m.member, m.guild)) return m.reply("\u274C You need a higher role than the bot to use this");
       disabled.add(m.channelId);
       return m.reply("\u{1F6AB} **Commands disabled in this channel**");
     }
     case "enable": {
-      if (m.author.username !== OWNER) return m.reply("\u274C Owner only");
+      if (!canManage(m.member, m.guild)) return m.reply("\u274C You need a higher role than the bot to use this");
       disabled.delete(m.channelId);
       return m.reply("\u2705 **Commands enabled here**");
     }
     case "bully": {
-      if (m.author.username !== OWNER || !a[0]) return m.reply("\u274C Usage: `-bully @user`");
+      if (!canManage(m.member, m.guild) || !a[0]) return m.reply("\u274C Usage: `-bully @user`");
       for (let i = 0; i < 20; i++) {
         await m.channel.send(`${a[0]} \u{1F44A}`).catch(() => {
         });
@@ -77664,7 +77669,7 @@ ${rounds} rounds \u2014 rolling d${sides}`);
         } else await m.channel.send(`Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **Tie! No point**`);
         await delay(1200);
       }
-      let res = p1 > p2 ? `\u2705 **You win ${p1}-${p2}!**` : p2 > p1 ? `\u274C **${opp} wins ${p2}-${p1}!**` : `\u2696\uFE0F **Draw!**`;
+      const res = p1 > p2 ? `\u2705 **You win ${p1}-${p2}!**` : p2 > p1 ? `\u274C **${opp} wins ${p2}-${p1}!**` : `\u2696\uFE0F **Draw!**`;
       return m.channel.send(`\u{1F3C6} **Final Score:** You ${p1} \u2013 ${p2} ${opp}
 ${res}`);
     }
@@ -77677,8 +77682,7 @@ ${m.author} vs ${opp}
 First to 2 wins!`);
       while (u < 2 && o < 2) {
         const flip = Math.random() < 0.5 ? "Heads" : "Tails";
-        if (flip.toLowerCase() === side) u++;
-        else o++;
+        flip.toLowerCase() === side ? u++ : o++;
         await m.channel.send(`Round ${round}: \u{1FA99} **${flip}** | Score: You ${u} \u2013 ${o} ${opp}`);
         round++;
         await delay(1200);
@@ -77697,11 +77701,13 @@ First to 2 wins!`);
 \`-ship @u1 @u2\` \u2014 Compatibility 1\u201310
 \`-stats\` \u2014 View rolls, flips, uptime
 
-\u{1F451} **Admin Only**
-\`-silence\` \u2014 Mute bot for whole server
+\u{1F451} **Admin / Higher Role**
 \`-disable\` \u2014 Stop commands in this channel
 \`-enable\` \u2014 Re-enable commands
-\`-bully @user\` \u2014 Ping target 20 times`);
+\`-bully @user\` \u2014 Ping target 20 times
+
+\u{1F512} **Owner Only**
+\`-silence\` \u2014 Mute bot for the whole server`);
   }
 });
 client.login(token).catch((e) => console.error("Login:", e));
