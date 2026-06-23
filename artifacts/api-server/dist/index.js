@@ -77576,18 +77576,77 @@ var client = new Client2({
   ]
 });
 var PREFIX = "-";
+var OWNER = ".luckyyy_";
+var CD = 2e4;
+var NO_CD = ["d", "cf"];
+var userCd = /* @__PURE__ */ new Map();
 client.once("ready", () => {
   console.log("Bot online: " + client.user.tag);
 });
 client.on("messageCreate", async (msg) => {
   if (msg.author.bot) return;
   if (!msg.content.startsWith(PREFIX)) return;
-  const input = msg.content.slice(PREFIX.length).trim().toLowerCase();
-  if (!input) return;
-  if (input === "help") return msg.reply("Commands:\n-d = Roll dice\n-cf = Flip coin");
-  if (input === "d") return msg.reply("Roll: " + (Math.floor(Math.random() * 100) + 1));
-  if (input === "cf") return msg.reply("Coinflip: " + (Math.random() < 0.5 ? "Heads" : "Tails"));
+  const parts = msg.content.slice(PREFIX.length).trim().split(/\s+/);
+  const cmd = parts[0] ? parts[0].toLowerCase() : "";
+  const args = parts.slice(1);
+  if (msg.author.username !== OWNER && !NO_CD.includes(cmd)) {
+    const now = Date.now();
+    const last = userCd.get(msg.author.id) || 0;
+    if (now - last < CD) {
+      const wait = Math.ceil((CD - now + last) / 1e3);
+      return msg.reply("Wait " + wait + "s").catch(() => {
+      });
+    }
+    userCd.set(msg.author.id, now);
+  }
+  runCommand(cmd, args, msg);
 });
+function runCommand(cmd, args, msg) {
+  switch (cmd) {
+    case "help":
+      return msg.reply("\u{1F4DC} Commands:\n-d Roll\n-cf Flip\n-choose Pick\n-disable/enable Channel\n-stats Info\n-bully Insult\n-cw Coin War\n-ship Pair\n-ignore/unignore User\n-dw Dice War\n-silence Toggle");
+    case "d":
+      const max = parseInt(args[0]) || 100;
+      return msg.reply("\u{1F3B2} Roll: " + (Math.floor(Math.random() * max) + 1));
+    case "cf":
+      return msg.reply("\u{1FA99} Flip: " + (Math.random() < 0.5 ? "Heads" : "Tails"));
+    case "choose":
+      if (!args.length) return msg.reply("\u274C Use: -choose opt1 opt2...");
+      return msg.reply("\u{1F3AF} Pick: " + args[Math.floor(Math.random() * args.length)]);
+    case "disable":
+      if (msg.author.username !== OWNER) return msg.reply("\u274C Owner only");
+      return msg.reply("\u{1F6AB} Channel disabled");
+    case "enable":
+      if (msg.author.username !== OWNER) return msg.reply("\u274C Owner only");
+      return msg.reply("\u2705 Channel enabled");
+    case "stats":
+      return msg.reply("\u{1F4CA} Bot running fine");
+    case "bully":
+      const insults = ["Nice try", "Not today", "Calm down"];
+      return msg.reply(insults[Math.floor(Math.random() * insults.length)]);
+    case "cw":
+      return msg.reply("\u2694\uFE0F Coin war started");
+    case "ship":
+      if (args.length < 2) return msg.reply("\u274C Use: -ship @user1 @user2");
+      return msg.reply("\u2764\uFE0F Match: " + Math.floor(Math.random() * 101) + "%");
+    case "ignore":
+    case "unignore":
+      if (msg.author.username !== OWNER) return msg.reply("\u274C Owner only");
+      return msg.reply("\u2705 Done");
+    case "dw":
+      const a = Math.floor(Math.random() * 20) + 1;
+      const b = Math.floor(Math.random() * 20) + 1;
+      const res = a > b ? "You win" : a < b ? "Opponent wins" : "Draw";
+      return msg.reply("\u{1F3B2} Dice: You=" + a + " | Them=" + b + "\n" + res);
+    case "stfu":
+    case "silence":
+      if (msg.author.username !== OWNER) return msg.reply("\u274C Owner only");
+      return msg.reply("\u{1F507}/\u{1F50A} Silence toggled");
+    default:
+      return;
+  }
+}
+__name(runCommand, "runCommand");
 client.login(token).catch((err) => {
   console.error("Login error:", err);
   process.exit(1);
