@@ -77585,12 +77585,19 @@ if (fs.existsSync(DATA_FILE)) {
   try {
     botData = { ...botData, ...JSON.parse(fs.readFileSync(DATA_FILE, "utf8")) };
   } catch (e) {
+    console.warn("Load error, starting fresh");
   }
 }
-var save = /* @__PURE__ */ __name(() => fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), "utf8"), "save");
+var save = /* @__PURE__ */ __name(() => {
+  try {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), "utf8");
+  } catch (e) {
+    console.error("Save error:", e);
+  }
+}, "save");
 var isAdmin = /* @__PURE__ */ __name((m) => m.user.username === OWNER || m.permissions?.has(PermissionsBitField2.Flags.Administrator), "isAdmin");
 var canSilence = /* @__PURE__ */ __name((m, g) => m.user.username === OWNER || m.id === g.ownerId, "canSilence");
-client.once("ready", () => console.log("Bot online: " + client.user.tag));
+client.once("ready", () => console.log("\u2705 Bot online: " + client.user.tag));
 client.on("messageCreate", async (m) => {
   if (m.author.bot || !m.guild) return;
   const g = m.guild.id;
@@ -77638,7 +77645,7 @@ client.on("messageCreate", async (m) => {
       return m.reply(`\u{1FA99} Flip: ${res}`);
     }
     case "choose": {
-      if (!a.length) return m.reply("\u274C Usage: -choose opt1 opt2");
+      if (!a.length) return m.reply("\u274C Usage: -choose option1 option2 ...");
       return m.reply(`\u{1F3AF} Pick: ${a[Math.floor(Math.random() * a.length)]}`);
     }
     case "ship": {
@@ -77647,34 +77654,34 @@ client.on("messageCreate", async (m) => {
     }
     case "stats": {
       const min = Math.floor((Date.now() - botData.stats.start) / 6e4);
-      return m.reply(`\u{1F4CA} Stats
+      return m.reply(`\u{1F4CA} Bot Stats
 \u{1F3B2} Rolls: ${botData.stats.r}
 \u{1FA99} Flips: ${botData.stats.f}
 \u23F1\uFE0F Uptime: ${min}m`);
     }
     case "rewardtoggle": {
-      if (m.author.username !== OWNER) return m.reply("\u274C Only .luckyyy_");
+      if (m.author.username !== OWNER) return m.reply("\u274C Only .luckyyy_ can use this");
       botData.rewardOn[g] = !botData.rewardOn[g];
       save();
-      return m.reply(botData.rewardOn[g] ? "\u2705 Rewards ON" : "\u274C Rewards OFF");
+      return m.reply(botData.rewardOn[g] ? "\u2705 Rewards enabled" : "\u274C Rewards disabled");
     }
     case "balance": {
       let uid = m.author.id;
       if (a[0] && m.mentions.users.first()) {
-        if (!isAdmin(m.member)) return m.reply("\u274C Admins only for others");
+        if (!isAdmin(m.member)) return m.reply("\u274C Only admins can check others' balances");
         uid = m.mentions.users.first().id;
       }
       const d = botData.messages[uid] || { count: 0, earned: 0 };
       const next = (Math.floor(d.count / REWARD_THRESH) + 1) * REWARD_THRESH;
-      return m.reply(`\u{1F4B0} Balance
+      return m.reply(`\u{1F4B0} Balance Info
 Messages: ${d.count.toLocaleString()}
 Earned: $${d.earned.toFixed(2)}
-Next: ${next.toLocaleString()}`);
+Next reward at: ${next.toLocaleString()} messages`);
     }
     case "earningslb": {
-      if (!botData.rewardOn[g]) return m.reply("\u274C Rewards off");
+      if (!botData.rewardOn[g]) return m.reply("\u274C Rewards are off in this server");
       const list = Object.entries(botData.messages).sort((x, y) => y[1].earned - x[1].earned).slice(0, 10);
-      if (!list.length) return m.reply("\u{1F4CA} No data");
+      if (!list.length) return m.reply("\u{1F4CA} No earnings data yet");
       let txt = "\u{1F3C6} Top Earners\n";
       for (let i = 0; i < list.length; i++) {
         const u = await client.users.fetch(list[i][0]).catch(() => null);
@@ -77684,7 +77691,7 @@ Next: ${next.toLocaleString()}`);
       return m.reply(txt);
     }
     case "silence": {
-      if (!canSilence(m.member, m.guild)) return m.reply("\u274C Only owners");
+      if (!canSilence(m.member, m.guild)) return m.reply("\u274C Only server/bot owner");
       botData.silence[g] = !botData.silence[g];
       save();
       return m.reply(botData.silence[g] ? "\u{1F507} Bot silenced" : "\u{1F50A} Bot active");
@@ -77695,13 +77702,13 @@ Next: ${next.toLocaleString()}`);
         botData.disabled.push(m.channelId);
         save();
       }
-      return m.reply("\u{1F6AB} Commands disabled here");
+      return m.reply("\u{1F6AB} Commands disabled in this channel");
     }
     case "enable": {
       if (!isAdmin(m.member)) return m.reply("\u274C Admin only");
       botData.disabled = botData.disabled.filter((id) => id !== m.channelId);
       save();
-      return m.reply("\u2705 Commands enabled here");
+      return m.reply("\u2705 Commands enabled in this channel");
     }
     case "bully": {
       if (!isAdmin(m.member) || !a[0]) return m.reply("\u274C Usage: -bully @user");
@@ -77753,23 +77760,35 @@ First to 2 wins`);
       return m.channel.send(u === 2 ? `\u{1F3C6} You win!` : `\u{1F3C6} ${opp} wins!`);
     }
     case "help": {
-      return m.reply(`\u{1F4D6} COMMANDS
-\u{1F4B0} REWARDS
--rewardtoggle (OWNER)
--balance / -balance @user (ADMIN)
--earningslb
-*10,000 msgs = $2*
-\u{1F3B2} GENERAL
--d / -cf / -choose / -ship / -stats
--dw / -cw
-\u{1F451} ADMIN
--disable / -enable / -bully
-\u{1F512} OWNER
--silence`);
+      return m.reply(`\u{1F4D6} **BOT COMMANDS**
+
+\u{1F4B0} **REWARDS**
+\`-rewardtoggle\` \u2192 Turn rewards ON/OFF (OWNER ONLY)
+\`-balance\` \u2192 Check your own balance
+\`-balance @user\` \u2192 Check others' balance (ADMIN ONLY)
+\`-earningslb\` \u2192 View top earners
+*10,000 messages = $2*
+
+\u{1F3B2} **GENERAL**
+\`-d [max]\` \u2192 Roll dice
+\`-cf\` \u2192 Flip coin
+\`-choose opt1 opt2 ...\` \u2192 Pick random
+\`-ship @user1 @user2\` \u2192 Compatibility
+\`-stats\` \u2192 Bot usage stats
+\`-dw @user [rounds] [sides]\` \u2192 Dice War
+\`-cw @user heads/tails\` \u2192 Coin War
+
+\u{1F451} **ADMIN**
+\`-disable\` \u2192 Block commands in this channel
+\`-enable\` \u2192 Allow commands in this channel
+\`-bully @user\` \u2192 Spam mention
+
+\u{1F512} **OWNER**
+\`-silence\` \u2192 Mute/unmute bot responses`);
     }
   }
 });
-client.login(token).catch((e) => console.error("Login:", e));
+client.login(token).catch((e) => console.error("\u274C Login error:", e));
 /*! Bundled license information:
 
 undici/lib/web/fetch/body.js:
