@@ -77623,8 +77623,6 @@ client.on("messageCreate", async (m) => {
       if (earned > botData.messages[uid].earned) {
         botData.messages[uid].earned = earned;
         save();
-        await m.channel.send(`\u{1F389} ${m.author}: ${c.toLocaleString()} msgs \u2192 $${earned.toFixed(2)}`).catch(() => {
-        });
       }
     }
     return;
@@ -77780,23 +77778,23 @@ First to 2 wins`);
       return m.channel.send(u === 2 ? `\u{1F3C6} You win!` : `\u{1F3C6} ${opp} wins!`);
     }
     case "help": {
-      return m.reply(`\u{1F4D6} COMMANDS
+      return m.reply(`\u{1F4D6} **COMMANDS**
 
-\u{1F4B0} REWARDS
+\u{1F4B0} **REWARDS**
 -rewardtoggle (OWNER)
 -setreward <msgs> <$> (OWNER)
 -balance / -balance @user (ADMIN)
 -earningslb
 *Default: 10,000 msgs = $2*
 
-\u{1F3B2} GENERAL
+\u{1F3B2} **GENERAL**
 -d / -cf / -choose / -ship / -stats
 -dw / -cw
 
-\u{1F451} ADMIN
+\u{1F451} **ADMIN**
 -disable / -enable / -bully
 
-\u{1F512} OWNER
+\u{1F512} **OWNER**
 -silence`);
     }
   }

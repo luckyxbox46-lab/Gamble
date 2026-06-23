@@ -52,7 +52,6 @@ client.on('messageCreate',async m=>{
       const earned=Math.floor(c/REWARD_THRESH)*REWARD_AMT;
       if(earned>botData.messages[uid].earned){
         botData.messages[uid].earned=earned;save();
-        await m.channel.send(`🎉 ${m.author}: ${c.toLocaleString()} msgs → $${earned.toFixed(2)}`).catch(()=>{});
       }
     }
     return;
@@ -178,23 +177,23 @@ client.on('messageCreate',async m=>{
       return m.channel.send(u===2?`🏆 You win!`:`🏆 ${opp} wins!`);
     }
     case'help':{
-      return m.reply(`📖 COMMANDS
+      return m.reply(`📖 **COMMANDS**
 
-💰 REWARDS
+💰 **REWARDS**
 -rewardtoggle (OWNER)
 -setreward <msgs> <$> (OWNER)
 -balance / -balance @user (ADMIN)
 -earningslb
 *Default: 10,000 msgs = $2*
 
-🎲 GENERAL
+🎲 **GENERAL**
 -d / -cf / -choose / -ship / -stats
 -dw / -cw
 
-👑 ADMIN
+👑 **ADMIN**
 -disable / -enable / -bully
 
-🔒 OWNER
+🔒 **OWNER**
 -silence`);
     }
   }
