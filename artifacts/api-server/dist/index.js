@@ -44801,8 +44801,8 @@ var require_dist8 = __commonJS({
        *
        * @param disabled - Whether to disable this button
        */
-      setDisabled(disabled = true) {
-        this.data.disabled = disabledValidator.parse(disabled);
+      setDisabled(disabled2 = true) {
+        this.data.disabled = disabledValidator.parse(disabled2);
         return this;
       }
       /**
@@ -45579,8 +45579,8 @@ var require_dist8 = __commonJS({
        *
        * @param disabled - Whether this select menu is disabled
        */
-      setDisabled(disabled = true) {
-        this.data.disabled = disabledValidator.parse(disabled);
+      setDisabled(disabled2 = true) {
+        this.data.disabled = disabledValidator.parse(disabled2);
         return this;
       }
       /**
@@ -74420,9 +74420,9 @@ var require_Guild = __commonJS({
        * @param {boolean} [disabled=true] Whether the invites are disabled
        * @returns {Promise<Guild>}
        */
-      async disableInvites(disabled = true) {
+      async disableInvites(disabled2 = true) {
         const features = this.features.filter((feature) => feature !== GuildFeature.InvitesDisabled);
-        if (disabled) features.push(GuildFeature.InvitesDisabled);
+        if (disabled2) features.push(GuildFeature.InvitesDisabled);
         return this.edit({ features });
       }
       /**
@@ -77574,114 +77574,113 @@ var OWNER = ".luckyyy_";
 var CD = 2e4;
 var NO_CD = ["d", "cf", "choose"];
 var userCd = /* @__PURE__ */ new Map();
-var disabledChan = /* @__PURE__ */ new Set();
-var stats = { rolls: 0, flips: 0, started: Date.now() };
-var serverSilence = /* @__PURE__ */ new Map();
+var disabled = /* @__PURE__ */ new Set();
+var stats = { r: 0, f: 0, start: Date.now() };
+var silence = /* @__PURE__ */ new Map();
 client.once("ready", () => console.log("Bot online: " + client.user.tag));
-client.on("messageCreate", async (msg) => {
-  if (msg.author.bot || !msg.content.startsWith(PREFIX) || !msg.guild) return;
-  const guildId = msg.guild.id;
-  if (serverSilence.get(guildId) && msg.author.username !== OWNER) return;
-  if (disabledChan.has(msg.channelId) && msg.author.username !== OWNER) return;
-  const parts = msg.content.slice(PREFIX.length).trim().split(/\s+/);
-  const cmd = parts[0]?.toLowerCase() || "", args = parts.slice(1);
-  if (!NO_CD.includes(cmd) && msg.author.username !== OWNER) {
-    const now = Date.now(), last = userCd.get(msg.author.id) || 0;
-    if (now - last < CD) return msg.reply(`Wait ${Math.ceil((CD - now + last) / 1e3)}s`).catch(() => {
+client.on("messageCreate", async (m) => {
+  if (m.author.bot || !m.content.startsWith(PREFIX) || !m.guild) return;
+  const g = m.guild.id;
+  if (silence.get(g) && m.author.username !== OWNER) return;
+  if (disabled.has(m.channelId) && m.author.username !== OWNER) return;
+  const p = m.content.slice(PREFIX.length).trim().split(/\s+/);
+  const cmd = p[0]?.toLowerCase() || "", a = p.slice(1);
+  if (!NO_CD.includes(cmd) && m.author.username !== OWNER) {
+    const now = Date.now(), last = userCd.get(m.author.id) || 0;
+    if (now - last < CD) return m.reply(`Wait ${Math.ceil((CD - now + last) / 1e3)}s`).catch(() => {
     });
-    userCd.set(msg.author.id, now);
+    userCd.set(m.author.id, now);
   }
   switch (cmd) {
     case "d": {
-      const max = parseInt(args[0]) || 100, r = Math.floor(Math.random() * max) + 1;
-      stats.rolls++;
-      return msg.reply(`\u{1F3B2} Roll: ${r}`);
+      const max = parseInt(a[0]) || 100, r = Math.floor(Math.random() * max) + 1;
+      stats.r++;
+      return m.reply(`\u{1F3B2} Roll: ${r}`);
     }
     case "cf": {
       const res = Math.random() < 0.5 ? "Heads" : "Tails";
-      stats.flips++;
-      return msg.reply(`\u{1FA99} Flip: ${res}`);
+      stats.f++;
+      return m.reply(`\u{1FA99} Flip: ${res}`);
     }
     case "choose": {
-      if (!args.length) return msg.reply("Use: -choose opt1 opt2");
-      return msg.reply(`\u{1F3AF} Pick: ${args[Math.floor(Math.random() * args.length)]}`);
+      if (!a.length) return m.reply("Use: -choose opt1 opt2");
+      return m.reply(`\u{1F3AF} Pick: ${a[Math.floor(Math.random() * a.length)]}`);
     }
     case "cw": {
-      const side = args[1]?.toLowerCase();
-      if (!["heads", "tails"].includes(side)) return msg.reply("Use: -cw @user heads/tails");
+      const side = a[1]?.toLowerCase();
+      if (!["heads", "tails"].includes(side)) return m.reply("Use: -cw @user heads/tails");
       const res = Math.random() < 0.5 ? "Heads" : "Tails", win = res === side;
-      return msg.reply(`\u{1FA99} Coin War: ${res}
+      return m.reply(`\u{1FA99} Coin War: ${res}
 ${win ? "\u2705 Win" : "\u274C Lose"}`);
     }
     case "ship": {
-      if (args.length < 2) return msg.reply("Use: -ship @u1 @u2");
-      return msg.reply(`\u{1F49E} Match: ${Math.floor(Math.random() * 10) + 1}/10`);
+      if (a.length < 2) return m.reply("Use: -ship @u1 @u2");
+      return m.reply(`\u{1F49E} Match: ${Math.floor(Math.random() * 10) + 1}/10`);
     }
     case "stats": {
-      const m = Math.floor((Date.now() - stats.started) / 6e4);
-      return msg.reply(`\u{1F4CA} Stats
-Rolls: ${stats.rolls}
-Flips: ${stats.flips}
-Uptime: ${m}m`);
+      const min = Math.floor((Date.now() - stats.start) / 6e4);
+      return m.reply(`\u{1F4CA} Stats
+Rolls: ${stats.r}
+Flips: ${stats.f}
+Uptime: ${min}m`);
     }
     case "silence": {
-      if (msg.author.username !== OWNER) return msg.reply("\u274C Only .luckyyy_ can use this");
-      const state = serverSilence.get(guildId) || false;
-      serverSilence.set(guildId, !state);
-      return msg.reply(!state ? "\u{1F507} Server silenced" : "\u{1F50A} Server active");
+      if (m.author.username !== OWNER) return m.reply("\u274C Only .luckyyy_");
+      const st = silence.get(g) || false;
+      silence.set(g, !st);
+      return m.reply(!st ? "\u{1F507} Whole server silenced" : "\u{1F50A} Server active");
     }
     case "disable": {
-      if (msg.author.username !== OWNER) return msg.reply("\u274C Owner only");
-      disabledChan.add(msg.channelId);
-      return msg.reply("\u{1F6AB} Disabled here");
+      if (m.author.username !== OWNER) return m.reply("\u274C Owner only");
+      disabled.add(m.channelId);
+      return m.reply("\u{1F6AB} Disabled here");
     }
     case "enable": {
-      if (msg.author.username !== OWNER) return msg.reply("\u274C Owner only");
-      disabledChan.delete(msg.channelId);
-      return msg.reply("\u2705 Enabled here");
+      if (m.author.username !== OWNER) return m.reply("\u274C Owner only");
+      disabled.delete(m.channelId);
+      return m.reply("\u2705 Enabled here");
     }
     case "bully": {
-      if (msg.author.username !== OWNER || !args[0]) return msg.reply("\u274C Owner only | Use: -bully @user");
-      for (let i = 0; i < 20; i++) await msg.channel.send(`${args[0]} \u{1F44A}`).catch(() => {
+      if (m.author.username !== OWNER || !a[0]) return m.reply("\u274C Use: -bully @user");
+      for (let i = 0; i < 20; i++) await m.channel.send(`${a[0]} \u{1F44A}`).catch(() => {
       });
       return;
     }
     case "dw": {
-      const opp = args[0] || "Opponent";
-      let rounds = parseInt(args[1]) || 5;
-      rounds = Math.max(1, Math.min(10, rounds));
-      const sides = parseInt(args[2]) || 10;
+      const opp = a[0] || "Opponent";
+      let r = parseInt(a[1]) || 5;
+      r = Math.max(1, Math.min(10, r));
+      const s = parseInt(a[2]) || 10;
       let p1 = 0, p2 = 0;
       let out = `\u{1F3B2} **Dice War!**
-${msg.author} vs ${opp}
-${rounds} rounds \u2014 rolling a d${sides}
+${m.author} vs ${opp}
+${r} rounds \u2014 d${s}
 
 Rolling...
 `;
-      for (let i = 1; i <= rounds; i++) {
-        const r1 = Math.floor(Math.random() * sides) + 1;
-        const r2 = Math.floor(Math.random() * sides) + 1;
+      for (let i = 1; i <= r; i++) {
+        const r1 = Math.floor(Math.random() * s) + 1, r2 = Math.floor(Math.random() * s) + 1;
         if (r1 > r2) {
           p1++;
-          out += `Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **You take the round!**
+          out += `Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **You win round!**
 `;
         } else if (r2 > r1) {
           p2++;
-          out += `Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **${opp} takes the round!**
+          out += `Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **${opp} wins round!**
 `;
         } else {
-          out += `Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **Tie! No point awarded.**
+          out += `Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **Tie!**
 `;
         }
       }
       out += `
-\u{1F3C6} Final Score: **You ${p1} \u2013 ${p2} ${opp}**
+\u{1F3C6} Final: **You ${p1} \u2013 ${p2} ${opp}**
 `;
       out += p1 > p2 ? `\u2705 **You win ${p1}-${p2}!**` : p2 > p1 ? `\u274C **${opp} wins ${p2}-${p1}!**` : `\u2696\uFE0F **Draw!**`;
-      return msg.reply(out);
+      return m.reply(out);
     }
     case "help":
-      return msg.reply(`\u{1F4D6} Commands
+      return m.reply(`\u{1F4D6} Commands
 -d [max] Roll
 -cf Flip
 -choose opt...
@@ -77695,7 +77694,7 @@ Admin:
 -bully @user`);
   }
 });
-client.login(token).catch((e) => console.error("Login error:", e));
+client.login(token).catch((e) => console.error("Login:", e));
 /*! Bundled license information:
 
 undici/lib/web/fetch/body.js:
