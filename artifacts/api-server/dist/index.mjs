@@ -107971,7 +107971,7 @@ async function connect(t) {
   let d = 5e3;
   for (; ; ) {
     const c = newClient();
-    c.once("ready", async (cl) => {
+    c.on("ready", async (cl) => {
       logger.info({ tag: cl.user.tag });
       d = 5e3;
       await clearSlash(t, cl.user.id);
@@ -107980,29 +107980,43 @@ async function connect(t) {
     c.on("messageCreate", async (m) => {
       if (m.author.bot) return;
       if (m.author.username === OWNER4) {
-        const [cmd2, ...a2] = m.content.slice(1).trim().split(/\s+/);
-        const h2 = cmds.get(cmd2?.toLowerCase());
-        if (h2) try {
-          await h2(m, a2);
+        const parts2 = m.content.slice(PREFIX.length).trim().split(/\s+/);
+        let cmd2 = "";
+        if (parts2[0]) cmd2 = parts2[0].toLowerCase();
+        const args2 = parts2.slice(1);
+        const handler2 = cmds.get(cmd2);
+        if (handler2) try {
+          await handler2(m, args2);
         } catch (e) {
+          logger.error({ e });
         }
         return;
       }
       const g = m.guild?.id;
-      if (isSilenced(g) || ignoredUsers.has(m.author.id) || disabledChannels.has(m.channelId) || !m.content.startsWith(PREFIX)) return;
-      const [cmd, ...a] = m.content.slice(1).trim().split(/\s+/);
-      const cl = cmd?.toLowerCase() || "";
-      if (!NO_CD.has(cl)) {
-        const n = Date.now(), l = userCd.get(m.author.id) || 0;
-        if (n - l < CD) return m.reply(`\u23F3 ${Math.ceil((CD - n + l) / 1e3)}s`).catch(() => {
-        });
-        userCd.set(m.author.id, n);
+      if (isSilenced(g)) return;
+      if (ignoredUsers.has(m.author.id)) return;
+      if (disabledChannels.has(m.channelId)) return;
+      if (!m.content.startsWith(PREFIX)) return;
+      const parts = m.content.slice(PREFIX.length).trim().split(/\s+/);
+      let cmd = "";
+      if (parts[0]) cmd = parts[0].toLowerCase();
+      const args = parts.slice(1);
+      if (!NO_CD.has(cmd)) {
+        const now = Date.now(), last = userCd.get(m.author.id) || 0;
+        if (now - last < CD) {
+          const waitSec = Math.ceil((CD - now + last) / 1e3);
+          m.reply("\u23F3 Wait " + waitSec + "s").catch(() => {
+          });
+          return;
+        }
+        userCd.set(m.author.id, now);
       }
-      const h = cmds.get(cl);
-      if (!h) return;
+      const handler = cmds.get(cmd);
+      if (!handler) return;
       try {
-        await h(m, a);
+        await handler(m, args);
       } catch (e) {
+        logger.error({ e });
       }
     });
     try {
@@ -108019,7 +108033,7 @@ async function connect(t) {
 }
 async function startBot() {
   const t = process.env.DISCORD_BOT_TOKEN;
-  if (!t) return;
+  if (!t) return logger.warn("No token");
   connect(t).catch((e) => logger.error({ e }));
 }
 
