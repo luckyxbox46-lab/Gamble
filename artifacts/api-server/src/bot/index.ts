@@ -24,6 +24,7 @@ client.on('messageCreate',async m=>{
   if(m.author.bot||!m.guild)return;
   const g=m.guild.id;
 
+  // Count messages ONLY, no cooldown here
   if(!m.content.startsWith(PREFIX)&&rewardActive.get(g)){
     const uid=m.author.id,now=Date.now();
     const lastT=msgCd.get(uid)||0,lastC=lastMsg.get(uid)||'';
@@ -36,14 +37,17 @@ client.on('messageCreate',async m=>{
         await m.channel.send(`🎉 ${m.author}: ${c.toLocaleString()} msgs → earned $${e.toFixed(2)}`);
       }
     }
+    return; // STOP HERE for normal messages, no cooldown check
   }
 
+  // Only process commands from here
   if(silence.get(g)&&!canSilence(m.member,m.guild))return;
   if(disabled.has(m.channelId)&&!isAdmin(m.member))return;
 
   const p=m.content.slice(PREFIX.length).trim().split(/\s+/);
   const cmd=p[0]?.toLowerCase()||'',a=p.slice(1);
 
+  // Cooldown ONLY for commands, not normal chat
   if(!['d','cf','choose'].includes(cmd)&&!isAdmin(m.member)){
     const now=Date.now(),last=userCd.get(m.author.id)||0;
     if(now-last<CD)return m.reply(`⏳ Wait ${Math.ceil((CD-now+last)/1000)}s`).catch(()=>{});

@@ -77615,6 +77615,7 @@ client.on("messageCreate", async (m) => {
         await m.channel.send(`\u{1F389} ${m.author}: ${c.toLocaleString()} msgs \u2192 earned $${e.toFixed(2)}`);
       }
     }
+    return;
   }
   if (silence.get(g) && !canSilence(m.member, m.guild)) return;
   if (disabled.has(m.channelId) && !isAdmin(m.member)) return;
