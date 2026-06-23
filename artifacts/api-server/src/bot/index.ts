@@ -1,28 +1,47 @@
-import {Client,GatewayIntentBits,Message,REST,Routes} from "discord.js";
-import {logger} from "../lib/logger.js";
-import {execute as roll} from "./commands/roll.js";
-import {execute as coinflip} from "./commands/coinflip.js";
-import {execute as help} from "./commands/help.js";
-import {execute as silence,isSilenced} from "./commands/silence.js";
-import {disabledChannels,ignoredUsers} from "./channelState.js";
+import { Client, GatewayIntentBits, Message } from "discord.js";
 
-const PREFIX="-",CD=20000,OWNER=".luckyyy_";
-const NO_CD=new Set(["d","cf"]);
-const userCd=new Map<string,number>();
-const cmds=new Map<string,(m:Message,a:string[])=>Promise<void>>([
-["d",roll],["cf",coinflip],["help",help],["silence",silence]
-]);
+const token = process.env.DISCORD_BOT_TOKEN;
+if (!token) {
+  console.error("ERROR: DISCORD_BOTTOKEN environment variable not set");
+  process.exit(1);
+}
 
-async function clearSlash(t:string,c:string){try{const r=new REST({version:"10"}).setToken(t);await r.put(Routes.applicationCommands(c),{body:[]})}catch(e){logger.error(e)}}
-function newClient(){return new Client({intents:[GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent]})}
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent
+  ]
+});
 
-async function connect(t:string){let d=5000;for(;;){const c=newClient();c.once("ready",async b=>{logger.info(`✅ Logged in as ${b.user.tag}`);d=5000;await clearSlash(t,b.user.id)});
-c.on("error",e=>logger.error(e));c.on("messageCreate",async m=>{if(m.author.bot)return;
-if(m.author.username===OWNER){const p=m.content.slice(PREFIX.length).trim().split(/\s+/);const cmd=p[0]?p[0].toLowerCase():"";const args=p.slice(1);const h=cmds.get(cmd);if(h)try{await h(m,args)}catch(e){logger.error(e)}return;}
-const g=m.guild?.id;if(isSilenced(g))return;if(ignoredUsers.has(m.author.id))return;if(disabledChannels.has(m.channelId))return;if(!m.content.startsWith(PREFIX))return;
-const p=m.content.slice(PREFIX.length).trim().split(/\s+/);const cmd=p[0]?p[0].toLowerCase():"";const args=p.slice(1);
-if(!NO_CD.has(cmd)){const now=Date.now(),last=userCd.get(m.author.id)||0;if(now-last<CD){const w=Math.ceil((CD-now+last)/1000);m.reply("⏳ Wait "+w+"s").catch(()=>{});return;}userCd.set(m.author.id,now);}
-const h=cmds.get(cmd);if(!h)return;try{await h(m,args)}catch(e){logger.error(e)}});
-try{await c.login(t);await new Promise(r=>c.once("disconnect",r))}catch(e){logger.error("Login failed",e);await new Promise(r=>setTimeout(r,d));d=Math.min(d*2,60000)}finally{c.destroy()}}}
+const PREFIX = "-";
+const OWNER = ".luckyyy";
 
-export async function startBot(){const t=process.env.DISCORD_BOT_TOKEN;if(!t){logger.error("No token");return;}connect(t).catch(e=>logger.error(e))}
+client.once("ready", () => {
+  console.log("Bot online: " + client.user?.tag);
+});
+
+client.on("messageCreate", async (msg: Message) => {
+  if (msg.author.bot) return;
+  if (!msg.content.startsWith(PREFIX)) return;
+
+  const input = msg.content.slice(PREFIX.length).trim().toLowerCase();
+  if (!input) return;
+
+  if (input === "help") {
+    return msg.reply("Commands:\n-d = Roll dice\n-cf = Flip coin\n-help = Show this list");
+  }
+  if (input === "d") {
+    const roll = Math.floor(Math.random() * 100) + 1;
+    return msg.reply("Roll: " + roll);
+  }
+  if (input === "cf") {
+    const flip = Math.random() < 0.5 ? "Heads" : "Tails";
+    return msg.reply("Coinflip: " + flip);
+  }
+});
+
+client.login(token).catch(err => {
+  console.error("Login failed:", err);
+  process.exit(1);
+});
