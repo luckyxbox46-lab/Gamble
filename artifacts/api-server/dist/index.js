@@ -77606,19 +77606,6 @@ client.on("messageCreate", async (msg) => {
       if (!args.length) return msg.reply("Use: -choose opt1 opt2");
       return msg.reply(`\u{1F3AF} Pick: ${args[Math.floor(Math.random() * args.length)]}`);
     }
-    case "dw": {
-      const r = parseInt(args[1]) || 1, s = parseInt(args[2]) || 6;
-      let p1 = 0, p2 = 0;
-      for (let i = 0; i < r; i++) {
-        p1 += Math.floor(Math.random() * s) + 1;
-        p2 += Math.floor(Math.random() * s) + 1;
-      }
-      const w = p1 > p2 ? "You win" : p1 < p2 ? "Opponent wins" : "Draw";
-      return msg.reply(`\u2694\uFE0F Dice War
-You: ${p1}
-${args[0] || "Opp"}: ${p2}
-${w}`);
-    }
     case "cw": {
       const side = args[1]?.toLowerCase();
       if (!["heads", "tails"].includes(side)) return msg.reply("Use: -cw @user heads/tails");
@@ -77641,7 +77628,7 @@ Uptime: ${m}m`);
       if (msg.author.username !== OWNER) return msg.reply("\u274C Only .luckyyy_ can use this");
       const state = serverSilence.get(guildId) || false;
       serverSilence.set(guildId, !state);
-      return msg.reply(!state ? "\u{1F507} Bot SILENCED for WHOLE SERVER" : "\u{1F50A} Bot ACTIVE again");
+      return msg.reply(!state ? "\u{1F507} Server silenced" : "\u{1F50A} Server active");
     }
     case "disable": {
       if (msg.author.username !== OWNER) return msg.reply("\u274C Owner only");
@@ -77659,16 +77646,50 @@ Uptime: ${m}m`);
       });
       return;
     }
+    case "dw": {
+      const opp = args[0] || "Opponent";
+      let rounds = parseInt(args[1]) || 5;
+      rounds = Math.max(1, Math.min(10, rounds));
+      const sides = parseInt(args[2]) || 10;
+      let p1 = 0, p2 = 0;
+      let out = `\u{1F3B2} **Dice War!**
+${msg.author} vs ${opp}
+${rounds} rounds \u2014 rolling a d${sides}
+
+Rolling...
+`;
+      for (let i = 1; i <= rounds; i++) {
+        const r1 = Math.floor(Math.random() * sides) + 1;
+        const r2 = Math.floor(Math.random() * sides) + 1;
+        if (r1 > r2) {
+          p1++;
+          out += `Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **You take the round!**
+`;
+        } else if (r2 > r1) {
+          p2++;
+          out += `Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **${opp} takes the round!**
+`;
+        } else {
+          out += `Round ${i}: \u{1F3B2} ${r1} vs \u{1F3B2} ${r2} \u2014 **Tie! No point awarded.**
+`;
+        }
+      }
+      out += `
+\u{1F3C6} Final Score: **You ${p1} \u2013 ${p2} ${opp}**
+`;
+      out += p1 > p2 ? `\u2705 **You win ${p1}-${p2}!**` : p2 > p1 ? `\u274C **${opp} wins ${p2}-${p1}!**` : `\u2696\uFE0F **Draw!**`;
+      return msg.reply(out);
+    }
     case "help":
       return msg.reply(`\u{1F4D6} Commands
 -d [max] Roll
 -cf Flip
 -choose opt...
--dw @user rounds sides
+-dw @user [1-10] [sides]
 -cw @user heads/tails
 -ship @u1 @u2
 -stats
-\u{1F507} -silence (owner only, whole server)
+\u{1F507} -silence
 Admin:
 -disable/enable
 -bully @user`);
