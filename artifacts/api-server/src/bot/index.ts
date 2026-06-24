@@ -25,8 +25,8 @@ const client = new Client({
 const PREFIX = '-';
 const OWNER = '.luckyyy_';
 const CD = 20000;
-const MIN_MESSAGE_LENGTH = 3; // Ignore messages shorter than this
-const MIN_TIME_BETWEEN = 2000; // 2 seconds minimum between counts
+const MIN_MESSAGE_LENGTH = 3;
+const MIN_TIME_BETWEEN = 2000;
 let REWARD_THRESH = 10000;
 let REWARD_AMT = 2;
 const userCd = new Map(), lastMsg = new Map(), lastMsgTime = new Map();
@@ -79,20 +79,16 @@ const saveData = () => {
 };
 
 // --------------------------
-// PERMISSIONS
+// HELPERS
 // --------------------------
 const isOwner = m => m.author.username === OWNER;
 const isAdmin = m => isOwner(m) || m.member?.permissions?.has(PermissionsBitField.Flags.Administrator);
 const isIgnored = id => botData.ignoredUsers.includes(id);
 
-// Helper: check if message is likely spam
 function isSpam(content) {
   if (!content) return true;
-  // Remove spaces and common symbols
   const clean = content.replace(/[\s!?.,~*_+=<>:"'|\\/[\]{}()@#$%^&-]/g, '');
-  // Too short after cleaning
   if (clean.length < MIN_MESSAGE_LENGTH) return true;
-  // All same characters
   if (/^(.)\1+$/.test(clean)) return true;
   return false;
 }
@@ -113,14 +109,14 @@ client.on('messageCreate', async m => {
     saveData();
   }
 
-  // ✅ Only count if ALL these are true:
+  // Count only valid messages
   if (botData.rewardsEnabled[g] === true) {
     const now = Date.now();
     if (
-      !content.startsWith(PREFIX) &&                // Not a command
-      !isSpam(content) &&                           // Not spam/too short
-      now - (lastMsgTime.get(u) || 0) > MIN_TIME_BETWEEN && // Not too fast
-      content !== (lastMsg.get(u) || '')            // Not same as last message
+      !content.startsWith(PREFIX) &&
+      !isSpam(content) &&
+      now - (lastMsgTime.get(u) || 0) > MIN_TIME_BETWEEN &&
+      content !== (lastMsg.get(u) || '')
     ) {
       if (!botData.balances[u]) botData.balances[u] = { count: 0, earned: 0 };
       botData.balances[u].count++;
@@ -149,7 +145,7 @@ client.on('messageCreate', async m => {
   }
 
   // --------------------------
-  // COMMANDS
+  // ALL COMMANDS
   // --------------------------
   switch (cmd) {
     case 'd': {
@@ -181,7 +177,6 @@ client.on('messageCreate', async m => {
       if (m.mentions.users.first() && !isAdmin(m)) return m.reply({ content: '❌ Only admins can check others\' balance', ephemeral: true });
       const data = botData.balances[target.id] || { count: 0, earned: 0 };
       const next = (Math.floor(data.count / REWARD_THRESH) + 1) * REWARD_THRESH;
-
       const embed = new EmbedBuilder()
         .setColor('#2ecc71')
         .setTitle(`💰 Balance - ${target.username}`)
@@ -200,13 +195,11 @@ client.on('messageCreate', async m => {
         .sort(([,a], [,b]) => b.count - a.count)
         .slice(0, 10);
       if (!sorted.length) return m.reply('📊 No activity data yet');
-
       let desc = '';
       for (let i = 0; i < sorted.length; i++) {
         const user = await client.users.fetch(sorted[i][0]).catch(() => null);
-        desc += `**${i+1}.** ${user?.username || 'Unknown'} • ${formatNum(sorted[i][1].count)} msgs • $${sorted[i][1].earned.toFixed(2)}\n`;
+        desc += `**${i+1}.** ${user?.username || 'Unknown User'} • ${formatNum(sorted[i][1].count)} msgs • $${sorted[i][1].earned.toFixed(2)}\n`;
       }
-
       const embed = new EmbedBuilder()
         .setColor('#f1c40f')
         .setTitle('🏆 Leaderboard (Most Messages)')
@@ -217,71 +210,71 @@ client.on('messageCreate', async m => {
     case 'savedata': {
       if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this', ephemeral: true });
       saveData();
-      return m.reply({ content: '✅ Data saved', ephemeral: true });
+      return m.reply({ content: '✅ Data saved — will not reset on restart!', ephemeral: true });
     }
     case 'exportdata': {
       if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this', ephemeral: true });
       try {
         const fileContent = fs.readFileSync(DATA_FILE, 'utf8');
-        await m.author.send(`📤 PRIVATE BACKUP:\n\`\`\`json\n${fileContent}\n\`\`\``);
-        return m.reply({ content: '✅ Backup sent to DMs', ephemeral: true });
+        await m.author.send({ content: `📤 **PRIVATE BACKUP**\n\`\`\`json\n${fileContent}\n\`\`\`` });
+        return m.reply({ content: '✅ Backup sent to your DMs!', ephemeral: true });
       } catch {
-        return m.reply({ content: `📤 PRIVATE:\n\`\`\`json\n${fs.readFileSync(DATA_FILE, 'utf8')}\n\`\`\``, ephemeral: true });
+        return m.reply({ content: `📤 **PRIVATE BACKUP**\n\`\`\`json\n${fs.readFileSync(DATA_FILE, 'utf8')}\n\`\`\``, ephemeral: true });
       }
     }
     case 'importdata': {
       if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this', ephemeral: true });
       const jsonInput = args.join(' ');
-      if (!jsonInput) return m.reply({ content: '📥 Paste JSON after `-importdata`', ephemeral: true });
+      if (!jsonInput) return m.reply({ content: '📥 Usage: `-importdata <your-json-data>`', ephemeral: true });
       try {
         const imported = JSON.parse(jsonInput);
-        botData = { ...defaultData, ...imported, balances: { ...botData.balances, ...imported.balances } };
+        botData = { ...defaultData, ...imported, balances: { ...botData.balances, ...imported.balances }, rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg } };
         REWARD_THRESH = botData.rewardCfg.t || 10000;
         REWARD_AMT = botData.rewardCfg.a || 2;
         saveData();
-        return m.reply({ content: '✅ Import successful', ephemeral: true });
+        return m.reply({ content: '✅ Import successful!', ephemeral: true });
       } catch (err) {
         return m.reply({ content: `❌ Invalid JSON: ${err.message}`, ephemeral: true });
       }
     }
     case 'silence': {
-      if (!isOwner(m)) return m.reply({ content: '❌ Only owner', ephemeral: true });
+      if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this', ephemeral: true });
       botData.silenceMode[g] = !botData.silenceMode[g];
       saveData();
-      return m.reply(botData.silenceMode[g] ? '🔇 Commands muted' : '🔊 Commands enabled');
+      return m.reply(botData.silenceMode[g] ? '🔇 Commands muted — rewards still work' : '🔊 Commands enabled');
     }
     case 'ignore': {
-      if (!isAdmin(m)) return m.reply({ content: '❌ Only admins', ephemeral: true });
+      if (!isAdmin(m)) return m.reply({ content: '❌ Only admins can use this', ephemeral: true });
       const target = m.mentions.users.first();
       if (!target) return m.reply('❌ Usage: `-ignore @user`');
       if (!botData.ignoredUsers.includes(target.id)) {
         botData.ignoredUsers.push(target.id);
         saveData();
-        return m.reply(`✅ Ignored ${target.username}`);
+        return m.reply(`✅ Now ignoring **${target.username}**`);
       }
-      return m.reply(`ℹ️ Already ignored`);
+      return m.reply(`ℹ️ Already ignoring **${target.username}**`);
     }
     case 'unignore': {
-      if (!isAdmin(m)) return m.reply({ content: '❌ Only admins', ephemeral: true });
+      if (!isAdmin(m)) return m.reply({ content: '❌ Only admins can use this', ephemeral: true });
       const target = m.mentions.users.first();
       if (!target) return m.reply('❌ Usage: `-unignore @user`');
       botData.ignoredUsers = botData.ignoredUsers.filter(id => id !== target.id);
       saveData();
-      return m.reply(`✅ Unignored ${target.username}`);
+      return m.reply(`✅ No longer ignoring **${target.username}**`);
     }
     case 'disable': {
-      if (!isAdmin(m)) return m.reply({ content: '❌ Only admins', ephemeral: true });
+      if (!isAdmin(m)) return m.reply({ content: '❌ Only admins can use this', ephemeral: true });
       if (!botData.disabledChannels.includes(m.channel.id)) {
         botData.disabledChannels.push(m.channel.id);
         saveData();
       }
-      return m.reply('🚫 Commands disabled here');
+      return m.reply('🚫 Commands disabled in this channel');
     }
     case 'enable': {
-      if (!isAdmin(m)) return m.reply({ content: '❌ Only admins', ephemeral: true });
+      if (!isAdmin(m)) return m.reply({ content: '❌ Only admins can use this', ephemeral: true });
       botData.disabledChannels = botData.disabledChannels.filter(ch => ch !== m.channel.id);
       saveData();
-      return m.reply('✅ Commands enabled here');
+      return m.reply('✅ Commands enabled in this channel');
     }
     case 'bully': {
       if (!isAdmin(m) || !m.mentions.users.first()) return m.reply({ content: '❌ Usage: `-bully @user`', ephemeral: true });
@@ -293,58 +286,99 @@ client.on('messageCreate', async m => {
       const opp = m.mentions.users.first();
       const rounds = Math.max(1, Math.min(10, parseInt(args[0]) || 5));
       const sides = Math.max(2, parseInt(args[1]) || 1000);
-      if (!opp) return m.reply('❌ Usage: `-dw @user [rounds] [sides]`');
+      if (!opp) return m.reply('❌ Usage: `-dw @user [rounds] [max]`');
       let your = 0, opps = 0;
       await m.reply(`🎲 Dice War: **${m.author.username} vs ${opp.username}**`);
       for (let i = 1; i <= rounds; i++) {
         const y = Math.floor(Math.random() * sides) + 1;
         const o = Math.floor(Math.random() * sides) + 1;
         y > o ? your++ : o > y ? opps++ : null;
-        await m.channel.send(`Round ${i}: ${y} vs ${o}`).catch(()=>{});
+        await m.channel.send(`Round ${i}: 🎲 ${y} vs ${o}`).catch(()=>{});
         await delay(900);
       }
-      return m.channel.send(`🏆 Final: ${your} - ${opps} ${your>opps?'✅ You win':'❌ They win'}`);
+      return m.channel.send(`🏆 Final Score: **${your} - ${opps}** | ${your > opps ? '✅ You win!' : opps > your ? `✅ ${opp.username} wins!` : '⚖️ Draw!'}`);
     }
     case 'cw': {
       const opp = m.mentions.users.first(), side = args[1]?.toLowerCase();
       if (!opp || !['heads','tails'].includes(side)) return m.reply('❌ Usage: `-cw @user heads/tails`');
       let u = 0, o = 0;
-      await m.reply(`🪙 Coin War: ${m.author.username} vs ${opp.username}`);
+      await m.reply(`🪙 Coin War: **${m.author.username} vs ${opp.username}**`);
       while (u < 2 && o < 2) {
         const flip = Math.random() < 0.5 ? 'Heads' : 'Tails';
         flip === side ? u++ : o++;
-        await m.channel.send(`Flip: ${flip} | ${u} - ${o}`).catch(()=>{});
+        await m.channel.send(`Flip: **${flip}** | Score: ${u} - ${o}`).catch(()=>{});
         await delay(900);
       }
-      return m.channel.send(u === 2 ? `🏆 You win!` : `🏆 ${opp.username} wins!`);
+      return m.channel.send(u === 2 ? `🏆 **${m.author.username}** wins!` : `🏆 **${opp.username}** wins!`);
     }
     case 'ship': {
       const u1 = m.mentions.users.at(0), u2 = m.mentions.users.at(1) || m.author;
-      if (!u1) return m.reply('❌ Usage: `-ship @user1 @user2`');
+      if (!u1) return m.reply('❌ Usage: `-ship @user1 [@user2]`');
       const p = Math.floor(Math.random() * 101);
-      const embed = new EmbedBuilder().setColor(p>70?'#e91e63':'#f39c12').setTitle('💞 Match').setDescription(`${u1.username} & ${u2.username}: **${p}%**`);
+      const embed = new EmbedBuilder()
+        .setColor(p > 70 ? '#e91e63' : p > 40 ? '#f39c12' : '#3498db')
+        .setTitle('💞 Compatibility')
+        .setDescription(`**${u1.username}** × **${u2.username}**\nMatch: **${p}%**`);
       return m.reply({ embeds: [embed] });
     }
     case 'choose': {
-      if (!args.length) return m.reply('❌ Usage: `-choose opt1 opt2 ...`');
+      if (!args.length) return m.reply('❌ Usage: `-choose option1 option2 ...`');
       return m.reply(`🎯 Picked: **${args[Math.floor(Math.random() * args.length)]}**`);
     }
     case 'stats': {
       const uptime = Math.floor((Date.now() - botData.stats.started) / 60000);
-      const embed = new EmbedBuilder().setColor('#9b59b6').setTitle('📊 Stats').addFields(
-        {name:'Rolls', value: botData.stats.rolls.toString(), inline:true},
-        {name:'Flips', value: botData.stats.flips.toString(), inline:true},
-        {name:'Uptime', value: `${uptime}m`, inline:true}
-      );
+      const embed = new EmbedBuilder()
+        .setColor('#9b59b6')
+        .setTitle('📊 Bot Statistics')
+        .addFields(
+          { name: '🎲 Total Rolls', value: botData.stats.rolls.toString(), inline: true },
+          { name: '🪙 Total Flips', value: botData.stats.flips.toString(), inline: true },
+          { name: '⏱️ Uptime', value: `${uptime} minutes`, inline: true }
+        );
       return m.reply({ embeds: [embed] });
     }
     case 'help': {
-      return m.reply({ embeds: [new EmbedBuilder().setColor('#3498db').setTitle('📖 Commands').setDescription('`-d` `-cf` `-balance` `-earningslb` `-choose` `-ship` `-dw` `-cw` `-stats`')] });
+      const embed = new EmbedBuilder()
+        .setColor('#3498db')
+        .setTitle('📖 Available Commands')
+        .setDescription(`
+**General:**
+\`-d [max]\` — Roll dice
+\`-cf\` — Flip a coin
+\`-balance [@user]\` — Check message count & earnings
+\`-earningslb\` — Leaderboard by most messages
+\`-choose ...\` — Pick a random option
+\`-ship @user1 [@user2]\` — Compatibility check
+\`-dw @user [rounds] [max]\` — Dice war
+\`-cw @user heads/tails\` — Coin war
+\`-stats\` — View bot stats
+\`-help\` — Show this menu
+        `);
+      return m.reply({ embeds: [embed] });
     }
     case 'luckyshelp': {
-      if (!isOwner(m)) return m.reply({ content: '❌ Owner only', ephemeral: true });
-      return m.reply({ embeds: [new EmbedBuilder().setColor('#e67e22').setTitle('🔒 Owner').setDescription('`-rewardtoggle` `-setreward` `-savedata` `-exportdata` `-importdata` `-silence` `-ignore` `-unignore` `-disable` `-enable`')] });
+      if (!isOwner(m)) return m.reply({ content: '❌ This command is for the owner only', ephemeral: true });
+      const embed = new EmbedBuilder()
+        .setColor('#e67e22')
+        .setTitle('🔒 Owner Commands')
+        .setDescription(`
+**Owner Only:**
+\`-rewardtoggle\` — Turn rewards on/off
+\`-setreward <msgs> <amount>\` — Set reward rate
+\`-savedata\` — Save data manually
+\`-exportdata\` — Get backup JSON
+\`-importdata <json>\` — Restore from backup
+\`-silence\` — Mute/unmute all commands
+\`-ignore @user\` — Block user from counting
+\`-unignore @user\` — Unblock user
+\`-disable\` — Disable commands in this channel
+\`-enable\` — Enable commands in this channel
+\`-bully @user\` — Send 8 pings
+        `);
+      return m.reply({ embeds: [embed] });
     }
+    default:
+      return m.reply(`❌ Unknown command. Use \`-help\` to see available commands.`);
   }
 });
 
