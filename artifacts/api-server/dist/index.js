@@ -77614,10 +77614,8 @@ if (fs.existsSync(DATA_FILE)) {
       disabledChannels: Array.isArray(saved.disabledChannels) ? saved.disabledChannels : [],
       silenceMode: { ...defaultData.silenceMode, ...saved.silenceMode },
       rewardsEnabled: { ...saved.rewardsEnabled },
-      // NEVER OVERWRITE
       ignoredUsers: Array.isArray(saved.ignoredUsers) ? saved.ignoredUsers : [],
       balances: { ...saved.balances },
-      // NEVER OVERWRITE
       rewardCfg: { ...defaultData.rewardCfg, ...saved.rewardCfg }
     };
     console.log("\u2705 Data loaded \u2014 rewards & balances preserved");
@@ -77634,7 +77632,7 @@ REWARD_AMT = botData.rewardCfg.a || 2;
 var saveData = /* @__PURE__ */ __name(() => {
   botData.rewardCfg = { t: REWARD_THRESH, a: REWARD_AMT };
   fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), "utf8");
-  console.log("\u{1F4BE} Data saved to permanent location");
+  console.log("\u{1F4BE} Data saved");
 }, "saveData");
 var isOwner = /* @__PURE__ */ __name((m) => m?.author?.username === OWNER, "isOwner");
 var isAdmin = /* @__PURE__ */ __name((m) => isOwner(m) || !!m?.member?.permissions?.has(PermissionsBitField2.Flags.Administrator), "isAdmin");
@@ -77812,7 +77810,7 @@ Next: ${formatNum(next)} msgs`);
       const opp = m.mentions.users.first();
       const rounds = Math.max(1, Math.min(10, parseInt(argsParts[0]) || 5));
       const sides = Math.max(2, parseInt(argsParts[1]) || 1e3);
-      if (!opp) return m.reply("\u274C Usage: -dw @user [rounds] [sides]\nExample: -dw @LocoPoco 5 1000");
+      if (!opp) return m.reply("\u274C Usage: -dw @user [rounds] [sides]\nExample: -dw @user 5 1000");
       let yourScore = 0;
       let oppScore = 0;
       await m.reply(`\u{1F3B2} Dice War!

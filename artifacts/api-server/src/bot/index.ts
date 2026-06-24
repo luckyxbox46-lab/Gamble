@@ -32,9 +32,9 @@ const formatNum = (n) => {
 };
 
 // --------------------------
-// DATA FILE NOW OUTSIDE CODE FOLDER — GIT WILL NEVER DELETE IT
+// DATA FILE OUTSIDE GIT FOLDER — NO MORE RESETS ON PUSH
 // --------------------------
-const DATA_DIR = path.join(__dirname, '../../..'); // One level above your repo folder
+const DATA_DIR = path.join(__dirname, '../../..');
 const DATA_FILE = path.join(DATA_DIR, 'bot-persistent-data.json');
 const defaultData = {
   stats: { rolls: 0, flips: 0, started: Date.now() },
@@ -48,20 +48,18 @@ const defaultData = {
 
 let botData;
 
-// Load data: SAVED VALUES ALWAYS WIN, NO RESETS
 if (fs.existsSync(DATA_FILE)) {
   try {
     const savedRaw = fs.readFileSync(DATA_FILE, 'utf8');
     const saved = JSON.parse(savedRaw);
-    // Merge: saved first, defaults only fill missing fields
     botData = {
       ...saved,
       stats: { ...defaultData.stats, ...saved.stats },
       disabledChannels: Array.isArray(saved.disabledChannels) ? saved.disabledChannels : [],
       silenceMode: { ...defaultData.silenceMode, ...saved.silenceMode },
-      rewardsEnabled: { ...saved.rewardsEnabled }, // NEVER OVERWRITE
+      rewardsEnabled: { ...saved.rewardsEnabled },
       ignoredUsers: Array.isArray(saved.ignoredUsers) ? saved.ignoredUsers : [],
-      balances: { ...saved.balances }, // NEVER OVERWRITE
+      balances: { ...saved.balances },
       rewardCfg: { ...defaultData.rewardCfg, ...saved.rewardCfg }
     };
     console.log('✅ Data loaded — rewards & balances preserved');
@@ -77,11 +75,10 @@ if (fs.existsSync(DATA_FILE)) {
 REWARD_THRESH = botData.rewardCfg.t || 10000;
 REWARD_AMT = botData.rewardCfg.a || 2;
 
-// Save function
 const saveData = () => {
   botData.rewardCfg = { t: REWARD_THRESH, a: REWARD_AMT };
   fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), 'utf8');
-  console.log('💾 Data saved to permanent location');
+  console.log('💾 Data saved');
 };
 
 // --------------------------
@@ -101,7 +98,6 @@ client.on('messageCreate', async (m) => {
   const g = m.guild.id;
   const uId = m.author.id;
 
-  // Rewards run first
   if (botData.rewardsEnabled[g] === true) {
     const now = Date.now();
     if (now - (msgCd.get(uId) || 0) > 2000 && m.content.trim() !== (lastMsg.get(uId) || '').trim()) {
@@ -193,7 +189,6 @@ client.on('messageCreate', async (m) => {
       }
       return m.reply(list);
     }
-    // Manual save/backup commands
     case 'savedata': {
       if (!isOwner(m)) return m.reply('❌ Owner only');
       saveData();
@@ -206,7 +201,6 @@ client.on('messageCreate', async (m) => {
       } catch { return m.reply('❌ Could not send file'); }
       return;
     }
-    // Admin commands
     case 'ignore': {
       if (!isAdmin(m)) return m.reply('❌ Only admins');
       const t = m.mentions.users.first();
@@ -243,14 +237,14 @@ client.on('messageCreate', async (m) => {
       for (let i=0; i<8; i++) { await m.channel.send(`${t} 👊`).catch(()=>{}); await delay(600); }
       return;
     }
-    // Dice War exactly like your screenshot
+    // ✅ DICE WAR — CLEAN EXAMPLE, NO @NAME
     case 'dw': {
       const argsParts = args.filter(a => !a.startsWith('<@'));
       const opp = m.mentions.users.first();
       const rounds = Math.max(1, Math.min(10, parseInt(argsParts[0]) || 5));
       const sides = Math.max(2, parseInt(argsParts[1]) || 1000);
 
-      if (!opp) return m.reply('❌ Usage: -dw @user [rounds] [sides]\nExample: -dw @LocoPoco 5 1000');
+      if (!opp) return m.reply('❌ Usage: -dw @user [rounds] [sides]\nExample: -dw @user 5 1000');
 
       let yourScore = 0;
       let oppScore = 0;
