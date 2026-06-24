@@ -77733,9 +77733,16 @@ client.on("messageCreate", async (m) => {
       if (!sorted.length) return m.reply("\u{1F4CA} No activity data yet.");
       let desc = "";
       for (let i = 0; i < sorted.length; i++) {
-        const user = await client.users.fetch(sorted[i][0]).catch(() => null);
-        desc += `**${i + 1}.** ${user?.username || "Unknown User"} \u2022 ${formatNum(sorted[i][1].count)} msgs \u2022 $${sorted[i][1].earned.toFixed(2)}
+        const userId = sorted[i][0];
+        const userData = sorted[i][1];
+        try {
+          const user = await client.users.fetch(userId);
+          desc += `**${i + 1}.** ${user.username} \u2022 ${formatNum(userData.count)} msgs \u2022 $${userData.earned.toFixed(2)}
 `;
+        } catch {
+          desc += `**${i + 1}.** Unknown User (${userId}) \u2022 ${formatNum(userData.count)} msgs \u2022 $${userData.earned.toFixed(2)}
+`;
+        }
       }
       const embed = new EmbedBuilder().setColor("#f1c40f").setTitle("\u{1F3C6} Leaderboard \u2014 Most Messages").setDescription(desc).setTimestamp();
       return m.reply({ embeds: [embed] });
@@ -77761,11 +77768,17 @@ client.on("messageCreate", async (m) => {
       if (!json) return m.reply({ content: "\u274C Usage: `-importdata <json>`", ephemeral: true });
       try {
         const imported = JSON.parse(json);
-        botData = { ...defaultData, ...imported, balances: { ...botData.balances, ...imported.balances }, rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg } };
+        botData = {
+          ...defaultData,
+          ...imported,
+          balances: imported.balances || {},
+          // OVERWRITE old balances
+          rewardCfg: { ...defaultData.rewardCfg, ...imported.rewardCfg }
+        };
         REWARD_THRESH = botData.rewardCfg.t || 1e4;
         REWARD_AMT = botData.rewardCfg.a || 2;
         saveData();
-        return m.reply({ content: "\u2705 Data imported successfully.", ephemeral: true });
+        return m.reply({ content: "\u2705 Data imported successfully \u2014 old balances cleared!", ephemeral: true });
       } catch (err) {
         return m.reply({ content: `\u274C Invalid JSON: ${err.message}`, ephemeral: true });
       }
@@ -77779,11 +77792,16 @@ client.on("messageCreate", async (m) => {
       try {
         const res = await fetch(attachment.url);
         const imported = await res.json();
-        botData = { ...defaultData, ...imported, balances: { ...botData.balances, ...imported.balances }, rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg } };
+        botData = {
+          ...defaultData,
+          ...imported,
+          balances: imported.balances || {},
+          rewardCfg: { ...defaultData.rewardCfg, ...imported.rewardCfg }
+        };
         REWARD_THRESH = botData.rewardCfg.t || 1e4;
         REWARD_AMT = botData.rewardCfg.a || 2;
         saveData();
-        return m.reply({ content: "\u2705 File imported successfully!", ephemeral: false });
+        return m.reply({ content: "\u2705 File imported successfully \u2014 old balances cleared!", ephemeral: false });
       } catch (err) {
         return m.reply({ content: `\u274C Failed to import file: ${err.message}`, ephemeral: true });
       }
@@ -78042,8 +78060,8 @@ Match: **${percent}%**`);
 \`-setreward <msgs> <amount>\` \u2192 Change reward rate
 \`-savedata\` \u2192 Save all data manually
 \`-exportdata\` \u2192 Get backup file in DMs
-\`-importdata <json>\` \u2192 Import small JSON data
-\`-importfile\` \u2192 Import backup file (attach .json)
+\`-importdata <json>\` \u2192 Import data (overwrites old balances)
+\`-importfile\` \u2192 Import backup file directly
 `,
           inline: false
         }

@@ -213,8 +213,14 @@ client.on('messageCreate', async m => {
 
       let desc = '';
       for (let i = 0; i < sorted.length; i++) {
-        const user = await client.users.fetch(sorted[i][0]).catch(() => null);
-        desc += `**${i+1}.** ${user?.username || 'Unknown User'} • ${formatNum(sorted[i][1].count)} msgs • $${sorted[i][1].earned.toFixed(2)}\n`;
+        const userId = sorted[i][0];
+        const userData = sorted[i][1];
+        try {
+          const user = await client.users.fetch(userId);
+          desc += `**${i+1}.** ${user.username} • ${formatNum(userData.count)} msgs • $${userData.earned.toFixed(2)}\n`;
+        } catch {
+          desc += `**${i+1}.** Unknown User (${userId}) • ${formatNum(userData.count)} msgs • $${userData.earned.toFixed(2)}\n`;
+        }
       }
 
       const embed = new EmbedBuilder()
@@ -231,7 +237,6 @@ client.on('messageCreate', async m => {
       return m.reply({ content: '✅ All data saved successfully.', ephemeral: true });
     }
 
-    // ✅ EXPORT: sends as file
     case 'exportdata': {
       if (!isOwner(m)) return m.reply({ content: '❌ Only the bot owner can use this.', ephemeral: true });
       try {
@@ -243,24 +248,28 @@ client.on('messageCreate', async m => {
       }
     }
 
-    // ✅ TEXT IMPORT (for small JSON)
+    // ✅ FIXED IMPORT: REPLACES BALANCES COMPLETELY, NO MERGE
     case 'importdata': {
       if (!isOwner(m)) return m.reply({ content: '❌ Only the bot owner can use this.', ephemeral: true });
       const json = args.join(' ');
       if (!json) return m.reply({ content: '❌ Usage: `-importdata <json>`', ephemeral: true });
       try {
         const imported = JSON.parse(json);
-        botData = { ...defaultData, ...imported, balances: { ...botData.balances, ...imported.balances }, rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg } };
+        botData = {
+          ...defaultData,
+          ...imported,
+          balances: imported.balances || {}, // OVERWRITE old balances
+          rewardCfg: { ...defaultData.rewardCfg, ...imported.rewardCfg }
+        };
         REWARD_THRESH = botData.rewardCfg.t || 10000;
         REWARD_AMT = botData.rewardCfg.a || 2;
         saveData();
-        return m.reply({ content: '✅ Data imported successfully.', ephemeral: true });
+        return m.reply({ content: '✅ Data imported successfully — old balances cleared!', ephemeral: true });
       } catch (err) {
         return m.reply({ content: `❌ Invalid JSON: ${err.message}`, ephemeral: true });
       }
     }
 
-    // ✅ NEW: FILE IMPORT (attach JSON file, no paste limit)
     case 'importfile': {
       if (!isOwner(m)) return m.reply({ content: '❌ Only the bot owner can use this.', ephemeral: true });
       const attachment = m.attachments.first() || (m.reference?.messageId && (await m.channel.messages.fetch(m.reference.messageId)).attachments.first());
@@ -270,11 +279,16 @@ client.on('messageCreate', async m => {
       try {
         const res = await fetch(attachment.url);
         const imported = await res.json();
-        botData = { ...defaultData, ...imported, balances: { ...botData.balances, ...imported.balances }, rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg } };
+        botData = {
+          ...defaultData,
+          ...imported,
+          balances: imported.balances || {},
+          rewardCfg: { ...defaultData.rewardCfg, ...imported.rewardCfg }
+        };
         REWARD_THRESH = botData.rewardCfg.t || 10000;
         REWARD_AMT = botData.rewardCfg.a || 2;
         saveData();
-        return m.reply({ content: '✅ File imported successfully!', ephemeral: false });
+        return m.reply({ content: '✅ File imported successfully — old balances cleared!', ephemeral: false });
       } catch (err) {
         return m.reply({ content: `❌ Failed to import file: ${err.message}`, ephemeral: true });
       }
@@ -325,7 +339,6 @@ client.on('messageCreate', async m => {
       return m.reply('✅ Commands enabled in this channel');
     }
 
-    // ✅ FULL BULLY LIST (100+ unique)
     case 'bully': {
       if (!isAdmin(m)) return m.reply({ content: '❌ Only administrators can use this.', ephemeral: true });
       const target = m.mentions.users.first();
@@ -576,8 +589,8 @@ client.on('messageCreate', async m => {
 \`-setreward <msgs> <amount>\` → Change reward rate
 \`-savedata\` → Save all data manually
 \`-exportdata\` → Get backup file in DMs
-\`-importdata <json>\` → Import small JSON data
-\`-importfile\` → Import backup file (attach .json)
+\`-importdata <json>\` → Import data (overwrites old balances)
+\`-importfile\` → Import backup file directly
 `,
             inline: false
           }
