@@ -36,7 +36,7 @@ const formatNum = (n) => {
   return n.toString();
 };
 
-// 🚀 PERMANENT STORAGE — NO RESETS
+// 🚀 PERMANENT STORAGE — NEVER RESETS
 const DATA_DIR = '/persist';
 const DATA_FILE = path.join(DATA_DIR, 'bot-data.json');
 
@@ -134,7 +134,7 @@ client.on('messageCreate', async m => {
 
   if (!['d','cf','choose'].includes(cmd) && !isOwner(m)) {
     const last = userCd.get(u) || 0;
-    if (Date.now() - last < CD) return m.reply(`⏳ Wait ${Math.ceil((CD - (Date.now() - last))/1000)}s`).catch(()=>{});
+    if (Date.now() - last < CD) return m.reply({ content: `⏳ Wait ${Math.ceil((CD - (Date.now() - last))/1000)}s`, ephemeral: true });
     userCd.set(u, Date.now());
   }
 
@@ -208,16 +208,50 @@ client.on('messageCreate', async m => {
       return m.reply({ content: '✅ Data saved — will **never reset** on deploy!', ephemeral: true });
     }
     case 'exportdata': {
-      // ✅ ONLY OWNER, SENT PRIVATELY
+      // ✅ PRIVATE ONLY: Sent to your DMs
       if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this command', ephemeral: true });
       try {
         await m.user.send({
-          content: '📤 **PRIVATE BACKUP** — Do not share this file:',
+          content: '📤 **PRIVATE BACKUP** — Keep this safe, do not share:',
           files: [{ attachment: DATA_FILE, name: `bot-backup-${Date.now()}.json` }]
         });
         return m.reply({ content: '✅ Backup sent to your DMs only!', ephemeral: true });
       } catch {
-        return m.reply({ content: '❌ Could not send DM — make sure your DMs are open', ephemeral: true });
+        return m.reply({ content: '❌ Could not send DM — enable DMs from server members', ephemeral: true });
+      }
+    }
+    case 'importdata': {
+      // ✅ WORKING IMPORT: Paste JSON directly
+      if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this command', ephemeral: true });
+      const jsonInput = args.join(' ');
+      if (!jsonInput) {
+        return m.reply({
+          content: `📥 **How to restore:**
+1. Open your backup .json file
+2. Copy ALL its contents
+3. Paste it like this:
+\`-importdata { "balances": { ... } }\`
+⚠️ Do this in a private channel/DM if you want it hidden`,
+          ephemeral: true
+        });
+      }
+      try {
+        const imported = JSON.parse(jsonInput);
+        // Merge imported data safely
+        botData = {
+          ...defaultData,
+          ...botData,
+          ...imported,
+          balances: { ...botData.balances, ...imported.balances },
+          rewardsEnabled: { ...botData.rewardsEnabled, ...imported.rewardsEnabled },
+          rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg }
+        };
+        saveData();
+        REWARD_THRESH = botData.rewardCfg.t || 10000;
+        REWARD_AMT = botData.rewardCfg.a || 2;
+        return m.reply({ content: '✅ Data imported successfully! All balances restored.', ephemeral: true });
+      } catch (err) {
+        return m.reply({ content: `❌ Invalid JSON format. Check your copied data.`, ephemeral: true });
       }
     }
     case 'silence': {
@@ -368,7 +402,7 @@ client.on('messageCreate', async m => {
         .addFields(
           {
             name: '💰 Rewards & Data',
-            value: '`-rewardtoggle` • Enable/disable rewards\n`-setreward <msgs> <amt>` • Set rate\n`-balance [@user]` • Check balance\n`-earningslb` • Leaderboard\n`-savedata` • Save all data\n`-exportdata` • Get private backup',
+            value: '`-rewardtoggle` • Enable/disable rewards\n`-setreward <msgs> <amt>` • Set rate\n`-balance [@user]` • Check balance\n`-earningslb` • Leaderboard\n`-savedata` • Save all data\n`-exportdata` • Get private backup\n`-importdata` • Restore backup',
             inline: false
           },
           {

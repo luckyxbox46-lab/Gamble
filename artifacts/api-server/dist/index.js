@@ -77670,8 +77670,7 @@ client.on("messageCreate", async (m) => {
   const cmd = args.shift().toLowerCase();
   if (!["d", "cf", "choose"].includes(cmd) && !isOwner(m)) {
     const last = userCd.get(u) || 0;
-    if (Date.now() - last < CD) return m.reply(`\u23F3 Wait ${Math.ceil((CD - (Date.now() - last)) / 1e3)}s`).catch(() => {
-    });
+    if (Date.now() - last < CD) return m.reply({ content: `\u23F3 Wait ${Math.ceil((CD - (Date.now() - last)) / 1e3)}s`, ephemeral: true });
     userCd.set(u, Date.now());
   }
   switch (cmd) {
@@ -77738,12 +77737,44 @@ client.on("messageCreate", async (m) => {
       if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this command", ephemeral: true });
       try {
         await m.user.send({
-          content: "\u{1F4E4} **PRIVATE BACKUP** \u2014 Do not share this file:",
+          content: "\u{1F4E4} **PRIVATE BACKUP** \u2014 Keep this safe, do not share:",
           files: [{ attachment: DATA_FILE, name: `bot-backup-${Date.now()}.json` }]
         });
         return m.reply({ content: "\u2705 Backup sent to your DMs only!", ephemeral: true });
       } catch {
-        return m.reply({ content: "\u274C Could not send DM \u2014 make sure your DMs are open", ephemeral: true });
+        return m.reply({ content: "\u274C Could not send DM \u2014 enable DMs from server members", ephemeral: true });
+      }
+    }
+    case "importdata": {
+      if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this command", ephemeral: true });
+      const jsonInput = args.join(" ");
+      if (!jsonInput) {
+        return m.reply({
+          content: `\u{1F4E5} **How to restore:**
+1. Open your backup .json file
+2. Copy ALL its contents
+3. Paste it like this:
+\`-importdata { "balances": { ... } }\`
+\u26A0\uFE0F Do this in a private channel/DM if you want it hidden`,
+          ephemeral: true
+        });
+      }
+      try {
+        const imported = JSON.parse(jsonInput);
+        botData = {
+          ...defaultData,
+          ...botData,
+          ...imported,
+          balances: { ...botData.balances, ...imported.balances },
+          rewardsEnabled: { ...botData.rewardsEnabled, ...imported.rewardsEnabled },
+          rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg }
+        };
+        saveData();
+        REWARD_THRESH = botData.rewardCfg.t || 1e4;
+        REWARD_AMT = botData.rewardCfg.a || 2;
+        return m.reply({ content: "\u2705 Data imported successfully! All balances restored.", ephemeral: true });
+      } catch (err) {
+        return m.reply({ content: `\u274C Invalid JSON format. Check your copied data.`, ephemeral: true });
       }
     }
     case "silence": {
@@ -77883,7 +77914,7 @@ Match: **${percent}%**`).setTimestamp();
       const embed = new EmbedBuilder().setColor("#e67e22").setTitle("\u{1F512} Lucky's Full Command List").setDescription("All commands including owner-only").addFields(
         {
           name: "\u{1F4B0} Rewards & Data",
-          value: "`-rewardtoggle` \u2022 Enable/disable rewards\n`-setreward <msgs> <amt>` \u2022 Set rate\n`-balance [@user]` \u2022 Check balance\n`-earningslb` \u2022 Leaderboard\n`-savedata` \u2022 Save all data\n`-exportdata` \u2022 Get private backup",
+          value: "`-rewardtoggle` \u2022 Enable/disable rewards\n`-setreward <msgs> <amt>` \u2022 Set rate\n`-balance [@user]` \u2022 Check balance\n`-earningslb` \u2022 Leaderboard\n`-savedata` \u2022 Save all data\n`-exportdata` \u2022 Get private backup\n`-importdata` \u2022 Restore backup",
           inline: false
         },
         {
