@@ -77580,6 +77580,7 @@ var client = new Client2({
 });
 var PREFIX = "-";
 var OWNER = ".luckyyy_";
+var CD = 2e4;
 var REWARD_THRESH = 1e4;
 var REWARD_AMT = 2;
 var userCd = /* @__PURE__ */ new Map();
@@ -77591,7 +77592,8 @@ var formatNum = /* @__PURE__ */ __name((n) => {
   if (n >= 1e3) return (n / 1e3).toFixed(1).replace(/\.0$/, "") + "k";
   return n.toString();
 }, "formatNum");
-var DATA_FILE = path.join(__dirname, "..", "..", "persistentData.json");
+var DATA_DIR = path.join(__dirname, "../../..");
+var DATA_FILE = path.join(DATA_DIR, "bot-persistent-data.json");
 var defaultData = {
   stats: { rolls: 0, flips: 0, started: Date.now() },
   disabledChannels: [],
@@ -77604,31 +77606,36 @@ var defaultData = {
 var botData;
 if (fs.existsSync(DATA_FILE)) {
   try {
-    const saved = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
+    const savedRaw = fs.readFileSync(DATA_FILE, "utf8");
+    const saved = JSON.parse(savedRaw);
     botData = {
       ...saved,
       stats: { ...defaultData.stats, ...saved.stats },
       disabledChannels: Array.isArray(saved.disabledChannels) ? saved.disabledChannels : [],
       silenceMode: { ...defaultData.silenceMode, ...saved.silenceMode },
-      rewardsEnabled: { ...defaultData.rewardsEnabled, ...saved.rewardsEnabled },
+      rewardsEnabled: { ...saved.rewardsEnabled },
+      // NEVER OVERWRITE
       ignoredUsers: Array.isArray(saved.ignoredUsers) ? saved.ignoredUsers : [],
-      balances: { ...defaultData.balances, ...saved.balances },
+      balances: { ...saved.balances },
+      // NEVER OVERWRITE
       rewardCfg: { ...defaultData.rewardCfg, ...saved.rewardCfg }
     };
-    console.log("\u2705 Data loaded \u2014 rewards preserved");
-  } catch {
-    console.log("\u26A0\uFE0F Starting fresh");
+    console.log("\u2705 Data loaded \u2014 rewards & balances preserved");
+  } catch (err) {
+    console.log("\u26A0\uFE0F Corrupted data \u2014 starting fresh");
     botData = { ...defaultData };
   }
 } else {
+  console.log("\u2139\uFE0F No data found \u2014 creating new permanent file");
   botData = { ...defaultData };
 }
 REWARD_THRESH = botData.rewardCfg.t || 1e4;
 REWARD_AMT = botData.rewardCfg.a || 2;
-var save = /* @__PURE__ */ __name(() => {
+var saveData = /* @__PURE__ */ __name(() => {
   botData.rewardCfg = { t: REWARD_THRESH, a: REWARD_AMT };
   fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), "utf8");
-}, "save");
+  console.log("\u{1F4BE} Data saved to permanent location");
+}, "saveData");
 var isOwner = /* @__PURE__ */ __name((m) => m?.author?.username === OWNER, "isOwner");
 var isAdmin = /* @__PURE__ */ __name((m) => isOwner(m) || !!m?.member?.permissions?.has(PermissionsBitField2.Flags.Administrator), "isAdmin");
 var isIgnored = /* @__PURE__ */ __name((id) => botData.ignoredUsers.includes(id), "isIgnored");
@@ -77647,7 +77654,7 @@ client.on("messageCreate", async (m) => {
       const earned = Math.floor(botData.balances[uId].count / REWARD_THRESH) * REWARD_AMT;
       if (earned > botData.balances[uId].earned) {
         botData.balances[uId].earned = earned;
-        save();
+        saveData();
       }
     }
   }
@@ -77663,7 +77670,7 @@ client.on("messageCreate", async (m) => {
   const args = parts.slice(1);
   if (!["d", "cf", "choose"].includes(cmd) && !isOwner(m)) {
     const lastUsed = userCd.get(uId) || 0;
-    if (Date.now() - lastUsed < 2e4) return m.reply(`\u23F3 Wait ${Math.ceil((2e4 - (Date.now() - lastUsed)) / 1e3)}s`).catch(() => {
+    if (Date.now() - lastUsed < CD) return m.reply(`\u23F3 Wait ${Math.ceil((CD - (Date.now() - lastUsed)) / 1e3)}s`).catch(() => {
     });
     userCd.set(uId, Date.now());
   }
@@ -77672,13 +77679,13 @@ client.on("messageCreate", async (m) => {
       const max = parseInt(args[0]) || 100;
       const roll = Math.floor(Math.random() * max) + 1;
       botData.stats.rolls++;
-      save();
+      saveData();
       return m.reply(`\u{1F3B2} Roll: ${roll}`);
     }
     case "cf": {
       const res = Math.random() < 0.5 ? "Heads" : "Tails";
       botData.stats.flips++;
-      save();
+      saveData();
       return m.reply(`\u{1FA99} Flip: ${res}`);
     }
     case "choose": {
@@ -77699,8 +77706,8 @@ client.on("messageCreate", async (m) => {
     case "rewardtoggle": {
       if (!isOwner(m)) return m.reply("\u274C Only owner");
       botData.rewardsEnabled[g] = !botData.rewardsEnabled[g];
-      save();
-      return m.reply(botData.rewardsEnabled[g] ? "\u2705 Rewards ENABLED \u2014 WILL STAY ON" : "\u274C Rewards DISABLED");
+      saveData();
+      return m.reply(botData.rewardsEnabled[g] ? "\u2705 Rewards ENABLED \u2014 PERMANENTLY SAVED" : "\u274C Rewards DISABLED \u2014 PERMANENTLY SAVED");
     }
     case "setreward": {
       if (!isOwner(m)) return m.reply("\u274C Only owner");
@@ -77708,7 +77715,7 @@ client.on("messageCreate", async (m) => {
       if (!t || !a || t < 1) return m.reply("\u274C Usage: -setreward <msgs> <amount>");
       REWARD_THRESH = t;
       REWARD_AMT = a;
-      save();
+      saveData();
       return m.reply(`\u2705 Updated: ${formatNum(t)} msgs = $${a.toFixed(2)}`);
     }
     case "balance": {
@@ -77733,6 +77740,20 @@ Next: ${formatNum(next)} msgs`);
       }
       return m.reply(list);
     }
+    case "savedata": {
+      if (!isOwner(m)) return m.reply("\u274C Owner only");
+      saveData();
+      return m.reply("\u2705 All data saved \u2014 safe from git/deploys!");
+    }
+    case "exportdata": {
+      if (!isOwner(m)) return m.reply("\u274C Owner only");
+      try {
+        await m.reply({ content: "\u{1F4E4} Your backup:", files: [{ attachment: DATA_FILE, name: `bot-backup-${Date.now()}.json` }] });
+      } catch {
+        return m.reply("\u274C Could not send file");
+      }
+      return;
+    }
     case "ignore": {
       if (!isAdmin(m)) return m.reply("\u274C Only admins");
       const t = m.mentions.users.first();
@@ -77740,7 +77761,7 @@ Next: ${formatNum(next)} msgs`);
       if (isOwner({ author: t })) return m.reply("\u274C Cannot ignore owner");
       if (!botData.ignoredUsers.includes(t.id)) {
         botData.ignoredUsers.push(t.id);
-        save();
+        saveData();
         return m.reply(`\u2705 Ignoring ${t.username}`);
       }
       return m.reply(`\u2139\uFE0F Already ignoring ${t.username}`);
@@ -77751,7 +77772,7 @@ Next: ${formatNum(next)} msgs`);
       if (!t) return m.reply("\u274C Usage: -unignore @user");
       if (botData.ignoredUsers.includes(t.id)) {
         botData.ignoredUsers = botData.ignoredUsers.filter((id) => id !== t.id);
-        save();
+        saveData();
         return m.reply(`\u2705 Unignored ${t.username}`);
       }
       return m.reply(`\u2139\uFE0F Not ignored`);
@@ -77759,21 +77780,21 @@ Next: ${formatNum(next)} msgs`);
     case "silence": {
       if (!isOwner(m)) return m.reply("\u274C Only owner");
       botData.silenceMode[g] = !botData.silenceMode[g];
-      save();
+      saveData();
       return m.reply(botData.silenceMode[g] ? "\u{1F507} Commands off \u2014 rewards work" : "\u{1F50A} Commands on");
     }
     case "disable": {
       if (!isAdmin(m)) return m.reply("\u274C Only admins");
       if (!botData.disabledChannels.includes(m.channel.id)) {
         botData.disabledChannels.push(m.channel.id);
-        save();
+        saveData();
       }
       return m.reply("\u{1F6AB} Commands off here \u2014 rewards work");
     }
     case "enable": {
       if (!isAdmin(m)) return m.reply("\u274C Only admins");
       botData.disabledChannels = botData.disabledChannels.filter((ch) => ch !== m.channel.id);
-      save();
+      saveData();
       return m.reply("\u2705 Commands enabled");
     }
     case "bully": {
@@ -77835,18 +77856,20 @@ ${rounds} rounds \u2014 rolling d${sides}`);
     case "help": {
       return m.reply(`\u{1F4D6} **COMMANDS**
 
-\u{1F4B0} **REWARDS**
+\u{1F4B0} **REWARDS & DATA**
 \`-rewardtoggle\` \u2014 Enable/disable rewards
 \`-setreward <msgs> <amount>\` \u2014 Set reward rate
 \`-balance [@user]\` \u2014 Check messages/earnings
 \`-earningslb\` \u2014 Top earners
+\`-savedata\` \u2014 Manually save all data
+\`-exportdata\` \u2014 Download backup file
 
 \u{1F3B2} **GAMES**
 \`-d [max]\` \u2014 Roll dice
 \`-cf\` \u2014 Flip coin
 \`-choose <opt1> <opt2>...\` \u2014 Pick
 \`-ship @user1 @user2\` \u2014 Compatibility
-\`-dw @user [rounds] [sides]\` \u2014 Dice War (1-10 rounds, any sides)
+\`-dw @user [rounds] [sides]\` \u2014 Dice War
 \`-cw @user <heads/tails>\` \u2014 Coin War
 
 \u{1F451} **ADMIN**
