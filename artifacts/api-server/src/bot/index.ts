@@ -2,7 +2,8 @@ const {
   Client,
   GatewayIntentBits,
   PermissionsBitField,
-  EmbedBuilder
+  EmbedBuilder,
+  AttachmentBuilder
 } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
@@ -48,7 +49,7 @@ const defaultData = {
   disabledChannels: [],
   silenceMode: {},
   rewardsEnabled: {},
-  blockedUsers: [], // Blocks command use only
+  blockedUsers: [],
   balances: {},
   rewardCfg: { t: 10000, a: 2 }
 };
@@ -58,7 +59,6 @@ let botData;
 if (fs.existsSync(DATA_FILE)) {
   try {
     const saved = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-    // Migrate old ignoredUsers if present
     if (saved.ignoredUsers && !saved.blockedUsers) {
       saved.blockedUsers = saved.ignoredUsers;
       delete saved.ignoredUsers;
@@ -90,7 +90,6 @@ const isServerOwner = m => m.guild && m.guild.ownerId === m.author.id;
 const isAdmin = m => m.member?.permissions?.has(PermissionsBitField.Flags.Administrator);
 const isCommandBlocked = userId => botData.blockedUsers.includes(userId);
 
-// Anti-spam check
 function isSpam(content) {
   if (!content) return true;
   const clean = content.replace(/[\s!?.,~*_+=<>:"'|\\/[\]{}()@#$%^&-]/g, '');
@@ -115,7 +114,7 @@ client.on('messageCreate', async m => {
     saveData();
   }
 
-  // ✅ Message counting & rewards work for EVERYONE — even blocked users
+  // Count messages & rewards for EVERYONE, even blocked users
   if (botData.rewardsEnabled[g] === true) {
     const now = Date.now();
     if (
@@ -136,7 +135,7 @@ client.on('messageCreate', async m => {
     }
   }
 
-  // ✅ Block commands only if user is blocked
+  // Block commands only
   if (content.startsWith(PREFIX)) {
     if (isCommandBlocked(u)) {
       return m.reply({ content: '🚫 You are blocked from using bot commands.', ephemeral: true }).catch(() => {});
@@ -232,21 +231,23 @@ client.on('messageCreate', async m => {
       return m.reply({ content: '✅ All data saved successfully.', ephemeral: true });
     }
 
+    // ✅ EXPORT: sends as file
     case 'exportdata': {
       if (!isOwner(m)) return m.reply({ content: '❌ Only the bot owner can use this.', ephemeral: true });
       try {
-        const content = fs.readFileSync(DATA_FILE, 'utf8');
-        await m.author.send(`📤 **Backup Data**\n\`\`\`json\n${content}\n\`\`\``);
-        return m.reply({ content: '✅ Backup sent to your DMs.', ephemeral: true });
-      } catch {
-        return m.reply({ content: `📤 **Backup Data**\n\`\`\`json\n${fs.readFileSync(DATA_FILE, 'utf8')}\n\`\`\``, ephemeral: true });
+        const backupFile = new AttachmentBuilder(DATA_FILE, { name: `bot-backup-${Date.now()}.json` });
+        await m.author.send({ content: '📤 Here is your full backup:', files: [backupFile] });
+        return m.reply({ content: '✅ Backup sent to your DMs as a file.', ephemeral: true });
+      } catch (err) {
+        return m.reply({ content: `❌ Failed to send backup: ${err.message}`, ephemeral: true });
       }
     }
 
+    // ✅ TEXT IMPORT (for small JSON)
     case 'importdata': {
       if (!isOwner(m)) return m.reply({ content: '❌ Only the bot owner can use this.', ephemeral: true });
       const json = args.join(' ');
-      if (!json) return m.reply({ content: '❌ Usage: `-importdata <your-json-data>`', ephemeral: true });
+      if (!json) return m.reply({ content: '❌ Usage: `-importdata <json>`', ephemeral: true });
       try {
         const imported = JSON.parse(json);
         botData = { ...defaultData, ...imported, balances: { ...botData.balances, ...imported.balances }, rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg } };
@@ -256,6 +257,26 @@ client.on('messageCreate', async m => {
         return m.reply({ content: '✅ Data imported successfully.', ephemeral: true });
       } catch (err) {
         return m.reply({ content: `❌ Invalid JSON: ${err.message}`, ephemeral: true });
+      }
+    }
+
+    // ✅ NEW: FILE IMPORT (attach JSON file, no paste limit)
+    case 'importfile': {
+      if (!isOwner(m)) return m.reply({ content: '❌ Only the bot owner can use this.', ephemeral: true });
+      const attachment = m.attachments.first() || (m.reference?.messageId && (await m.channel.messages.fetch(m.reference.messageId)).attachments.first());
+      if (!attachment || !attachment.name.endsWith('.json')) {
+        return m.reply({ content: '❌ Please attach or reply to a valid `.json` backup file.', ephemeral: true });
+      }
+      try {
+        const res = await fetch(attachment.url);
+        const imported = await res.json();
+        botData = { ...defaultData, ...imported, balances: { ...botData.balances, ...imported.balances }, rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg } };
+        REWARD_THRESH = botData.rewardCfg.t || 10000;
+        REWARD_AMT = botData.rewardCfg.a || 2;
+        saveData();
+        return m.reply({ content: '✅ File imported successfully!', ephemeral: false });
+      } catch (err) {
+        return m.reply({ content: `❌ Failed to import file: ${err.message}`, ephemeral: true });
       }
     }
 
@@ -274,7 +295,7 @@ client.on('messageCreate', async m => {
       if (!botData.blockedUsers.includes(target.id)) {
         botData.blockedUsers.push(target.id);
         saveData();
-        return m.reply(`✅ **${target.username}** has been blocked from using bot commands.`);
+        return m.reply(`✅ **${target.username}** is blocked from using commands.`);
       }
       return m.reply(`ℹ️ **${target.username}** is already blocked.`);
     }
@@ -285,7 +306,7 @@ client.on('messageCreate', async m => {
       if (!target) return m.reply('❌ Usage: `-unignore @user`');
       botData.blockedUsers = botData.blockedUsers.filter(id => id !== target.id);
       saveData();
-      return m.reply(`✅ **${target.username}** can now use bot commands again.`);
+      return m.reply(`✅ **${target.username}** can use commands again.`);
     }
 
     case 'disable': {
@@ -304,7 +325,7 @@ client.on('messageCreate', async m => {
       return m.reply('✅ Commands enabled in this channel');
     }
 
-    // ✅ UPDATED BULLY COMMAND: 100+ unique lines, random every use
+    // ✅ FULL BULLY LIST (100+ unique)
     case 'bully': {
       if (!isAdmin(m)) return m.reply({ content: '❌ Only administrators can use this.', ephemeral: true });
       const target = m.mentions.users.first();
@@ -340,10 +361,8 @@ client.on('messageCreate', async m => {
         "I’d call you a tool, but even tools have a purpose 🔧🤷‍♀️",
         "You’re the reason they put warning labels on everything ⚠️",
         "Your brain is like a sieve — everything goes in and nothing stays 🧠🚰",
-        "If you were any slower, you’d be going backwards 🐢",
         "You have a face only a mother could love… and she probably regrets it 😬",
         "You’re like a broken pencil — pointless ✏️❌",
-        "I’d agree with you but then we’d both be wrong 🤦‍♂️",
         "You’re the reason they invented the phrase ‘lower your expectations’ 📉",
         "If you were any more clueless, you’d be a door 🚪🤷‍♂️",
         "You bring a whole new meaning to the word ‘mediocre’ 📊",
@@ -352,11 +371,9 @@ client.on('messageCreate', async m => {
         "If common sense was common, you’d have some 🧠💭",
         "You’re not just a headache, you’re the whole migraine 🤕",
         "You have the personality of wet cardboard 📦💧",
-        "You’re like a cloud — when you leave, the sun comes out ☀️",
         "If you were any more empty, you’d be a vacuum cleaner 🧹",
         "You’re proof that nature sometimes makes mistakes 🌍❌",
         "I’d make a joke about you, but the beatings aren’t funny enough 🤡",
-        "You’re the reason they put ‘do not use’ on dangerous items ⚠️",
         "If you were a movie, you’d be called ‘The Big Mistake’ 🎬❌",
         "You have the charm of a wet sock 🧦💦",
         "You’re like a zero — you add nothing and mean nothing 🔢",
@@ -412,7 +429,6 @@ client.on('messageCreate', async m => {
         "If you were any more ordinary, you’d be invisible 👤"
       ];
 
-      // Shuffle and pick 8 random unique ones each time
       const shuffled = [...insults].sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 8);
 
@@ -559,8 +575,9 @@ client.on('messageCreate', async m => {
 \`-rewardtoggle\` → Turn rewards ON/OFF
 \`-setreward <msgs> <amount>\` → Change reward rate
 \`-savedata\` → Save all data manually
-\`-exportdata\` → Download full backup
-\`-importdata <json>\` → Restore from backup
+\`-exportdata\` → Get backup file in DMs
+\`-importdata <json>\` → Import small JSON data
+\`-importfile\` → Import backup file (attach .json)
 `,
             inline: false
           }

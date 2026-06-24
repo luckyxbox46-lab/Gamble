@@ -77053,7 +77053,7 @@ var require_AttachmentBuilder = __commonJS({
   "../../node_modules/.pnpm/discord.js@14.26.4/node_modules/discord.js/src/structures/AttachmentBuilder.js"(exports2, module2) {
     "use strict";
     var { basename, flatten } = require_Util();
-    var AttachmentBuilder = class _AttachmentBuilder {
+    var AttachmentBuilder2 = class _AttachmentBuilder {
       static {
         __name(this, "AttachmentBuilder");
       }
@@ -77132,7 +77132,7 @@ var require_AttachmentBuilder = __commonJS({
         });
       }
     };
-    module2.exports = AttachmentBuilder;
+    module2.exports = AttachmentBuilder2;
   }
 });
 
@@ -77566,7 +77566,8 @@ var {
   Client: Client2,
   GatewayIntentBits,
   PermissionsBitField: PermissionsBitField2,
-  EmbedBuilder
+  EmbedBuilder,
+  AttachmentBuilder
 } = require_src();
 var fs = require("fs");
 var path = require("path");
@@ -77607,7 +77608,6 @@ var defaultData = {
   silenceMode: {},
   rewardsEnabled: {},
   blockedUsers: [],
-  // Blocks command use only
   balances: {},
   rewardCfg: { t: 1e4, a: 2 }
 };
@@ -77748,23 +77748,17 @@ client.on("messageCreate", async (m) => {
     case "exportdata": {
       if (!isOwner(m)) return m.reply({ content: "\u274C Only the bot owner can use this.", ephemeral: true });
       try {
-        const content2 = fs.readFileSync(DATA_FILE, "utf8");
-        await m.author.send(`\u{1F4E4} **Backup Data**
-\`\`\`json
-${content2}
-\`\`\``);
-        return m.reply({ content: "\u2705 Backup sent to your DMs.", ephemeral: true });
-      } catch {
-        return m.reply({ content: `\u{1F4E4} **Backup Data**
-\`\`\`json
-${fs.readFileSync(DATA_FILE, "utf8")}
-\`\`\``, ephemeral: true });
+        const backupFile = new AttachmentBuilder(DATA_FILE, { name: `bot-backup-${Date.now()}.json` });
+        await m.author.send({ content: "\u{1F4E4} Here is your full backup:", files: [backupFile] });
+        return m.reply({ content: "\u2705 Backup sent to your DMs as a file.", ephemeral: true });
+      } catch (err) {
+        return m.reply({ content: `\u274C Failed to send backup: ${err.message}`, ephemeral: true });
       }
     }
     case "importdata": {
       if (!isOwner(m)) return m.reply({ content: "\u274C Only the bot owner can use this.", ephemeral: true });
       const json = args.join(" ");
-      if (!json) return m.reply({ content: "\u274C Usage: `-importdata <your-json-data>`", ephemeral: true });
+      if (!json) return m.reply({ content: "\u274C Usage: `-importdata <json>`", ephemeral: true });
       try {
         const imported = JSON.parse(json);
         botData = { ...defaultData, ...imported, balances: { ...botData.balances, ...imported.balances }, rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg } };
@@ -77774,6 +77768,24 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
         return m.reply({ content: "\u2705 Data imported successfully.", ephemeral: true });
       } catch (err) {
         return m.reply({ content: `\u274C Invalid JSON: ${err.message}`, ephemeral: true });
+      }
+    }
+    case "importfile": {
+      if (!isOwner(m)) return m.reply({ content: "\u274C Only the bot owner can use this.", ephemeral: true });
+      const attachment = m.attachments.first() || m.reference?.messageId && (await m.channel.messages.fetch(m.reference.messageId)).attachments.first();
+      if (!attachment || !attachment.name.endsWith(".json")) {
+        return m.reply({ content: "\u274C Please attach or reply to a valid `.json` backup file.", ephemeral: true });
+      }
+      try {
+        const res = await fetch(attachment.url);
+        const imported = await res.json();
+        botData = { ...defaultData, ...imported, balances: { ...botData.balances, ...imported.balances }, rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg } };
+        REWARD_THRESH = botData.rewardCfg.t || 1e4;
+        REWARD_AMT = botData.rewardCfg.a || 2;
+        saveData();
+        return m.reply({ content: "\u2705 File imported successfully!", ephemeral: false });
+      } catch (err) {
+        return m.reply({ content: `\u274C Failed to import file: ${err.message}`, ephemeral: true });
       }
     }
     case "silence": {
@@ -77790,7 +77802,7 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
       if (!botData.blockedUsers.includes(target.id)) {
         botData.blockedUsers.push(target.id);
         saveData();
-        return m.reply(`\u2705 **${target.username}** has been blocked from using bot commands.`);
+        return m.reply(`\u2705 **${target.username}** is blocked from using commands.`);
       }
       return m.reply(`\u2139\uFE0F **${target.username}** is already blocked.`);
     }
@@ -77800,7 +77812,7 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
       if (!target) return m.reply("\u274C Usage: `-unignore @user`");
       botData.blockedUsers = botData.blockedUsers.filter((id) => id !== target.id);
       saveData();
-      return m.reply(`\u2705 **${target.username}** can now use bot commands again.`);
+      return m.reply(`\u2705 **${target.username}** can use commands again.`);
     }
     case "disable": {
       if (!isAdmin(m)) return m.reply({ content: "\u274C Only administrators can use this.", ephemeral: true });
@@ -77850,10 +77862,8 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
         "I\u2019d call you a tool, but even tools have a purpose \u{1F527}\u{1F937}\u200D\u2640\uFE0F",
         "You\u2019re the reason they put warning labels on everything \u26A0\uFE0F",
         "Your brain is like a sieve \u2014 everything goes in and nothing stays \u{1F9E0}\u{1F6B0}",
-        "If you were any slower, you\u2019d be going backwards \u{1F422}",
         "You have a face only a mother could love\u2026 and she probably regrets it \u{1F62C}",
         "You\u2019re like a broken pencil \u2014 pointless \u270F\uFE0F\u274C",
-        "I\u2019d agree with you but then we\u2019d both be wrong \u{1F926}\u200D\u2642\uFE0F",
         "You\u2019re the reason they invented the phrase \u2018lower your expectations\u2019 \u{1F4C9}",
         "If you were any more clueless, you\u2019d be a door \u{1F6AA}\u{1F937}\u200D\u2642\uFE0F",
         "You bring a whole new meaning to the word \u2018mediocre\u2019 \u{1F4CA}",
@@ -77862,11 +77872,9 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
         "If common sense was common, you\u2019d have some \u{1F9E0}\u{1F4AD}",
         "You\u2019re not just a headache, you\u2019re the whole migraine \u{1F915}",
         "You have the personality of wet cardboard \u{1F4E6}\u{1F4A7}",
-        "You\u2019re like a cloud \u2014 when you leave, the sun comes out \u2600\uFE0F",
         "If you were any more empty, you\u2019d be a vacuum cleaner \u{1F9F9}",
         "You\u2019re proof that nature sometimes makes mistakes \u{1F30D}\u274C",
         "I\u2019d make a joke about you, but the beatings aren\u2019t funny enough \u{1F921}",
-        "You\u2019re the reason they put \u2018do not use\u2019 on dangerous items \u26A0\uFE0F",
         "If you were a movie, you\u2019d be called \u2018The Big Mistake\u2019 \u{1F3AC}\u274C",
         "You have the charm of a wet sock \u{1F9E6}\u{1F4A6}",
         "You\u2019re like a zero \u2014 you add nothing and mean nothing \u{1F522}",
@@ -78033,8 +78041,9 @@ Match: **${percent}%**`);
 \`-rewardtoggle\` \u2192 Turn rewards ON/OFF
 \`-setreward <msgs> <amount>\` \u2192 Change reward rate
 \`-savedata\` \u2192 Save all data manually
-\`-exportdata\` \u2192 Download full backup
-\`-importdata <json>\` \u2192 Restore from backup
+\`-exportdata\` \u2192 Get backup file in DMs
+\`-importdata <json>\` \u2192 Import small JSON data
+\`-importfile\` \u2192 Import backup file (attach .json)
 `,
           inline: false
         }
