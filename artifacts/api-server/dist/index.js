@@ -77670,7 +77670,7 @@ client.on("messageCreate", async (m) => {
   if (isIgnored(u)) return;
   if (botData.silenceMode[g] && !isOwner(m)) return;
   if (botData.disabledChannels.includes(m.channel.id) && !isAdmin(m)) return;
-  const args = content.slice(PREFIX.length).split(/\s+/);
+  const args = content.slice(PREFIX.length).trim().split(/\s+/);
   const cmd = args.shift().toLowerCase();
   if (!["d", "cf", "choose"].includes(cmd) && !isOwner(m)) {
     const last = userCd.get(u) || 0;
@@ -77722,7 +77722,7 @@ client.on("messageCreate", async (m) => {
     case "earningslb": {
       const g2 = m.guild.id;
       if (botData.rewardsEnabled[g2] !== true) return m.reply("\u274C Rewards are disabled");
-      const sorted = Object.entries(botData.balances).sort(([, a], [, b]) => b.count - a.count).slice(0, 10);
+      const sorted = Object.entries(botData.balances).sort(([, userA], [, userB]) => userB.count - userA.count).slice(0, 10);
       if (!sorted.length) return m.reply("\u{1F4CA} No activity data yet");
       let desc = "";
       for (let i = 0; i < sorted.length; i++) {
@@ -77736,7 +77736,7 @@ client.on("messageCreate", async (m) => {
     case "savedata": {
       if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this", ephemeral: true });
       saveData();
-      return m.reply({ content: "\u2705 Data saved \u2014 will not reset on restart!", ephemeral: true });
+      return m.reply({ content: "\u2705 Data saved \u2014 will **never reset**!", ephemeral: true });
     }
     case "exportdata": {
       if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this", ephemeral: true });
@@ -77746,7 +77746,7 @@ client.on("messageCreate", async (m) => {
 \`\`\`json
 ${fileContent}
 \`\`\`` });
-        return m.reply({ content: "\u2705 Backup sent to your DMs!", ephemeral: true });
+        return m.reply({ content: "\u2705 Backup sent to DMs!", ephemeral: true });
       } catch {
         return m.reply({ content: `\u{1F4E4} **PRIVATE BACKUP**
 \`\`\`json
@@ -77760,7 +77760,12 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
       if (!jsonInput) return m.reply({ content: "\u{1F4E5} Usage: `-importdata <your-json-data>`", ephemeral: true });
       try {
         const imported = JSON.parse(jsonInput);
-        botData = { ...defaultData, ...imported, balances: { ...botData.balances, ...imported.balances }, rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg } };
+        botData = {
+          ...defaultData,
+          ...imported,
+          balances: { ...botData.balances, ...imported.balances },
+          rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg }
+        };
         REWARD_THRESH = botData.rewardCfg.t || 1e4;
         REWARD_AMT = botData.rewardCfg.a || 2;
         saveData();
@@ -77779,6 +77784,7 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
       if (!isAdmin(m)) return m.reply({ content: "\u274C Only admins can use this", ephemeral: true });
       const target = m.mentions.users.first();
       if (!target) return m.reply("\u274C Usage: `-ignore @user`");
+      if (isOwner({ author: target })) return m.reply("\u274C Cannot ignore the owner");
       if (!botData.ignoredUsers.includes(target.id)) {
         botData.ignoredUsers.push(target.id);
         saveData();
@@ -77867,7 +77873,7 @@ Match: **${p}%**`);
         { name: "\u{1F3B2} Total Rolls", value: botData.stats.rolls.toString(), inline: true },
         { name: "\u{1FA99} Total Flips", value: botData.stats.flips.toString(), inline: true },
         { name: "\u23F1\uFE0F Uptime", value: `${uptime} minutes`, inline: true }
-      );
+      ).setTimestamp();
       return m.reply({ embeds: [embed] });
     }
     case "help": {
@@ -77883,7 +77889,7 @@ Match: **${p}%**`);
 \`-cw @user heads/tails\` \u2014 Coin war
 \`-stats\` \u2014 View bot stats
 \`-help\` \u2014 Show this menu
-        `);
+        `).setTimestamp();
       return m.reply({ embeds: [embed] });
     }
     case "luckyshelp": {
@@ -77901,7 +77907,7 @@ Match: **${p}%**`);
 \`-disable\` \u2014 Disable commands in this channel
 \`-enable\` \u2014 Enable commands in this channel
 \`-bully @user\` \u2014 Send 8 pings
-        `);
+        `).setTimestamp();
       return m.reply({ embeds: [embed] });
     }
     default:

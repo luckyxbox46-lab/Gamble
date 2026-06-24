@@ -109,7 +109,7 @@ client.on('messageCreate', async m => {
     saveData();
   }
 
-  // Count only valid messages
+  // Count only normal messages, not commands or spam
   if (botData.rewardsEnabled[g] === true) {
     const now = Date.now();
     if (
@@ -135,7 +135,7 @@ client.on('messageCreate', async m => {
   if (botData.silenceMode[g] && !isOwner(m)) return;
   if (botData.disabledChannels.includes(m.channel.id) && !isAdmin(m)) return;
 
-  const args = content.slice(PREFIX.length).split(/\s+/);
+  const args = content.slice(PREFIX.length).trim().split(/\s+/);
   const cmd = args.shift().toLowerCase();
 
   if (!['d','cf','choose'].includes(cmd) && !isOwner(m)) {
@@ -145,7 +145,7 @@ client.on('messageCreate', async m => {
   }
 
   // --------------------------
-  // ALL COMMANDS
+  // ALL ORIGINAL COMMANDS
   // --------------------------
   switch (cmd) {
     case 'd': {
@@ -177,6 +177,7 @@ client.on('messageCreate', async m => {
       if (m.mentions.users.first() && !isAdmin(m)) return m.reply({ content: '❌ Only admins can check others\' balance', ephemeral: true });
       const data = botData.balances[target.id] || { count: 0, earned: 0 };
       const next = (Math.floor(data.count / REWARD_THRESH) + 1) * REWARD_THRESH;
+
       const embed = new EmbedBuilder()
         .setColor('#2ecc71')
         .setTitle(`💰 Balance - ${target.username}`)
@@ -191,15 +192,19 @@ client.on('messageCreate', async m => {
     case 'earningslb': {
       const g = m.guild.id;
       if (botData.rewardsEnabled[g] !== true) return m.reply('❌ Rewards are disabled');
+      // Sorted by most messages first
       const sorted = Object.entries(botData.balances)
-        .sort(([,a], [,b]) => b.count - a.count)
+        .sort(([, userA], [, userB]) => userB.count - userA.count)
         .slice(0, 10);
+
       if (!sorted.length) return m.reply('📊 No activity data yet');
+
       let desc = '';
       for (let i = 0; i < sorted.length; i++) {
         const user = await client.users.fetch(sorted[i][0]).catch(() => null);
         desc += `**${i+1}.** ${user?.username || 'Unknown User'} • ${formatNum(sorted[i][1].count)} msgs • $${sorted[i][1].earned.toFixed(2)}\n`;
       }
+
       const embed = new EmbedBuilder()
         .setColor('#f1c40f')
         .setTitle('🏆 Leaderboard (Most Messages)')
@@ -210,14 +215,14 @@ client.on('messageCreate', async m => {
     case 'savedata': {
       if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this', ephemeral: true });
       saveData();
-      return m.reply({ content: '✅ Data saved — will not reset on restart!', ephemeral: true });
+      return m.reply({ content: '✅ Data saved — will **never reset**!', ephemeral: true });
     }
     case 'exportdata': {
       if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this', ephemeral: true });
       try {
         const fileContent = fs.readFileSync(DATA_FILE, 'utf8');
         await m.author.send({ content: `📤 **PRIVATE BACKUP**\n\`\`\`json\n${fileContent}\n\`\`\`` });
-        return m.reply({ content: '✅ Backup sent to your DMs!', ephemeral: true });
+        return m.reply({ content: '✅ Backup sent to DMs!', ephemeral: true });
       } catch {
         return m.reply({ content: `📤 **PRIVATE BACKUP**\n\`\`\`json\n${fs.readFileSync(DATA_FILE, 'utf8')}\n\`\`\``, ephemeral: true });
       }
@@ -228,7 +233,12 @@ client.on('messageCreate', async m => {
       if (!jsonInput) return m.reply({ content: '📥 Usage: `-importdata <your-json-data>`', ephemeral: true });
       try {
         const imported = JSON.parse(jsonInput);
-        botData = { ...defaultData, ...imported, balances: { ...botData.balances, ...imported.balances }, rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg } };
+        botData = {
+          ...defaultData,
+          ...imported,
+          balances: { ...botData.balances, ...imported.balances },
+          rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg }
+        };
         REWARD_THRESH = botData.rewardCfg.t || 10000;
         REWARD_AMT = botData.rewardCfg.a || 2;
         saveData();
@@ -247,6 +257,7 @@ client.on('messageCreate', async m => {
       if (!isAdmin(m)) return m.reply({ content: '❌ Only admins can use this', ephemeral: true });
       const target = m.mentions.users.first();
       if (!target) return m.reply('❌ Usage: `-ignore @user`');
+      if (isOwner({author: target})) return m.reply('❌ Cannot ignore the owner');
       if (!botData.ignoredUsers.includes(target.id)) {
         botData.ignoredUsers.push(target.id);
         saveData();
@@ -334,7 +345,8 @@ client.on('messageCreate', async m => {
           { name: '🎲 Total Rolls', value: botData.stats.rolls.toString(), inline: true },
           { name: '🪙 Total Flips', value: botData.stats.flips.toString(), inline: true },
           { name: '⏱️ Uptime', value: `${uptime} minutes`, inline: true }
-        );
+        )
+        .setTimestamp();
       return m.reply({ embeds: [embed] });
     }
     case 'help': {
@@ -353,7 +365,8 @@ client.on('messageCreate', async m => {
 \`-cw @user heads/tails\` — Coin war
 \`-stats\` — View bot stats
 \`-help\` — Show this menu
-        `);
+        `)
+        .setTimestamp();
       return m.reply({ embeds: [embed] });
     }
     case 'luckyshelp': {
@@ -374,7 +387,8 @@ client.on('messageCreate', async m => {
 \`-disable\` — Disable commands in this channel
 \`-enable\` — Enable commands in this channel
 \`-bully @user\` — Send 8 pings
-        `);
+        `)
+        .setTimestamp();
       return m.reply({ embeds: [embed] });
     }
     default:
