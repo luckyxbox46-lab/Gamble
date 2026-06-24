@@ -77613,20 +77613,13 @@ var botData;
 if (fs.existsSync(DATA_FILE)) {
   try {
     const saved = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
-    botData = {
-      ...defaultData,
-      ...saved,
-      rewardsEnabled: { ...saved.rewardsEnabled },
-      balances: { ...saved.balances },
-      rewardCfg: { ...defaultData.rewardCfg, ...saved.rewardCfg }
-    };
-    console.log("\u2705 Loaded saved data \u2014 balances preserved");
+    botData = { ...defaultData, ...saved };
+    console.log("\u2705 Loaded saved data");
   } catch {
-    console.log("\u26A0\uFE0F Data file corrupted \u2014 starting fresh");
+    console.log("\u26A0\uFE0F Starting fresh data");
     botData = { ...defaultData };
   }
 } else {
-  console.log("\u2139\uFE0F No data found \u2014 using defaults");
   botData = { ...defaultData };
 }
 REWARD_THRESH = botData.rewardCfg.t || 1e4;
@@ -77634,7 +77627,7 @@ REWARD_AMT = botData.rewardCfg.a || 2;
 var saveData = /* @__PURE__ */ __name(() => {
   botData.rewardCfg = { t: REWARD_THRESH, a: REWARD_AMT };
   fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), "utf8");
-  console.log("\u{1F4BE} Saved to permanent storage");
+  console.log("\u{1F4BE} Saved");
 }, "saveData");
 var isOwner = /* @__PURE__ */ __name((m) => m.author.username === OWNER, "isOwner");
 var isAdmin = /* @__PURE__ */ __name((m) => isOwner(m) || m.member?.permissions?.has(PermissionsBitField2.Flags.Administrator), "isAdmin");
@@ -77744,7 +77737,7 @@ client.on("messageCreate", async (m) => {
 ${fileContent}
 \`\`\``
         });
-        return m.reply({ content: "\u2705 Backup sent to your DMs! Check your private messages.", ephemeral: true });
+        return m.reply({ content: "\u2705 Backup sent to your DMs!", ephemeral: true });
       } catch {
         return m.reply({
           content: `\u{1F4E4} **PRIVATE BACKUP** (only you see this):
@@ -77760,10 +77753,10 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
       const jsonInput = args.join(" ");
       if (!jsonInput) {
         return m.reply({
-          content: `\u{1F4E5} **How to restore:**
+          content: `\u{1F4E5} **How to import:**
 1. Copy your full backup JSON
-2. Paste it: \`-importdata YOUR_JSON_HERE\`
-\u26A0\uFE0F Only you see this.`,
+2. Paste it like: \`-importdata {"balances": {...}}\`
+\u274C DO NOT add the word "json"`,
           ephemeral: true
         });
       }
@@ -77771,16 +77764,18 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
         const imported = JSON.parse(jsonInput);
         botData = {
           ...defaultData,
-          ...botData,
           ...imported,
           balances: { ...botData.balances, ...imported.balances },
           rewardsEnabled: { ...botData.rewardsEnabled, ...imported.rewardsEnabled },
           rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg }
         };
-        saveData();
         REWARD_THRESH = botData.rewardCfg.t || 1e4;
         REWARD_AMT = botData.rewardCfg.a || 2;
-        return m.reply({ content: "\u2705 Data imported successfully!", ephemeral: true });
+        saveData();
+        return m.reply({ content: `\u2705 **SUCCESS!** Data imported & active.
+\u2022 Balances loaded
+\u2022 Rewards: ${botData.rewardsEnabled[g] ? "\u2705 ON" : "\u274C OFF"}
+\u2022 Threshold: ${formatNum(REWARD_THRESH)} = $${REWARD_AMT.toFixed(2)}`, ephemeral: true });
       } catch (err) {
         return m.reply({ content: `\u274C Invalid JSON: ${err.message}`, ephemeral: true });
       }
@@ -77918,7 +77913,7 @@ Match: **${percent}%**`).setTimestamp();
       return m.reply({ embeds: [embed] });
     }
     case "luckyshelp": {
-      if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this", ephemeral: true });
+      if (!isOwner(m)) return m.reply({ content: "\u274C This command is for the owner only", ephemeral: true });
       const embed = new EmbedBuilder().setColor("#e67e22").setTitle("\u{1F512} Lucky's Full Command List").setDescription("All commands including owner-only").addFields(
         {
           name: "\u{1F4B0} Rewards & Data",

@@ -54,23 +54,17 @@ const defaultData = {
 
 let botData;
 
+// Load existing data safely
 if (fs.existsSync(DATA_FILE)) {
   try {
     const saved = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-    botData = {
-      ...defaultData,
-      ...saved,
-      rewardsEnabled: { ...saved.rewardsEnabled },
-      balances: { ...saved.balances },
-      rewardCfg: { ...defaultData.rewardCfg, ...saved.rewardCfg }
-    };
-    console.log('✅ Loaded saved data — balances preserved');
+    botData = { ...defaultData, ...saved };
+    console.log('✅ Loaded saved data');
   } catch {
-    console.log('⚠️ Data file corrupted — starting fresh');
+    console.log('⚠️ Starting fresh data');
     botData = { ...defaultData };
   }
 } else {
-  console.log('ℹ️ No data found — using defaults');
   botData = { ...defaultData };
 }
 
@@ -80,7 +74,7 @@ REWARD_AMT = botData.rewardCfg.a || 2;
 const saveData = () => {
   botData.rewardCfg = { t: REWARD_THRESH, a: REWARD_AMT };
   fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), 'utf8');
-  console.log('💾 Saved to permanent storage');
+  console.log('💾 Saved');
 };
 
 // --------------------------
@@ -204,18 +198,14 @@ client.on('messageCreate', async m => {
       return m.reply({ content: '✅ Data saved — will **never reset** on deploy!', ephemeral: true });
     }
     case 'exportdata': {
-      // ✅ 100% PRIVATE: Sent ONLY to your DMs, never in the channel
       if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this', ephemeral: true });
       try {
         const fileContent = fs.readFileSync(DATA_FILE, 'utf8');
-        // Send straight to DMs, no channel message
         await m.author.send({
           content: `📤 **PRIVATE BACKUP** — Do not share:\n\`\`\`json\n${fileContent}\n\`\`\``
         });
-        // Only you see this confirmation
-        return m.reply({ content: '✅ Backup sent to your DMs! Check your private messages.', ephemeral: true });
+        return m.reply({ content: '✅ Backup sent to your DMs!', ephemeral: true });
       } catch {
-        // Fallback: only visible to you
         return m.reply({
           content: `📤 **PRIVATE BACKUP** (only you see this):\n\`\`\`json\n${fs.readFileSync(DATA_FILE, 'utf8')}\n\`\`\``,
           ephemeral: true
@@ -227,24 +217,25 @@ client.on('messageCreate', async m => {
       const jsonInput = args.join(' ');
       if (!jsonInput) {
         return m.reply({
-          content: `📥 **How to restore:**\n1. Copy your full backup JSON\n2. Paste it: \`-importdata YOUR_JSON_HERE\`\n⚠️ Only you see this.`,
+          content: `📥 **How to import:**\n1. Copy your full backup JSON\n2. Paste it like: \`-importdata {"balances": {...}}\`\n❌ DO NOT add the word "json"`,
           ephemeral: true
         });
       }
       try {
         const imported = JSON.parse(jsonInput);
+        // ✅ FULL REPLACE / MERGE — WORKS EVERY TIME
         botData = {
           ...defaultData,
-          ...botData,
           ...imported,
           balances: { ...botData.balances, ...imported.balances },
           rewardsEnabled: { ...botData.rewardsEnabled, ...imported.rewardsEnabled },
           rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg }
         };
-        saveData();
+        // ✅ UPDATE LIVE VALUES IMMEDIATELY
         REWARD_THRESH = botData.rewardCfg.t || 10000;
         REWARD_AMT = botData.rewardCfg.a || 2;
-        return m.reply({ content: '✅ Data imported successfully!', ephemeral: true });
+        saveData();
+        return m.reply({ content: `✅ **SUCCESS!** Data imported & active.\n• Balances loaded\n• Rewards: ${botData.rewardsEnabled[g] ? '✅ ON' : '❌ OFF'}\n• Threshold: ${formatNum(REWARD_THRESH)} = $${REWARD_AMT.toFixed(2)}`, ephemeral: true });
       } catch (err) {
         return m.reply({ content: `❌ Invalid JSON: ${err.message}`, ephemeral: true });
       }
@@ -385,7 +376,7 @@ client.on('messageCreate', async m => {
       return m.reply({ embeds: [embed] });
     }
     case 'luckyshelp': {
-      if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this', ephemeral: true });
+      if (!isOwner(m)) return m.reply({ content: '❌ This command is for the owner only', ephemeral: true });
       const embed = new EmbedBuilder()
         .setColor('#e67e22')
         .setTitle('🔒 Lucky\'s Full Command List')
