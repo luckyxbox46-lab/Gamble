@@ -23,7 +23,7 @@ const client = new Client({
 // SETTINGS
 // --------------------------
 const PREFIX = '-';
-const OWNER = '.luckyyy_';
+const OWNER = '.luckyyy_'; // Only you
 const CD = 20000;
 let REWARD_THRESH = 10000;
 let REWARD_AMT = 2;
@@ -42,7 +42,7 @@ const DATA_FILE = path.join(DATA_DIR, 'bot-data.json');
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
-// Default: REWARDS ENABLED by default now
+// Default: rewards enabled automatically
 const defaultData = {
   stats: { rolls: 0, flips: 0, started: Date.now() },
   disabledChannels: [],
@@ -55,7 +55,7 @@ const defaultData = {
 
 let botData;
 
-// Load data — NEVER overwrite existing balances
+// Load existing data safely
 if (fs.existsSync(DATA_FILE)) {
   try {
     const saved = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -154,13 +154,13 @@ client.on('messageCreate', async m => {
       return m.reply(`🪙 Flip: **${res}**`);
     }
     case 'rewardtoggle': {
-      if (!isOwner(m)) return m.reply('❌ Only owner can use this command');
+      if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this command', ephemeral: true });
       botData.rewardsEnabled[g] = !botData.rewardsEnabled[g];
       saveData();
       return m.reply(botData.rewardsEnabled[g] ? '✅ Rewards **ENABLED** & saved' : '❌ Rewards **DISABLED** & saved');
     }
     case 'setreward': {
-      if (!isOwner(m)) return m.reply('❌ Only owner can use this command');
+      if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this command', ephemeral: true });
       const t = parseInt(args[0]), a = parseFloat(args[1]);
       if (!t || !a || t < 1) return m.reply('❌ Usage: `-setreward <messages> <amount>`');
       REWARD_THRESH = t; REWARD_AMT = a; saveData();
@@ -168,7 +168,7 @@ client.on('messageCreate', async m => {
     }
     case 'balance': {
       const target = m.mentions.users.first() || m.author;
-      if (m.mentions.users.first() && !isAdmin(m)) return m.reply('❌ Only admins can check others\' balance');
+      if (m.mentions.users.first() && !isAdmin(m)) return m.reply({ content: '❌ Only admins can check others\' balance', ephemeral: true });
       const data = botData.balances[target.id] || { count: 0, earned: 0 };
       const next = (Math.floor(data.count / REWARD_THRESH) + 1) * REWARD_THRESH;
 
@@ -203,32 +203,31 @@ client.on('messageCreate', async m => {
       return m.reply({ embeds: [embed] });
     }
     case 'savedata': {
-      if (!isOwner(m)) return m.reply('❌ This command is for the owner only');
+      if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this command', ephemeral: true });
       saveData();
-      return m.reply('✅ Data saved — will **never reset** on deploy!');
+      return m.reply({ content: '✅ Data saved — will **never reset** on deploy!', ephemeral: true });
     }
     case 'exportdata': {
-      if (!isOwner(m)) return m.reply('❌ This command is for the owner only');
+      // ✅ ONLY OWNER, SENT PRIVATELY
+      if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this command', ephemeral: true });
       try {
-        await m.reply({
-          content: '📤 Your full backup file:',
+        await m.user.send({
+          content: '📤 **PRIVATE BACKUP** — Do not share this file:',
           files: [{ attachment: DATA_FILE, name: `bot-backup-${Date.now()}.json` }]
         });
-      } catch { return m.reply('❌ Failed to send backup'); }
-      return;
-    }
-    case 'importdata': {
-      if (!isOwner(m)) return m.reply('❌ Owner only');
-      return m.reply('📤 Send your old backup .json file as attachment and I will restore it');
+        return m.reply({ content: '✅ Backup sent to your DMs only!', ephemeral: true });
+      } catch {
+        return m.reply({ content: '❌ Could not send DM — make sure your DMs are open', ephemeral: true });
+      }
     }
     case 'silence': {
-      if (!isOwner(m)) return m.reply('❌ Only owner can use this');
+      if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this command', ephemeral: true });
       botData.silenceMode[g] = !botData.silenceMode[g];
       saveData();
       return m.reply(botData.silenceMode[g] ? '🔇 Commands muted — rewards still work' : '🔊 Commands enabled');
     }
     case 'ignore': {
-      if (!isAdmin(m)) return m.reply('❌ Only admins can use this');
+      if (!isAdmin(m)) return m.reply({ content: '❌ Only admins can use this command', ephemeral: true });
       const target = m.mentions.users.first();
       if (!target) return m.reply('❌ Usage: `-ignore @user`');
       if (isOwner({author: target})) return m.reply('❌ Cannot ignore the owner');
@@ -240,7 +239,7 @@ client.on('messageCreate', async m => {
       return m.reply(`ℹ️ Already ignoring **${target.username}**`);
     }
     case 'unignore': {
-      if (!isAdmin(m)) return m.reply('❌ Only admins can use this');
+      if (!isAdmin(m)) return m.reply({ content: '❌ Only admins can use this command', ephemeral: true });
       const target = m.mentions.users.first();
       if (!target) return m.reply('❌ Usage: `-unignore @user`');
       if (botData.ignoredUsers.includes(target.id)) {
@@ -251,7 +250,7 @@ client.on('messageCreate', async m => {
       return m.reply(`ℹ️ **${target.username}** is not ignored`);
     }
     case 'disable': {
-      if (!isAdmin(m)) return m.reply('❌ Only admins can use this');
+      if (!isAdmin(m)) return m.reply({ content: '❌ Only admins can use this command', ephemeral: true });
       if (!botData.disabledChannels.includes(m.channel.id)) {
         botData.disabledChannels.push(m.channel.id);
         saveData();
@@ -259,13 +258,13 @@ client.on('messageCreate', async m => {
       return m.reply('🚫 Commands disabled in this channel');
     }
     case 'enable': {
-      if (!isAdmin(m)) return m.reply('❌ Only admins can use this');
+      if (!isAdmin(m)) return m.reply({ content: '❌ Only admins can use this command', ephemeral: true });
       botData.disabledChannels = botData.disabledChannels.filter(ch => ch !== m.channel.id);
       saveData();
       return m.reply('✅ Commands enabled in this channel');
     }
     case 'bully': {
-      if (!isAdmin(m) || !m.mentions.users.first()) return m.reply('❌ Usage: `-bully @user`');
+      if (!isAdmin(m) || !m.mentions.users.first()) return m.reply({ content: '❌ Usage: `-bully @user`', ephemeral: true });
       const target = m.mentions.users.first();
       for (let i = 0; i < 8; i++) { await m.channel.send(`${target} 👊`).catch(()=>{}); await delay(600); }
       return;
@@ -361,7 +360,7 @@ client.on('messageCreate', async m => {
 
     // ✅ OWNER ONLY HELP - EMBED
     case 'luckyshelp': {
-      if (!isOwner(m)) return m.reply('❌ This command is for the owner only');
+      if (!isOwner(m)) return m.reply({ content: '❌ This command is for the owner only', ephemeral: true });
       const embed = new EmbedBuilder()
         .setColor('#e67e22')
         .setTitle('🔒 Lucky\'s Full Command List')
@@ -369,7 +368,7 @@ client.on('messageCreate', async m => {
         .addFields(
           {
             name: '💰 Rewards & Data',
-            value: '`-rewardtoggle` • Enable/disable rewards\n`-setreward <msgs> <amt>` • Set rate\n`-balance [@user]` • Check balance\n`-earningslb` • Leaderboard\n`-savedata` • Save all data\n`-exportdata` • Download backup\n`-importdata` • Restore backup',
+            value: '`-rewardtoggle` • Enable/disable rewards\n`-setreward <msgs> <amt>` • Set rate\n`-balance [@user]` • Check balance\n`-earningslb` • Leaderboard\n`-savedata` • Save all data\n`-exportdata` • Get private backup',
             inline: false
           },
           {
