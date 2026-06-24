@@ -77580,7 +77580,6 @@ var client = new Client2({
 });
 var PREFIX = "-";
 var OWNER = ".luckyyy_";
-var CD = 2e4;
 var REWARD_THRESH = 1e4;
 var REWARD_AMT = 2;
 var userCd = /* @__PURE__ */ new Map();
@@ -77605,8 +77604,7 @@ var defaultData = {
 var botData;
 if (fs.existsSync(DATA_FILE)) {
   try {
-    const savedRaw = fs.readFileSync(DATA_FILE, "utf8");
-    const saved = JSON.parse(savedRaw);
+    const saved = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
     botData = {
       ...saved,
       stats: { ...defaultData.stats, ...saved.stats },
@@ -77617,13 +77615,12 @@ if (fs.existsSync(DATA_FILE)) {
       balances: { ...defaultData.balances, ...saved.balances },
       rewardCfg: { ...defaultData.rewardCfg, ...saved.rewardCfg }
     };
-    console.log("\u2705 Data loaded \u2014 rewards & settings preserved");
-  } catch (err) {
-    console.log("\u26A0\uFE0F Corrupted file \u2014 starting fresh");
+    console.log("\u2705 Data loaded \u2014 rewards preserved");
+  } catch {
+    console.log("\u26A0\uFE0F Starting fresh");
     botData = { ...defaultData };
   }
 } else {
-  console.log("\u2139\uFE0F New data file created");
   botData = { ...defaultData };
 }
 REWARD_THRESH = botData.rewardCfg.t || 1e4;
@@ -77634,7 +77631,7 @@ var save = /* @__PURE__ */ __name(() => {
 }, "save");
 var isOwner = /* @__PURE__ */ __name((m) => m?.author?.username === OWNER, "isOwner");
 var isAdmin = /* @__PURE__ */ __name((m) => isOwner(m) || !!m?.member?.permissions?.has(PermissionsBitField2.Flags.Administrator), "isAdmin");
-var isIgnored = /* @__PURE__ */ __name((userId) => botData.ignoredUsers.includes(userId), "isIgnored");
+var isIgnored = /* @__PURE__ */ __name((id) => botData.ignoredUsers.includes(id), "isIgnored");
 client.once("ready", () => console.log(`\u2705 Bot online: ${client.user.tag}`));
 client.on("messageCreate", async (m) => {
   if (!m || m.author.bot || !m.guild) return;
@@ -77656,9 +77653,8 @@ client.on("messageCreate", async (m) => {
   }
   if (!m.content.startsWith(PREFIX)) return;
   if (isOwner(m)) {
-  } else if (isIgnored(uId)) {
-    return;
-  } else {
+  } else if (isIgnored(uId)) return;
+  else {
     if (botData.silenceMode[g]) return;
     if (botData.disabledChannels.includes(m.channel.id)) return;
   }
@@ -77667,10 +77663,8 @@ client.on("messageCreate", async (m) => {
   const args = parts.slice(1);
   if (!["d", "cf", "choose"].includes(cmd) && !isOwner(m)) {
     const lastUsed = userCd.get(uId) || 0;
-    if (Date.now() - lastUsed < CD) {
-      return m.reply(`\u23F3 Wait ${Math.ceil((CD - (Date.now() - lastUsed)) / 1e3)}s`).catch(() => {
-      });
-    }
+    if (Date.now() - lastUsed < 2e4) return m.reply(`\u23F3 Wait ${Math.ceil((2e4 - (Date.now() - lastUsed)) / 1e3)}s`).catch(() => {
+    });
     userCd.set(uId, Date.now());
   }
   switch (cmd) {
@@ -77711,7 +77705,7 @@ client.on("messageCreate", async (m) => {
     case "setreward": {
       if (!isOwner(m)) return m.reply("\u274C Only owner");
       const t = parseInt(args[0]), a = parseFloat(args[1]);
-      if (!t || !a || t < 1 || a < 0) return m.reply("\u274C Usage: -setreward <msgs> <amount>");
+      if (!t || !a || t < 1) return m.reply("\u274C Usage: -setreward <msgs> <amount>");
       REWARD_THRESH = t;
       REWARD_AMT = a;
       save();
@@ -77722,55 +77716,51 @@ client.on("messageCreate", async (m) => {
       if (m.mentions.users.first() && !isAdmin(m)) return m.reply("\u274C Only admins");
       const data = botData.balances[target.id] || { count: 0, earned: 0 };
       const next = (Math.floor(data.count / REWARD_THRESH) + 1) * REWARD_THRESH;
-      return m.reply(
-        `\u{1F4B0} **${target.username}**
+      return m.reply(`\u{1F4B0} **${target.username}**
 Messages: ${formatNum(data.count)}
 Earned: $${data.earned.toFixed(2)}
-Next: ${formatNum(next)} msgs`
-      );
+Next: ${formatNum(next)} msgs`);
     }
     case "earningslb": {
-      if (!botData.rewardsEnabled[g]) return m.reply("\u274C Rewards disabled \u2014 use -rewardtoggle once");
+      if (!botData.rewardsEnabled[g]) return m.reply("\u274C Rewards disabled \u2014 use -rewardtoggle");
       const sorted = Object.entries(botData.balances).sort(([, a], [, b]) => b.earned - a.earned).slice(0, 10);
       if (!sorted.length) return m.reply("\u{1F4CA} No earnings yet");
       let list = "\u{1F3C6} **Top Earners**\n";
       for (let i = 0; i < sorted.length; i++) {
-        const user = await client.users.fetch(sorted[i][0]).catch(() => null);
-        list += `${i + 1}. ${user?.username || "Unknown"} | ${formatNum(sorted[i][1].count)} msgs | $${sorted[i][1].earned.toFixed(2)}
+        const u = await client.users.fetch(sorted[i][0]).catch(() => null);
+        list += `${i + 1}. ${u?.username || "Unknown"} | ${formatNum(sorted[i][1].count)} msgs | $${sorted[i][1].earned.toFixed(2)}
 `;
       }
       return m.reply(list);
     }
     case "ignore": {
       if (!isAdmin(m)) return m.reply("\u274C Only admins");
-      const target = m.mentions.users.first();
-      if (!target) return m.reply("\u274C Usage: -ignore @user");
-      if (isOwner({ author: target })) return m.reply("\u274C Cannot ignore the owner");
-      if (!botData.ignoredUsers.includes(target.id)) {
-        botData.ignoredUsers.push(target.id);
+      const t = m.mentions.users.first();
+      if (!t) return m.reply("\u274C Usage: -ignore @user");
+      if (isOwner({ author: t })) return m.reply("\u274C Cannot ignore owner");
+      if (!botData.ignoredUsers.includes(t.id)) {
+        botData.ignoredUsers.push(t.id);
         save();
-        return m.reply(`\u2705 Now ignoring commands from ${target.username}`);
-      } else {
-        return m.reply(`\u2139\uFE0F Already ignoring ${target.username}`);
+        return m.reply(`\u2705 Ignoring ${t.username}`);
       }
+      return m.reply(`\u2139\uFE0F Already ignoring ${t.username}`);
     }
     case "unignore": {
       if (!isAdmin(m)) return m.reply("\u274C Only admins");
-      const target = m.mentions.users.first();
-      if (!target) return m.reply("\u274C Usage: -unignore @user");
-      if (botData.ignoredUsers.includes(target.id)) {
-        botData.ignoredUsers = botData.ignoredUsers.filter((id) => id !== target.id);
+      const t = m.mentions.users.first();
+      if (!t) return m.reply("\u274C Usage: -unignore @user");
+      if (botData.ignoredUsers.includes(t.id)) {
+        botData.ignoredUsers = botData.ignoredUsers.filter((id) => id !== t.id);
         save();
-        return m.reply(`\u2705 No longer ignoring ${target.username}`);
-      } else {
-        return m.reply(`\u2139\uFE0F ${target.username} is not being ignored`);
+        return m.reply(`\u2705 Unignored ${t.username}`);
       }
+      return m.reply(`\u2139\uFE0F Not ignored`);
     }
     case "silence": {
       if (!isOwner(m)) return m.reply("\u274C Only owner");
       botData.silenceMode[g] = !botData.silenceMode[g];
       save();
-      return m.reply(botData.silenceMode[g] ? "\u{1F507} Commands off \u2014 rewards still work" : "\u{1F50A} Commands on");
+      return m.reply(botData.silenceMode[g] ? "\u{1F507} Commands off \u2014 rewards work" : "\u{1F50A} Commands on");
     }
     case "disable": {
       if (!isAdmin(m)) return m.reply("\u274C Only admins");
@@ -77778,13 +77768,13 @@ Next: ${formatNum(next)} msgs`
         botData.disabledChannels.push(m.channel.id);
         save();
       }
-      return m.reply("\u{1F6AB} Commands off here \u2014 rewards still work");
+      return m.reply("\u{1F6AB} Commands off here \u2014 rewards work");
     }
     case "enable": {
       if (!isAdmin(m)) return m.reply("\u274C Only admins");
       botData.disabledChannels = botData.disabledChannels.filter((ch) => ch !== m.channel.id);
       save();
-      return m.reply("\u2705 Commands enabled here");
+      return m.reply("\u2705 Commands enabled");
     }
     case "bully": {
       if (!isAdmin(m) || !m.mentions.users.first()) return m.reply("\u274C Usage: -bully @user");
@@ -77797,72 +77787,82 @@ Next: ${formatNum(next)} msgs`
       return;
     }
     case "dw": {
-      const opp = m.mentions.users.first() || { username: "Opponent" };
-      const rounds = Math.max(1, Math.min(10, parseInt(args[0]) || 5));
-      const sides = Math.max(2, Math.min(20, parseInt(args[1]) || 6));
-      let p1 = 0, p2 = 0;
-      await m.reply(`\u{1F3B2} Dice War: ${m.author.username} vs ${opp.username}
-\u{1F4CB} Rounds: ${rounds} | Dice sides: ${sides}`);
+      const argsParts = args.filter((a) => !a.startsWith("<@"));
+      const opp = m.mentions.users.first();
+      const rounds = Math.max(1, Math.min(10, parseInt(argsParts[0]) || 5));
+      const sides = Math.max(2, parseInt(argsParts[1]) || 1e3);
+      if (!opp) return m.reply("\u274C Usage: -dw @user [rounds] [sides]\nExample: -dw @LocoPoco 5 1000");
+      let yourScore = 0;
+      let oppScore = 0;
+      await m.reply(`\u{1F3B2} Dice War!
+${m.author} vs ${opp}
+${rounds} rounds \u2014 rolling d${sides}`);
       for (let i = 1; i <= rounds; i++) {
-        const r1 = Math.floor(Math.random() * sides) + 1;
-        const r2 = Math.floor(Math.random() * sides) + 1;
-        if (r1 > r2) p1++;
-        else if (r2 > r1) p2++;
-        await m.channel.send(`Round ${i}: ${r1} - ${r2} | Score: ${p1} - ${p2}`).catch(() => {
+        const yourRoll = Math.floor(Math.random() * sides) + 1;
+        const oppRoll = Math.floor(Math.random() * sides) + 1;
+        let result;
+        if (yourRoll > oppRoll) {
+          yourScore++;
+          result = `You take the round!`;
+        } else if (oppRoll > yourRoll) {
+          oppScore++;
+          result = `${opp} takes the round!`;
+        } else {
+          result = `Draw \u2014 no points!`;
+        }
+        await m.channel.send(`Round ${i}: \u{1F3B2} ${yourRoll} vs \u{1F3B2} ${oppRoll} \u2014 ${result}`).catch(() => {
         });
         await delay(900);
       }
-      const final = p1 > p2 ? `\u{1F3C6} ${m.author.username} wins the match!` : p2 > p1 ? `\u{1F3C6} ${opp.username} wins the match!` : `\u2696\uFE0F The match ends in a draw!`;
-      return m.channel.send(`\u2705 Final Score: ${p1} - ${p2}
-${final}`);
+      const final = `\u{1F3C6} Final Score: You ${yourScore} - ${oppScore} ${opp}
+` + (yourScore > oppScore ? `\u2705 You win ${yourScore}-${oppScore}!` : oppScore > yourScore ? `\u274C ${opp} wins ${oppScore}-${yourScore}!` : `\u2696\uFE0F Match ends in a draw!`);
+      return m.channel.send(final);
     }
     case "cw": {
       const opp = m.mentions.users.first(), side = args[1]?.toLowerCase();
       if (!opp || !["heads", "tails"].includes(side)) return m.reply("\u274C Usage: -cw @user <heads/tails>");
       let u = 0, o = 0;
-      await m.reply(`\u{1FA99} Coin War: ${m.author.username} vs ${opp.username} \u2014 First to 2 wins`);
+      await m.reply(`\u{1FA99} Coin War: ${m.author} vs ${opp} \u2014 First to 2 wins`);
       while (u < 2 && o < 2) {
         const flip = Math.random() < 0.5 ? "Heads" : "Tails";
-        flip.toLowerCase() === side ? u++ : o++;
+        flip === side ? u++ : o++;
         await m.channel.send(`Flip: ${flip} | Score: ${u} - ${o}`).catch(() => {
         });
         await delay(900);
       }
-      const result = u === 2 ? `\u{1F3C6} ${m.author.username} wins!` : `\u{1F3C6} ${opp.username} wins!`;
-      return m.channel.send(result);
+      return m.channel.send(u === 2 ? `\u{1F3C6} ${m.author} wins!` : `\u{1F3C6} ${opp} wins!`);
     }
     case "help": {
-      return m.reply(`\u{1F4D6} **COMMANDS & USAGE**
+      return m.reply(`\u{1F4D6} **COMMANDS**
 
 \u{1F4B0} **REWARDS**
 \`-rewardtoggle\` \u2014 Enable/disable rewards
 \`-setreward <msgs> <amount>\` \u2014 Set reward rate
-\`-balance [@user]\` \u2014 View messages & earned
-\`-earningslb\` \u2014 View top earners
+\`-balance [@user]\` \u2014 Check messages/earnings
+\`-earningslb\` \u2014 Top earners
 
-\u{1F3B2} **GENERAL**
+\u{1F3B2} **GAMES**
 \`-d [max]\` \u2014 Roll dice
 \`-cf\` \u2014 Flip coin
-\`-choose <opt1> <opt2> ...\` \u2014 Pick option
+\`-choose <opt1> <opt2>...\` \u2014 Pick
 \`-ship @user1 @user2\` \u2014 Compatibility
-\`-stats\` \u2014 Bot stats
-\`-dw [rounds] [sides]\` \u2014 Dice War (1-10 rounds)
+\`-dw @user [rounds] [sides]\` \u2014 Dice War (1-10 rounds, any sides)
 \`-cw @user <heads/tails>\` \u2014 Coin War
 
 \u{1F451} **ADMIN**
-\`-ignore @user\` \u2014 Ignore all commands from user
-\`-unignore @user\` \u2014 Allow commands again
-\`-disable\` \u2014 Disable commands here
-\`-enable\` \u2014 Enable commands here
-\`-bully @user\` \u2014 Send pings
+\`-ignore @user\` \u2014 Ignore commands
+\`-unignore @user\` \u2014 Allow commands
+\`-disable\` \u2014 Disable here
+\`-enable\` \u2014 Enable here
+\`-bully @user\` \u2014 Spam ping
 
-\u{1F512} **OWNER ONLY**
-\`-silence\` \u2014 Mute/unmute all commands
+\u{1F512} **OWNER**
+\`-silence\` \u2014 Mute all commands
 `);
     }
   }
 });
-client.login(token).catch((err) => console.error("\u274C Login failed:", err.message));
+client.login(token).catch((err) => console.error("\u274C Login error:", err.message));
 /*! Bundled license information:
 
 undici/lib/web/fetch/body.js:
