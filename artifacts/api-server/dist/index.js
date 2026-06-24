@@ -77670,7 +77670,8 @@ client.on("messageCreate", async (m) => {
   const cmd = args.shift().toLowerCase();
   if (!["d", "cf", "choose"].includes(cmd) && !isOwner(m)) {
     const last = userCd.get(u) || 0;
-    if (Date.now() - last < CD) return m.reply({ content: `\u23F3 Wait ${Math.ceil((CD - (Date.now() - last)) / 1e3)}s`, ephemeral: true });
+    if (Date.now() - last < CD) return m.reply(`\u23F3 Wait ${Math.ceil((CD - (Date.now() - last)) / 1e3)}s`).catch(() => {
+    });
     userCd.set(u, Date.now());
   }
   switch (cmd) {
@@ -77688,13 +77689,13 @@ client.on("messageCreate", async (m) => {
       return m.reply(`\u{1FA99} Flip: **${res}**`);
     }
     case "rewardtoggle": {
-      if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this command", ephemeral: true });
+      if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this", ephemeral: true });
       botData.rewardsEnabled[g] = !botData.rewardsEnabled[g];
       saveData();
       return m.reply(botData.rewardsEnabled[g] ? "\u2705 Rewards **ENABLED** & saved" : "\u274C Rewards **DISABLED** & saved");
     }
     case "setreward": {
-      if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this command", ephemeral: true });
+      if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this", ephemeral: true });
       const t = parseInt(args[0]), a = parseFloat(args[1]);
       if (!t || !a || t < 1) return m.reply("\u274C Usage: `-setreward <messages> <amount>`");
       REWARD_THRESH = t;
@@ -77729,34 +77730,39 @@ client.on("messageCreate", async (m) => {
       return m.reply({ embeds: [embed] });
     }
     case "savedata": {
-      if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this command", ephemeral: true });
+      if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this", ephemeral: true });
       saveData();
       return m.reply({ content: "\u2705 Data saved \u2014 will **never reset** on deploy!", ephemeral: true });
     }
     case "exportdata": {
-      if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this command", ephemeral: true });
+      if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this", ephemeral: true });
       try {
         const fileContent = fs.readFileSync(DATA_FILE, "utf8");
-        return m.reply({
-          content: `\u{1F4E4} **PRIVATE BACKUP** (only you can see this):
+        await m.author.send({
+          content: `\u{1F4E4} **PRIVATE BACKUP** \u2014 Do not share:
 \`\`\`json
 ${fileContent}
-\`\`\`
-Copy all of this to save or restore later.`,
+\`\`\``
+        });
+        return m.reply({ content: "\u2705 Backup sent to your DMs! Check your private messages.", ephemeral: true });
+      } catch {
+        return m.reply({
+          content: `\u{1F4E4} **PRIVATE BACKUP** (only you see this):
+\`\`\`json
+${fs.readFileSync(DATA_FILE, "utf8")}
+\`\`\``,
           ephemeral: true
         });
-      } catch (err) {
-        return m.reply({ content: `\u274C Failed to read data file: ${err.message}`, ephemeral: true });
       }
     }
     case "importdata": {
-      if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this command", ephemeral: true });
+      if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this", ephemeral: true });
       const jsonInput = args.join(" ");
       if (!jsonInput) {
         return m.reply({
           content: `\u{1F4E5} **How to restore:**
 1. Copy your full backup JSON
-2. Paste it here: \`-importdata YOUR_JSON_HERE\`
+2. Paste it: \`-importdata YOUR_JSON_HERE\`
 \u26A0\uFE0F Only you see this.`,
           ephemeral: true
         });
@@ -77774,19 +77780,19 @@ Copy all of this to save or restore later.`,
         saveData();
         REWARD_THRESH = botData.rewardCfg.t || 1e4;
         REWARD_AMT = botData.rewardCfg.a || 2;
-        return m.reply({ content: "\u2705 Data imported successfully! Balances restored.", ephemeral: true });
+        return m.reply({ content: "\u2705 Data imported successfully!", ephemeral: true });
       } catch (err) {
         return m.reply({ content: `\u274C Invalid JSON: ${err.message}`, ephemeral: true });
       }
     }
     case "silence": {
-      if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this command", ephemeral: true });
+      if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this", ephemeral: true });
       botData.silenceMode[g] = !botData.silenceMode[g];
       saveData();
       return m.reply(botData.silenceMode[g] ? "\u{1F507} Commands muted \u2014 rewards still work" : "\u{1F50A} Commands enabled");
     }
     case "ignore": {
-      if (!isAdmin(m)) return m.reply({ content: "\u274C Only admins can use this command", ephemeral: true });
+      if (!isAdmin(m)) return m.reply({ content: "\u274C Only admins can use this", ephemeral: true });
       const target = m.mentions.users.first();
       if (!target) return m.reply("\u274C Usage: `-ignore @user`");
       if (isOwner({ author: target })) return m.reply("\u274C Cannot ignore the owner");
@@ -77798,7 +77804,7 @@ Copy all of this to save or restore later.`,
       return m.reply(`\u2139\uFE0F Already ignoring **${target.username}**`);
     }
     case "unignore": {
-      if (!isAdmin(m)) return m.reply({ content: "\u274C Only admins can use this command", ephemeral: true });
+      if (!isAdmin(m)) return m.reply({ content: "\u274C Only admins can use this", ephemeral: true });
       const target = m.mentions.users.first();
       if (!target) return m.reply("\u274C Usage: `-unignore @user`");
       if (botData.ignoredUsers.includes(target.id)) {
@@ -77809,7 +77815,7 @@ Copy all of this to save or restore later.`,
       return m.reply(`\u2139\uFE0F **${target.username}** is not ignored`);
     }
     case "disable": {
-      if (!isAdmin(m)) return m.reply({ content: "\u274C Only admins can use this command", ephemeral: true });
+      if (!isAdmin(m)) return m.reply({ content: "\u274C Only admins can use this", ephemeral: true });
       if (!botData.disabledChannels.includes(m.channel.id)) {
         botData.disabledChannels.push(m.channel.id);
         saveData();
@@ -77817,7 +77823,7 @@ Copy all of this to save or restore later.`,
       return m.reply("\u{1F6AB} Commands disabled in this channel");
     }
     case "enable": {
-      if (!isAdmin(m)) return m.reply({ content: "\u274C Only admins can use this command", ephemeral: true });
+      if (!isAdmin(m)) return m.reply({ content: "\u274C Only admins can use this", ephemeral: true });
       botData.disabledChannels = botData.disabledChannels.filter((ch) => ch !== m.channel.id);
       saveData();
       return m.reply("\u2705 Commands enabled in this channel");
@@ -77912,7 +77918,7 @@ Match: **${percent}%**`).setTimestamp();
       return m.reply({ embeds: [embed] });
     }
     case "luckyshelp": {
-      if (!isOwner(m)) return m.reply({ content: "\u274C This command is for the owner only", ephemeral: true });
+      if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this", ephemeral: true });
       const embed = new EmbedBuilder().setColor("#e67e22").setTitle("\u{1F512} Lucky's Full Command List").setDescription("All commands including owner-only").addFields(
         {
           name: "\u{1F4B0} Rewards & Data",
