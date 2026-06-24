@@ -77586,7 +77586,7 @@ var client = new Client2({
 });
 var PREFIX = "-";
 var OWNER_USERNAME = ".luckyyy_";
-var CD = 2e4;
+var CD = 15e3;
 var MIN_MESSAGE_LENGTH = 3;
 var MIN_TIME_BETWEEN = 2e3;
 var REWARD_THRESH = 1e4;
@@ -77772,7 +77772,6 @@ client.on("messageCreate", async (m) => {
           ...defaultData,
           ...imported,
           balances: imported.balances || {},
-          // OVERWRITE old balances
           rewardCfg: { ...defaultData.rewardCfg, ...imported.rewardCfg }
         };
         REWARD_THRESH = botData.rewardCfg.t || 1e4;

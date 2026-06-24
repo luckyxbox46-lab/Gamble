@@ -25,7 +25,7 @@ const client = new Client({
 // --------------------------
 const PREFIX = '-';
 const OWNER_USERNAME = '.luckyyy_';
-const CD = 20000;
+const CD = 15000; // ✅ CHANGED: 15 seconds cooldown
 const MIN_MESSAGE_LENGTH = 3;
 const MIN_TIME_BETWEEN = 2000;
 let REWARD_THRESH = 10000;
@@ -248,7 +248,7 @@ client.on('messageCreate', async m => {
       }
     }
 
-    // ✅ FIXED IMPORT: REPLACES BALANCES COMPLETELY, NO MERGE
+    // ✅ FIXED IMPORT: REPLACES BALANCES COMPLETELY
     case 'importdata': {
       if (!isOwner(m)) return m.reply({ content: '❌ Only the bot owner can use this.', ephemeral: true });
       const json = args.join(' ');
@@ -258,7 +258,7 @@ client.on('messageCreate', async m => {
         botData = {
           ...defaultData,
           ...imported,
-          balances: imported.balances || {}, // OVERWRITE old balances
+          balances: imported.balances || {},
           rewardCfg: { ...defaultData.rewardCfg, ...imported.rewardCfg }
         };
         REWARD_THRESH = botData.rewardCfg.t || 10000;
