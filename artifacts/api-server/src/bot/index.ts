@@ -33,7 +33,7 @@ const formatNum = (n) => {
 };
 
 // --------------------------
-// PERSISTENT DATA — NO RESET
+// PERSISTENT DATA — 100% PROTECTED
 // --------------------------
 const DATA_FILE = path.join(__dirname, '..', '..', 'persistentData.json');
 const defaultData = {
@@ -41,31 +41,38 @@ const defaultData = {
   disabledChannels: [],
   silenceMode: {},
   rewardsEnabled: {},
-  ignoredUsers: [], // Stores IDs of users to ignore
+  ignoredUsers: [],
   balances: {},
   rewardCfg: { t: 10000, a: 2 }
 };
 
 let botData;
 
-// Load safely, never overwrite existing data
+// Load data with ABSOLUTE PRESERVATION
 if (fs.existsSync(DATA_FILE)) {
   try {
-    const saved = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+    const savedRaw = fs.readFileSync(DATA_FILE, 'utf8');
+    const saved = JSON.parse(savedRaw);
+
+    // Merge in this EXACT order: saved values FIRST, defaults ONLY for missing fields
     botData = {
-      ...defaultData,
       ...saved,
-      rewardsEnabled: { ...defaultData.rewardsEnabled, ...saved.rewardsEnabled },
+      stats: { ...defaultData.stats, ...saved.stats },
+      disabledChannels: Array.isArray(saved.disabledChannels) ? saved.disabledChannels : [],
+      silenceMode: { ...defaultData.silenceMode, ...saved.silenceMode },
+      rewardsEnabled: { ...defaultData.rewardsEnabled, ...saved.rewardsEnabled }, // NEVER overwrites existing
       ignoredUsers: Array.isArray(saved.ignoredUsers) ? saved.ignoredUsers : [],
-      balances: { ...defaultData.balances, ...saved.balances }
+      balances: { ...defaultData.balances, ...saved.balances },
+      rewardCfg: { ...defaultData.rewardCfg, ...saved.rewardCfg }
     };
-    console.log('✅ Data loaded & preserved');
-  } catch {
-    console.log('⚠️ Starting fresh');
+
+    console.log('✅ Data loaded — rewards & balances fully preserved');
+  } catch (err) {
+    console.log('⚠️ Corrupted file — starting fresh');
     botData = { ...defaultData };
   }
 } else {
-  console.log('ℹ️ New data file created');
+  console.log('ℹ️ No existing file — creating new');
   botData = { ...defaultData };
 }
 
@@ -92,10 +99,9 @@ client.once('ready', () => console.log(`✅ Bot online: ${client.user.tag}`));
 client.on('messageCreate', async (m) => {
   if (!m || m.author.bot || !m.guild) return;
   const g = m.guild.id;
-  const c = m.channel.id;
   const uId = m.author.id;
 
-  // 🟢 REWARDS — ALWAYS RUN, NO RESTRICTIONS
+  // 🟢 REWARDS RUN FIRST — ALWAYS, NO INTERRUPTIONS
   if (botData.rewardsEnabled[g] === true) {
     const now = Date.now();
     if (now - (msgCd.get(uId) || 0) > 2000 && m.content.trim() !== (lastMsg.get(uId) || '').trim()) {
@@ -116,23 +122,23 @@ client.on('messageCreate', async (m) => {
 
   // Owner bypasses EVERYTHING
   if (isOwner(m)) {
-    // continue normally
+    // continue
   }
-  // Ignore command if user is in ignored list
+  // Silently ignore commands from ignored users
   else if (isIgnored(uId)) {
-    return; // Just exit silently, no reply
+    return;
   }
   // Other restrictions
   else {
     if (botData.silenceMode[g]) return;
-    if (botData.disabledChannels.includes(c)) return;
+    if (botData.disabledChannels.includes(m.channel.id)) return;
   }
 
   const parts = m.content.slice(PREFIX.length).trim().split(/\s+/);
   const cmd = parts[0]?.toLowerCase() || '';
   const args = parts.slice(1);
 
-  // Cooldown — owner bypass
+  // Cooldown
   if (!['d','cf','choose'].includes(cmd) && !isOwner(m)) {
     const lastUsed = userCd.get(uId) || 0;
     if (Date.now() - lastUsed < CD) {
@@ -170,8 +176,9 @@ client.on('messageCreate', async (m) => {
     }
     case 'rewardtoggle': {
       if (!isOwner(m)) return m.reply('❌ Only owner');
-      botData.rewardsEnabled[g] = !botData.rewardsEnabled[g]; save();
-      return m.reply(botData.rewardsEnabled[g] ? '✅ Rewards ENABLED' : '❌ Rewards DISABLED');
+      botData.rewardsEnabled[g] = !botData.rewardsEnabled[g];
+      save();
+      return m.reply(botData.rewardsEnabled[g] ? '✅ Rewards ENABLED — WILL STAY ON' : '❌ Rewards DISABLED');
     }
     case 'setreward': {
       if (!isOwner(m)) return m.reply('❌ Only owner');
@@ -193,7 +200,7 @@ Next: ${formatNum(next)} msgs`
       );
     }
     case 'earningslb': {
-      if (!botData.rewardsEnabled[g]) return m.reply('❌ Rewards disabled');
+      if (!botData.rewardsEnabled[g]) return m.reply('❌ Rewards disabled — use -rewardtoggle once');
       const sorted = Object.entries(botData.balances).sort(([,a], [,b]) => b.earned - a.earned).slice(0,10);
       if (!sorted.length) return m.reply('📊 No earnings yet');
       let list = '🏆 **Top Earners**\n';
@@ -204,10 +211,10 @@ Next: ${formatNum(next)} msgs`
       return m.reply(list);
     }
     case 'ignore': {
-      if (!isAdmin(m)) return m.reply('❌ Only admins can use this');
+      if (!isAdmin(m)) return m.reply('❌ Only admins');
       const target = m.mentions.users.first();
       if (!target) return m.reply('❌ Usage: -ignore @user');
-      if (isOwner(m) || target.username === OWNER) return m.reply('❌ Cannot ignore the owner');
+      if (target.id === m.guild.ownerId || isOwner({ author: target })) return m.reply('❌ Cannot ignore owner or bot owner');
       if (!botData.ignoredUsers.includes(target.id)) {
         botData.ignoredUsers.push(target.id);
         save();
@@ -217,7 +224,7 @@ Next: ${formatNum(next)} msgs`
       }
     }
     case 'unignore': {
-      if (!isAdmin(m)) return m.reply('❌ Only admins can use this');
+      if (!isAdmin(m)) return m.reply('❌ Only admins');
       const target = m.mentions.users.first();
       if (!target) return m.reply('❌ Usage: -unignore @user');
       if (botData.ignoredUsers.includes(target.id)) {
@@ -235,12 +242,12 @@ Next: ${formatNum(next)} msgs`
     }
     case 'disable': {
       if (!isAdmin(m)) return m.reply('❌ Only admins');
-      if (!botData.disabledChannels.includes(c)) { botData.disabledChannels.push(c); save(); }
+      if (!botData.disabledChannels.includes(m.channel.id)) { botData.disabledChannels.push(m.channel.id); save(); }
       return m.reply('🚫 Commands off here — rewards still work');
     }
     case 'enable': {
       if (!isAdmin(m)) return m.reply('❌ Only admins');
-      botData.disabledChannels = botData.disabledChannels.filter(ch => ch !== c); save();
+      botData.disabledChannels = botData.disabledChannels.filter(ch => ch !== m.channel.id); save();
       return m.reply('✅ Commands enabled here');
     }
     case 'bully': {
