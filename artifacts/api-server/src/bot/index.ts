@@ -301,38 +301,65 @@ client.on('messageCreate', async m => {
       return;
     }
 
+    // ✅ FIXED DICE WAR
     case 'dw': {
       const opp = m.mentions.users.first();
+      // Correct order: rounds first, then max sides
       const rounds = Math.max(1, Math.min(10, parseInt(args[0]) || 5));
       const sides = Math.max(2, parseInt(args[1]) || 1000);
       if (!opp) return m.reply('❌ Usage: `-dw @user [rounds] [max]` | Max rounds: 10');
-      let your = 0, opps = 0;
-      await m.reply(`🎲 **Dice War**: ${m.author.username} vs ${opp.username}`);
+
+      let yourScore = 0, oppScore = 0;
+      await m.reply(`🎲 **Dice War**: ${m.author.username} vs ${opp.username}\nRounds: ${rounds} | Max: ${sides}`);
+
       for (let i = 1; i <= rounds; i++) {
-        const y = Math.floor(Math.random() * sides) + 1;
-        const o = Math.floor(Math.random() * sides) + 1;
-        if (y > o) your++;
-        else if (o > y) opps++;
-        await m.channel.send(`Round ${i}: 🎲 ${y} vs ${o}`).catch(()=>{});
+        const youRoll = Math.floor(Math.random() * sides) + 1;
+        const oppRoll = Math.floor(Math.random() * sides) + 1;
+
+        if (youRoll > oppRoll) yourScore++;
+        else if (oppRoll > youRoll) oppScore++;
+
+        await m.channel.send(`Round ${i}: 🎲 ${youRoll} vs ${oppRoll}`).catch(()=>{});
         await delay(900);
       }
-      return m.channel.send(`🏆 Final Score: **${your} - ${opps}** | ${your > opps ? '✅ You win!' : opps > your ? `✅ ${opp.username} wins!` : '⚖️ Draw!'}`);
+
+      const result = yourScore > oppScore
+        ? `✅ **${m.author.username}** wins!`
+        : oppScore > yourScore
+          ? `✅ **${opp.username}** wins!`
+          : '⚖️ Draw!';
+
+      return m.channel.send(`🏆 Final Score: **${yourScore} - ${oppScore}**\n${result}`);
     }
 
+    // ✅ FIXED COIN WAR
     case 'cw': {
       const opp = m.mentions.users.first();
       const pick = args[1]?.toLowerCase();
-      if (!opp || !['heads','tails'].includes(pick)) return m.reply('❌ Usage: `-cw @user heads/tails`');
-      let userScore = 0, oppScore = 0;
+      if (!opp || !['heads','tails'].includes(pick))
+        return m.reply('❌ Usage: `-cw @user heads/tails` | First to 2 points wins');
+
+      let yourScore = 0, oppScore = 0;
       await m.reply(`🪙 **Coin War**: ${m.author.username} vs ${opp.username}\nYou picked: **${pick}**`);
-      while (userScore < 2 && oppScore < 2) {
-        const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
-        if (result === pick) userScore++;
-        else oppScore++;
-        await m.channel.send(`Flip: **${result}** | Score: ${userScore} - ${oppScore}`).catch(()=>{});
+
+      while (yourScore < 2 && oppScore < 2) {
+        const flip = Math.random() < 0.5 ? 'Heads' : 'Tails';
+        // Fixed logic: give point to correct person
+        if (flip.toLowerCase() === pick) {
+          yourScore++;
+        } else {
+          oppScore++;
+        }
+
+        await m.channel.send(`Flip: **${flip}** | Score: ${yourScore} - ${oppScore}`).catch(()=>{});
         await delay(900);
       }
-      return m.channel.send(userScore === 2 ? `🏆 **${m.author.username}** wins!` : `🏆 **${opp.username}** wins!`);
+
+      const result = yourScore === 2
+        ? `🏆 **${m.author.username}** wins!`
+        : `🏆 **${opp.username}** wins!`;
+
+      return m.channel.send(result);
     }
 
     case 'ship': {
@@ -363,7 +390,7 @@ client.on('messageCreate', async m => {
 \`-choose ...\` → Pick a random option
 \`-ship @user1 [@user2]\` → Check compatibility
 \`-dw @user [rounds] [max]\` → Dice War (max 10 rounds)
-\`-cw @user heads/tails\` → Coin War
+\`-cw @user heads/tails\` → Coin War (first to 2 points)
 
 **💰 Rewards & Stats**
 \`-balance [@user]\` → View your messages & earnings
