@@ -77670,7 +77670,7 @@ client.on("messageCreate", async (m) => {
       return m.reply(`\u{1FA99} Flip: ${res}`);
     }
     case "choose": {
-      if (!args.length) return m.reply("\u274C Usage: -choose opt1 opt2 ...");
+      if (!args.length) return m.reply("\u274C Usage: -choose <option1> <option2> ...");
       return m.reply(`\u{1F3AF} Pick: ${args[Math.floor(Math.random() * args.length)]}`);
     }
     case "ship": {
@@ -77685,35 +77685,37 @@ client.on("messageCreate", async (m) => {
 \u23F1\uFE0F Uptime: ${uptime}m`);
     }
     case "rewardtoggle": {
-      if (!isOwner(m)) return m.reply("\u274C Only owner");
+      if (!isOwner(m)) return m.reply("\u274C Usage: Only owner can use this");
       botData.rewardsEnabled[g] = !botData.rewardsEnabled[g];
       save();
-      return m.reply(botData.rewardsEnabled[g] ? "\u2705 Rewards ENABLED" : "\u274C Rewards DISABLED");
+      return m.reply(botData.rewardsEnabled[g] ? "\u2705 Rewards enabled" : "\u274C Rewards disabled");
     }
     case "setreward": {
-      if (!isOwner(m)) return m.reply("\u274C Only owner");
+      if (!isOwner(m)) return m.reply("\u274C Usage: Only owner can use this");
       const t = parseInt(args[0]), a = parseFloat(args[1]);
-      if (!t || !a || t < 1 || a < 0) return m.reply("\u274C Usage: -setreward <msgs> <$>");
+      if (!t || !a || t < 1 || a < 0) return m.reply("\u274C Usage: -setreward <message_count> <amount>");
       REWARD_THRESH = t;
       REWARD_AMT = a;
       save();
-      return m.reply(`\u2705 Updated: ${t} msgs = $${a.toFixed(2)}`);
+      return m.reply(`\u2705 Updated: ${t} messages = $${a.toFixed(2)}`);
     }
     case "balance": {
       const target = m.mentions.users.first() || m.author;
-      if (m.mentions.users.first() && !isAdmin(m)) return m.reply("\u274C Admin only");
-      const d = botData.balances[target.id] || { count: 0, earned: 0 };
-      const next = (Math.floor(d.count / REWARD_THRESH) + 1) * REWARD_THRESH;
-      return m.reply(`\u{1F4B0} ${target.username}
-Messages: ${d.count}
-Earned: $${d.earned.toFixed(2)}
-Next: ${next}`);
+      if (m.mentions.users.first() && !isAdmin(m)) return m.reply("\u274C Usage: Only admins can check others' balance");
+      const data = botData.balances[target.id] || { count: 0, earned: 0 };
+      const nextReward = (Math.floor(data.count / REWARD_THRESH) + 1) * REWARD_THRESH;
+      return m.reply(
+        `\u{1F4B0} **${target.username}**
+Messages Sent: ${data.count}
+Earned: $${data.earned.toFixed(2)}
+Next reward at: ${nextReward} messages`
+      );
     }
     case "earningslb": {
-      if (!botData.rewardsEnabled[g]) return m.reply("\u274C Rewards are OFF");
+      if (!botData.rewardsEnabled[g]) return m.reply("\u274C Usage: Rewards are disabled");
       const sorted = Object.entries(botData.balances).sort((x, y) => y[1].earned - x[1].earned).slice(0, 10);
-      if (!sorted.length) return m.reply("\u{1F4CA} No earnings yet");
-      let list = "\u{1F3C6} Top Earners\n";
+      if (!sorted.length) return m.reply("\u{1F4CA} No earnings recorded yet");
+      let list = "\u{1F3C6} **Top Earners**\n";
       for (let i = 0; i < sorted.length; i++) {
         const u = await client.users.fetch(sorted[i][0]).catch(() => null);
         list += `${i + 1}. ${u?.username || "Unknown"} \u2014 $${sorted[i][1].earned.toFixed(2)}
@@ -77722,24 +77724,24 @@ Next: ${next}`);
       return m.reply(list);
     }
     case "silence": {
-      if (!isOwner(m)) return m.reply("\u274C Only owner");
+      if (!isOwner(m)) return m.reply("\u274C Usage: Only owner can use this");
       botData.silenceMode[g] = !botData.silenceMode[g];
       save();
-      return m.reply(botData.silenceMode[g] ? "\u{1F507} Commands OFF \u2014 REWARDS STILL WORK \u2705" : "\u{1F50A} Commands ON");
+      return m.reply(botData.silenceMode[g] ? "\u{1F507} Commands disabled \u2014 rewards still work" : "\u{1F50A} Commands enabled");
     }
     case "disable": {
-      if (!isAdmin(m)) return m.reply("\u274C Admin only");
+      if (!isAdmin(m)) return m.reply("\u274C Usage: Only admins can use this");
       if (!botData.disabledChannels.includes(c)) {
         botData.disabledChannels.push(c);
         save();
       }
-      return m.reply("\u{1F6AB} Commands OFF here \u2014 REWARDS STILL WORK \u2705");
+      return m.reply("\u{1F6AB} Commands disabled here \u2014 rewards still work");
     }
     case "enable": {
-      if (!isAdmin(m)) return m.reply("\u274C Admin only");
+      if (!isAdmin(m)) return m.reply("\u274C Usage: Only admins can use this");
       botData.disabledChannels = botData.disabledChannels.filter((ch) => ch !== c);
       save();
-      return m.reply("\u2705 Commands back ON");
+      return m.reply("\u2705 Commands enabled here");
     }
     case "bully": {
       if (!isAdmin(m) || !m.mentions.users.first()) return m.reply("\u274C Usage: -bully @user");
@@ -77771,7 +77773,7 @@ ${res}`);
     }
     case "cw": {
       const opp = m.mentions.users.first(), side = args[1]?.toLowerCase();
-      if (!opp || !["heads", "tails"].includes(side)) return m.reply("\u274C Usage: -cw @user heads/tails");
+      if (!opp || !["heads", "tails"].includes(side)) return m.reply("\u274C Usage: -cw @user <heads/tails>");
       let u = 0, o = 0;
       await m.reply(`\u{1FA99} Coin War: ${m.author.username} vs ${opp.username}`);
       while (u < 2 && o < 2) {
@@ -77784,25 +77786,30 @@ ${res}`);
       return m.channel.send(u === 2 ? `\u{1F3C6} ${m.author.username} wins!` : `\u{1F3C6} ${opp.username} wins!`);
     }
     case "help": {
-      return m.reply(`\u{1F4D6} **COMMANDS**
+      return m.reply(`\u{1F4D6} **COMMANDS & USAGE**
 
 \u{1F4B0} **REWARDS**
-\`-rewardtoggle\` (Owner)
-\`-setreward <msgs> <$\` (Owner)
-\`-balance\` / \`-balance @user\`
-\`-earningslb\`
-*Rewards work EVEN IF commands are disabled/silenced*
-*Balances NEVER reset on updates/pushes*
+\`-rewardtoggle\` \u2014 Enable/disable rewards
+\`-setreward <msgs> <amount>\` \u2014 Set reward rate
+\`-balance [@user]\` \u2014 View messages sent & earned amount
+\`-earningslb\` \u2014 View top earners
 
 \u{1F3B2} **GENERAL**
-\`-d [max]\` \u2022 \`-cf\` \u2022 \`-choose\`
-\`-ship\` \u2022 \`-stats\` \u2022 \`-dw\` \u2022 \`-cw\`
+\`-d [max]\` \u2014 Roll a dice
+\`-cf\` \u2014 Flip a coin
+\`-choose <opt1> <opt2> ...\` \u2014 Pick an option
+\`-ship @user1 @user2\` \u2014 Check compatibility
+\`-stats\` \u2014 View bot stats
+\`-dw [rounds] [sides]\` \u2014 Dice battle
+\`-cw @user <heads/tails>\` \u2014 Coin battle
 
 \u{1F451} **ADMIN**
-\`-disable\` \u2022 \`-enable\` \u2022 \`-bully\`
+\`-disable\` \u2014 Turn off commands in channel
+\`-enable\` \u2014 Turn on commands in channel
+\`-bully @user\` \u2014 Send messages to a user
 
-\u{1F512} **OWNER (.luckyyy_) \u2014 BYPASSES EVERYTHING**
-\`-silence\`
+\u{1F512} **OWNER ONLY**
+\`-silence\` \u2014 Mute/unmute all commands
 `);
     }
   }

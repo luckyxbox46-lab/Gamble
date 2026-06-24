@@ -31,11 +31,8 @@ let REWARD_AMT = 2;
 const userCd = new Map(), lastMsg = new Map(), msgCd = new Map();
 const delay = ms => new Promise(r => setTimeout(r, ms));
 
-// 🔹 PERSISTENT DATA LOCATION — SURVIVES DEPLOYS
-// Use /tmp or a dedicated Railway volume path
+// Persistent data
 const DATA_FILE = path.join(__dirname, '..', '..', 'persistentData.json');
-
-// 🔹 DEFAULT STRUCTURE — only used if NO saved data exists
 const defaultData = {
   stats: { rolls: 0, flips: 0, started: Date.now() },
   disabledChannels: [],
@@ -45,12 +42,10 @@ const defaultData = {
   rewardCfg: { t: 10000, a: 2 }
 };
 
-// 🔹 LOAD DATA — MERGE, NEVER OVERWRITE
 let botData;
 if (fs.existsSync(DATA_FILE)) {
   try {
     const saved = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-    // Merge saved data into defaults — keeps old balances, adds new fields
     botData = { ...defaultData, ...saved };
     console.log('✅ Loaded existing data — balances preserved');
   } catch (e) {
@@ -62,11 +57,9 @@ if (fs.existsSync(DATA_FILE)) {
   botData = { ...defaultData };
 }
 
-// Apply saved reward settings
 REWARD_THRESH = botData.rewardCfg.t || 10000;
 REWARD_AMT = botData.rewardCfg.a || 2;
 
-// 🔹 SAVE FUNCTION — only writes changes, never resets
 const save = () => {
   botData.rewardCfg = { t: REWARD_THRESH, a: REWARD_AMT };
   fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), 'utf8');
@@ -84,16 +77,14 @@ const isAdmin = (m) => isOwner(m) || !!m?.member?.permissions?.has(PermissionsBi
 client.once('clientReady', () => console.log(`✅ Bot online: ${client.user.tag}`));
 
 // --------------------------
-// MESSAGE HANDLER — REWARDS FIRST, ALWAYS
+// MESSAGE HANDLER
 // --------------------------
 client.on('messageCreate', async (m) => {
   if (!m || m.author.bot || !m.guild) return;
   const g = m.guild.id;
   const c = m.channel.id;
 
-  // ==============================================
-  // 🔹 REWARD SYSTEM — NEVER BLOCKED, NEVER RESET
-  // ==============================================
+  // REWARD SYSTEM — ALWAYS RUNS
   if (botData.rewardsEnabled[g]) {
     const u = m.author.id;
     const now = Date.now();
@@ -110,12 +101,9 @@ client.on('messageCreate', async (m) => {
     }
   }
 
-  // ==============================================
-  // 🔹 COMMAND SYSTEM
-  // ==============================================
+  // COMMAND CHECK
   if (!m.content.startsWith(PREFIX)) return;
 
-  // Owner bypass ALL restrictions
   if (!isOwner(m)) {
     if (botData.silenceMode[g]) return;
     if (botData.disabledChannels.includes(c)) return;
@@ -125,7 +113,7 @@ client.on('messageCreate', async (m) => {
   const cmd = parts[0]?.toLowerCase() || '';
   const args = parts.slice(1);
 
-  // Cooldown — owner bypass
+  // Cooldown
   if (!['d', 'cf', 'choose'].includes(cmd) && !isOwner(m)) {
     const lastUsed = userCd.get(m.author.id) || 0;
     if (Date.now() - lastUsed < CD) {
@@ -135,7 +123,7 @@ client.on('messageCreate', async (m) => {
   }
 
   // --------------------------
-  // ALL COMMANDS
+  // COMMANDS
   // --------------------------
   switch (cmd) {
     case 'd': {
@@ -150,7 +138,7 @@ client.on('messageCreate', async (m) => {
       return m.reply(`🪙 Flip: ${res}`);
     }
     case 'choose': {
-      if (!args.length) return m.reply('❌ Usage: -choose opt1 opt2 ...');
+      if (!args.length) return m.reply('❌ Usage: -choose <option1> <option2> ...');
       return m.reply(`🎯 Pick: ${args[Math.floor(Math.random() * args.length)]}`);
     }
     case 'ship': {
@@ -162,29 +150,34 @@ client.on('messageCreate', async (m) => {
       return m.reply(`📊 Stats\n🎲 Rolls: ${botData.stats.rolls}\n🪙 Flips: ${botData.stats.flips}\n⏱️ Uptime: ${uptime}m`);
     }
     case 'rewardtoggle': {
-      if (!isOwner(m)) return m.reply('❌ Only owner');
+      if (!isOwner(m)) return m.reply('❌ Usage: Only owner can use this');
       botData.rewardsEnabled[g] = !botData.rewardsEnabled[g]; save();
-      return m.reply(botData.rewardsEnabled[g] ? '✅ Rewards ENABLED' : '❌ Rewards DISABLED');
+      return m.reply(botData.rewardsEnabled[g] ? '✅ Rewards enabled' : '❌ Rewards disabled');
     }
     case 'setreward': {
-      if (!isOwner(m)) return m.reply('❌ Only owner');
+      if (!isOwner(m)) return m.reply('❌ Usage: Only owner can use this');
       const t = parseInt(args[0]), a = parseFloat(args[1]);
-      if (!t || !a || t < 1 || a < 0) return m.reply('❌ Usage: -setreward <msgs> <$>');
+      if (!t || !a || t < 1 || a < 0) return m.reply('❌ Usage: -setreward <message_count> <amount>');
       REWARD_THRESH = t; REWARD_AMT = a; save();
-      return m.reply(`✅ Updated: ${t} msgs = $${a.toFixed(2)}`);
+      return m.reply(`✅ Updated: ${t} messages = $${a.toFixed(2)}`);
     }
     case 'balance': {
       const target = m.mentions.users.first() || m.author;
-      if (m.mentions.users.first() && !isAdmin(m)) return m.reply('❌ Admin only');
-      const d = botData.balances[target.id] || { count: 0, earned: 0 };
-      const next = (Math.floor(d.count / REWARD_THRESH) + 1) * REWARD_THRESH;
-      return m.reply(`💰 ${target.username}\nMessages: ${d.count}\nEarned: $${d.earned.toFixed(2)}\nNext: ${next}`);
+      if (m.mentions.users.first() && !isAdmin(m)) return m.reply('❌ Usage: Only admins can check others\' balance');
+      const data = botData.balances[target.id] || { count: 0, earned: 0 };
+      const nextReward = (Math.floor(data.count / REWARD_THRESH) + 1) * REWARD_THRESH;
+      return m.reply(
+`💰 **${target.username}**
+Messages Sent: ${data.count}
+Earned: $${data.earned.toFixed(2)}
+Next reward at: ${nextReward} messages`
+      );
     }
     case 'earningslb': {
-      if (!botData.rewardsEnabled[g]) return m.reply('❌ Rewards are OFF');
+      if (!botData.rewardsEnabled[g]) return m.reply('❌ Usage: Rewards are disabled');
       const sorted = Object.entries(botData.balances).sort((x,y) => y[1].earned - x[1].earned).slice(0,10);
-      if (!sorted.length) return m.reply('📊 No earnings yet');
-      let list = '🏆 Top Earners\n';
+      if (!sorted.length) return m.reply('📊 No earnings recorded yet');
+      let list = '🏆 **Top Earners**\n';
       for (let i=0; i<sorted.length; i++) {
         const u = await client.users.fetch(sorted[i][0]).catch(() => null);
         list += `${i+1}. ${u?.username || 'Unknown'} — $${sorted[i][1].earned.toFixed(2)}\n`;
@@ -192,21 +185,19 @@ client.on('messageCreate', async (m) => {
       return m.reply(list);
     }
     case 'silence': {
-      if (!isOwner(m)) return m.reply('❌ Only owner');
+      if (!isOwner(m)) return m.reply('❌ Usage: Only owner can use this');
       botData.silenceMode[g] = !botData.silenceMode[g]; save();
-      return m.reply(botData.silenceMode[g] ? '🔇 Commands OFF — REWARDS STILL WORK ✅' : '🔊 Commands ON');
+      return m.reply(botData.silenceMode[g] ? '🔇 Commands disabled — rewards still work' : '🔊 Commands enabled');
     }
     case 'disable': {
-      if (!isAdmin(m)) return m.reply('❌ Admin only');
-      if (!botData.disabledChannels.includes(c)) {
-        botData.disabledChannels.push(c); save();
-      }
-      return m.reply('🚫 Commands OFF here — REWARDS STILL WORK ✅');
+      if (!isAdmin(m)) return m.reply('❌ Usage: Only admins can use this');
+      if (!botData.disabledChannels.includes(c)) { botData.disabledChannels.push(c); save(); }
+      return m.reply('🚫 Commands disabled here — rewards still work');
     }
     case 'enable': {
-      if (!isAdmin(m)) return m.reply('❌ Admin only');
+      if (!isAdmin(m)) return m.reply('❌ Usage: Only admins can use this');
       botData.disabledChannels = botData.disabledChannels.filter(ch => ch !== c); save();
-      return m.reply('✅ Commands back ON');
+      return m.reply('✅ Commands enabled here');
     }
     case 'bully': {
       if (!isAdmin(m) || !m.mentions.users.first()) return m.reply('❌ Usage: -bully @user');
@@ -231,7 +222,7 @@ client.on('messageCreate', async (m) => {
     }
     case 'cw': {
       const opp = m.mentions.users.first(), side = args[1]?.toLowerCase();
-      if (!opp || !['heads','tails'].includes(side)) return m.reply('❌ Usage: -cw @user heads/tails');
+      if (!opp || !['heads','tails'].includes(side)) return m.reply('❌ Usage: -cw @user <heads/tails>');
       let u=0, o=0;
       await m.reply(`🪙 Coin War: ${m.author.username} vs ${opp.username}`);
       while (u<2 && o<2) {
@@ -243,25 +234,30 @@ client.on('messageCreate', async (m) => {
       return m.channel.send(u===2 ? `🏆 ${m.author.username} wins!` : `🏆 ${opp.username} wins!`);
     }
     case 'help': {
-      return m.reply(`📖 **COMMANDS**
+      return m.reply(`📖 **COMMANDS & USAGE**
 
 💰 **REWARDS**
-\`-rewardtoggle\` (Owner)
-\`-setreward <msgs> <$\` (Owner)
-\`-balance\` / \`-balance @user\`
-\`-earningslb\`
-*Rewards work EVEN IF commands are disabled/silenced*
-*Balances NEVER reset on updates/pushes*
+\`-rewardtoggle\` — Enable/disable rewards
+\`-setreward <msgs> <amount>\` — Set reward rate
+\`-balance [@user]\` — View messages sent & earned amount
+\`-earningslb\` — View top earners
 
 🎲 **GENERAL**
-\`-d [max]\` • \`-cf\` • \`-choose\`
-\`-ship\` • \`-stats\` • \`-dw\` • \`-cw\`
+\`-d [max]\` — Roll a dice
+\`-cf\` — Flip a coin
+\`-choose <opt1> <opt2> ...\` — Pick an option
+\`-ship @user1 @user2\` — Check compatibility
+\`-stats\` — View bot stats
+\`-dw [rounds] [sides]\` — Dice battle
+\`-cw @user <heads/tails>\` — Coin battle
 
 👑 **ADMIN**
-\`-disable\` • \`-enable\` • \`-bully\`
+\`-disable\` — Turn off commands in channel
+\`-enable\` — Turn on commands in channel
+\`-bully @user\` — Send messages to a user
 
-🔒 **OWNER (.luckyyy_) — BYPASSES EVERYTHING**
-\`-silence\`
+🔒 **OWNER ONLY**
+\`-silence\` — Mute/unmute all commands
 `);
     }
   }
