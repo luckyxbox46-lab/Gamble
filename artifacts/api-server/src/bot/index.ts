@@ -20,9 +20,14 @@ const client = new Client({
   ]
 });
 
-// Your original settings
-const PREFIX = '-', OWNER = '.luckyyy_', CD = 20000;
-let REWARD_THRESH = 10000, REWARD_AMT = 2;
+// --------------------------
+// YOUR SETTINGS
+// --------------------------
+const PREFIX = '-';
+const OWNER = '.luckyyy_'; // YOU - FULL BYPASS
+const CD = 20000; // 20 second cooldown
+let REWARD_THRESH = 10000;
+let REWARD_AMT = 2;
 const userCd = new Map(), lastMsg = new Map(), msgCd = new Map();
 const delay = ms => new Promise(r => setTimeout(r, ms));
 
@@ -30,9 +35,9 @@ const delay = ms => new Promise(r => setTimeout(r, ms));
 const DATA_FILE = path.join(__dirname, '..', '..', 'persistentData.json');
 let botData = {
   stats: { rolls: 0, flips: 0, started: Date.now() },
-  disabled: [],
-  silence: {},
-  rewards: {},
+  disabledChannels: [], // Only blocks commands, NOT rewards
+  silenceMode: {}, // Only blocks commands, NOT rewards
+  rewardsEnabled: {},
   balances: {},
   rewardCfg: { t: 10000, a: 2 }
 };
@@ -55,49 +60,68 @@ const save = () => {
   fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), 'utf8');
 };
 
-// ✅ SAFE CHECKS — NO MORE UNDEFINED ERRORS
-const isAdmin = (m) => {
-  if (!m || !m.author) return false;
-  if (m.author.username === OWNER) return true;
-  return !!m.member?.permissions?.has(PermissionsBitField.Flags.Administrator);
-};
+// --------------------------
+// PERMISSION CHECKS
+// --------------------------
 const isOwner = (m) => m && m.author && m.author.username === OWNER;
 
-// Fixed ready event
+const isAdmin = (m) => {
+  if (!m || !m.author) return false;
+  if (isOwner(m)) return true; // Owner is always admin
+  return !!m.member?.permissions?.has(PermissionsBitField.Flags.Administrator);
+};
+
+// --------------------------
+// READY EVENT
+// --------------------------
 client.once('clientReady', () => console.log(`✅ Bot online: ${client.user.tag}`));
 
-// Message handler
+// --------------------------
+// MESSAGE HANDLER
+// --------------------------
 client.on('messageCreate', async (m) => {
   if (!m || m.author.bot || !m.guild) return;
-  const g = m.guild.id, c = m.channel.id;
+  const g = m.guild.id;
+  const c = m.channel.id;
 
-  if (botData.disabled.includes(c)) return;
-
-  // Reward system
+  // ==============================================
+  // 1. REWARD SYSTEM — RUNS ALWAYS, NO RESTRICTIONS
+  // ==============================================
   if (!m.content.startsWith(PREFIX)) {
-    if (!botData.rewards[g]) return;
-    const u = m.author.id, now = Date.now();
-    if (now - (msgCd.get(u) || 0) > 2000 && m.content.trim() !== (lastMsg.get(u) || '').trim()) {
-      if (!botData.balances[u]) botData.balances[u] = { count: 0, earned: 0 };
-      botData.balances[u].count++;
-      lastMsg.set(u, m.content);
-      msgCd.set(u, now);
-      const earned = Math.floor(botData.balances[u].count / REWARD_THRESH) * REWARD_AMT;
-      if (earned > botData.balances[u].earned) {
-        botData.balances[u].earned = earned;
-        save();
+    if (botData.rewardsEnabled[g]) {
+      const u = m.author.id;
+      const now = Date.now();
+      if (now - (msgCd.get(u) || 0) > 2000 && m.content.trim() !== (lastMsg.get(u) || '').trim()) {
+        if (!botData.balances[u]) botData.balances[u] = { count: 0, earned: 0 };
+        botData.balances[u].count++;
+        lastMsg.set(u, m.content);
+        msgCd.set(u, now);
+        const earned = Math.floor(botData.balances[u].count / REWARD_THRESH) * REWARD_AMT;
+        if (earned > botData.balances[u].earned) {
+          botData.balances[u].earned = earned;
+          save();
+        }
       }
     }
-    return;
+    // Return here only if it's not a command
+    if (!m.content.startsWith(PREFIX)) return;
   }
 
-  if (botData.silence[g] && !isOwner(m)) return;
+  // ==============================================
+  // 2. COMMAND SYSTEM — APPLY RESTRICTIONS
+  // ==============================================
+  // OWNER BYPASS: If you are the owner, ignore all blocks
+  if (!isOwner(m)) {
+    if (botData.silenceMode[g]) return;
+    if (botData.disabledChannels.includes(c)) return;
+  }
 
   const parts = m.content.slice(PREFIX.length).trim().split(/\s+/);
-  const cmd = parts[0]?.toLowerCase() || '', args = parts.slice(1);
+  const cmd = parts[0]?.toLowerCase() || '';
+  const args = parts.slice(1);
 
-  // Cooldown
-  if (!['d', 'cf', 'choose'].includes(cmd) && !isAdmin(m)) {
+  // Cooldown check — owner bypasses cooldown too
+  if (!['d', 'cf', 'choose'].includes(cmd) && !isOwner(m)) {
     const lastUsed = userCd.get(m.author.id) || 0;
     if (Date.now() - lastUsed < CD) {
       return m.reply(`⏳ Wait ${Math.ceil((CD - (Date.now() - lastUsed)) / 1000)}s`).catch(() => {});
@@ -105,7 +129,9 @@ client.on('messageCreate', async (m) => {
     userCd.set(m.author.id, Date.now());
   }
 
-  // All original commands
+  // --------------------------
+  // ALL COMMANDS
+  // --------------------------
   switch (cmd) {
     case 'd': {
       const max = parseInt(args[0]) || 100;
@@ -114,39 +140,47 @@ client.on('messageCreate', async (m) => {
       save();
       return m.reply(`🎲 Roll: ${roll}`);
     }
+
     case 'cf': {
       const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
       botData.stats.flips++;
       save();
       return m.reply(`🪙 Flip: ${result}`);
     }
+
     case 'choose': {
       if (!args.length) return m.reply('❌ Usage: -choose option1 option2 ...');
       return m.reply(`🎯 Pick: ${args[Math.floor(Math.random() * args.length)]}`);
     }
+
     case 'ship': {
       if (!m.mentions.users.size) return m.reply('❌ Usage: -ship @user1 @user2');
       return m.reply(`💞 Compatibility: ${Math.floor(Math.random() * 100)}%`);
     }
+
     case 'stats': {
       const uptime = Math.floor((Date.now() - botData.stats.started) / 60000);
       return m.reply(`📊 Stats\n🎲 Rolls: ${botData.stats.rolls}\n🪙 Flips: ${botData.stats.flips}\n⏱️ Uptime: ${uptime}m`);
     }
+
     case 'rewardtoggle': {
       if (!isOwner(m)) return m.reply('❌ Only owner can use this');
-      botData.rewards[g] = !botData.rewards[g];
+      botData.rewardsEnabled[g] = !botData.rewardsEnabled[g];
       save();
-      return m.reply(botData.rewards[g] ? '✅ Rewards enabled' : '❌ Rewards disabled');
+      return m.reply(botData.rewardsEnabled[g] ? '✅ Rewards enabled' : '❌ Rewards disabled');
     }
+
     case 'setreward': {
       if (!isOwner(m)) return m.reply('❌ Only owner can use this');
-      const t = parseInt(args[0]), a = parseFloat(args[1]);
+      const t = parseInt(args[0]);
+      const a = parseFloat(args[1]);
       if (!t || !a || t < 1 || a < 0) return m.reply('❌ Usage: -setreward <message_count> <amount>');
       REWARD_THRESH = t;
       REWARD_AMT = a;
       save();
       return m.reply(`✅ Updated: ${t} messages = $${a.toFixed(2)}`);
     }
+
     case 'balance': {
       const target = m.mentions.users.first() || m.author;
       if (m.mentions.users.first() && !isAdmin(m)) return m.reply('❌ Only admins can check others\' balance');
@@ -154,8 +188,9 @@ client.on('messageCreate', async (m) => {
       const nextReward = (Math.floor(data.count / REWARD_THRESH) + 1) * REWARD_THRESH;
       return m.reply(`💰 ${target.username}\nMessages sent: ${data.count}\nEarned: $${data.earned.toFixed(2)}\nNext reward at: ${nextReward} messages`);
     }
+
     case 'earningslb': {
-      if (!botData.rewards[g]) return m.reply('❌ Rewards are disabled here');
+      if (!botData.rewardsEnabled[g]) return m.reply('❌ Rewards are disabled here');
       const sorted = Object.entries(botData.balances).sort((x, y) => y[1].earned - x[1].earned).slice(0, 10);
       if (!sorted.length) return m.reply('📊 No earnings recorded yet');
       let list = '🏆 Top Earners\n';
@@ -165,26 +200,31 @@ client.on('messageCreate', async (m) => {
       }
       return m.reply(list);
     }
+
     case 'silence': {
       if (!isOwner(m)) return m.reply('❌ Only owner can use this');
-      botData.silence[g] = !botData.silence[g];
+      botData.silenceMode[g] = !botData.silenceMode[g];
       save();
-      return m.reply(botData.silence[g] ? '🔇 Bot silenced' : '🔊 Bot active');
+      return m.reply(botData.silenceMode[g] ? '🔇 Bot silenced (commands off, rewards still work)' : '🔊 Bot active again');
     }
+
     case 'disable': {
       if (!isAdmin(m)) return m.reply('❌ Only admins can use this');
-      if (!botData.disabled.includes(c)) {
-        botData.disabled.push(c);
+      if (!botData.disabledChannels.includes(c)) {
+        botData.disabledChannels.push(c);
         save();
       }
-      return m.reply('🚫 Commands disabled in this channel');
+      return m.reply('🚫 Commands disabled here (rewards still work)');
     }
+
     case 'enable': {
       if (!isAdmin(m)) return m.reply('❌ Only admins can use this');
-      botData.disabled = botData.disabled.filter(ch => ch !== c);
+      // Fixed: properly removes the channel
+      botData.disabledChannels = botData.disabledChannels.filter(channel => channel !== c);
       save();
-      return m.reply('✅ Commands enabled in this channel');
+      return m.reply('✅ Commands enabled here');
     }
+
     case 'bully': {
       if (!isAdmin(m) || !m.mentions.users.first()) return m.reply('❌ Usage: -bully @user');
       const target = m.mentions.users.first();
@@ -194,6 +234,7 @@ client.on('messageCreate', async (m) => {
       }
       return;
     }
+
     case 'dw': {
       const opponent = m.mentions.users.first() || { username: 'Opponent' };
       const rounds = Math.max(1, Math.min(10, parseInt(args[1]) || 5));
@@ -211,6 +252,7 @@ client.on('messageCreate', async (m) => {
       const result = p1 > p2 ? `✅ ${m.author.username} wins!` : p2 > p1 ? `✅ ${opponent.username} wins!` : '⚖️ It\'s a draw!';
       return m.channel.send(`🏆 Final Score: ${p1} - ${p2}\n${result}`);
     }
+
     case 'cw': {
       const opponent = m.mentions.users.first();
       const side = args[1]?.toLowerCase();
@@ -226,6 +268,7 @@ client.on('messageCreate', async (m) => {
       }
       return m.channel.send(userScore === 2 ? `🏆 ${m.author.username} wins!` : `🏆 ${opponent.username} wins!`);
     }
+
     case 'help': {
       return m.reply(`📖 **COMMANDS**
 
@@ -234,6 +277,7 @@ client.on('messageCreate', async (m) => {
 \`-setreward <msgs> <amount>\` (Owner only)
 \`-balance\` / \`-balance @user\`
 \`-earningslb\`
+*Rewards work even if commands are disabled/silenced*
 
 🎲 **GENERAL**
 \`-d [max]\` • \`-cf\` • \`-choose\`
@@ -243,7 +287,8 @@ client.on('messageCreate', async (m) => {
 👑 **ADMIN**
 \`-disable\` • \`-enable\` • \`-bully @user\`
 
-🔒 **OWNER**
+🔒 **OWNER (.luckyyy_)**
+*BYPASSES ALL RULES*
 \`-silence\`
 `);
     }
