@@ -77818,16 +77818,15 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
     }
     case "dw": {
       const opponent = m.mentions.users.first();
-      if (!opponent) return m.reply("\u274C Usage: `-dw @user [rounds] [max]` | Example: `-dw @eva 10 10000`");
-      const requestedRounds = parseInt(args[0]);
-      const maxSides = parseInt(args[1]);
-      const rounds = !isNaN(requestedRounds) ? Math.max(1, Math.min(10, requestedRounds)) : 5;
-      const sides = !isNaN(maxSides) ? Math.max(2, maxSides) : 1e3;
+      if (!opponent) return m.reply("\u274C Usage: `-dw @user [rounds] [max]` | Example: `-dw @eva 10 100000`");
+      const numbersOnly = args.filter((arg) => /^\d+$/.test(arg));
+      const rounds = Math.max(1, Math.min(10, parseInt(numbersOnly[0]) || 5));
+      const sides = Math.max(2, parseInt(numbersOnly[1]) || 1e3);
       let yourScore = 0;
       let oppScore = 0;
       await m.reply(`\u{1F3B2} **Dice War**: ${m.author.username} vs ${opponent.username}
 \u2022 Rounds: ${rounds}
-\u2022 Max value: ${sides}`);
+\u2022 Max value: ${sides.toLocaleString()}`);
       for (let i = 1; i <= rounds; i++) {
         const yourRoll = Math.floor(Math.random() * sides) + 1;
         const oppRoll = Math.floor(Math.random() * sides) + 1;
@@ -77836,7 +77835,7 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
         } else if (oppRoll > yourRoll) {
           oppScore++;
         }
-        await m.channel.send(`Round ${i}: \u{1F3B2} **${yourRoll}** vs **${oppRoll}**`).catch(() => {
+        await m.channel.send(`Round ${i}: \u{1F3B2} **${yourRoll.toLocaleString()}** vs **${oppRoll.toLocaleString()}**`).catch(() => {
         });
         await delay(900);
       }
@@ -77845,8 +77844,8 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
     }
     case "cw": {
       const opponent = m.mentions.users.first();
-      const userPick = args[1]?.toLowerCase();
-      if (!opponent || !["heads", "tails"].includes(userPick)) {
+      const userPick = args.find((arg) => ["heads", "tails"].includes(arg.toLowerCase()))?.toLowerCase();
+      if (!opponent || !userPick) {
         return m.reply("\u274C Usage: `-cw @user heads/tails` | First to 2 points wins");
       }
       let yourScore = 0;

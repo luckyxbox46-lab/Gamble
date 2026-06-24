@@ -301,23 +301,20 @@ client.on('messageCreate', async m => {
       return;
     }
 
-    // ✅ FULLY REWRITTEN DICE WAR - NO MORE INPUT MIXUP
+    // ✅ FIXED DW: ARGUMENT POSITION ISSUE RESOLVED
     case 'dw': {
       const opponent = m.mentions.users.first();
-      if (!opponent) return m.reply('❌ Usage: `-dw @user [rounds] [max]` | Example: `-dw @eva 10 10000`');
+      if (!opponent) return m.reply('❌ Usage: `-dw @user [rounds] [max]` | Example: `-dw @eva 10 100000`');
 
-      // Read and sanitize values explicitly
-      const requestedRounds = parseInt(args[0]);
-      const maxSides = parseInt(args[1]);
-
-      // Apply limits and defaults
-      const rounds = !isNaN(requestedRounds) ? Math.max(1, Math.min(10, requestedRounds)) : 5;
-      const sides = !isNaN(maxSides) ? Math.max(2, maxSides) : 1000;
+      // Filter out mentions, keep only numbers
+      const numbersOnly = args.filter(arg => /^\d+$/.test(arg));
+      const rounds = Math.max(1, Math.min(10, parseInt(numbersOnly[0]) || 5));
+      const sides = Math.max(2, parseInt(numbersOnly[1]) || 1000);
 
       let yourScore = 0;
       let oppScore = 0;
 
-      await m.reply(`🎲 **Dice War**: ${m.author.username} vs ${opponent.username}\n• Rounds: ${rounds}\n• Max value: ${sides}`);
+      await m.reply(`🎲 **Dice War**: ${m.author.username} vs ${opponent.username}\n• Rounds: ${rounds}\n• Max value: ${sides.toLocaleString()}`);
 
       for (let i = 1; i <= rounds; i++) {
         const yourRoll = Math.floor(Math.random() * sides) + 1;
@@ -329,7 +326,7 @@ client.on('messageCreate', async m => {
           oppScore++;
         }
 
-        await m.channel.send(`Round ${i}: 🎲 **${yourRoll}** vs **${oppRoll}**`).catch(()=>{});
+        await m.channel.send(`Round ${i}: 🎲 **${yourRoll.toLocaleString()}** vs **${oppRoll.toLocaleString()}**`).catch(()=>{});
         await delay(900);
       }
 
@@ -342,12 +339,12 @@ client.on('messageCreate', async m => {
       return m.channel.send(result);
     }
 
-    // ✅ FULLY REWRITTEN COIN WAR - SCORING FIXED
+    // ✅ FIXED CW SCORING
     case 'cw': {
       const opponent = m.mentions.users.first();
-      const userPick = args[1]?.toLowerCase();
+      const userPick = args.find(arg => ['heads','tails'].includes(arg.toLowerCase()))?.toLowerCase();
 
-      if (!opponent || !['heads', 'tails'].includes(userPick)) {
+      if (!opponent || !userPick) {
         return m.reply('❌ Usage: `-cw @user heads/tails` | First to 2 points wins');
       }
 
