@@ -77817,47 +77817,55 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
       return;
     }
     case "dw": {
-      const opp = m.mentions.users.first();
-      const rounds = Math.max(1, Math.min(10, parseInt(args[0]) || 5));
-      const sides = Math.max(2, parseInt(args[1]) || 1e3);
-      if (!opp) return m.reply("\u274C Usage: `-dw @user [rounds] [max]` | Max rounds: 10");
-      let yourScore = 0, oppScore = 0;
-      await m.reply(`\u{1F3B2} **Dice War**: ${m.author.username} vs ${opp.username}
-Rounds: ${rounds} | Max: ${sides}`);
+      const opponent = m.mentions.users.first();
+      if (!opponent) return m.reply("\u274C Usage: `-dw @user [rounds] [max]` | Example: `-dw @eva 10 10000`");
+      const requestedRounds = parseInt(args[0]);
+      const maxSides = parseInt(args[1]);
+      const rounds = !isNaN(requestedRounds) ? Math.max(1, Math.min(10, requestedRounds)) : 5;
+      const sides = !isNaN(maxSides) ? Math.max(2, maxSides) : 1e3;
+      let yourScore = 0;
+      let oppScore = 0;
+      await m.reply(`\u{1F3B2} **Dice War**: ${m.author.username} vs ${opponent.username}
+\u2022 Rounds: ${rounds}
+\u2022 Max value: ${sides}`);
       for (let i = 1; i <= rounds; i++) {
-        const youRoll = Math.floor(Math.random() * sides) + 1;
+        const yourRoll = Math.floor(Math.random() * sides) + 1;
         const oppRoll = Math.floor(Math.random() * sides) + 1;
-        if (youRoll > oppRoll) yourScore++;
-        else if (oppRoll > youRoll) oppScore++;
-        await m.channel.send(`Round ${i}: \u{1F3B2} ${youRoll} vs ${oppRoll}`).catch(() => {
+        if (yourRoll > oppRoll) {
+          yourScore++;
+        } else if (oppRoll > yourRoll) {
+          oppScore++;
+        }
+        await m.channel.send(`Round ${i}: \u{1F3B2} **${yourRoll}** vs **${oppRoll}**`).catch(() => {
         });
         await delay(900);
       }
-      const result = yourScore > oppScore ? `\u2705 **${m.author.username}** wins!` : oppScore > yourScore ? `\u2705 **${opp.username}** wins!` : "\u2696\uFE0F Draw!";
-      return m.channel.send(`\u{1F3C6} Final Score: **${yourScore} - ${oppScore}**
-${result}`);
+      const result = yourScore > oppScore ? `\u{1F3C6} Final Score: **${yourScore} - ${oppScore}** | \u2705 **${m.author.username}** wins!` : oppScore > yourScore ? `\u{1F3C6} Final Score: **${yourScore} - ${oppScore}** | \u2705 **${opponent.username}** wins!` : `\u{1F3C6} Final Score: **${yourScore} - ${oppScore}** | \u2696\uFE0F It's a draw!`;
+      return m.channel.send(result);
     }
     case "cw": {
-      const opp = m.mentions.users.first();
-      const pick = args[1]?.toLowerCase();
-      if (!opp || !["heads", "tails"].includes(pick))
+      const opponent = m.mentions.users.first();
+      const userPick = args[1]?.toLowerCase();
+      if (!opponent || !["heads", "tails"].includes(userPick)) {
         return m.reply("\u274C Usage: `-cw @user heads/tails` | First to 2 points wins");
-      let yourScore = 0, oppScore = 0;
-      await m.reply(`\u{1FA99} **Coin War**: ${m.author.username} vs ${opp.username}
-You picked: **${pick}**`);
+      }
+      let yourScore = 0;
+      let oppScore = 0;
+      await m.reply(`\u{1FA99} **Coin War**: ${m.author.username} vs ${opponent.username}
+You chose: **${userPick.toUpperCase()}**`);
       while (yourScore < 2 && oppScore < 2) {
-        const flip = Math.random() < 0.5 ? "Heads" : "Tails";
-        if (flip.toLowerCase() === pick) {
+        const result = Math.random() < 0.5 ? "heads" : "tails";
+        if (result === userPick) {
           yourScore++;
         } else {
           oppScore++;
         }
-        await m.channel.send(`Flip: **${flip}** | Score: ${yourScore} - ${oppScore}`).catch(() => {
+        await m.channel.send(`Flip: **${result.toUpperCase()}** | Score: **${yourScore} - ${oppScore}**`).catch(() => {
         });
         await delay(900);
       }
-      const result = yourScore === 2 ? `\u{1F3C6} **${m.author.username}** wins!` : `\u{1F3C6} **${opp.username}** wins!`;
-      return m.channel.send(result);
+      const final = yourScore === 2 ? `\u{1F3C6} **${m.author.username}** wins! Final: ${yourScore} - ${oppScore}` : `\u{1F3C6} **${opponent.username}** wins! Final: ${yourScore} - ${oppScore}`;
+      return m.channel.send(final);
     }
     case "ship": {
       const u1 = m.mentions.users.at(0), u2 = m.mentions.users.at(1) || m.author;
