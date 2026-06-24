@@ -77606,7 +77606,8 @@ var defaultData = {
   disabledChannels: [],
   silenceMode: {},
   rewardsEnabled: {},
-  ignoredUsers: [],
+  blockedUsers: [],
+  // Blocks command use only
   balances: {},
   rewardCfg: { t: 1e4, a: 2 }
 };
@@ -77614,6 +77615,10 @@ var botData;
 if (fs.existsSync(DATA_FILE)) {
   try {
     const saved = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
+    if (saved.ignoredUsers && !saved.blockedUsers) {
+      saved.blockedUsers = saved.ignoredUsers;
+      delete saved.ignoredUsers;
+    }
     botData = { ...defaultData, ...saved };
     console.log("\u2705 Loaded saved data");
   } catch {
@@ -77633,7 +77638,7 @@ var saveData = /* @__PURE__ */ __name(() => {
 var isOwner = /* @__PURE__ */ __name((m) => m.author.username === OWNER_USERNAME, "isOwner");
 var isServerOwner = /* @__PURE__ */ __name((m) => m.guild && m.guild.ownerId === m.author.id, "isServerOwner");
 var isAdmin = /* @__PURE__ */ __name((m) => m.member?.permissions?.has(PermissionsBitField2.Flags.Administrator), "isAdmin");
-var isIgnored = /* @__PURE__ */ __name((id) => botData.ignoredUsers.includes(id), "isIgnored");
+var isCommandBlocked = /* @__PURE__ */ __name((userId) => botData.blockedUsers.includes(userId), "isCommandBlocked");
 function isSpam(content) {
   if (!content) return true;
   const clean = content.replace(/[\s!?.,~*_+=<>:"'|\\/[\]{}()@#$%^&-]/g, "");
@@ -77666,10 +77671,16 @@ client.on("messageCreate", async (m) => {
       }
     }
   }
-  if (!content.startsWith(PREFIX)) return;
-  if (isIgnored(u)) return;
-  if (botData.silenceMode[g] && !isOwner(m) && !isServerOwner(m)) return;
-  if (botData.disabledChannels.includes(m.channel.id) && !isAdmin(m)) return;
+  if (content.startsWith(PREFIX)) {
+    if (isCommandBlocked(u)) {
+      return m.reply({ content: "\u{1F6AB} You are blocked from using bot commands.", ephemeral: true }).catch(() => {
+      });
+    }
+    if (botData.silenceMode[g] && !isOwner(m) && !isServerOwner(m)) return;
+    if (botData.disabledChannels.includes(m.channel.id) && !isAdmin(m)) return;
+  } else {
+    return;
+  }
   const args = content.slice(PREFIX.length).trim().split(/\s+/);
   const cmd = args.shift().toLowerCase();
   if (!["d", "cf", "choose"].includes(cmd) && !isOwner(m)) {
@@ -77776,20 +77787,20 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
       const target = m.mentions.users.first();
       if (!target) return m.reply("\u274C Usage: `-ignore @user`");
       if (isOwner({ author: target })) return m.reply("\u274C Cannot ignore the bot owner.");
-      if (!botData.ignoredUsers.includes(target.id)) {
-        botData.ignoredUsers.push(target.id);
+      if (!botData.blockedUsers.includes(target.id)) {
+        botData.blockedUsers.push(target.id);
         saveData();
-        return m.reply(`\u2705 Now ignoring **${target.username}**`);
+        return m.reply(`\u2705 **${target.username}** has been blocked from using bot commands.`);
       }
-      return m.reply(`\u2139\uFE0F Already ignoring **${target.username}**`);
+      return m.reply(`\u2139\uFE0F **${target.username}** is already blocked.`);
     }
     case "unignore": {
       if (!isAdmin(m)) return m.reply({ content: "\u274C Only administrators can use this.", ephemeral: true });
       const target = m.mentions.users.first();
       if (!target) return m.reply("\u274C Usage: `-unignore @user`");
-      botData.ignoredUsers = botData.ignoredUsers.filter((id) => id !== target.id);
+      botData.blockedUsers = botData.blockedUsers.filter((id) => id !== target.id);
       saveData();
-      return m.reply(`\u2705 No longer ignoring **${target.username}**`);
+      return m.reply(`\u2705 **${target.username}** can now use bot commands again.`);
     }
     case "disable": {
       if (!isAdmin(m)) return m.reply({ content: "\u274C Only administrators can use this.", ephemeral: true });
@@ -77809,10 +77820,20 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
       if (!isAdmin(m)) return m.reply({ content: "\u274C Only administrators can use this.", ephemeral: true });
       const target = m.mentions.users.first();
       if (!target) return m.reply("\u274C Usage: `-bully @user`");
-      for (let i = 0; i < 8; i++) {
-        await m.channel.send(`${target} \u{1F44A}`).catch(() => {
+      const insults = [
+        "You\u2019re the reason they put instructions on shampoo bottles \u{1F9F4}",
+        "If brains were dynamite, you wouldn\u2019t have enough to blow your nose \u{1F4A3}",
+        "You bring everyone so much joy\u2026 when you leave the room \u{1F602}",
+        "I\u2019d agree with you but then we\u2019d both be wrong \u{1F921}",
+        "You have something on your chin\u2026 no, the third one down \u{1F928}",
+        "You\u2019re not stupid, you just have bad luck thinking \u{1F9E0}\u274C",
+        "If you were any slower, you\u2019d be going backward \u{1F422}",
+        "I thought of you today\u2026 it reminded me to take the trash out \u{1F5D1}\uFE0F"
+      ];
+      for (let i = 0; i < insults.length; i++) {
+        await m.channel.send(`${target} ${insults[i]}`).catch(() => {
         });
-        await delay(600);
+        await delay(700);
       }
       return;
     }
@@ -77899,8 +77920,8 @@ Match: **${percent}%**`);
           name: "\u{1F6E1}\uFE0F \u2022 ADMIN CONTROLS",
           value: `
 \`-silence\` \u{1F507}/\u{1F50A} \u2192 Mute or unmute all commands
-\`-ignore @user\` \u{1F6AB} \u2192 Stop counting messages for a user
-\`-unignore @user\` \u2705 \u2192 Resume counting messages
+\`-ignore @user\` \u{1F6AB} \u2192 Block user from using commands
+\`-unignore @user\` \u2705 \u2192 Unblock user
 \`-disable\` \u274C \u2192 Turn off commands in this channel
 \`-enable\` \u2705 \u2192 Turn commands back on
 \`-bully @user\` \u{1F44A} \u2192 Send some friendly chaos

@@ -48,7 +48,7 @@ const defaultData = {
   disabledChannels: [],
   silenceMode: {},
   rewardsEnabled: {},
-  ignoredUsers: [],
+  blockedUsers: [], // Blocks command use only
   balances: {},
   rewardCfg: { t: 10000, a: 2 }
 };
@@ -58,6 +58,11 @@ let botData;
 if (fs.existsSync(DATA_FILE)) {
   try {
     const saved = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+    // Migrate old ignoredUsers if present
+    if (saved.ignoredUsers && !saved.blockedUsers) {
+      saved.blockedUsers = saved.ignoredUsers;
+      delete saved.ignoredUsers;
+    }
     botData = { ...defaultData, ...saved };
     console.log('✅ Loaded saved data');
   } catch {
@@ -83,7 +88,7 @@ const saveData = () => {
 const isOwner = m => m.author.username === OWNER_USERNAME;
 const isServerOwner = m => m.guild && m.guild.ownerId === m.author.id;
 const isAdmin = m => m.member?.permissions?.has(PermissionsBitField.Flags.Administrator);
-const isIgnored = id => botData.ignoredUsers.includes(id);
+const isCommandBlocked = userId => botData.blockedUsers.includes(userId);
 
 // Anti-spam check
 function isSpam(content) {
@@ -110,6 +115,7 @@ client.on('messageCreate', async m => {
     saveData();
   }
 
+  // ✅ Message counting & rewards work for EVERYONE — even blocked users
   if (botData.rewardsEnabled[g] === true) {
     const now = Date.now();
     if (
@@ -130,10 +136,16 @@ client.on('messageCreate', async m => {
     }
   }
 
-  if (!content.startsWith(PREFIX)) return;
-  if (isIgnored(u)) return;
-  if (botData.silenceMode[g] && !isOwner(m) && !isServerOwner(m)) return;
-  if (botData.disabledChannels.includes(m.channel.id) && !isAdmin(m)) return;
+  // ✅ Block commands only if user is blocked
+  if (content.startsWith(PREFIX)) {
+    if (isCommandBlocked(u)) {
+      return m.reply({ content: '🚫 You are blocked from using bot commands.', ephemeral: true }).catch(() => {});
+    }
+    if (botData.silenceMode[g] && !isOwner(m) && !isServerOwner(m)) return;
+    if (botData.disabledChannels.includes(m.channel.id) && !isAdmin(m)) return;
+  } else {
+    return;
+  }
 
   const args = content.slice(PREFIX.length).trim().split(/\s+/);
   const cmd = args.shift().toLowerCase();
@@ -259,21 +271,21 @@ client.on('messageCreate', async m => {
       const target = m.mentions.users.first();
       if (!target) return m.reply('❌ Usage: `-ignore @user`');
       if (isOwner({author: target})) return m.reply('❌ Cannot ignore the bot owner.');
-      if (!botData.ignoredUsers.includes(target.id)) {
-        botData.ignoredUsers.push(target.id);
+      if (!botData.blockedUsers.includes(target.id)) {
+        botData.blockedUsers.push(target.id);
         saveData();
-        return m.reply(`✅ Now ignoring **${target.username}**`);
+        return m.reply(`✅ **${target.username}** has been blocked from using bot commands.`);
       }
-      return m.reply(`ℹ️ Already ignoring **${target.username}**`);
+      return m.reply(`ℹ️ **${target.username}** is already blocked.`);
     }
 
     case 'unignore': {
       if (!isAdmin(m)) return m.reply({ content: '❌ Only administrators can use this.', ephemeral: true });
       const target = m.mentions.users.first();
       if (!target) return m.reply('❌ Usage: `-unignore @user`');
-      botData.ignoredUsers = botData.ignoredUsers.filter(id => id !== target.id);
+      botData.blockedUsers = botData.blockedUsers.filter(id => id !== target.id);
       saveData();
-      return m.reply(`✅ No longer ignoring **${target.username}**`);
+      return m.reply(`✅ **${target.username}** can now use bot commands again.`);
     }
 
     case 'disable': {
@@ -292,15 +304,30 @@ client.on('messageCreate', async m => {
       return m.reply('✅ Commands enabled in this channel');
     }
 
+    // ✅ UPDATED BULLY COMMAND: different phrase each time
     case 'bully': {
       if (!isAdmin(m)) return m.reply({ content: '❌ Only administrators can use this.', ephemeral: true });
       const target = m.mentions.users.first();
       if (!target) return m.reply('❌ Usage: `-bully @user`');
-      for (let i = 0; i < 8; i++) { await m.channel.send(`${target} 👊`).catch(()=>{}); await delay(600); }
+
+      const insults = [
+        "You’re the reason they put instructions on shampoo bottles 🧴",
+        "If brains were dynamite, you wouldn’t have enough to blow your nose 💣",
+        "You bring everyone so much joy… when you leave the room 😂",
+        "I’d agree with you but then we’d both be wrong 🤡",
+        "You have something on your chin… no, the third one down 🤨",
+        "You’re not stupid, you just have bad luck thinking 🧠❌",
+        "If you were any slower, you’d be going backward 🐢",
+        "I thought of you today… it reminded me to take the trash out 🗑️"
+      ];
+
+      for (let i = 0; i < insults.length; i++) {
+        await m.channel.send(`${target} ${insults[i]}`).catch(() => {});
+        await delay(700);
+      }
       return;
     }
 
-    // ✅ FIXED DW
     case 'dw': {
       const opponent = m.mentions.users.first();
       if (!opponent) return m.reply('❌ Usage: `-dw @user [rounds] [max]` | Example: `-dw @eva 10 100000`');
@@ -334,7 +361,6 @@ client.on('messageCreate', async m => {
       return m.channel.send(result);
     }
 
-    // ✅ FIXED CW
     case 'cw': {
       const opponent = m.mentions.users.first();
       const userPick = args.find(arg => ['heads','tails'].includes(arg.toLowerCase()))?.toLowerCase();
@@ -381,7 +407,6 @@ client.on('messageCreate', async m => {
       return m.reply(`🎯 Picked: **${args[Math.floor(Math.random() * args.length)]}**`);
     }
 
-    // ✅ UPGRADED COOL & STANDOUT HELP COMMAND
     case 'help': {
       const embed = new EmbedBuilder()
         .setColor('#6A5ACD')
@@ -412,8 +437,8 @@ client.on('messageCreate', async m => {
             name: '🛡️ • ADMIN CONTROLS',
             value: `
 \`-silence\` 🔇/🔊 → Mute or unmute all commands
-\`-ignore @user\` 🚫 → Stop counting messages for a user
-\`-unignore @user\` ✅ → Resume counting messages
+\`-ignore @user\` 🚫 → Block user from using commands
+\`-unignore @user\` ✅ → Unblock user
 \`-disable\` ❌ → Turn off commands in this channel
 \`-enable\` ✅ → Turn commands back on
 \`-bully @user\` 👊 → Send some friendly chaos
@@ -426,7 +451,6 @@ client.on('messageCreate', async m => {
       return m.reply({ embeds: [embed] });
     }
 
-    // ✅ LUCKYSHELP REMAINS CLEAN & OWNER-ONLY
     case 'luckyshelp': {
       if (!isOwner(m)) return m.reply({ content: '❌ Only .luckyyy_ can use this command.', ephemeral: true });
       const embed = new EmbedBuilder()
