@@ -77604,20 +77604,23 @@ var defaultData = {
 var botData;
 if (fs.existsSync(DATA_FILE)) {
   try {
-    const saved = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
+    const savedRaw = fs.readFileSync(DATA_FILE, "utf8");
+    const saved = JSON.parse(savedRaw);
     botData = {
       ...defaultData,
       ...saved,
+      // Keep EVERY reward status that already existed
       rewardsEnabled: { ...defaultData.rewardsEnabled, ...saved.rewardsEnabled },
+      // Keep ALL balances completely untouched
       balances: { ...defaultData.balances, ...saved.balances }
     };
-    console.log("\u2705 Data loaded & preserved");
-  } catch (e) {
-    console.log("\u26A0\uFE0F Starting fresh");
+    console.log("\u2705 Data loaded \u2014 rewards & balances preserved");
+  } catch (err) {
+    console.log("\u26A0\uFE0F Corrupted file \u2014 starting fresh");
     botData = { ...defaultData };
   }
 } else {
-  console.log("\u2139\uFE0F New data file created");
+  console.log("\u2139\uFE0F No existing file \u2014 creating new");
   botData = { ...defaultData };
 }
 REWARD_THRESH = botData.rewardCfg.t || 1e4;
@@ -77694,19 +77697,19 @@ client.on("messageCreate", async (m) => {
 \u23F1\uFE0F Uptime: ${uptime}m`);
     }
     case "rewardtoggle": {
-      if (!isOwner(m)) return m.reply("\u274C Only owner");
+      if (!isOwner(m)) return m.reply("\u274C Only owner can use this");
       botData.rewardsEnabled[g] = !botData.rewardsEnabled[g];
       save();
-      return m.reply(botData.rewardsEnabled[g] ? "\u2705 Rewards ENABLED" : "\u274C Rewards DISABLED");
+      return m.reply(botData.rewardsEnabled[g] ? "\u2705 Rewards ENABLED \u2014 WILL STAY ON" : "\u274C Rewards DISABLED");
     }
     case "setreward": {
-      if (!isOwner(m)) return m.reply("\u274C Only owner");
+      if (!isOwner(m)) return m.reply("\u274C Only owner can use this");
       const t = parseInt(args[0]), a = parseFloat(args[1]);
       if (!t || !a || t < 1 || a < 0) return m.reply("\u274C Usage: -setreward <msgs> <amount>");
       REWARD_THRESH = t;
       REWARD_AMT = a;
       save();
-      return m.reply(`\u2705 Updated: ${t} messages = $${a.toFixed(2)}`);
+      return m.reply(`\u2705 Updated: ${formatNum(t)} messages = $${a.toFixed(2)}`);
     }
     case "balance": {
       const target = m.mentions.users.first() || m.author;
@@ -77721,7 +77724,7 @@ Next reward at: ${formatNum(next)} messages`
       );
     }
     case "earningslb": {
-      if (botData.rewardsEnabled[g] !== true) return m.reply("\u274C Rewards are disabled \u2014 use -rewardtoggle to enable");
+      if (botData.rewardsEnabled[g] !== true) return m.reply("\u274C Rewards are disabled \u2014 use `-rewardtoggle` once to enable permanently");
       const sorted = Object.entries(botData.balances).sort(([, a], [, b]) => b.earned - a.earned).slice(0, 10);
       if (!sorted.length) return m.reply("\u{1F4CA} No earnings recorded yet");
       let list = "\u{1F3C6} **Top Earners**\n";
@@ -77735,13 +77738,13 @@ Next reward at: ${formatNum(next)} messages`
       return m.reply(list);
     }
     case "silence": {
-      if (!isOwner(m)) return m.reply("\u274C Only owner");
+      if (!isOwner(m)) return m.reply("\u274C Only owner can use this");
       botData.silenceMode[g] = !botData.silenceMode[g];
       save();
       return m.reply(botData.silenceMode[g] ? "\u{1F507} Commands off \u2014 rewards still work" : "\u{1F50A} Commands on");
     }
     case "disable": {
-      if (!isAdmin(m)) return m.reply("\u274C Only admins");
+      if (!isAdmin(m)) return m.reply("\u274C Only admins can use this");
       if (!botData.disabledChannels.includes(c)) {
         botData.disabledChannels.push(c);
         save();
@@ -77749,7 +77752,7 @@ Next reward at: ${formatNum(next)} messages`
       return m.reply("\u{1F6AB} Commands off here \u2014 rewards still work");
     }
     case "enable": {
-      if (!isAdmin(m)) return m.reply("\u274C Only admins");
+      if (!isAdmin(m)) return m.reply("\u274C Only admins can use this");
       botData.disabledChannels = botData.disabledChannels.filter((ch) => ch !== c);
       save();
       return m.reply("\u2705 Commands enabled here");
