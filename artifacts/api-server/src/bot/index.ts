@@ -48,31 +48,30 @@ const defaultData = {
 
 let botData;
 
-// Load data with ABSOLUTE PRESERVATION
+// Load data — SAVED VALUES ALWAYS COME FIRST
 if (fs.existsSync(DATA_FILE)) {
   try {
     const savedRaw = fs.readFileSync(DATA_FILE, 'utf8');
     const saved = JSON.parse(savedRaw);
 
-    // Merge in this EXACT order: saved values FIRST, defaults ONLY for missing fields
     botData = {
       ...saved,
       stats: { ...defaultData.stats, ...saved.stats },
       disabledChannels: Array.isArray(saved.disabledChannels) ? saved.disabledChannels : [],
       silenceMode: { ...defaultData.silenceMode, ...saved.silenceMode },
-      rewardsEnabled: { ...defaultData.rewardsEnabled, ...saved.rewardsEnabled }, // NEVER overwrites existing
+      rewardsEnabled: { ...defaultData.rewardsEnabled, ...saved.rewardsEnabled },
       ignoredUsers: Array.isArray(saved.ignoredUsers) ? saved.ignoredUsers : [],
       balances: { ...defaultData.balances, ...saved.balances },
       rewardCfg: { ...defaultData.rewardCfg, ...saved.rewardCfg }
     };
 
-    console.log('✅ Data loaded — rewards & balances fully preserved');
+    console.log('✅ Data loaded — rewards & settings preserved');
   } catch (err) {
     console.log('⚠️ Corrupted file — starting fresh');
     botData = { ...defaultData };
   }
 } else {
-  console.log('ℹ️ No existing file — creating new');
+  console.log('ℹ️ New data file created');
   botData = { ...defaultData };
 }
 
@@ -101,7 +100,7 @@ client.on('messageCreate', async (m) => {
   const g = m.guild.id;
   const uId = m.author.id;
 
-  // 🟢 REWARDS RUN FIRST — ALWAYS, NO INTERRUPTIONS
+  // 🟢 REWARDS RUN FIRST — NEVER DISABLED UNLESS YOU DO IT
   if (botData.rewardsEnabled[g] === true) {
     const now = Date.now();
     if (now - (msgCd.get(uId) || 0) > 2000 && m.content.trim() !== (lastMsg.get(uId) || '').trim()) {
@@ -120,16 +119,11 @@ client.on('messageCreate', async (m) => {
   // 🟡 COMMANDS CHECK
   if (!m.content.startsWith(PREFIX)) return;
 
-  // Owner bypasses EVERYTHING
   if (isOwner(m)) {
-    // continue
-  }
-  // Silently ignore commands from ignored users
-  else if (isIgnored(uId)) {
-    return;
-  }
-  // Other restrictions
-  else {
+    // Owner bypasses everything
+  } else if (isIgnored(uId)) {
+    return; // Silently ignore
+  } else {
     if (botData.silenceMode[g]) return;
     if (botData.disabledChannels.includes(m.channel.id)) return;
   }
@@ -214,7 +208,7 @@ Next: ${formatNum(next)} msgs`
       if (!isAdmin(m)) return m.reply('❌ Only admins');
       const target = m.mentions.users.first();
       if (!target) return m.reply('❌ Usage: -ignore @user');
-      if (target.id === m.guild.ownerId || isOwner({ author: target })) return m.reply('❌ Cannot ignore owner or bot owner');
+      if (isOwner({ author: target })) return m.reply('❌ Cannot ignore the owner');
       if (!botData.ignoredUsers.includes(target.id)) {
         botData.ignoredUsers.push(target.id);
         save();
@@ -256,33 +250,26 @@ Next: ${formatNum(next)} msgs`
       for (let i=0; i<8; i++) { await m.channel.send(`${t} 👊`).catch(()=>{}); await delay(600); }
       return;
     }
+    // ✅ DICE WAR — BACK TO ORIGINAL SIMPLE VERSION
     case 'dw': {
       const opp = m.mentions.users.first() || { username: 'Opponent' };
-      const r = Math.max(1, Math.min(10, parseInt(args[1]) || 5));
-      const s = Math.max(2, Math.min(20, parseInt(args[2]) || 6));
-      let p1=0, p2=0;
-      await m.reply(`🎲 Dice War: ${m.author.username} vs ${opp.username}`);
-      for (let i=1; i<=r; i++) {
-        const r1 = Math.floor(Math.random()*s)+1, r2 = Math.floor(Math.random()*s)+1;
-        if (r1>r2) p1++; else if (r2>r1) p2++;
-        await m.channel.send(`Round ${i}: ${r1}-${r2} | ${p1}-${p2}`).catch(()=>{});
-        await delay(900);
-      }
-      const res = p1>p2 ? `✅ ${m.author.username} wins!` : p2>p1 ? `✅ ${opp.username} wins!` : '⚖️ Draw!';
-      return m.channel.send(`🏆 Final: ${p1}-${p2}\n${res}`);
+      const roll1 = Math.floor(Math.random() * 6) + 1;
+      const roll2 = Math.floor(Math.random() * 6) + 1;
+      const result = roll1 > roll2
+        ? `✅ ${m.author.username} wins!`
+        : roll2 > roll1
+        ? `✅ ${opp.username} wins!`
+        : `⚖️ It's a draw!`;
+      return m.reply(`🎲 Dice War!\n${m.author.username} rolled: ${roll1}\n${opp.username} rolled: ${roll2}\n${result}`);
     }
     case 'cw': {
       const opp = m.mentions.users.first(), side = args[1]?.toLowerCase();
       if (!opp || !['heads','tails'].includes(side)) return m.reply('❌ Usage: -cw @user <heads/tails>');
-      let u=0, o=0;
-      await m.reply(`🪙 Coin War: ${m.author.username} vs ${opp.username}`);
-      while (u<2 && o<2) {
-        const f = Math.random()<0.5 ? 'Heads' : 'Tails';
-        f.toLowerCase() === side ? u++ : o++;
-        await m.channel.send(`Flip: ${f} | ${u}-${o}`).catch(()=>{});
-        await delay(900);
-      }
-      return m.channel.send(u===2 ? `🏆 ${m.author.username} wins!` : `🏆 ${opp.username} wins!`);
+      const flip = Math.random() < 0.5 ? 'Heads' : 'Tails';
+      const result = flip.toLowerCase() === side
+        ? `✅ ${m.author.username} wins!`
+        : `✅ ${opp.username} wins!`;
+      return m.reply(`🪙 Coin War!\nFlip result: ${flip}\n${result}`);
     }
     case 'help': {
       return m.reply(`📖 **COMMANDS & USAGE**
@@ -299,8 +286,8 @@ Next: ${formatNum(next)} msgs`
 \`-choose <opt1> <opt2> ...\` — Pick option
 \`-ship @user1 @user2\` — Compatibility
 \`-stats\` — Bot stats
-\`-dw [rounds] [sides]\` — Dice battle
-\`-cw @user <heads/tails>\` — Coin battle
+\`-dw [@user]\` — Dice war
+\`-cw @user <heads/tails>\` — Coin war
 
 👑 **ADMIN**
 \`-ignore @user\` — Ignore all commands from user

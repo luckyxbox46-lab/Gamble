@@ -77613,18 +77613,17 @@ if (fs.existsSync(DATA_FILE)) {
       disabledChannels: Array.isArray(saved.disabledChannels) ? saved.disabledChannels : [],
       silenceMode: { ...defaultData.silenceMode, ...saved.silenceMode },
       rewardsEnabled: { ...defaultData.rewardsEnabled, ...saved.rewardsEnabled },
-      // NEVER overwrites existing
       ignoredUsers: Array.isArray(saved.ignoredUsers) ? saved.ignoredUsers : [],
       balances: { ...defaultData.balances, ...saved.balances },
       rewardCfg: { ...defaultData.rewardCfg, ...saved.rewardCfg }
     };
-    console.log("\u2705 Data loaded \u2014 rewards & balances fully preserved");
+    console.log("\u2705 Data loaded \u2014 rewards & settings preserved");
   } catch (err) {
     console.log("\u26A0\uFE0F Corrupted file \u2014 starting fresh");
     botData = { ...defaultData };
   }
 } else {
-  console.log("\u2139\uFE0F No existing file \u2014 creating new");
+  console.log("\u2139\uFE0F New data file created");
   botData = { ...defaultData };
 }
 REWARD_THRESH = botData.rewardCfg.t || 1e4;
@@ -77746,7 +77745,7 @@ Next: ${formatNum(next)} msgs`
       if (!isAdmin(m)) return m.reply("\u274C Only admins");
       const target = m.mentions.users.first();
       if (!target) return m.reply("\u274C Usage: -ignore @user");
-      if (target.id === m.guild.ownerId || isOwner({ author: target })) return m.reply("\u274C Cannot ignore owner or bot owner");
+      if (isOwner({ author: target })) return m.reply("\u274C Cannot ignore the owner");
       if (!botData.ignoredUsers.includes(target.id)) {
         botData.ignoredUsers.push(target.id);
         save();
@@ -77799,35 +77798,22 @@ Next: ${formatNum(next)} msgs`
     }
     case "dw": {
       const opp = m.mentions.users.first() || { username: "Opponent" };
-      const r = Math.max(1, Math.min(10, parseInt(args[1]) || 5));
-      const s = Math.max(2, Math.min(20, parseInt(args[2]) || 6));
-      let p1 = 0, p2 = 0;
-      await m.reply(`\u{1F3B2} Dice War: ${m.author.username} vs ${opp.username}`);
-      for (let i = 1; i <= r; i++) {
-        const r1 = Math.floor(Math.random() * s) + 1, r2 = Math.floor(Math.random() * s) + 1;
-        if (r1 > r2) p1++;
-        else if (r2 > r1) p2++;
-        await m.channel.send(`Round ${i}: ${r1}-${r2} | ${p1}-${p2}`).catch(() => {
-        });
-        await delay(900);
-      }
-      const res = p1 > p2 ? `\u2705 ${m.author.username} wins!` : p2 > p1 ? `\u2705 ${opp.username} wins!` : "\u2696\uFE0F Draw!";
-      return m.channel.send(`\u{1F3C6} Final: ${p1}-${p2}
-${res}`);
+      const roll1 = Math.floor(Math.random() * 6) + 1;
+      const roll2 = Math.floor(Math.random() * 6) + 1;
+      const result = roll1 > roll2 ? `\u2705 ${m.author.username} wins!` : roll2 > roll1 ? `\u2705 ${opp.username} wins!` : `\u2696\uFE0F It's a draw!`;
+      return m.reply(`\u{1F3B2} Dice War!
+${m.author.username} rolled: ${roll1}
+${opp.username} rolled: ${roll2}
+${result}`);
     }
     case "cw": {
       const opp = m.mentions.users.first(), side = args[1]?.toLowerCase();
       if (!opp || !["heads", "tails"].includes(side)) return m.reply("\u274C Usage: -cw @user <heads/tails>");
-      let u = 0, o = 0;
-      await m.reply(`\u{1FA99} Coin War: ${m.author.username} vs ${opp.username}`);
-      while (u < 2 && o < 2) {
-        const f = Math.random() < 0.5 ? "Heads" : "Tails";
-        f.toLowerCase() === side ? u++ : o++;
-        await m.channel.send(`Flip: ${f} | ${u}-${o}`).catch(() => {
-        });
-        await delay(900);
-      }
-      return m.channel.send(u === 2 ? `\u{1F3C6} ${m.author.username} wins!` : `\u{1F3C6} ${opp.username} wins!`);
+      const flip = Math.random() < 0.5 ? "Heads" : "Tails";
+      const result = flip.toLowerCase() === side ? `\u2705 ${m.author.username} wins!` : `\u2705 ${opp.username} wins!`;
+      return m.reply(`\u{1FA99} Coin War!
+Flip result: ${flip}
+${result}`);
     }
     case "help": {
       return m.reply(`\u{1F4D6} **COMMANDS & USAGE**
@@ -77844,8 +77830,8 @@ ${res}`);
 \`-choose <opt1> <opt2> ...\` \u2014 Pick option
 \`-ship @user1 @user2\` \u2014 Compatibility
 \`-stats\` \u2014 Bot stats
-\`-dw [rounds] [sides]\` \u2014 Dice battle
-\`-cw @user <heads/tails>\` \u2014 Coin battle
+\`-dw [@user]\` \u2014 Dice war
+\`-cw @user <heads/tails>\` \u2014 Coin war
 
 \u{1F451} **ADMIN**
 \`-ignore @user\` \u2014 Ignore all commands from user
