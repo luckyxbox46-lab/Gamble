@@ -110,7 +110,6 @@ client.on('messageCreate', async m => {
     saveData();
   }
 
-  // Count only valid messages, not commands or spam
   if (botData.rewardsEnabled[g] === true) {
     const now = Date.now();
     if (
@@ -301,7 +300,7 @@ client.on('messageCreate', async m => {
       return;
     }
 
-    // ✅ FIXED DW: ARGUMENTS WORK 100%
+    // ✅ FIXED DW
     case 'dw': {
       const opponent = m.mentions.users.first();
       if (!opponent) return m.reply('❌ Usage: `-dw @user [rounds] [max]` | Example: `-dw @eva 10 100000`');
@@ -335,7 +334,7 @@ client.on('messageCreate', async m => {
       return m.channel.send(result);
     }
 
-    // ✅ FIXED CW: SCORING CORRECT
+    // ✅ FIXED CW
     case 'cw': {
       const opponent = m.mentions.users.first();
       const userPick = args.find(arg => ['heads','tails'].includes(arg.toLowerCase()))?.toLowerCase();
@@ -382,72 +381,78 @@ client.on('messageCreate', async m => {
       return m.reply(`🎯 Picked: **${args[Math.floor(Math.random() * args.length)]}**`);
     }
 
-    // ✅ NEW CLEAN & STANDOUT HELP
+    // ✅ UPGRADED COOL & STANDOUT HELP COMMAND
     case 'help': {
       const embed = new EmbedBuilder()
-        .setColor('#2980b9')
-        .setTitle('📜 COMMAND LIST')
-        .setDescription('All available commands grouped by access level')
+        .setColor('#6A5ACD')
+        .setTitle('✨ LUCKY’S COMMAND CENTER ✨')
+        .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nAll commands you can use — have fun! 🎉\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
         .addFields(
           {
-            name: '🎮 PUBLIC COMMANDS',
+            name: '🎮 • FUN & GAMES',
             value: `
-\`-d [max]\` → Roll dice (default 1–100)
-\`-cf\` → Flip a coin
-\`-choose <...>\` → Pick a random option
-\`-ship @user1 [@user2]\` → Check love compatibility
-\`-dw @user [rounds] [max]\` → Dice War (max 10 rounds)
-\`-cw @user heads/tails\` → Coin War (first to 2 points)
-\`-balance [@user]\` → View messages & earnings
-\`-earningslb\` → View server leaderboard
+\`-d [max]\` 🎲 → Roll the dice
+\`-cf\` 🪙 → Flip a coin
+\`-choose <...>\` 🎯 → Let me pick for you
+\`-ship @user [@user2]\` 💘 → Check your match!
+\`-dw @user [rounds] [max]\` ⚔️ → Dice War challenge
+\`-cw @user heads/tails\` 🪙 → Coin War battle
 `,
             inline: false
           },
           {
-            name: '🛡️ ADMIN / SERVER OWNER',
+            name: '💰 • REWARDS & STATS',
             value: `
-\`-silence\` → Mute/unmute all commands
-\`-ignore @user\` → Block user from counting
-\`-unignore @user\` → Unblock user
-\`-disable\` → Disable commands in this channel
-\`-enable\` → Enable commands in this channel
-\`-bully @user\` → Send 8 quick pings
+\`-balance [@user]\` → Check your messages & earnings
+\`-earningslb\` → View the server leaderboard
+`,
+            inline: false
+          },
+          {
+            name: '🛡️ • ADMIN CONTROLS',
+            value: `
+\`-silence\` 🔇/🔊 → Mute or unmute all commands
+\`-ignore @user\` 🚫 → Stop counting messages for a user
+\`-unignore @user\` ✅ → Resume counting messages
+\`-disable\` ❌ → Turn off commands in this channel
+\`-enable\` ✅ → Turn commands back on
+\`-bully @user\` 👊 → Send some friendly chaos
 `,
             inline: false
           }
         )
-        .setFooter({ text: 'Use -luckyshelp only if you are the bot owner' })
+        .setFooter({ text: '💡 Use -luckyshelp for owner-only commands | Prefix: -' })
         .setTimestamp();
       return m.reply({ embeds: [embed] });
     }
 
-    // ✅ LUCKYSHELP = ONLY YOUR COMMANDS
+    // ✅ LUCKYSHELP REMAINS CLEAN & OWNER-ONLY
     case 'luckyshelp': {
       if (!isOwner(m)) return m.reply({ content: '❌ Only .luckyyy_ can use this command.', ephemeral: true });
       const embed = new EmbedBuilder()
-        .setColor('#8e44ad')
-        .setTitle('🔒 BOT OWNER COMMANDS')
-        .setDescription('Only you have access to these:')
+        .setColor('#9B59B6')
+        .setTitle('🔒 OWNER CONTROL PANEL')
+        .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nYour exclusive commands only 🛠️\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
         .addFields(
           {
-            name: '⚙️ CONTROLS & DATA',
+            name: '⚙️ • BOT MANAGEMENT',
             value: `
 \`-rewardtoggle\` → Turn rewards ON/OFF
-\`-setreward <msgs> <amount>\` → Set reward rate
-\`-savedata\` → Manually save all data
-\`-exportdata\` → Get full backup in DM
+\`-setreward <msgs> <amount>\` → Change reward rate
+\`-savedata\` → Save all data manually
+\`-exportdata\` → Download full backup
 \`-importdata <json>\` → Restore from backup
 `,
             inline: false
           }
         )
-        .setFooter({ text: 'Your exclusive commands only' })
+        .setFooter({ text: 'Only you have access to these' })
         .setTimestamp();
       return m.reply({ embeds: [embed] });
     }
 
     default:
-      return m.reply(`❌ Unknown command. Use \`-help\` to see all available commands.`);
+      return m.reply(`❌ Unknown command. Type \`-help\` to see what I can do!`);
   }
 });
 
