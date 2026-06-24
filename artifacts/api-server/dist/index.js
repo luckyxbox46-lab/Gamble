@@ -77830,11 +77830,8 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
       for (let i = 1; i <= rounds; i++) {
         const yourRoll = Math.floor(Math.random() * sides) + 1;
         const oppRoll = Math.floor(Math.random() * sides) + 1;
-        if (yourRoll > oppRoll) {
-          yourScore++;
-        } else if (oppRoll > yourRoll) {
-          oppScore++;
-        }
+        if (yourRoll > oppRoll) yourScore++;
+        else if (oppRoll > yourRoll) oppScore++;
         await m.channel.send(`Round ${i}: \u{1F3B2} **${yourRoll.toLocaleString()}** vs **${oppRoll.toLocaleString()}**`).catch(() => {
         });
         await delay(900);
@@ -77854,11 +77851,8 @@ ${fs.readFileSync(DATA_FILE, "utf8")}
 You chose: **${userPick.toUpperCase()}**`);
       while (yourScore < 2 && oppScore < 2) {
         const result = Math.random() < 0.5 ? "heads" : "tails";
-        if (result === userPick) {
-          yourScore++;
-        } else {
-          oppScore++;
-        }
+        if (result === userPick) yourScore++;
+        else oppScore++;
         await m.channel.send(`Flip: **${result.toUpperCase()}** | Score: **${yourScore} - ${oppScore}**`).catch(() => {
         });
         await delay(900);
@@ -77880,47 +77874,55 @@ Match: **${percent}%**`);
       return m.reply(`\u{1F3AF} Picked: **${args[Math.floor(Math.random() * args.length)]}**`);
     }
     case "help": {
-      const embed = new EmbedBuilder().setColor("#3498db").setTitle("\u{1F4D6} Public Commands").setDescription(`
-**\u{1F3B2} Games & Fun**
-\`-d [max]\` \u2192 Roll dice
+      const embed = new EmbedBuilder().setColor("#2980b9").setTitle("\u{1F4DC} COMMAND LIST").setDescription("All available commands grouped by access level").addFields(
+        {
+          name: "\u{1F3AE} PUBLIC COMMANDS",
+          value: `
+\`-d [max]\` \u2192 Roll dice (default 1\u2013100)
 \`-cf\` \u2192 Flip a coin
-\`-choose ...\` \u2192 Pick a random option
-\`-ship @user1 [@user2]\` \u2192 Check compatibility
+\`-choose <...>\` \u2192 Pick a random option
+\`-ship @user1 [@user2]\` \u2192 Check love compatibility
 \`-dw @user [rounds] [max]\` \u2192 Dice War (max 10 rounds)
 \`-cw @user heads/tails\` \u2192 Coin War (first to 2 points)
-
-**\u{1F4B0} Rewards & Stats**
-\`-balance [@user]\` \u2192 View your messages & earnings
-\`-earningslb\` \u2192 Leaderboard by total messages
-
-Use \`-luckyshelp\` if you are the bot owner.
-        `).setTimestamp();
-      return m.reply({ embeds: [embed] });
-    }
-    case "luckyshelp": {
-      if (!isOwner(m)) return m.reply({ content: "\u274C Only the bot owner can use this.", ephemeral: true });
-      const embed = new EmbedBuilder().setColor("#e67e22").setTitle("\u{1F512} Owner & Admin Commands").setDescription(`
-**\u{1F916} Bot Owner Only**
-\`-rewardtoggle\` \u2192 Turn rewards on/off
-\`-setreward <msgs> <amount>\` \u2192 Set reward rate
-\`-savedata\` \u2192 Save all data manually
-\`-exportdata\` \u2192 Get full backup
-\`-importdata <json>\` \u2192 Restore from backup
-
-**\u{1F451} Bot/Server Owner**
+\`-balance [@user]\` \u2192 View messages & earnings
+\`-earningslb\` \u2192 View server leaderboard
+`,
+          inline: false
+        },
+        {
+          name: "\u{1F6E1}\uFE0F ADMIN / SERVER OWNER",
+          value: `
 \`-silence\` \u2192 Mute/unmute all commands
-
-**\u{1F6E1}\uFE0F Administrators**
 \`-ignore @user\` \u2192 Block user from counting
 \`-unignore @user\` \u2192 Unblock user
 \`-disable\` \u2192 Disable commands in this channel
 \`-enable\` \u2192 Enable commands in this channel
 \`-bully @user\` \u2192 Send 8 quick pings
-        `).setTimestamp();
+`,
+          inline: false
+        }
+      ).setFooter({ text: "Use -luckyshelp only if you are the bot owner" }).setTimestamp();
+      return m.reply({ embeds: [embed] });
+    }
+    case "luckyshelp": {
+      if (!isOwner(m)) return m.reply({ content: "\u274C Only .luckyyy_ can use this command.", ephemeral: true });
+      const embed = new EmbedBuilder().setColor("#8e44ad").setTitle("\u{1F512} BOT OWNER COMMANDS").setDescription("Only you have access to these:").addFields(
+        {
+          name: "\u2699\uFE0F CONTROLS & DATA",
+          value: `
+\`-rewardtoggle\` \u2192 Turn rewards ON/OFF
+\`-setreward <msgs> <amount>\` \u2192 Set reward rate
+\`-savedata\` \u2192 Manually save all data
+\`-exportdata\` \u2192 Get full backup in DM
+\`-importdata <json>\` \u2192 Restore from backup
+`,
+          inline: false
+        }
+      ).setFooter({ text: "Your exclusive commands only" }).setTimestamp();
       return m.reply({ embeds: [embed] });
     }
     default:
-      return m.reply(`\u274C Unknown command. Use \`-help\` to see available commands.`);
+      return m.reply(`\u274C Unknown command. Use \`-help\` to see all available commands.`);
   }
 });
 client.login(token).catch((err) => console.error("\u274C Login failed:", err.message));

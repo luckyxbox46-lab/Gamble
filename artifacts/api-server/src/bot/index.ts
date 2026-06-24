@@ -301,12 +301,11 @@ client.on('messageCreate', async m => {
       return;
     }
 
-    // ✅ FIXED DW: ARGUMENT POSITION ISSUE RESOLVED
+    // ✅ FIXED DW: ARGUMENTS WORK 100%
     case 'dw': {
       const opponent = m.mentions.users.first();
       if (!opponent) return m.reply('❌ Usage: `-dw @user [rounds] [max]` | Example: `-dw @eva 10 100000`');
 
-      // Filter out mentions, keep only numbers
       const numbersOnly = args.filter(arg => /^\d+$/.test(arg));
       const rounds = Math.max(1, Math.min(10, parseInt(numbersOnly[0]) || 5));
       const sides = Math.max(2, parseInt(numbersOnly[1]) || 1000);
@@ -320,11 +319,8 @@ client.on('messageCreate', async m => {
         const yourRoll = Math.floor(Math.random() * sides) + 1;
         const oppRoll = Math.floor(Math.random() * sides) + 1;
 
-        if (yourRoll > oppRoll) {
-          yourScore++;
-        } else if (oppRoll > yourRoll) {
-          oppScore++;
-        }
+        if (yourRoll > oppRoll) yourScore++;
+        else if (oppRoll > yourRoll) oppScore++;
 
         await m.channel.send(`Round ${i}: 🎲 **${yourRoll.toLocaleString()}** vs **${oppRoll.toLocaleString()}**`).catch(()=>{});
         await delay(900);
@@ -339,7 +335,7 @@ client.on('messageCreate', async m => {
       return m.channel.send(result);
     }
 
-    // ✅ FIXED CW SCORING
+    // ✅ FIXED CW: SCORING CORRECT
     case 'cw': {
       const opponent = m.mentions.users.first();
       const userPick = args.find(arg => ['heads','tails'].includes(arg.toLowerCase()))?.toLowerCase();
@@ -355,12 +351,8 @@ client.on('messageCreate', async m => {
 
       while (yourScore < 2 && oppScore < 2) {
         const result = Math.random() < 0.5 ? 'heads' : 'tails';
-
-        if (result === userPick) {
-          yourScore++;
-        } else {
-          oppScore++;
-        }
+        if (result === userPick) yourScore++;
+        else oppScore++;
 
         await m.channel.send(`Flip: **${result.toUpperCase()}** | Score: **${yourScore} - ${oppScore}**`).catch(()=>{});
         await delay(900);
@@ -390,58 +382,72 @@ client.on('messageCreate', async m => {
       return m.reply(`🎯 Picked: **${args[Math.floor(Math.random() * args.length)]}**`);
     }
 
+    // ✅ NEW CLEAN & STANDOUT HELP
     case 'help': {
       const embed = new EmbedBuilder()
-        .setColor('#3498db')
-        .setTitle('📖 Public Commands')
-        .setDescription(`
-**🎲 Games & Fun**
-\`-d [max]\` → Roll dice
+        .setColor('#2980b9')
+        .setTitle('📜 COMMAND LIST')
+        .setDescription('All available commands grouped by access level')
+        .addFields(
+          {
+            name: '🎮 PUBLIC COMMANDS',
+            value: `
+\`-d [max]\` → Roll dice (default 1–100)
 \`-cf\` → Flip a coin
-\`-choose ...\` → Pick a random option
-\`-ship @user1 [@user2]\` → Check compatibility
+\`-choose <...>\` → Pick a random option
+\`-ship @user1 [@user2]\` → Check love compatibility
 \`-dw @user [rounds] [max]\` → Dice War (max 10 rounds)
 \`-cw @user heads/tails\` → Coin War (first to 2 points)
-
-**💰 Rewards & Stats**
-\`-balance [@user]\` → View your messages & earnings
-\`-earningslb\` → Leaderboard by total messages
-
-Use \`-luckyshelp\` if you are the bot owner.
-        `)
-        .setTimestamp();
-      return m.reply({ embeds: [embed] });
-    }
-
-    case 'luckyshelp': {
-      if (!isOwner(m)) return m.reply({ content: '❌ Only the bot owner can use this.', ephemeral: true });
-      const embed = new EmbedBuilder()
-        .setColor('#e67e22')
-        .setTitle('🔒 Owner & Admin Commands')
-        .setDescription(`
-**🤖 Bot Owner Only**
-\`-rewardtoggle\` → Turn rewards on/off
-\`-setreward <msgs> <amount>\` → Set reward rate
-\`-savedata\` → Save all data manually
-\`-exportdata\` → Get full backup
-\`-importdata <json>\` → Restore from backup
-
-**👑 Bot/Server Owner**
+\`-balance [@user]\` → View messages & earnings
+\`-earningslb\` → View server leaderboard
+`,
+            inline: false
+          },
+          {
+            name: '🛡️ ADMIN / SERVER OWNER',
+            value: `
 \`-silence\` → Mute/unmute all commands
-
-**🛡️ Administrators**
 \`-ignore @user\` → Block user from counting
 \`-unignore @user\` → Unblock user
 \`-disable\` → Disable commands in this channel
 \`-enable\` → Enable commands in this channel
 \`-bully @user\` → Send 8 quick pings
-        `)
+`,
+            inline: false
+          }
+        )
+        .setFooter({ text: 'Use -luckyshelp only if you are the bot owner' })
+        .setTimestamp();
+      return m.reply({ embeds: [embed] });
+    }
+
+    // ✅ LUCKYSHELP = ONLY YOUR COMMANDS
+    case 'luckyshelp': {
+      if (!isOwner(m)) return m.reply({ content: '❌ Only .luckyyy_ can use this command.', ephemeral: true });
+      const embed = new EmbedBuilder()
+        .setColor('#8e44ad')
+        .setTitle('🔒 BOT OWNER COMMANDS')
+        .setDescription('Only you have access to these:')
+        .addFields(
+          {
+            name: '⚙️ CONTROLS & DATA',
+            value: `
+\`-rewardtoggle\` → Turn rewards ON/OFF
+\`-setreward <msgs> <amount>\` → Set reward rate
+\`-savedata\` → Manually save all data
+\`-exportdata\` → Get full backup in DM
+\`-importdata <json>\` → Restore from backup
+`,
+            inline: false
+          }
+        )
+        .setFooter({ text: 'Your exclusive commands only' })
         .setTimestamp();
       return m.reply({ embeds: [embed] });
     }
 
     default:
-      return m.reply(`❌ Unknown command. Use \`-help\` to see available commands.`);
+      return m.reply(`❌ Unknown command. Use \`-help\` to see all available commands.`);
   }
 });
 
