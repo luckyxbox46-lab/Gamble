@@ -77711,15 +77711,17 @@ client.on("messageCreate", async (m) => {
     case "earningslb": {
       const g2 = m.guild.id;
       if (botData.rewardsEnabled[g2] !== true) return m.reply("\u274C Rewards are disabled");
-      const sorted = Object.entries(botData.balances).sort(([, a], [, b]) => b.earned - a.earned).slice(0, 10);
-      if (!sorted.length) return m.reply("\u{1F4CA} No earnings data yet");
+      const sorted = Object.entries(botData.balances).sort(([, userA], [, userB]) => userB.count - userA.count).slice(0, 10);
+      if (!sorted.length) return m.reply("\u{1F4CA} No activity data yet");
       let desc = "";
       for (let i = 0; i < sorted.length; i++) {
-        const user = await client.users.fetch(sorted[i][0]).catch(() => null);
-        desc += `**${i + 1}.** ${user?.username || "Unknown"} \u2022 ${formatNum(sorted[i][1].count)} msgs \u2022 $${sorted[i][1].earned.toFixed(2)}
+        const userId = sorted[i][0];
+        const userData = sorted[i][1];
+        const user = await client.users.fetch(userId).catch(() => null);
+        desc += `**${i + 1}.** ${user?.username || "Unknown User"} \u2022 ${formatNum(userData.count)} msgs \u2022 $${userData.earned.toFixed(2)}
 `;
       }
-      const embed = new EmbedBuilder().setColor("#f1c40f").setTitle("\u{1F3C6} Top Earners").setDescription(desc).setTimestamp();
+      const embed = new EmbedBuilder().setColor("#f1c40f").setTitle("\u{1F3C6} Leaderboard (Most Messages)").setDescription(desc).setTimestamp();
       return m.reply({ embeds: [embed] });
     }
     case "savedata": {
@@ -77917,7 +77919,7 @@ Match: **${percent}%**`).setTimestamp();
       const embed = new EmbedBuilder().setColor("#e67e22").setTitle("\u{1F512} Lucky's Full Command List").setDescription("All commands including owner-only").addFields(
         {
           name: "\u{1F4B0} Rewards & Data",
-          value: "`-rewardtoggle` \u2022 Enable/disable rewards\n`-setreward <msgs> <amt>` \u2022 Set rate\n`-balance [@user]` \u2022 Check balance\n`-earningslb` \u2022 Leaderboard\n`-savedata` \u2022 Save all data\n`-exportdata` \u2022 Get private backup\n`-importdata` \u2022 Restore backup",
+          value: "`-rewardtoggle` \u2022 Enable/disable rewards\n`-setreward <msgs> <amt>` \u2022 Set rate\n`-balance [@user]` \u2022 Check balance\n`-earningslb` \u2022 View leaderboard\n`-savedata` \u2022 Save all data\n`-exportdata` \u2022 Get private backup\n`-importdata` \u2022 Restore backup",
           inline: false
         },
         {

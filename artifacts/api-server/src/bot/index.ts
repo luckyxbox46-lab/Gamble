@@ -176,18 +176,24 @@ client.on('messageCreate', async m => {
     case 'earningslb': {
       const g = m.guild.id;
       if (botData.rewardsEnabled[g] !== true) return m.reply('❌ Rewards are disabled');
-      const sorted = Object.entries(botData.balances).sort(([,a], [,b]) => b.earned - a.earned).slice(0,10);
-      if (!sorted.length) return m.reply('📊 No earnings data yet');
+      // ✅ SORT BY MOST MESSAGES FIRST (highest → lowest)
+      const sorted = Object.entries(botData.balances)
+        .sort(([, userA], [, userB]) => userB.count - userA.count)
+        .slice(0, 10);
+
+      if (!sorted.length) return m.reply('📊 No activity data yet');
 
       let desc = '';
       for (let i = 0; i < sorted.length; i++) {
-        const user = await client.users.fetch(sorted[i][0]).catch(() => null);
-        desc += `**${i+1}.** ${user?.username || 'Unknown'} • ${formatNum(sorted[i][1].count)} msgs • $${sorted[i][1].earned.toFixed(2)}\n`;
+        const userId = sorted[i][0];
+        const userData = sorted[i][1];
+        const user = await client.users.fetch(userId).catch(() => null);
+        desc += `**${i+1}.** ${user?.username || 'Unknown User'} • ${formatNum(userData.count)} msgs • $${userData.earned.toFixed(2)}\n`;
       }
 
       const embed = new EmbedBuilder()
         .setColor('#f1c40f')
-        .setTitle('🏆 Top Earners')
+        .setTitle('🏆 Leaderboard (Most Messages)')
         .setDescription(desc)
         .setTimestamp();
       return m.reply({ embeds: [embed] });
@@ -223,7 +229,6 @@ client.on('messageCreate', async m => {
       }
       try {
         const imported = JSON.parse(jsonInput);
-        // ✅ FULL REPLACE / MERGE — WORKS EVERY TIME
         botData = {
           ...defaultData,
           ...imported,
@@ -231,7 +236,6 @@ client.on('messageCreate', async m => {
           rewardsEnabled: { ...botData.rewardsEnabled, ...imported.rewardsEnabled },
           rewardCfg: { ...botData.rewardCfg, ...imported.rewardCfg }
         };
-        // ✅ UPDATE LIVE VALUES IMMEDIATELY
         REWARD_THRESH = botData.rewardCfg.t || 10000;
         REWARD_AMT = botData.rewardCfg.a || 2;
         saveData();
@@ -384,7 +388,7 @@ client.on('messageCreate', async m => {
         .addFields(
           {
             name: '💰 Rewards & Data',
-            value: '`-rewardtoggle` • Enable/disable rewards\n`-setreward <msgs> <amt>` • Set rate\n`-balance [@user]` • Check balance\n`-earningslb` • Leaderboard\n`-savedata` • Save all data\n`-exportdata` • Get private backup\n`-importdata` • Restore backup',
+            value: '`-rewardtoggle` • Enable/disable rewards\n`-setreward <msgs> <amt>` • Set rate\n`-balance [@user]` • Check balance\n`-earningslb` • View leaderboard\n`-savedata` • Save all data\n`-exportdata` • Get private backup\n`-importdata` • Restore backup',
             inline: false
           },
           {
