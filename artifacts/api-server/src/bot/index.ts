@@ -42,6 +42,7 @@ const DATA_FILE = path.join(DATA_DIR, 'bot-data.json');
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
+// Default: REWARDS ENABLED by default now
 const defaultData = {
   stats: { rolls: 0, flips: 0, started: Date.now() },
   disabledChannels: [],
@@ -54,6 +55,7 @@ const defaultData = {
 
 let botData;
 
+// Load data — NEVER overwrite existing balances
 if (fs.existsSync(DATA_FILE)) {
   try {
     const saved = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -64,13 +66,13 @@ if (fs.existsSync(DATA_FILE)) {
       balances: { ...saved.balances },
       rewardCfg: { ...defaultData.rewardCfg, ...saved.rewardCfg }
     };
-    console.log('✅ Loaded saved data — will NOT reset');
+    console.log('✅ Loaded saved data — balances preserved');
   } catch {
-    console.log('⚠️ Starting fresh data');
+    console.log('⚠️ Data file corrupted — starting fresh');
     botData = { ...defaultData };
   }
 } else {
-  console.log('ℹ️ Creating new data file');
+  console.log('ℹ️ No data found — using defaults');
   botData = { ...defaultData };
 }
 
@@ -99,6 +101,12 @@ client.on('messageCreate', async m => {
   if (!m.guild || m.author.bot) return;
   const g = m.guild.id;
   const u = m.author.id;
+
+  // Auto-enable rewards if not set
+  if (botData.rewardsEnabled[g] === undefined) {
+    botData.rewardsEnabled[g] = true;
+    saveData();
+  }
 
   // Reward system
   if (botData.rewardsEnabled[g] === true) {
@@ -176,7 +184,8 @@ client.on('messageCreate', async m => {
       return m.reply({ embeds: [embed] });
     }
     case 'earningslb': {
-      if (!botData.rewardsEnabled[g]) return m.reply('❌ Rewards are disabled');
+      const g = m.guild.id;
+      if (botData.rewardsEnabled[g] !== true) return m.reply('❌ Rewards are disabled');
       const sorted = Object.entries(botData.balances).sort(([,a], [,b]) => b.earned - a.earned).slice(0,10);
       if (!sorted.length) return m.reply('📊 No earnings data yet');
 
@@ -207,6 +216,10 @@ client.on('messageCreate', async m => {
         });
       } catch { return m.reply('❌ Failed to send backup'); }
       return;
+    }
+    case 'importdata': {
+      if (!isOwner(m)) return m.reply('❌ Owner only');
+      return m.reply('📤 Send your old backup .json file as attachment and I will restore it');
     }
     case 'silence': {
       if (!isOwner(m)) return m.reply('❌ Only owner can use this');
@@ -356,7 +369,7 @@ client.on('messageCreate', async m => {
         .addFields(
           {
             name: '💰 Rewards & Data',
-            value: '`-rewardtoggle` • Enable/disable rewards\n`-setreward <msgs> <amt>` • Set rate\n`-balance [@user]` • Check balance\n`-earningslb` • Leaderboard\n`-savedata` • Save all data\n`-exportdata` • Download backup',
+            value: '`-rewardtoggle` • Enable/disable rewards\n`-setreward <msgs> <amt>` • Set rate\n`-balance [@user]` • Check balance\n`-earningslb` • Leaderboard\n`-savedata` • Save all data\n`-exportdata` • Download backup\n`-importdata` • Restore backup',
             inline: false
           },
           {

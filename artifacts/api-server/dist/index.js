@@ -77620,13 +77620,13 @@ if (fs.existsSync(DATA_FILE)) {
       balances: { ...saved.balances },
       rewardCfg: { ...defaultData.rewardCfg, ...saved.rewardCfg }
     };
-    console.log("\u2705 Loaded saved data \u2014 will NOT reset");
+    console.log("\u2705 Loaded saved data \u2014 balances preserved");
   } catch {
-    console.log("\u26A0\uFE0F Starting fresh data");
+    console.log("\u26A0\uFE0F Data file corrupted \u2014 starting fresh");
     botData = { ...defaultData };
   }
 } else {
-  console.log("\u2139\uFE0F Creating new data file");
+  console.log("\u2139\uFE0F No data found \u2014 using defaults");
   botData = { ...defaultData };
 }
 REWARD_THRESH = botData.rewardCfg.t || 1e4;
@@ -77644,6 +77644,10 @@ client.on("messageCreate", async (m) => {
   if (!m.guild || m.author.bot) return;
   const g = m.guild.id;
   const u = m.author.id;
+  if (botData.rewardsEnabled[g] === void 0) {
+    botData.rewardsEnabled[g] = true;
+    saveData();
+  }
   if (botData.rewardsEnabled[g] === true) {
     const now = Date.now();
     if (now - (msgCd.get(u) || 0) > 2e3 && m.content.trim() !== (lastMsg.get(u) || "")) {
@@ -77712,7 +77716,8 @@ client.on("messageCreate", async (m) => {
       return m.reply({ embeds: [embed] });
     }
     case "earningslb": {
-      if (!botData.rewardsEnabled[g]) return m.reply("\u274C Rewards are disabled");
+      const g2 = m.guild.id;
+      if (botData.rewardsEnabled[g2] !== true) return m.reply("\u274C Rewards are disabled");
       const sorted = Object.entries(botData.balances).sort(([, a], [, b]) => b.earned - a.earned).slice(0, 10);
       if (!sorted.length) return m.reply("\u{1F4CA} No earnings data yet");
       let desc = "";
@@ -77740,6 +77745,10 @@ client.on("messageCreate", async (m) => {
         return m.reply("\u274C Failed to send backup");
       }
       return;
+    }
+    case "importdata": {
+      if (!isOwner(m)) return m.reply("\u274C Owner only");
+      return m.reply("\u{1F4E4} Send your old backup .json file as attachment and I will restore it");
     }
     case "silence": {
       if (!isOwner(m)) return m.reply("\u274C Only owner can use this");
@@ -77878,7 +77887,7 @@ Match: **${percent}%**`).setTimestamp();
       const embed = new EmbedBuilder().setColor("#e67e22").setTitle("\u{1F512} Lucky's Full Command List").setDescription("All commands including owner-only").addFields(
         {
           name: "\u{1F4B0} Rewards & Data",
-          value: "`-rewardtoggle` \u2022 Enable/disable rewards\n`-setreward <msgs> <amt>` \u2022 Set rate\n`-balance [@user]` \u2022 Check balance\n`-earningslb` \u2022 Leaderboard\n`-savedata` \u2022 Save all data\n`-exportdata` \u2022 Download backup",
+          value: "`-rewardtoggle` \u2022 Enable/disable rewards\n`-setreward <msgs> <amt>` \u2022 Set rate\n`-balance [@user]` \u2022 Check balance\n`-earningslb` \u2022 Leaderboard\n`-savedata` \u2022 Save all data\n`-exportdata` \u2022 Download backup\n`-importdata` \u2022 Restore backup",
           inline: false
         },
         {
