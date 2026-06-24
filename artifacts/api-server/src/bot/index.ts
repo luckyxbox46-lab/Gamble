@@ -1,4 +1,9 @@
-const {Client,GatewayIntentBits,PermissionsBitField} = require('discord.js');
+const {
+  Client,
+  GatewayIntentBits,
+  PermissionsBitField,
+  EmbedBuilder
+} = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 
@@ -31,11 +36,10 @@ const formatNum = (n) => {
   return n.toString();
 };
 
-// 🚀 RAILWAY SAFE PATH — NO RESETS, NO VOLUME NEEDED
+// 🚀 PERMANENT STORAGE — NO RESETS
 const DATA_DIR = '/persist';
 const DATA_FILE = path.join(DATA_DIR, 'bot-data.json');
 
-// Make folder if it doesn't exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 const defaultData = {
@@ -50,7 +54,6 @@ const defaultData = {
 
 let botData;
 
-// Load saved data — never overwrites
 if (fs.existsSync(DATA_FILE)) {
   try {
     const saved = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -61,7 +64,7 @@ if (fs.existsSync(DATA_FILE)) {
       balances: { ...saved.balances },
       rewardCfg: { ...defaultData.rewardCfg, ...saved.rewardCfg }
     };
-    console.log('✅ Loaded saved data — WILL NOT RESET');
+    console.log('✅ Loaded saved data — will NOT reset');
   } catch {
     console.log('⚠️ Starting fresh data');
     botData = { ...defaultData };
@@ -77,7 +80,7 @@ REWARD_AMT = botData.rewardCfg.a || 2;
 const saveData = () => {
   botData.rewardCfg = { t: REWARD_THRESH, a: REWARD_AMT };
   fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), 'utf8');
-  console.log('💾 Saved to safe storage');
+  console.log('💾 Saved to permanent storage');
 };
 
 // --------------------------
@@ -135,54 +138,71 @@ client.on('messageCreate', async m => {
       const max = parseInt(args[0]) || 100;
       const roll = Math.floor(Math.random() * max) + 1;
       botData.stats.rolls++; saveData();
-      return m.reply(`🎲 Roll: ${roll}`);
+      return m.reply(`🎲 Roll: **${roll}**`);
     }
     case 'cf': {
       const res = Math.random() < 0.5 ? 'Heads' : 'Tails';
       botData.stats.flips++; saveData();
-      return m.reply(`🪙 Flip: ${res}`);
+      return m.reply(`🪙 Flip: **${res}**`);
     }
     case 'rewardtoggle': {
       if (!isOwner(m)) return m.reply('❌ Only owner can use this command');
       botData.rewardsEnabled[g] = !botData.rewardsEnabled[g];
       saveData();
-      return m.reply(botData.rewardsEnabled[g] ? '✅ Rewards ENABLED & saved' : '❌ Rewards DISABLED & saved');
+      return m.reply(botData.rewardsEnabled[g] ? '✅ Rewards **ENABLED** & saved' : '❌ Rewards **DISABLED** & saved');
     }
     case 'setreward': {
       if (!isOwner(m)) return m.reply('❌ Only owner can use this command');
       const t = parseInt(args[0]), a = parseFloat(args[1]);
-      if (!t || !a || t < 1) return m.reply('❌ Usage: -setreward <messages> <amount>');
+      if (!t || !a || t < 1) return m.reply('❌ Usage: `-setreward <messages> <amount>`');
       REWARD_THRESH = t; REWARD_AMT = a; saveData();
-      return m.reply(`✅ Updated: ${formatNum(t)} msgs = $${a.toFixed(2)}`);
+      return m.reply(`✅ Updated: **${formatNum(t)} messages = $${a.toFixed(2)}**`);
     }
     case 'balance': {
       const target = m.mentions.users.first() || m.author;
       if (m.mentions.users.first() && !isAdmin(m)) return m.reply('❌ Only admins can check others\' balance');
       const data = botData.balances[target.id] || { count: 0, earned: 0 };
       const next = (Math.floor(data.count / REWARD_THRESH) + 1) * REWARD_THRESH;
-      return m.reply(`💰 **${target.username}**\nMessages: ${formatNum(data.count)}\nEarned: $${data.earned.toFixed(2)}\nNext reward at: ${formatNum(next)}`);
+
+      const embed = new EmbedBuilder()
+        .setColor('#2ecc71')
+        .setTitle(`💰 Balance - ${target.username}`)
+        .addFields(
+          { name: 'Total Messages', value: formatNum(data.count), inline: true },
+          { name: 'Total Earned', value: `$${data.earned.toFixed(2)}`, inline: true },
+          { name: 'Next Reward At', value: formatNum(next), inline: true }
+        )
+        .setTimestamp();
+      return m.reply({ embeds: [embed] });
     }
     case 'earningslb': {
       if (!botData.rewardsEnabled[g]) return m.reply('❌ Rewards are disabled');
       const sorted = Object.entries(botData.balances).sort(([,a], [,b]) => b.earned - a.earned).slice(0,10);
       if (!sorted.length) return m.reply('📊 No earnings data yet');
-      let list = '🏆 **Top Earners**\n';
+
+      let desc = '';
       for (let i = 0; i < sorted.length; i++) {
         const user = await client.users.fetch(sorted[i][0]).catch(() => null);
-        list += `${i+1}. ${user?.username || 'Unknown'} | ${formatNum(sorted[i][1].count)} msgs | $${sorted[i][1].earned.toFixed(2)}\n`;
+        desc += `**${i+1}.** ${user?.username || 'Unknown'} • ${formatNum(sorted[i][1].count)} msgs • $${sorted[i][1].earned.toFixed(2)}\n`;
       }
-      return m.reply(list);
+
+      const embed = new EmbedBuilder()
+        .setColor('#f1c40f')
+        .setTitle('🏆 Top Earners')
+        .setDescription(desc)
+        .setTimestamp();
+      return m.reply({ embeds: [embed] });
     }
     case 'savedata': {
       if (!isOwner(m)) return m.reply('❌ This command is for the owner only');
       saveData();
-      return m.reply('✅ Data saved — will NEVER reset on deploy!');
+      return m.reply('✅ Data saved — will **never reset** on deploy!');
     }
     case 'exportdata': {
       if (!isOwner(m)) return m.reply('❌ This command is for the owner only');
       try {
         await m.reply({
-          content: '📤 Your full backup:',
+          content: '📤 Your full backup file:',
           files: [{ attachment: DATA_FILE, name: `bot-backup-${Date.now()}.json` }]
         });
       } catch { return m.reply('❌ Failed to send backup'); }
@@ -197,25 +217,25 @@ client.on('messageCreate', async m => {
     case 'ignore': {
       if (!isAdmin(m)) return m.reply('❌ Only admins can use this');
       const target = m.mentions.users.first();
-      if (!target) return m.reply('❌ Usage: -ignore @user');
-      if (isOwner({author: target})) return m.reply('❌ Cannot ignore owner');
+      if (!target) return m.reply('❌ Usage: `-ignore @user`');
+      if (isOwner({author: target})) return m.reply('❌ Cannot ignore the owner');
       if (!botData.ignoredUsers.includes(target.id)) {
         botData.ignoredUsers.push(target.id);
         saveData();
-        return m.reply(`✅ Ignoring ${target.username}`);
+        return m.reply(`✅ Now ignoring **${target.username}**`);
       }
-      return m.reply(`ℹ️ Already ignored`);
+      return m.reply(`ℹ️ Already ignoring **${target.username}**`);
     }
     case 'unignore': {
       if (!isAdmin(m)) return m.reply('❌ Only admins can use this');
       const target = m.mentions.users.first();
-      if (!target) return m.reply('❌ Usage: -unignore @user');
+      if (!target) return m.reply('❌ Usage: `-unignore @user`');
       if (botData.ignoredUsers.includes(target.id)) {
         botData.ignoredUsers = botData.ignoredUsers.filter(id => id !== target.id);
         saveData();
-        return m.reply(`✅ Unignored ${target.username}`);
+        return m.reply(`✅ No longer ignoring **${target.username}**`);
       }
-      return m.reply(`ℹ️ Not ignored`);
+      return m.reply(`ℹ️ **${target.username}** is not ignored`);
     }
     case 'disable': {
       if (!isAdmin(m)) return m.reply('❌ Only admins can use this');
@@ -223,16 +243,16 @@ client.on('messageCreate', async m => {
         botData.disabledChannels.push(m.channel.id);
         saveData();
       }
-      return m.reply('🚫 Commands disabled here');
+      return m.reply('🚫 Commands disabled in this channel');
     }
     case 'enable': {
       if (!isAdmin(m)) return m.reply('❌ Only admins can use this');
       botData.disabledChannels = botData.disabledChannels.filter(ch => ch !== m.channel.id);
       saveData();
-      return m.reply('✅ Commands enabled here');
+      return m.reply('✅ Commands enabled in this channel');
     }
     case 'bully': {
-      if (!isAdmin(m) || !m.mentions.users.first()) return m.reply('❌ Usage: -bully @user');
+      if (!isAdmin(m) || !m.mentions.users.first()) return m.reply('❌ Usage: `-bully @user`');
       const target = m.mentions.users.first();
       for (let i = 0; i < 8; i++) { await m.channel.send(`${target} 👊`).catch(()=>{}); await delay(600); }
       return;
@@ -242,89 +262,121 @@ client.on('messageCreate', async m => {
       const opp = m.mentions.users.first();
       const rounds = Math.max(1, Math.min(10, parseInt(argsParts[0]) || 5));
       const sides = Math.max(2, parseInt(argsParts[1]) || 1000);
-      if (!opp) return m.reply('❌ Usage: -dw @user [rounds] [sides]');
+      if (!opp) return m.reply('❌ Usage: `-dw @user [rounds] [sides]`');
       let yourScore = 0, oppScore = 0;
-      await m.reply(`🎲 Dice War: ${m.author} vs ${opp} — ${rounds} rounds`);
+      await m.reply(`🎲 Dice War: **${m.author.username} vs ${opp.username}**\n${rounds} rounds • d${sides}`);
       for (let i = 1; i <= rounds; i++) {
         const y = Math.floor(Math.random() * sides) + 1;
         const o = Math.floor(Math.random() * sides) + 1;
-        const res = y > o ? (yourScore++, 'You win round') : o > y ? (oppScore++, `${opp} wins round`) : 'Draw';
-        await m.channel.send(`Round ${i}: 🎲 ${y} vs ${o} — ${res}`).catch(()=>{});
+        const res = y > o ? (yourScore++, '✅ You win round') : o > y ? (oppScore++, `❌ ${opp.username} wins round`) : '⚖️ Draw';
+        await m.channel.send(`Round ${i}: 🎲 **${y}** vs 🎲 **${o}**\n${res}`).catch(()=>{});
         await delay(900);
       }
-      const final = `🏆 Final: You ${yourScore} - ${oppScore} ${opp}\n${yourScore > oppScore ? '✅ You win!' : oppScore > yourScore ? `❌ ${opp} wins!` : '⚖️ Draw'}`;
+      const final = `🏆 Final Score: **You ${yourScore} - ${oppScore} ${opp.username}**\n${yourScore > oppScore ? '✅ You win the match!' : oppScore > yourScore ? `❌ ${opp.username} wins the match!` : '⚖️ Match ends in a draw!'}`;
       return m.channel.send(final);
     }
     case 'cw': {
       const opp = m.mentions.users.first(), side = args[1]?.toLowerCase();
-      if (!opp || !['heads','tails'].includes(side)) return m.reply('❌ Usage: -cw @user <heads/tails>');
+      if (!opp || !['heads','tails'].includes(side)) return m.reply('❌ Usage: `-cw @user <heads/tails>`');
       let u = 0, o = 0;
-      await m.reply(`🪙 Coin War: First to 2 wins`);
+      await m.reply(`🪙 Coin War: **${m.author.username} vs ${opp.username}**\nFirst to 2 wins`);
       while (u < 2 && o < 2) {
         const flip = Math.random() < 0.5 ? 'Heads' : 'Tails';
         flip === side ? u++ : o++;
-        await m.channel.send(`Flip: ${flip} | Score: ${u} - ${o}`).catch(()=>{});
+        await m.channel.send(`Flip: **${flip}** | Score: **${u} - ${o}**`).catch(()=>{});
         await delay(900);
       }
-      return m.channel.send(u === 2 ? `🏆 ${m.author} wins!` : `🏆 ${opp} wins!`);
+      return m.channel.send(u === 2 ? `🏆 **${m.author.username}** wins!` : `🏆 **${opp.username}** wins!`);
     }
     case 'ship': {
-      if (!m.mentions.users.size) return m.reply('❌ Usage: -ship @user1 @user2');
-      return m.reply(`💞 Compatibility: ${Math.floor(Math.random() * 100)}%`);
+      if (!m.mentions.users.size) return m.reply('❌ Usage: `-ship @user1 @user2`');
+      const user1 = m.mentions.users.at(0);
+      const user2 = m.mentions.users.at(1) || m.author;
+      const percent = Math.floor(Math.random() * 101);
+      const embed = new EmbedBuilder()
+        .setColor(percent >= 70 ? '#e91e63' : percent >= 40 ? '#f39c12' : '#3498db')
+        .setTitle('💞 Compatibility Check')
+        .setDescription(`**${user1.username}** & **${user2.username}**\nMatch: **${percent}%**`)
+        .setTimestamp();
+      return m.reply({ embeds: [embed] });
     }
     case 'choose': {
-      if (!args.length) return m.reply('❌ Usage: -choose <opt1> <opt2>...');
-      return m.reply(`🎯 Pick: ${args[Math.floor(Math.random() * args.length)]}`);
+      if (!args.length) return m.reply('❌ Usage: `-choose <option1> <option2> ...`');
+      return m.reply(`🎯 Picked: **${args[Math.floor(Math.random() * args.length)]}**`);
     }
     case 'stats': {
       const uptime = Math.floor((Date.now() - botData.stats.started) / 60000);
-      return m.reply(`📊 Stats\n🎲 Rolls: ${botData.stats.rolls}\n🪙 Flips: ${botData.stats.flips}\n⏱️ Uptime: ${uptime}m`);
+      const embed = new EmbedBuilder()
+        .setColor('#9b59b6')
+        .setTitle('📊 Bot Statistics')
+        .addFields(
+          { name: '🎲 Total Rolls', value: botData.stats.rolls.toString(), inline: true },
+          { name: '🪙 Total Flips', value: botData.stats.flips.toString(), inline: true },
+          { name: '⏱️ Uptime', value: `${uptime} minutes`, inline: true }
+        )
+        .setTimestamp();
+      return m.reply({ embeds: [embed] });
     }
+
+    // ✅ PUBLIC HELP - EMBED
     case 'help': {
-      return m.reply(`📖 **COMMANDS**
-
-💰 **REWARDS**
-\`-balance [@user]\` — Check balance
-\`-earningslb\` — Top earners
-
-🎲 **GAMES**
-\`-d [max]\` — Roll dice
-\`-cf\` — Flip coin
-\`-choose <opt1>...\` — Pick
-\`-ship @user1 @user2\` — Compatibility
-\`-dw @user [rounds] [sides]\` — Dice War
-\`-cw @user <heads/tails>\` — Coin War
-\`-stats\` — Bot stats
-
-👑 **ADMIN**
-\`-ignore @user\` — Block commands
-\`-unignore @user\` — Allow commands
-\`-disable\` — Disable here
-\`-enable\` — Enable here
-\`-bully @user\` — Spam ping
-`);
+      const embed = new EmbedBuilder()
+        .setColor('#3498db')
+        .setTitle('📖 Public Commands')
+        .setDescription('All commands available to everyone')
+        .addFields(
+          {
+            name: '💰 Rewards',
+            value: '`-balance [@user]` • Check your balance\n`-earningslb` • View top earners',
+            inline: false
+          },
+          {
+            name: '🎲 Games',
+            value: '`-d [max]` • Roll dice\n`-cf` • Flip coin\n`-choose <opt...>` • Pick random\n`-ship @user` • Compatibility\n`-dw @user [r] [s]` • Dice War\n`-cw @user <side>` • Coin War\n`-stats` • Bot stats',
+            inline: false
+          },
+          {
+            name: '👑 Admin',
+            value: '`-ignore @user` • Block commands\n`-unignore @user` • Unblock\n`-disable` • Disable here\n`-enable` • Enable here\n`-bully @user` • Spam ping',
+            inline: false
+          }
+        )
+        .setFooter({ text: 'Use -luckyshelp for full owner commands' })
+        .setTimestamp();
+      return m.reply({ embeds: [embed] });
     }
+
+    // ✅ OWNER ONLY HELP - EMBED
     case 'luckyshelp': {
-      if (!isOwner(m)) return m.reply('❌ Owner only');
-      return m.reply(`📖 **LUCKY'S FULL LIST**
-
-💰 **REWARDS & DATA**
-\`-rewardtoggle\` — On/off rewards
-\`-setreward <msgs> <amt>\` — Set reward rate
-\`-balance [@user]\` — Check balance
-\`-earningslb\` — Top earners
-\`-savedata\` — Save data
-\`-exportdata\` — Download backup
-
-🎲 **GAMES**
-\`-d\` \`-cf\` \`-choose\` \`-ship\` \`-dw\` \`-cw\` \`-stats\`
-
-👑 **ADMIN**
-\`-ignore\` \`-unignore\` \`-disable\` \`-enable\` \`-bully\`
-
-🔒 **OWNER**
-\`-silence\` — Mute all commands
-`);
+      if (!isOwner(m)) return m.reply('❌ This command is for the owner only');
+      const embed = new EmbedBuilder()
+        .setColor('#e67e22')
+        .setTitle('🔒 Lucky\'s Full Command List')
+        .setDescription('All commands including owner-only')
+        .addFields(
+          {
+            name: '💰 Rewards & Data',
+            value: '`-rewardtoggle` • Enable/disable rewards\n`-setreward <msgs> <amt>` • Set rate\n`-balance [@user]` • Check balance\n`-earningslb` • Leaderboard\n`-savedata` • Save all data\n`-exportdata` • Download backup',
+            inline: false
+          },
+          {
+            name: '🎲 Games',
+            value: '`-d` `-cf` `-choose` `-ship` `-dw` `-cw` `-stats`',
+            inline: false
+          },
+          {
+            name: '👑 Admin',
+            value: '`-ignore` `-unignore` `-disable` `-enable` `-bully`',
+            inline: false
+          },
+          {
+            name: '🔒 Owner Only',
+            value: '`-silence` • Mute/unmute all commands',
+            inline: false
+          }
+        )
+        .setTimestamp();
+      return m.reply({ embeds: [embed] });
     }
   }
 });

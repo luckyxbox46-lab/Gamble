@@ -44137,7 +44137,7 @@ var require_dist8 = __commonJS({
       ContextMenuCommandAssertions: /* @__PURE__ */ __name(() => Assertions_exports11, "ContextMenuCommandAssertions"),
       ContextMenuCommandBuilder: /* @__PURE__ */ __name(() => ContextMenuCommandBuilder, "ContextMenuCommandBuilder"),
       EmbedAssertions: /* @__PURE__ */ __name(() => Assertions_exports, "EmbedAssertions"),
-      EmbedBuilder: /* @__PURE__ */ __name(() => EmbedBuilder, "EmbedBuilder"),
+      EmbedBuilder: /* @__PURE__ */ __name(() => EmbedBuilder2, "EmbedBuilder"),
       FileBuilder: /* @__PURE__ */ __name(() => FileBuilder, "FileBuilder"),
       FileUploadAssertions: /* @__PURE__ */ __name(() => Assertions_exports4, "FileUploadAssertions"),
       FileUploadBuilder: /* @__PURE__ */ __name(() => FileUploadBuilder, "FileUploadBuilder"),
@@ -44271,7 +44271,7 @@ var require_dist8 = __commonJS({
     }
     __name(normalizeArray, "normalizeArray");
     __name2(normalizeArray, "normalizeArray");
-    var EmbedBuilder = class {
+    var EmbedBuilder2 = class {
       static {
         __name(this, "EmbedBuilder");
       }
@@ -77012,7 +77012,7 @@ var require_EmbedBuilder = __commonJS({
     var { isJSONEncodable } = require_dist();
     var { toSnakeCase } = require_Transformers();
     var { resolveColor } = require_Util();
-    var EmbedBuilder = class extends BuildersEmbed {
+    var EmbedBuilder2 = class extends BuildersEmbed {
       static {
         __name(this, "EmbedBuilder");
       }
@@ -77044,7 +77044,7 @@ var require_EmbedBuilder = __commonJS({
         return embedLength(this.data);
       }
     };
-    module2.exports = EmbedBuilder;
+    module2.exports = EmbedBuilder2;
   }
 });
 
@@ -77562,7 +77562,12 @@ var require_src = __commonJS({
 });
 
 // src/bot/index.ts
-var { Client: Client2, GatewayIntentBits, PermissionsBitField: PermissionsBitField2 } = require_src();
+var {
+  Client: Client2,
+  GatewayIntentBits,
+  PermissionsBitField: PermissionsBitField2,
+  EmbedBuilder
+} = require_src();
 var fs = require("fs");
 var path = require("path");
 var token = process.env.DISCORD_BOT_TOKEN;
@@ -77615,7 +77620,7 @@ if (fs.existsSync(DATA_FILE)) {
       balances: { ...saved.balances },
       rewardCfg: { ...defaultData.rewardCfg, ...saved.rewardCfg }
     };
-    console.log("\u2705 Loaded saved data \u2014 WILL NOT RESET");
+    console.log("\u2705 Loaded saved data \u2014 will NOT reset");
   } catch {
     console.log("\u26A0\uFE0F Starting fresh data");
     botData = { ...defaultData };
@@ -77629,7 +77634,7 @@ REWARD_AMT = botData.rewardCfg.a || 2;
 var saveData = /* @__PURE__ */ __name(() => {
   botData.rewardCfg = { t: REWARD_THRESH, a: REWARD_AMT };
   fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), "utf8");
-  console.log("\u{1F4BE} Saved to safe storage");
+  console.log("\u{1F4BE} Saved to permanent storage");
 }, "saveData");
 var isOwner = /* @__PURE__ */ __name((m) => m.author.username === OWNER, "isOwner");
 var isAdmin = /* @__PURE__ */ __name((m) => isOwner(m) || m.member?.permissions?.has(PermissionsBitField2.Flags.Administrator), "isAdmin");
@@ -77671,61 +77676,64 @@ client.on("messageCreate", async (m) => {
       const roll = Math.floor(Math.random() * max) + 1;
       botData.stats.rolls++;
       saveData();
-      return m.reply(`\u{1F3B2} Roll: ${roll}`);
+      return m.reply(`\u{1F3B2} Roll: **${roll}**`);
     }
     case "cf": {
       const res = Math.random() < 0.5 ? "Heads" : "Tails";
       botData.stats.flips++;
       saveData();
-      return m.reply(`\u{1FA99} Flip: ${res}`);
+      return m.reply(`\u{1FA99} Flip: **${res}**`);
     }
     case "rewardtoggle": {
       if (!isOwner(m)) return m.reply("\u274C Only owner can use this command");
       botData.rewardsEnabled[g] = !botData.rewardsEnabled[g];
       saveData();
-      return m.reply(botData.rewardsEnabled[g] ? "\u2705 Rewards ENABLED & saved" : "\u274C Rewards DISABLED & saved");
+      return m.reply(botData.rewardsEnabled[g] ? "\u2705 Rewards **ENABLED** & saved" : "\u274C Rewards **DISABLED** & saved");
     }
     case "setreward": {
       if (!isOwner(m)) return m.reply("\u274C Only owner can use this command");
       const t = parseInt(args[0]), a = parseFloat(args[1]);
-      if (!t || !a || t < 1) return m.reply("\u274C Usage: -setreward <messages> <amount>");
+      if (!t || !a || t < 1) return m.reply("\u274C Usage: `-setreward <messages> <amount>`");
       REWARD_THRESH = t;
       REWARD_AMT = a;
       saveData();
-      return m.reply(`\u2705 Updated: ${formatNum(t)} msgs = $${a.toFixed(2)}`);
+      return m.reply(`\u2705 Updated: **${formatNum(t)} messages = $${a.toFixed(2)}**`);
     }
     case "balance": {
       const target = m.mentions.users.first() || m.author;
       if (m.mentions.users.first() && !isAdmin(m)) return m.reply("\u274C Only admins can check others' balance");
       const data = botData.balances[target.id] || { count: 0, earned: 0 };
       const next = (Math.floor(data.count / REWARD_THRESH) + 1) * REWARD_THRESH;
-      return m.reply(`\u{1F4B0} **${target.username}**
-Messages: ${formatNum(data.count)}
-Earned: $${data.earned.toFixed(2)}
-Next reward at: ${formatNum(next)}`);
+      const embed = new EmbedBuilder().setColor("#2ecc71").setTitle(`\u{1F4B0} Balance - ${target.username}`).addFields(
+        { name: "Total Messages", value: formatNum(data.count), inline: true },
+        { name: "Total Earned", value: `$${data.earned.toFixed(2)}`, inline: true },
+        { name: "Next Reward At", value: formatNum(next), inline: true }
+      ).setTimestamp();
+      return m.reply({ embeds: [embed] });
     }
     case "earningslb": {
       if (!botData.rewardsEnabled[g]) return m.reply("\u274C Rewards are disabled");
       const sorted = Object.entries(botData.balances).sort(([, a], [, b]) => b.earned - a.earned).slice(0, 10);
       if (!sorted.length) return m.reply("\u{1F4CA} No earnings data yet");
-      let list = "\u{1F3C6} **Top Earners**\n";
+      let desc = "";
       for (let i = 0; i < sorted.length; i++) {
         const user = await client.users.fetch(sorted[i][0]).catch(() => null);
-        list += `${i + 1}. ${user?.username || "Unknown"} | ${formatNum(sorted[i][1].count)} msgs | $${sorted[i][1].earned.toFixed(2)}
+        desc += `**${i + 1}.** ${user?.username || "Unknown"} \u2022 ${formatNum(sorted[i][1].count)} msgs \u2022 $${sorted[i][1].earned.toFixed(2)}
 `;
       }
-      return m.reply(list);
+      const embed = new EmbedBuilder().setColor("#f1c40f").setTitle("\u{1F3C6} Top Earners").setDescription(desc).setTimestamp();
+      return m.reply({ embeds: [embed] });
     }
     case "savedata": {
       if (!isOwner(m)) return m.reply("\u274C This command is for the owner only");
       saveData();
-      return m.reply("\u2705 Data saved \u2014 will NEVER reset on deploy!");
+      return m.reply("\u2705 Data saved \u2014 will **never reset** on deploy!");
     }
     case "exportdata": {
       if (!isOwner(m)) return m.reply("\u274C This command is for the owner only");
       try {
         await m.reply({
-          content: "\u{1F4E4} Your full backup:",
+          content: "\u{1F4E4} Your full backup file:",
           files: [{ attachment: DATA_FILE, name: `bot-backup-${Date.now()}.json` }]
         });
       } catch {
@@ -77742,25 +77750,25 @@ Next reward at: ${formatNum(next)}`);
     case "ignore": {
       if (!isAdmin(m)) return m.reply("\u274C Only admins can use this");
       const target = m.mentions.users.first();
-      if (!target) return m.reply("\u274C Usage: -ignore @user");
-      if (isOwner({ author: target })) return m.reply("\u274C Cannot ignore owner");
+      if (!target) return m.reply("\u274C Usage: `-ignore @user`");
+      if (isOwner({ author: target })) return m.reply("\u274C Cannot ignore the owner");
       if (!botData.ignoredUsers.includes(target.id)) {
         botData.ignoredUsers.push(target.id);
         saveData();
-        return m.reply(`\u2705 Ignoring ${target.username}`);
+        return m.reply(`\u2705 Now ignoring **${target.username}**`);
       }
-      return m.reply(`\u2139\uFE0F Already ignored`);
+      return m.reply(`\u2139\uFE0F Already ignoring **${target.username}**`);
     }
     case "unignore": {
       if (!isAdmin(m)) return m.reply("\u274C Only admins can use this");
       const target = m.mentions.users.first();
-      if (!target) return m.reply("\u274C Usage: -unignore @user");
+      if (!target) return m.reply("\u274C Usage: `-unignore @user`");
       if (botData.ignoredUsers.includes(target.id)) {
         botData.ignoredUsers = botData.ignoredUsers.filter((id) => id !== target.id);
         saveData();
-        return m.reply(`\u2705 Unignored ${target.username}`);
+        return m.reply(`\u2705 No longer ignoring **${target.username}**`);
       }
-      return m.reply(`\u2139\uFE0F Not ignored`);
+      return m.reply(`\u2139\uFE0F **${target.username}** is not ignored`);
     }
     case "disable": {
       if (!isAdmin(m)) return m.reply("\u274C Only admins can use this");
@@ -77768,16 +77776,16 @@ Next reward at: ${formatNum(next)}`);
         botData.disabledChannels.push(m.channel.id);
         saveData();
       }
-      return m.reply("\u{1F6AB} Commands disabled here");
+      return m.reply("\u{1F6AB} Commands disabled in this channel");
     }
     case "enable": {
       if (!isAdmin(m)) return m.reply("\u274C Only admins can use this");
       botData.disabledChannels = botData.disabledChannels.filter((ch) => ch !== m.channel.id);
       saveData();
-      return m.reply("\u2705 Commands enabled here");
+      return m.reply("\u2705 Commands enabled in this channel");
     }
     case "bully": {
-      if (!isAdmin(m) || !m.mentions.users.first()) return m.reply("\u274C Usage: -bully @user");
+      if (!isAdmin(m) || !m.mentions.users.first()) return m.reply("\u274C Usage: `-bully @user`");
       const target = m.mentions.users.first();
       for (let i = 0; i < 8; i++) {
         await m.channel.send(`${target} \u{1F44A}`).catch(() => {
@@ -77791,95 +77799,105 @@ Next reward at: ${formatNum(next)}`);
       const opp = m.mentions.users.first();
       const rounds = Math.max(1, Math.min(10, parseInt(argsParts[0]) || 5));
       const sides = Math.max(2, parseInt(argsParts[1]) || 1e3);
-      if (!opp) return m.reply("\u274C Usage: -dw @user [rounds] [sides]");
+      if (!opp) return m.reply("\u274C Usage: `-dw @user [rounds] [sides]`");
       let yourScore = 0, oppScore = 0;
-      await m.reply(`\u{1F3B2} Dice War: ${m.author} vs ${opp} \u2014 ${rounds} rounds`);
+      await m.reply(`\u{1F3B2} Dice War: **${m.author.username} vs ${opp.username}**
+${rounds} rounds \u2022 d${sides}`);
       for (let i = 1; i <= rounds; i++) {
         const y = Math.floor(Math.random() * sides) + 1;
         const o = Math.floor(Math.random() * sides) + 1;
-        const res = y > o ? (yourScore++, "You win round") : o > y ? (oppScore++, `${opp} wins round`) : "Draw";
-        await m.channel.send(`Round ${i}: \u{1F3B2} ${y} vs ${o} \u2014 ${res}`).catch(() => {
+        const res = y > o ? (yourScore++, "\u2705 You win round") : o > y ? (oppScore++, `\u274C ${opp.username} wins round`) : "\u2696\uFE0F Draw";
+        await m.channel.send(`Round ${i}: \u{1F3B2} **${y}** vs \u{1F3B2} **${o}**
+${res}`).catch(() => {
         });
         await delay(900);
       }
-      const final = `\u{1F3C6} Final: You ${yourScore} - ${oppScore} ${opp}
-${yourScore > oppScore ? "\u2705 You win!" : oppScore > yourScore ? `\u274C ${opp} wins!` : "\u2696\uFE0F Draw"}`;
+      const final = `\u{1F3C6} Final Score: **You ${yourScore} - ${oppScore} ${opp.username}**
+${yourScore > oppScore ? "\u2705 You win the match!" : oppScore > yourScore ? `\u274C ${opp.username} wins the match!` : "\u2696\uFE0F Match ends in a draw!"}`;
       return m.channel.send(final);
     }
     case "cw": {
       const opp = m.mentions.users.first(), side = args[1]?.toLowerCase();
-      if (!opp || !["heads", "tails"].includes(side)) return m.reply("\u274C Usage: -cw @user <heads/tails>");
+      if (!opp || !["heads", "tails"].includes(side)) return m.reply("\u274C Usage: `-cw @user <heads/tails>`");
       let u2 = 0, o = 0;
-      await m.reply(`\u{1FA99} Coin War: First to 2 wins`);
+      await m.reply(`\u{1FA99} Coin War: **${m.author.username} vs ${opp.username}**
+First to 2 wins`);
       while (u2 < 2 && o < 2) {
         const flip = Math.random() < 0.5 ? "Heads" : "Tails";
         flip === side ? u2++ : o++;
-        await m.channel.send(`Flip: ${flip} | Score: ${u2} - ${o}`).catch(() => {
+        await m.channel.send(`Flip: **${flip}** | Score: **${u2} - ${o}**`).catch(() => {
         });
         await delay(900);
       }
-      return m.channel.send(u2 === 2 ? `\u{1F3C6} ${m.author} wins!` : `\u{1F3C6} ${opp} wins!`);
+      return m.channel.send(u2 === 2 ? `\u{1F3C6} **${m.author.username}** wins!` : `\u{1F3C6} **${opp.username}** wins!`);
     }
     case "ship": {
-      if (!m.mentions.users.size) return m.reply("\u274C Usage: -ship @user1 @user2");
-      return m.reply(`\u{1F49E} Compatibility: ${Math.floor(Math.random() * 100)}%`);
+      if (!m.mentions.users.size) return m.reply("\u274C Usage: `-ship @user1 @user2`");
+      const user1 = m.mentions.users.at(0);
+      const user2 = m.mentions.users.at(1) || m.author;
+      const percent = Math.floor(Math.random() * 101);
+      const embed = new EmbedBuilder().setColor(percent >= 70 ? "#e91e63" : percent >= 40 ? "#f39c12" : "#3498db").setTitle("\u{1F49E} Compatibility Check").setDescription(`**${user1.username}** & **${user2.username}**
+Match: **${percent}%**`).setTimestamp();
+      return m.reply({ embeds: [embed] });
     }
     case "choose": {
-      if (!args.length) return m.reply("\u274C Usage: -choose <opt1> <opt2>...");
-      return m.reply(`\u{1F3AF} Pick: ${args[Math.floor(Math.random() * args.length)]}`);
+      if (!args.length) return m.reply("\u274C Usage: `-choose <option1> <option2> ...`");
+      return m.reply(`\u{1F3AF} Picked: **${args[Math.floor(Math.random() * args.length)]}**`);
     }
     case "stats": {
       const uptime = Math.floor((Date.now() - botData.stats.started) / 6e4);
-      return m.reply(`\u{1F4CA} Stats
-\u{1F3B2} Rolls: ${botData.stats.rolls}
-\u{1FA99} Flips: ${botData.stats.flips}
-\u23F1\uFE0F Uptime: ${uptime}m`);
+      const embed = new EmbedBuilder().setColor("#9b59b6").setTitle("\u{1F4CA} Bot Statistics").addFields(
+        { name: "\u{1F3B2} Total Rolls", value: botData.stats.rolls.toString(), inline: true },
+        { name: "\u{1FA99} Total Flips", value: botData.stats.flips.toString(), inline: true },
+        { name: "\u23F1\uFE0F Uptime", value: `${uptime} minutes`, inline: true }
+      ).setTimestamp();
+      return m.reply({ embeds: [embed] });
     }
     case "help": {
-      return m.reply(`\u{1F4D6} **COMMANDS**
-
-\u{1F4B0} **REWARDS**
-\`-balance [@user]\` \u2014 Check balance
-\`-earningslb\` \u2014 Top earners
-
-\u{1F3B2} **GAMES**
-\`-d [max]\` \u2014 Roll dice
-\`-cf\` \u2014 Flip coin
-\`-choose <opt1>...\` \u2014 Pick
-\`-ship @user1 @user2\` \u2014 Compatibility
-\`-dw @user [rounds] [sides]\` \u2014 Dice War
-\`-cw @user <heads/tails>\` \u2014 Coin War
-\`-stats\` \u2014 Bot stats
-
-\u{1F451} **ADMIN**
-\`-ignore @user\` \u2014 Block commands
-\`-unignore @user\` \u2014 Allow commands
-\`-disable\` \u2014 Disable here
-\`-enable\` \u2014 Enable here
-\`-bully @user\` \u2014 Spam ping
-`);
+      const embed = new EmbedBuilder().setColor("#3498db").setTitle("\u{1F4D6} Public Commands").setDescription("All commands available to everyone").addFields(
+        {
+          name: "\u{1F4B0} Rewards",
+          value: "`-balance [@user]` \u2022 Check your balance\n`-earningslb` \u2022 View top earners",
+          inline: false
+        },
+        {
+          name: "\u{1F3B2} Games",
+          value: "`-d [max]` \u2022 Roll dice\n`-cf` \u2022 Flip coin\n`-choose <opt...>` \u2022 Pick random\n`-ship @user` \u2022 Compatibility\n`-dw @user [r] [s]` \u2022 Dice War\n`-cw @user <side>` \u2022 Coin War\n`-stats` \u2022 Bot stats",
+          inline: false
+        },
+        {
+          name: "\u{1F451} Admin",
+          value: "`-ignore @user` \u2022 Block commands\n`-unignore @user` \u2022 Unblock\n`-disable` \u2022 Disable here\n`-enable` \u2022 Enable here\n`-bully @user` \u2022 Spam ping",
+          inline: false
+        }
+      ).setFooter({ text: "Use -luckyshelp for full owner commands" }).setTimestamp();
+      return m.reply({ embeds: [embed] });
     }
     case "luckyshelp": {
-      if (!isOwner(m)) return m.reply("\u274C Owner only");
-      return m.reply(`\u{1F4D6} **LUCKY'S FULL LIST**
-
-\u{1F4B0} **REWARDS & DATA**
-\`-rewardtoggle\` \u2014 On/off rewards
-\`-setreward <msgs> <amt>\` \u2014 Set reward rate
-\`-balance [@user]\` \u2014 Check balance
-\`-earningslb\` \u2014 Top earners
-\`-savedata\` \u2014 Save data
-\`-exportdata\` \u2014 Download backup
-
-\u{1F3B2} **GAMES**
-\`-d\` \`-cf\` \`-choose\` \`-ship\` \`-dw\` \`-cw\` \`-stats\`
-
-\u{1F451} **ADMIN**
-\`-ignore\` \`-unignore\` \`-disable\` \`-enable\` \`-bully\`
-
-\u{1F512} **OWNER**
-\`-silence\` \u2014 Mute all commands
-`);
+      if (!isOwner(m)) return m.reply("\u274C This command is for the owner only");
+      const embed = new EmbedBuilder().setColor("#e67e22").setTitle("\u{1F512} Lucky's Full Command List").setDescription("All commands including owner-only").addFields(
+        {
+          name: "\u{1F4B0} Rewards & Data",
+          value: "`-rewardtoggle` \u2022 Enable/disable rewards\n`-setreward <msgs> <amt>` \u2022 Set rate\n`-balance [@user]` \u2022 Check balance\n`-earningslb` \u2022 Leaderboard\n`-savedata` \u2022 Save all data\n`-exportdata` \u2022 Download backup",
+          inline: false
+        },
+        {
+          name: "\u{1F3B2} Games",
+          value: "`-d` `-cf` `-choose` `-ship` `-dw` `-cw` `-stats`",
+          inline: false
+        },
+        {
+          name: "\u{1F451} Admin",
+          value: "`-ignore` `-unignore` `-disable` `-enable` `-bully`",
+          inline: false
+        },
+        {
+          name: "\u{1F512} Owner Only",
+          value: "`-silence` \u2022 Mute/unmute all commands",
+          inline: false
+        }
+      ).setTimestamp();
+      return m.reply({ embeds: [embed] });
     }
   }
 });
