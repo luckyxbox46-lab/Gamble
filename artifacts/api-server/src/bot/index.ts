@@ -304,7 +304,7 @@ client.on('messageCreate', async m => {
       return m.reply('✅ Commands enabled in this channel');
     }
 
-    // ✅ UPDATED BULLY COMMAND: different phrase each time
+    // ✅ UPDATED BULLY COMMAND: 100+ unique lines, random every use
     case 'bully': {
       if (!isAdmin(m)) return m.reply({ content: '❌ Only administrators can use this.', ephemeral: true });
       const target = m.mentions.users.first();
@@ -318,11 +318,106 @@ client.on('messageCreate', async m => {
         "You have something on your chin… no, the third one down 🤨",
         "You’re not stupid, you just have bad luck thinking 🧠❌",
         "If you were any slower, you’d be going backward 🐢",
-        "I thought of you today… it reminded me to take the trash out 🗑️"
+        "I thought of you today… it reminded me to take the trash out 🗑️",
+        "You’re proof that evolution can go in reverse 🦍",
+        "I’d explain it to you but I can’t understand it for you 🤷‍♂️",
+        "You’re like a software update — everyone dreads you 📉",
+        "If you spoke your mind, you’d be speechless 🤐",
+        "You have an entire life to be annoying, why rush it?",
+        "Somewhere out there is a tree working hard to produce oxygen for you… it’s a shame you waste it 🌳💨",
+        "You’re the human equivalent of a participation award 🏅😴",
+        "I’d roast you but my mom told me I’m not allowed to burn trash 🔥🗑️",
+        "Your secrets are always safe with me… I never even listen when you talk 🎧🚫",
+        "You’re not the dumbest person alive, but you better hope they don’t die 🤞",
+        "If you were any more in the dark, you’d be a lightbulb 💡❌",
+        "You’re the reason they lower the standards 📉",
+        "It’s impossible to underestimate you 📏",
+        "You have your entire life to act this way, why not take today off?",
+        "You’re like a cloud — when you disappear, it’s a beautiful day ☁️☀️",
+        "I’ve heard of being in the dark, but you’re in a whole different universe 🌑",
+        "If there was a contest for ignorance, you’d come in first… and last 🥇😵",
+        "You’re not useless, you can always serve as a bad example 📚❌",
+        "I’d call you a tool, but even tools have a purpose 🔧🤷‍♀️",
+        "You’re the reason they put warning labels on everything ⚠️",
+        "Your brain is like a sieve — everything goes in and nothing stays 🧠🚰",
+        "If you were any slower, you’d be going backwards 🐢",
+        "You have a face only a mother could love… and she probably regrets it 😬",
+        "You’re like a broken pencil — pointless ✏️❌",
+        "I’d agree with you but then we’d both be wrong 🤦‍♂️",
+        "You’re the reason they invented the phrase ‘lower your expectations’ 📉",
+        "If you were any more clueless, you’d be a door 🚪🤷‍♂️",
+        "You bring a whole new meaning to the word ‘mediocre’ 📊",
+        "I’d explain it to you but I left my English-to-Dumb dictionary at home 📖❌",
+        "You’re like a smartphone with no signal — completely useless 📶🚫",
+        "If common sense was common, you’d have some 🧠💭",
+        "You’re not just a headache, you’re the whole migraine 🤕",
+        "You have the personality of wet cardboard 📦💧",
+        "You’re like a cloud — when you leave, the sun comes out ☀️",
+        "If you were any more empty, you’d be a vacuum cleaner 🧹",
+        "You’re proof that nature sometimes makes mistakes 🌍❌",
+        "I’d make a joke about you, but the beatings aren’t funny enough 🤡",
+        "You’re the reason they put ‘do not use’ on dangerous items ⚠️",
+        "If you were a movie, you’d be called ‘The Big Mistake’ 🎬❌",
+        "You have the charm of a wet sock 🧦💦",
+        "You’re like a zero — you add nothing and mean nothing 🔢",
+        "If you were any less intelligent, you’d be a rock 🪨",
+        "You’re not just wrong, you’re impressively wrong 🤯",
+        "You bring new meaning to the word ‘failure’ 📉",
+        "I’ve met rocks with more personality 🪨🤷‍♂️",
+        "If you were a song, you’d be just noise 🎵🔇",
+        "You’re like a broken clock — even when you’re right, it’s by accident ⏰❌",
+        "You have the wit of a doorknob 🚪🤡",
+        "If you were any more lost, you’d be in another galaxy 🌌",
+        "You’re the reason people talk about ‘selective breeding’ 🧬❌",
+        "You’re not dumb, you’re just on energy-saving mode 🔋💤",
+        "If you were a plant, you’d be a weed 🌱🚫",
+        "You have the charisma of a damp towel 🧺💧",
+        "You’re like a computer with no operating system — completely useless 💻❌",
+        "If you were any more annoying, you’d be a mosquito 🦟",
+        "You’re the reason they test products before selling them 🧪❌",
+        "You bring joy to everyone… when you leave 🚪😊",
+        "If you were a shape, you’d be a useless blob 🟡🤷‍♀️",
+        "You have the thinking speed of a snail 🐌💭",
+        "You’re like static on a radio — just noise 📻🔊",
+        "If you were a book, you’d be blank pages 📖❌",
+        "You’re not just slow, you’re moving in reverse 🚗↩️",
+        "You have the logic of a toddler 🧸🤦‍♂️",
+        "If you were any more confused, you’d be a maze 🧩",
+        "You’re like a candle with no flame — no light, no purpose 🕯️❌",
+        "You’re the reason they say ‘don’t judge a book by its cover’ — because inside is empty 📕",
+        "If you were a tool, you’d be the one left in the rain 🔧🌧️",
+        "You have the attention span of a goldfish 🐠⏱️",
+        "You’re like a bridge to nowhere — completely pointless 🌉❌",
+        "If you were any more simple, you’d be a square 🟦",
+        "You bring nothing to the conversation but silence 🤐💬",
+        "You’re the reason they put ‘use with caution’ on everything ⚠️",
+        "If you were a number, you’d be zero — worthless 0️⃣",
+        "You have the creativity of a brick 🧱🎨",
+        "You’re like a road with no exit — just going nowhere 🛣️❌",
+        "If you were any more forgetful, you’d forget your own name 🧠🤷‍♂️",
+        "You’re not just boring, you’re a cure for insomnia 😴",
+        "You have the grace of a newborn giraffe 🦒🤸‍♂️",
+        "If you were a season, you’d be winter — cold and lifeless ❄️",
+        "You’re like a phone with no battery — completely dead 📱🔋❌",
+        "You bring a new low to every room you enter 📉",
+        "If you were any more dull, you’d be a pencil eraser ✏️🧽",
+        "You have the courage of a house cat 🐱🙈",
+        "You’re like a mirror that shows nothing — empty 🪞❌",
+        "If you were a meal, you’d be plain bread — no taste, no value 🍞",
+        "You’re the reason they say ‘some people just shouldn’t talk’ 🤐",
+        "You have the coordination of a newborn fawn 🦌🤸‍♀️",
+        "If you were any more quiet, you’d be invisible 👻",
+        "You’re like a map with no directions — useless 🗺️❌",
+        "You bring nothing but confusion and chaos 🤯",
+        "If you were any more ordinary, you’d be invisible 👤"
       ];
 
-      for (let i = 0; i < insults.length; i++) {
-        await m.channel.send(`${target} ${insults[i]}`).catch(() => {});
+      // Shuffle and pick 8 random unique ones each time
+      const shuffled = [...insults].sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, 8);
+
+      for (const line of selected) {
+        await m.channel.send(`${target} ${line}`).catch(() => {});
         await delay(700);
       }
       return;
