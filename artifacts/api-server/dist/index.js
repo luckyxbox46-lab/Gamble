@@ -77587,6 +77587,11 @@ var userCd = /* @__PURE__ */ new Map();
 var lastMsg = /* @__PURE__ */ new Map();
 var msgCd = /* @__PURE__ */ new Map();
 var delay = /* @__PURE__ */ __name((ms) => new Promise((r) => setTimeout(r, ms)), "delay");
+var formatNum = /* @__PURE__ */ __name((n) => {
+  if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, "") + "m";
+  if (n >= 1e3) return (n / 1e3).toFixed(1).replace(/\.0$/, "") + "k";
+  return n.toString();
+}, "formatNum");
 var DATA_FILE = path.join(__dirname, "..", "..", "persistentData.json");
 var defaultData = {
   stats: { rolls: 0, flips: 0, started: Date.now() },
@@ -77710,19 +77715,21 @@ client.on("messageCreate", async (m) => {
       const next = (Math.floor(data.count / REWARD_THRESH) + 1) * REWARD_THRESH;
       return m.reply(
         `\u{1F4B0} **${target.username}**
-Messages Sent: ${data.count}
+Messages Sent: ${formatNum(data.count)}
 Earned: $${data.earned.toFixed(2)}
-Next reward at: ${next} messages`
+Next reward at: ${formatNum(next)} messages`
       );
     }
     case "earningslb": {
       if (botData.rewardsEnabled[g] !== true) return m.reply("\u274C Rewards are disabled \u2014 use -rewardtoggle to enable");
-      const sorted = Object.entries(botData.balances).sort((x, y) => y[1].earned - x[1].earned).slice(0, 10);
-      if (!sorted.length) return m.reply("\u{1F4CA} No earnings yet");
+      const sorted = Object.entries(botData.balances).sort(([, a], [, b]) => b.earned - a.earned).slice(0, 10);
+      if (!sorted.length) return m.reply("\u{1F4CA} No earnings recorded yet");
       let list = "\u{1F3C6} **Top Earners**\n";
       for (let i = 0; i < sorted.length; i++) {
-        const u = await client.users.fetch(sorted[i][0]).catch(() => null);
-        list += `${i + 1}. ${u?.username || "Unknown"} \u2014 $${sorted[i][1].earned.toFixed(2)}
+        const [userId, data] = sorted[i];
+        const user = await client.users.fetch(userId).catch(() => null);
+        const username = user?.username || "Unknown";
+        list += `${i + 1}. ${username} | ${formatNum(data.count)} msgs | $${data.earned.toFixed(2)}
 `;
       }
       return m.reply(list);

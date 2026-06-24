@@ -14,7 +14,9 @@ const client = new Client({
   ]
 });
 
-// Settings
+// --------------------------
+// SETTINGS
+// --------------------------
 const PREFIX = '-';
 const OWNER = '.luckyyy_';
 const CD = 20000;
@@ -23,7 +25,16 @@ let REWARD_AMT = 2;
 const userCd = new Map(), lastMsg = new Map(), msgCd = new Map();
 const delay = ms => new Promise(r => setTimeout(r, ms));
 
-// Persistent data — NEVER RESETS
+// Format numbers: 1234 → 1.2k, 1234567 → 1.2m
+const formatNum = (n) => {
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'm';
+  if (n >= 1_000) return (n / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
+  return n.toString();
+};
+
+// --------------------------
+// PERSISTENT DATA — NO RESET
+// --------------------------
 const DATA_FILE = path.join(__dirname, '..', '..', 'persistentData.json');
 const defaultData = {
   stats: { rolls: 0, flips: 0, started: Date.now() },
@@ -34,12 +45,10 @@ const defaultData = {
   rewardCfg: { t: 10000, a: 2 }
 };
 
-// Load safely — MERGE only, never overwrite existing values
 let botData;
 if (fs.existsSync(DATA_FILE)) {
   try {
     const saved = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-    // Preserve existing rewardsEnabled, balances, etc.
     botData = {
       ...defaultData,
       ...saved,
@@ -64,18 +73,23 @@ const save = () => {
   fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), 'utf8');
 };
 
-// Permissions
+// --------------------------
+// PERMISSIONS
+// --------------------------
 const isOwner = m => m?.author?.username === OWNER;
 const isAdmin = m => isOwner(m) || !!m?.member?.permissions?.has(PermissionsBitField.Flags.Administrator);
 
 client.once('clientReady', () => console.log(`✅ Bot online: ${client.user.tag}`));
 
+// --------------------------
+// MESSAGE HANDLER
+// --------------------------
 client.on('messageCreate', async (m) => {
   if (!m || m.author.bot || !m.guild) return;
   const g = m.guild.id;
   const c = m.channel.id;
 
-  // 🟢 REWARDS RUN FIRST — ALWAYS, NO RESET
+  // REWARDS RUN FIRST — ALWAYS
   if (botData.rewardsEnabled[g] === true) {
     const u = m.author.id;
     const now = Date.now();
@@ -92,10 +106,10 @@ client.on('messageCreate', async (m) => {
     }
   }
 
-  // 🟡 Only process commands if message starts with prefix
+  // ONLY PROCESS COMMANDS IF STARTS WITH PREFIX
   if (!m.content.startsWith(PREFIX)) return;
 
-  // Owner bypass all blocks
+  // OWNER BYPASS ALL RESTRICTIONS
   if (!isOwner(m)) {
     if (botData.silenceMode[g]) return;
     if (botData.disabledChannels.includes(c)) return;
@@ -105,7 +119,7 @@ client.on('messageCreate', async (m) => {
   const cmd = parts[0]?.toLowerCase() || '';
   const args = parts.slice(1);
 
-  // Cooldown
+  // COOLDOWN
   if (!['d','cf','choose'].includes(cmd) && !isOwner(m)) {
     const lastUsed = userCd.get(m.author.id) || 0;
     if (Date.now() - lastUsed < CD) {
@@ -114,6 +128,9 @@ client.on('messageCreate', async (m) => {
     userCd.set(m.author.id, Date.now());
   }
 
+  // --------------------------
+  // COMMANDS
+  // --------------------------
   switch (cmd) {
     case 'd': {
       const max = parseInt(args[0]) || 100;
@@ -158,19 +175,24 @@ client.on('messageCreate', async (m) => {
       const next = (Math.floor(data.count / REWARD_THRESH) + 1) * REWARD_THRESH;
       return m.reply(
 `💰 **${target.username}**
-Messages Sent: ${data.count}
+Messages Sent: ${formatNum(data.count)}
 Earned: $${data.earned.toFixed(2)}
-Next reward at: ${next} messages`
+Next reward at: ${formatNum(next)} messages`
       );
     }
     case 'earningslb': {
       if (botData.rewardsEnabled[g] !== true) return m.reply('❌ Rewards are disabled — use -rewardtoggle to enable');
-      const sorted = Object.entries(botData.balances).sort((x,y) => y[1].earned - x[1].earned).slice(0,10);
-      if (!sorted.length) return m.reply('📊 No earnings yet');
+      const sorted = Object.entries(botData.balances)
+        .sort(([,a], [,b]) => b.earned - a.earned)
+        .slice(0, 10);
+      if (!sorted.length) return m.reply('📊 No earnings recorded yet');
+
       let list = '🏆 **Top Earners**\n';
-      for (let i=0; i<sorted.length; i++) {
-        const u = await client.users.fetch(sorted[i][0]).catch(() => null);
-        list += `${i+1}. ${u?.username || 'Unknown'} — $${sorted[i][1].earned.toFixed(2)}\n`;
+      for (let i = 0; i < sorted.length; i++) {
+        const [userId, data] = sorted[i];
+        const user = await client.users.fetch(userId).catch(() => null);
+        const username = user?.username || 'Unknown';
+        list += `${i+1}. ${username} | ${formatNum(data.count)} msgs | $${data.earned.toFixed(2)}\n`;
       }
       return m.reply(list);
     }
