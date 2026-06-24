@@ -42,7 +42,6 @@ const DATA_FILE = path.join(DATA_DIR, 'bot-data.json');
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
-// Default: rewards enabled automatically
 const defaultData = {
   stats: { rolls: 0, flips: 0, started: Date.now() },
   disabledChannels: [],
@@ -55,7 +54,6 @@ const defaultData = {
 
 let botData;
 
-// Load existing data safely
 if (fs.existsSync(DATA_FILE)) {
   try {
     const saved = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -102,13 +100,11 @@ client.on('messageCreate', async m => {
   const g = m.guild.id;
   const u = m.author.id;
 
-  // Auto-enable rewards if not set
   if (botData.rewardsEnabled[g] === undefined) {
     botData.rewardsEnabled[g] = true;
     saveData();
   }
 
-  // Reward system
   if (botData.rewardsEnabled[g] === true) {
     const now = Date.now();
     if (now - (msgCd.get(u) || 0) > 2000 && m.content.trim() !== (lastMsg.get(u) || '')) {
@@ -208,36 +204,30 @@ client.on('messageCreate', async m => {
       return m.reply({ content: '✅ Data saved — will **never reset** on deploy!', ephemeral: true });
     }
     case 'exportdata': {
-      // ✅ PRIVATE ONLY: Sent to your DMs
+      // ✅ FIXED: Sent HIDDEN only to you in channel, no DMs needed
       if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this command', ephemeral: true });
       try {
-        await m.user.send({
-          content: '📤 **PRIVATE BACKUP** — Keep this safe, do not share:',
-          files: [{ attachment: DATA_FILE, name: `bot-backup-${Date.now()}.json` }]
+        const fileContent = fs.readFileSync(DATA_FILE, 'utf8');
+        return m.reply({
+          content: `📤 **PRIVATE BACKUP** (only you can see this):\n\`\`\`json\n${fileContent}\n\`\`\`\nCopy all of this to save or restore later.`,
+          ephemeral: true
         });
-        return m.reply({ content: '✅ Backup sent to your DMs only!', ephemeral: true });
-      } catch {
-        return m.reply({ content: '❌ Could not send DM — enable DMs from server members', ephemeral: true });
+      } catch (err) {
+        return m.reply({ content: `❌ Failed to read data file: ${err.message}`, ephemeral: true });
       }
     }
     case 'importdata': {
-      // ✅ WORKING IMPORT: Paste JSON directly
+      // ✅ Working import
       if (!isOwner(m)) return m.reply({ content: '❌ Only owner can use this command', ephemeral: true });
       const jsonInput = args.join(' ');
       if (!jsonInput) {
         return m.reply({
-          content: `📥 **How to restore:**
-1. Open your backup .json file
-2. Copy ALL its contents
-3. Paste it like this:
-\`-importdata { "balances": { ... } }\`
-⚠️ Do this in a private channel/DM if you want it hidden`,
+          content: `📥 **How to restore:**\n1. Copy your full backup JSON\n2. Paste it here: \`-importdata YOUR_JSON_HERE\`\n⚠️ Only you see this.`,
           ephemeral: true
         });
       }
       try {
         const imported = JSON.parse(jsonInput);
-        // Merge imported data safely
         botData = {
           ...defaultData,
           ...botData,
@@ -249,9 +239,9 @@ client.on('messageCreate', async m => {
         saveData();
         REWARD_THRESH = botData.rewardCfg.t || 10000;
         REWARD_AMT = botData.rewardCfg.a || 2;
-        return m.reply({ content: '✅ Data imported successfully! All balances restored.', ephemeral: true });
+        return m.reply({ content: '✅ Data imported successfully! Balances restored.', ephemeral: true });
       } catch (err) {
-        return m.reply({ content: `❌ Invalid JSON format. Check your copied data.`, ephemeral: true });
+        return m.reply({ content: `❌ Invalid JSON: ${err.message}`, ephemeral: true });
       }
     }
     case 'silence': {
@@ -363,8 +353,6 @@ client.on('messageCreate', async m => {
         .setTimestamp();
       return m.reply({ embeds: [embed] });
     }
-
-    // ✅ PUBLIC HELP - EMBED
     case 'help': {
       const embed = new EmbedBuilder()
         .setColor('#3498db')
@@ -391,8 +379,6 @@ client.on('messageCreate', async m => {
         .setTimestamp();
       return m.reply({ embeds: [embed] });
     }
-
-    // ✅ OWNER ONLY HELP - EMBED
     case 'luckyshelp': {
       if (!isOwner(m)) return m.reply({ content: '❌ This command is for the owner only', ephemeral: true });
       const embed = new EmbedBuilder()

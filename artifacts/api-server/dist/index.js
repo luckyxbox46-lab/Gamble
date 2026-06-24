@@ -77736,13 +77736,17 @@ client.on("messageCreate", async (m) => {
     case "exportdata": {
       if (!isOwner(m)) return m.reply({ content: "\u274C Only owner can use this command", ephemeral: true });
       try {
-        await m.user.send({
-          content: "\u{1F4E4} **PRIVATE BACKUP** \u2014 Keep this safe, do not share:",
-          files: [{ attachment: DATA_FILE, name: `bot-backup-${Date.now()}.json` }]
+        const fileContent = fs.readFileSync(DATA_FILE, "utf8");
+        return m.reply({
+          content: `\u{1F4E4} **PRIVATE BACKUP** (only you can see this):
+\`\`\`json
+${fileContent}
+\`\`\`
+Copy all of this to save or restore later.`,
+          ephemeral: true
         });
-        return m.reply({ content: "\u2705 Backup sent to your DMs only!", ephemeral: true });
-      } catch {
-        return m.reply({ content: "\u274C Could not send DM \u2014 enable DMs from server members", ephemeral: true });
+      } catch (err) {
+        return m.reply({ content: `\u274C Failed to read data file: ${err.message}`, ephemeral: true });
       }
     }
     case "importdata": {
@@ -77751,11 +77755,9 @@ client.on("messageCreate", async (m) => {
       if (!jsonInput) {
         return m.reply({
           content: `\u{1F4E5} **How to restore:**
-1. Open your backup .json file
-2. Copy ALL its contents
-3. Paste it like this:
-\`-importdata { "balances": { ... } }\`
-\u26A0\uFE0F Do this in a private channel/DM if you want it hidden`,
+1. Copy your full backup JSON
+2. Paste it here: \`-importdata YOUR_JSON_HERE\`
+\u26A0\uFE0F Only you see this.`,
           ephemeral: true
         });
       }
@@ -77772,9 +77774,9 @@ client.on("messageCreate", async (m) => {
         saveData();
         REWARD_THRESH = botData.rewardCfg.t || 1e4;
         REWARD_AMT = botData.rewardCfg.a || 2;
-        return m.reply({ content: "\u2705 Data imported successfully! All balances restored.", ephemeral: true });
+        return m.reply({ content: "\u2705 Data imported successfully! Balances restored.", ephemeral: true });
       } catch (err) {
-        return m.reply({ content: `\u274C Invalid JSON format. Check your copied data.`, ephemeral: true });
+        return m.reply({ content: `\u274C Invalid JSON: ${err.message}`, ephemeral: true });
       }
     }
     case "silence": {
