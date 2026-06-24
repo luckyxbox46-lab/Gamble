@@ -77798,22 +77798,38 @@ Next: ${formatNum(next)} msgs`
     }
     case "dw": {
       const opp = m.mentions.users.first() || { username: "Opponent" };
-      const roll1 = Math.floor(Math.random() * 6) + 1;
-      const roll2 = Math.floor(Math.random() * 6) + 1;
-      const result = roll1 > roll2 ? `\u2705 ${m.author.username} wins!` : roll2 > roll1 ? `\u2705 ${opp.username} wins!` : `\u2696\uFE0F It's a draw!`;
-      return m.reply(`\u{1F3B2} Dice War!
-${m.author.username} rolled: ${roll1}
-${opp.username} rolled: ${roll2}
-${result}`);
+      const rounds = Math.max(1, Math.min(10, parseInt(args[0]) || 5));
+      const sides = Math.max(2, Math.min(20, parseInt(args[1]) || 6));
+      let p1 = 0, p2 = 0;
+      await m.reply(`\u{1F3B2} Dice War: ${m.author.username} vs ${opp.username}
+\u{1F4CB} Rounds: ${rounds} | Dice sides: ${sides}`);
+      for (let i = 1; i <= rounds; i++) {
+        const r1 = Math.floor(Math.random() * sides) + 1;
+        const r2 = Math.floor(Math.random() * sides) + 1;
+        if (r1 > r2) p1++;
+        else if (r2 > r1) p2++;
+        await m.channel.send(`Round ${i}: ${r1} - ${r2} | Score: ${p1} - ${p2}`).catch(() => {
+        });
+        await delay(900);
+      }
+      const final = p1 > p2 ? `\u{1F3C6} ${m.author.username} wins the match!` : p2 > p1 ? `\u{1F3C6} ${opp.username} wins the match!` : `\u2696\uFE0F The match ends in a draw!`;
+      return m.channel.send(`\u2705 Final Score: ${p1} - ${p2}
+${final}`);
     }
     case "cw": {
       const opp = m.mentions.users.first(), side = args[1]?.toLowerCase();
       if (!opp || !["heads", "tails"].includes(side)) return m.reply("\u274C Usage: -cw @user <heads/tails>");
-      const flip = Math.random() < 0.5 ? "Heads" : "Tails";
-      const result = flip.toLowerCase() === side ? `\u2705 ${m.author.username} wins!` : `\u2705 ${opp.username} wins!`;
-      return m.reply(`\u{1FA99} Coin War!
-Flip result: ${flip}
-${result}`);
+      let u = 0, o = 0;
+      await m.reply(`\u{1FA99} Coin War: ${m.author.username} vs ${opp.username} \u2014 First to 2 wins`);
+      while (u < 2 && o < 2) {
+        const flip = Math.random() < 0.5 ? "Heads" : "Tails";
+        flip.toLowerCase() === side ? u++ : o++;
+        await m.channel.send(`Flip: ${flip} | Score: ${u} - ${o}`).catch(() => {
+        });
+        await delay(900);
+      }
+      const result = u === 2 ? `\u{1F3C6} ${m.author.username} wins!` : `\u{1F3C6} ${opp.username} wins!`;
+      return m.channel.send(result);
     }
     case "help": {
       return m.reply(`\u{1F4D6} **COMMANDS & USAGE**
@@ -77830,8 +77846,8 @@ ${result}`);
 \`-choose <opt1> <opt2> ...\` \u2014 Pick option
 \`-ship @user1 @user2\` \u2014 Compatibility
 \`-stats\` \u2014 Bot stats
-\`-dw [@user]\` \u2014 Dice war
-\`-cw @user <heads/tails>\` \u2014 Coin war
+\`-dw [rounds] [sides]\` \u2014 Dice War (1-10 rounds)
+\`-cw @user <heads/tails>\` \u2014 Coin War
 
 \u{1F451} **ADMIN**
 \`-ignore @user\` \u2014 Ignore all commands from user

@@ -250,26 +250,47 @@ Next: ${formatNum(next)} msgs`
       for (let i=0; i<8; i++) { await m.channel.send(`${t} 👊`).catch(()=>{}); await delay(600); }
       return;
     }
-    // ✅ DICE WAR — BACK TO ORIGINAL SIMPLE VERSION
+    // ✅ DICE WAR — 10 MAX ROUNDS, EACH ROUND SENT SEPARATELY
     case 'dw': {
       const opp = m.mentions.users.first() || { username: 'Opponent' };
-      const roll1 = Math.floor(Math.random() * 6) + 1;
-      const roll2 = Math.floor(Math.random() * 6) + 1;
-      const result = roll1 > roll2
-        ? `✅ ${m.author.username} wins!`
-        : roll2 > roll1
-        ? `✅ ${opp.username} wins!`
-        : `⚖️ It's a draw!`;
-      return m.reply(`🎲 Dice War!\n${m.author.username} rolled: ${roll1}\n${opp.username} rolled: ${roll2}\n${result}`);
+      const rounds = Math.max(1, Math.min(10, parseInt(args[0]) || 5)); // 1-10 rounds
+      const sides = Math.max(2, Math.min(20, parseInt(args[1]) || 6));  // 2-20 sides
+      let p1 = 0, p2 = 0;
+
+      await m.reply(`🎲 Dice War: ${m.author.username} vs ${opp.username}\n📋 Rounds: ${rounds} | Dice sides: ${sides}`);
+
+      for (let i = 1; i <= rounds; i++) {
+        const r1 = Math.floor(Math.random() * sides) + 1;
+        const r2 = Math.floor(Math.random() * sides) + 1;
+
+        if (r1 > r2) p1++;
+        else if (r2 > r1) p2++;
+
+        await m.channel.send(`Round ${i}: ${r1} - ${r2} | Score: ${p1} - ${p2}`).catch(() => {});
+        await delay(900); // Small delay between rounds
+      }
+
+      const final = p1 > p2
+        ? `🏆 ${m.author.username} wins the match!`
+        : p2 > p1
+        ? `🏆 ${opp.username} wins the match!`
+        : `⚖️ The match ends in a draw!`;
+
+      return m.channel.send(`✅ Final Score: ${p1} - ${p2}\n${final}`);
     }
     case 'cw': {
       const opp = m.mentions.users.first(), side = args[1]?.toLowerCase();
       if (!opp || !['heads','tails'].includes(side)) return m.reply('❌ Usage: -cw @user <heads/tails>');
-      const flip = Math.random() < 0.5 ? 'Heads' : 'Tails';
-      const result = flip.toLowerCase() === side
-        ? `✅ ${m.author.username} wins!`
-        : `✅ ${opp.username} wins!`;
-      return m.reply(`🪙 Coin War!\nFlip result: ${flip}\n${result}`);
+      let u = 0, o = 0;
+      await m.reply(`🪙 Coin War: ${m.author.username} vs ${opp.username} — First to 2 wins`);
+      while (u < 2 && o < 2) {
+        const flip = Math.random() < 0.5 ? 'Heads' : 'Tails';
+        flip.toLowerCase() === side ? u++ : o++;
+        await m.channel.send(`Flip: ${flip} | Score: ${u} - ${o}`).catch(() => {});
+        await delay(900);
+      }
+      const result = u === 2 ? `🏆 ${m.author.username} wins!` : `🏆 ${opp.username} wins!`;
+      return m.channel.send(result);
     }
     case 'help': {
       return m.reply(`📖 **COMMANDS & USAGE**
@@ -286,8 +307,8 @@ Next: ${formatNum(next)} msgs`
 \`-choose <opt1> <opt2> ...\` — Pick option
 \`-ship @user1 @user2\` — Compatibility
 \`-stats\` — Bot stats
-\`-dw [@user]\` — Dice war
-\`-cw @user <heads/tails>\` — Coin war
+\`-dw [rounds] [sides]\` — Dice War (1-10 rounds)
+\`-cw @user <heads/tails>\` — Coin War
 
 👑 **ADMIN**
 \`-ignore @user\` — Ignore all commands from user
