@@ -82,7 +82,8 @@ const isOwner = m => m.author.username === OWNER;
 const isAdmin = m => isOwner(m) || m.member?.permissions?.has(PermissionsBitField.Flags.Administrator);
 const isIgnored = id => botData.ignoredUsers.includes(id);
 
-client.once('ready', () => console.log(`✅ Bot online: ${client.user.tag}`));
+// ✅ Fixed deprecation warning
+client.once('clientReady', () => console.log(`✅ Bot online: ${client.user.tag}`));
 
 // --------------------------
 // MESSAGE HANDLER
@@ -186,6 +187,13 @@ client.on('messageCreate', async m => {
       }
       return;
     }
+    case 'silence': {
+      if (!isOwner(m)) return m.reply('❌ Only owner can use this');
+      botData.silenceMode[g] = !botData.silenceMode[g];
+      saveData();
+      return m.reply(botData.silenceMode[g] ? '🔇 Commands disabled here — rewards still work' : '🔊 Commands enabled');
+    }
+    // 👑 ADMIN COMMANDS
     case 'ignore': {
       if (!isAdmin(m)) return m.reply('❌ Only admins can use this');
       const target = m.mentions.users.first();
@@ -208,12 +216,6 @@ client.on('messageCreate', async m => {
         return m.reply(`✅ No longer ignoring ${target.username}`);
       }
       return m.reply(`ℹ️ ${target.username} is not ignored`);
-    }
-    case 'silence': {
-      if (!isOwner(m)) return m.reply('❌ Only owner can use this');
-      botData.silenceMode[g] = !botData.silenceMode[g];
-      saveData();
-      return m.reply(botData.silenceMode[g] ? '🔇 Commands disabled here — rewards still work' : '🔊 Commands enabled');
     }
     case 'disable': {
       if (!isAdmin(m)) return m.reply('❌ Only admins can use this');
@@ -238,7 +240,7 @@ client.on('messageCreate', async m => {
       }
       return;
     }
-    // ✅ DICE WAR — EXACT STYLE, SEPARATE ROUNDS
+    // ✅ GAMES
     case 'dw': {
       const argsParts = args.filter(a => !a.startsWith('<@'));
       const opp = m.mentions.users.first();
@@ -297,34 +299,62 @@ client.on('messageCreate', async m => {
       const uptime = Math.floor((Date.now() - botData.stats.started) / 60000);
       return m.reply(`📊 Bot Stats\n🎲 Total Rolls: ${botData.stats.rolls}\n🪙 Total Flips: ${botData.stats.flips}\n⏱️ Uptime: ${uptime} minutes`);
     }
+    // ✅ Normal Help: Public + Admin commands ONLY
     case 'help': {
       return m.reply(`📖 **COMMANDS**
 
-💰 **REWARDS & DATA**
-\`-rewardtoggle\` — Enable/disable rewards (Owner only)
-\`-setreward <msgs> <amount>\` — Set reward rate (Owner only)
+💰 **REWARDS**
 \`-balance [@user]\` — Check your balance
 \`-earningslb\` — View top earners
-\`-savedata\` — Save all data (**Owner only**)
-\`-exportdata\` — Download backup (**Owner only**)
 
 🎲 **GAMES**
 \`-d [max]\` — Roll dice
 \`-cf\` — Flip coin
 \`-choose <opt1> <opt2>...\` — Pick random option
 \`-ship @user1 @user2\` — Get compatibility %
-\`-dw @user [rounds] [sides]\` — Dice War (1-10 rounds)
+\`-dw @user [rounds] [sides]\` — Dice War
 \`-cw @user <heads/tails>\` — Coin War
+\`-stats\` — View bot stats
 
 👑 **ADMIN**
-\`-ignore @user\` — Block commands from user
+\`-ignore @user\` — Block commands from a user
 \`-unignore @user\` — Allow commands again
-\`-disable\` — Disable commands here
-\`-enable\` — Enable commands here
-\`-bully @user\` — Spam ping
+\`-disable\` — Disable commands in this channel
+\`-enable\` — Enable commands in this channel
+\`-bully @user\` — Send spam messages to a user
+`);
+    }
+    // ✅ LuckysHelp: ONLY YOU, shows everything
+    case 'luckyshelp': {
+      if (!isOwner(m)) return m.reply('❌ This command is for the owner only');
+      return m.reply(`📖 **LUCKY'S FULL COMMAND LIST**
+
+💰 **REWARDS & DATA**
+\`-rewardtoggle\` — Enable/disable rewards
+\`-setreward <msgs> <amount>\` — Set reward amount per messages
+\`-balance [@user]\` — Check balance
+\`-earningslb\` — View top earners
+\`-savedata\` — Manually save all data
+\`-exportdata\` — Download full backup file
+
+🎲 **GAMES**
+\`-d [max]\` — Roll dice
+\`-cf\` — Flip coin
+\`-choose <opt1> <opt2>...\` — Pick random option
+\`-ship @user1 @user2\` — Get compatibility %
+\`-dw @user [rounds] [sides]\` — Dice War
+\`-cw @user <heads/tails>\` — Coin War
+\`-stats\` — View bot stats
+
+👑 **ADMIN**
+\`-ignore @user\` — Block commands from a user
+\`-unignore @user\` — Allow commands again
+\`-disable\` — Disable commands in this channel
+\`-enable\` — Enable commands in this channel
+\`-bully @user\` — Send spam messages to a user
 
 🔒 **OWNER ONLY**
-\`-silence\` — Mute/unmute all commands
+\`-silence\` — Mute/unmute all commands globally
 `);
     }
   }

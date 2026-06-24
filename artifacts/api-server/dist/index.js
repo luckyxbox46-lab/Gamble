@@ -77631,7 +77631,7 @@ var saveData = /* @__PURE__ */ __name(() => {
 var isOwner = /* @__PURE__ */ __name((m) => m.author.username === OWNER, "isOwner");
 var isAdmin = /* @__PURE__ */ __name((m) => isOwner(m) || m.member?.permissions?.has(PermissionsBitField2.Flags.Administrator), "isAdmin");
 var isIgnored = /* @__PURE__ */ __name((id) => botData.ignoredUsers.includes(id), "isIgnored");
-client.once("ready", () => console.log(`\u2705 Bot online: ${client.user.tag}`));
+client.once("clientReady", () => console.log(`\u2705 Bot online: ${client.user.tag}`));
 client.on("messageCreate", async (m) => {
   if (!m.guild || m.author.bot) return;
   const g = m.guild.id;
@@ -77730,6 +77730,12 @@ Next reward at: ${formatNum(next)}`);
       }
       return;
     }
+    case "silence": {
+      if (!isOwner(m)) return m.reply("\u274C Only owner can use this");
+      botData.silenceMode[g] = !botData.silenceMode[g];
+      saveData();
+      return m.reply(botData.silenceMode[g] ? "\u{1F507} Commands disabled here \u2014 rewards still work" : "\u{1F50A} Commands enabled");
+    }
     case "ignore": {
       if (!isAdmin(m)) return m.reply("\u274C Only admins can use this");
       const target = m.mentions.users.first();
@@ -77752,12 +77758,6 @@ Next reward at: ${formatNum(next)}`);
         return m.reply(`\u2705 No longer ignoring ${target.username}`);
       }
       return m.reply(`\u2139\uFE0F ${target.username} is not ignored`);
-    }
-    case "silence": {
-      if (!isOwner(m)) return m.reply("\u274C Only owner can use this");
-      botData.silenceMode[g] = !botData.silenceMode[g];
-      saveData();
-      return m.reply(botData.silenceMode[g] ? "\u{1F507} Commands disabled here \u2014 rewards still work" : "\u{1F50A} Commands enabled");
     }
     case "disable": {
       if (!isAdmin(m)) return m.reply("\u274C Only admins can use this");
@@ -77846,31 +77846,57 @@ ${rounds} rounds \u2014 rolling d${sides}`);
     case "help": {
       return m.reply(`\u{1F4D6} **COMMANDS**
 
-\u{1F4B0} **REWARDS & DATA**
-\`-rewardtoggle\` \u2014 Enable/disable rewards (Owner only)
-\`-setreward <msgs> <amount>\` \u2014 Set reward rate (Owner only)
+\u{1F4B0} **REWARDS**
 \`-balance [@user]\` \u2014 Check your balance
 \`-earningslb\` \u2014 View top earners
-\`-savedata\` \u2014 Save all data (**Owner only**)
-\`-exportdata\` \u2014 Download backup (**Owner only**)
 
 \u{1F3B2} **GAMES**
 \`-d [max]\` \u2014 Roll dice
 \`-cf\` \u2014 Flip coin
 \`-choose <opt1> <opt2>...\` \u2014 Pick random option
 \`-ship @user1 @user2\` \u2014 Get compatibility %
-\`-dw @user [rounds] [sides]\` \u2014 Dice War (1-10 rounds)
+\`-dw @user [rounds] [sides]\` \u2014 Dice War
 \`-cw @user <heads/tails>\` \u2014 Coin War
+\`-stats\` \u2014 View bot stats
 
 \u{1F451} **ADMIN**
-\`-ignore @user\` \u2014 Block commands from user
+\`-ignore @user\` \u2014 Block commands from a user
 \`-unignore @user\` \u2014 Allow commands again
-\`-disable\` \u2014 Disable commands here
-\`-enable\` \u2014 Enable commands here
-\`-bully @user\` \u2014 Spam ping
+\`-disable\` \u2014 Disable commands in this channel
+\`-enable\` \u2014 Enable commands in this channel
+\`-bully @user\` \u2014 Send spam messages to a user
+`);
+    }
+    case "luckyshelp": {
+      if (!isOwner(m)) return m.reply("\u274C This command is for the owner only");
+      return m.reply(`\u{1F4D6} **LUCKY'S FULL COMMAND LIST**
+
+\u{1F4B0} **REWARDS & DATA**
+\`-rewardtoggle\` \u2014 Enable/disable rewards
+\`-setreward <msgs> <amount>\` \u2014 Set reward amount per messages
+\`-balance [@user]\` \u2014 Check balance
+\`-earningslb\` \u2014 View top earners
+\`-savedata\` \u2014 Manually save all data
+\`-exportdata\` \u2014 Download full backup file
+
+\u{1F3B2} **GAMES**
+\`-d [max]\` \u2014 Roll dice
+\`-cf\` \u2014 Flip coin
+\`-choose <opt1> <opt2>...\` \u2014 Pick random option
+\`-ship @user1 @user2\` \u2014 Get compatibility %
+\`-dw @user [rounds] [sides]\` \u2014 Dice War
+\`-cw @user <heads/tails>\` \u2014 Coin War
+\`-stats\` \u2014 View bot stats
+
+\u{1F451} **ADMIN**
+\`-ignore @user\` \u2014 Block commands from a user
+\`-unignore @user\` \u2014 Allow commands again
+\`-disable\` \u2014 Disable commands in this channel
+\`-enable\` \u2014 Enable commands in this channel
+\`-bully @user\` \u2014 Send spam messages to a user
 
 \u{1F512} **OWNER ONLY**
-\`-silence\` \u2014 Mute/unmute all commands
+\`-silence\` \u2014 Mute/unmute all commands globally
 `);
     }
   }
