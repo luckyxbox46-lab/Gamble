@@ -1,0 +1,13 @@
+{
+  "disabledChannels": [],
+  "silenceMode": {},
+  "rewardsEnabled": {
+    "1076908476204318750": true
+  },
+  "blockedUsers": [],
+  "balances": {},
+  "rewardCfg": {
+    "t": 10000,
+    "a": 2
+  }
+}

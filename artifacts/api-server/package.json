@@ -1,18 +1,12 @@
 {
   "name": "api-server",
-  "version": "0.0.0",
-  "type": "commonjs",
-  "scripts": {
-    "build": "node ./build.mjs",
-    "start": "node dist/index.js"
-  },
+  "version": "1.0.0",
+  "description": "Discord Bot",
+  "main": "src/bot/index.ts",
   "dependencies": {
-    "discord.js": "^14.14.1"
-  },
-  "devDependencies": {
-    "esbuild": "^0.21.5"
+    "discord.js": "^14.16.3"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=16.9.0"
   }
 }
