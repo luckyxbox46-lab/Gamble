@@ -26,7 +26,7 @@ const client = new Client({
 // --------------------------
 const PREFIX = '-';
 const OWNER_USERNAME = '.luckyyy_';
-const CD = 15000; // ✅ CHANGED: 15 seconds cooldown
+const CD = 15000;
 const MIN_MESSAGE_LENGTH = 3;
 const MIN_TIME_BETWEEN = 2000;
 let REWARD_THRESH = 10000;
@@ -115,7 +115,7 @@ function isSpam(content) {
   return false;
 }
 
-client.once('clientReady', () => console.log(`✅ Bot online: ${client.user.tag}`));
+client.once('ready', () => console.log(`✅ Bot online: ${client.user.tag}`));
 
 // --------------------------
 // MESSAGE HANDLER
@@ -131,7 +131,6 @@ client.on('messageCreate', async m => {
     saveData();
   }
 
-  // Count messages & rewards for EVERYONE, even blocked users
   if (botData.rewardsEnabled[g] === true) {
     const now = Date.now();
     if (
@@ -152,7 +151,6 @@ client.on('messageCreate', async m => {
     }
   }
 
-  // Block commands only
   if (content.startsWith(PREFIX)) {
     if (isCommandBlocked(u)) {
       return m.reply({ content: '🚫 You are blocked from using bot commands.', ephemeral: true }).catch(() => {});
@@ -173,7 +171,7 @@ client.on('messageCreate', async m => {
   }
 
   // --------------------------
-  // COMMANDS
+  // ALL COMMANDS
   // --------------------------
   switch (cmd) {
     case 'd': {
@@ -265,7 +263,6 @@ client.on('messageCreate', async m => {
       }
     }
 
-    // ✅ FIXED IMPORT: REPLACES BALANCES COMPLETELY
     case 'importdata': {
       if (!isOwner(m)) return m.reply({ content: '❌ Only the bot owner can use this.', ephemeral: true });
       const json = args.join(' ');
@@ -548,14 +545,13 @@ client.on('messageCreate', async m => {
       return m.reply(`🎯 Picked: **${args[Math.floor(Math.random() * args.length)]}**`);
     }
 
-    // --------------------------
-    // ✅ NEW GIVEAWAY COMMANDS
-    // --------------------------
+    // ✅ FIXED GIVEAWAY COMMANDS
     case 'giveaway': {
       if (!isAdmin(m)) return m.reply('❌ Only Administrators can start giveaways.');
-      const parts = args.join(' ').split(' | ').map(p => p.trim());
+      const input = args.join(' ');
+      const parts = input.split(' | ').map(p => p.trim()).filter(p => p);
       if (parts.length !== 4) {
-        return m.reply(`❌ **Wrong format!**\nUse: \`-giveaway <prize> | <time> | <requirements> | <host>\`\nExample: \`-giveaway 10$ Cash | 1h | Must be active | @luckyy\`\nTime: s = sec, m = min, h = hour, d = day`);
+        return m.reply(`❌ **Wrong format!**\nUse exactly: \`-giveaway <prize> | <time> | <requirements> | <host>\`\nExample: \`-giveaway 50$ Cash | 10m | Must be active | @luckyy\`\nTime units: s=sec, m=min, h=hour, d=day`);
       }
       const [prize, timeStr, requirements, host] = parts;
       const duration = parseTime(timeStr);
