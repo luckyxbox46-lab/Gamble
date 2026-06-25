@@ -16,7 +16,8 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMembers
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessageReactions
   ]
 });
 
@@ -81,6 +82,22 @@ const saveData = () => {
   fs.writeFileSync(DATA_FILE, JSON.stringify(botData, null, 2), 'utf8');
   console.log('💾 Saved');
 };
+
+// --------------------------
+// GIVEAWAY HELPERS
+// --------------------------
+function parseTime(input) {
+  const match = input.match(/^(\d+)\s*(s|m|h|d)$/i);
+  if (!match) return null;
+  const num = parseInt(match[1]);
+  switch(match[2].toLowerCase()) {
+    case 's': return num * 1000;
+    case 'm': return num * 60 * 1000;
+    case 'h': return num * 60 * 60 * 1000;
+    case 'd': return num * 24 * 60 * 60 * 1000;
+    default: return null;
+  }
+}
 
 // --------------------------
 // PERMISSION CHECKS
@@ -149,7 +166,7 @@ client.on('messageCreate', async m => {
   const args = content.slice(PREFIX.length).trim().split(/\s+/);
   const cmd = args.shift().toLowerCase();
 
-  if (!['d','cf','choose'].includes(cmd) && !isOwner(m)) {
+  if (!['d','cf','choose','giveaway','reroll'].includes(cmd) && !isOwner(m)) {
     const last = userCd.get(u) || 0;
     if (Date.now() - last < CD) return m.reply(`⏳ Wait ${Math.ceil((CD - (Date.now() - last))/1000)}s`).catch(()=>{});
     userCd.set(u, Date.now());
@@ -531,6 +548,70 @@ client.on('messageCreate', async m => {
       return m.reply(`🎯 Picked: **${args[Math.floor(Math.random() * args.length)]}**`);
     }
 
+    // --------------------------
+    // ✅ NEW GIVEAWAY COMMANDS
+    // --------------------------
+    case 'giveaway': {
+      if (!isAdmin(m)) return m.reply('❌ Only Administrators can start giveaways.');
+      const parts = args.join(' ').split(' | ').map(p => p.trim());
+      if (parts.length !== 4) {
+        return m.reply(`❌ **Wrong format!**\nUse: \`-giveaway <prize> | <time> | <requirements> | <host>\`\nExample: \`-giveaway 10$ Cash | 1h | Must be active | @luckyy\`\nTime: s = sec, m = min, h = hour, d = day`);
+      }
+      const [prize, timeStr, requirements, host] = parts;
+      const duration = parseTime(timeStr);
+      if (!duration) return m.reply('❌ Invalid time! Use: `30s`, `5m`, `2h`, `1d`');
+      const endTimestamp = Math.floor((Date.now() + duration) / 1000);
+      const giveawayEmbed = new EmbedBuilder()
+        .setColor('#FF9900')
+        .setTitle('🎉 GIVEAWAY 🎉')
+        .setDescription('React with ✅ below to enter!')
+        .addFields(
+          { name: '🏆 Prize', value: prize, inline: false },
+          { name: '⏰ Duration', value: timeStr, inline: true },
+          { name: '📋 Requirements', value: requirements, inline: true },
+          { name: '👤 Hosted by', value: host, inline: true },
+          { name: '📅 Ends', value: `<t:${endTimestamp}:R>`, inline: false }
+        )
+        .setTimestamp(Date.now() + duration);
+      const giveawayMsg = await m.channel.send({ embeds: [giveawayEmbed] });
+      await giveawayMsg.react('✅');
+      m.reply('✅ Giveaway started successfully!');
+      setTimeout(async () => {
+        try {
+          const fetchedMsg = await m.channel.messages.fetch(giveawayMsg.id);
+          const reaction = fetchedMsg.reactions.cache.get('✅');
+          if (!reaction) return fetchedMsg.reply(`❌ No entries found for **${prize}**`);
+          const users = await reaction.users.fetch();
+          const participants = users.filter(u => !u.bot);
+          if (participants.size === 0) return fetchedMsg.reply(`❌ No one entered the giveaway!`);
+          const winner = participants.random();
+          fetchedMsg.reply(`🎊 **GIVEAWAY ENDED!** 🎊\n🏆 **Prize:** ${prize}\n👑 **Winner:** ${winner}\n📩 Contact ${host} to claim your prize!`);
+        } catch (err) {
+          console.error('Giveaway error:', err);
+        }
+      }, duration);
+      break;
+    }
+
+    case 'reroll': {
+      if (!isAdmin(m)) return m.reply('❌ Only Administrators can reroll.');
+      const messageId = args[0];
+      if (!messageId) return m.reply('❌ Usage: `-reroll <giveaway_message_id>`');
+      try {
+        const msg = await m.channel.messages.fetch(messageId);
+        const reaction = msg.reactions.cache.get('✅');
+        if (!reaction) return m.reply('❌ No entries found on that message.');
+        const users = await reaction.users.fetch();
+        const participants = users.filter(u => !u.bot);
+        if (participants.size === 0) return m.reply('❌ No participants to choose from.');
+        const newWinner = participants.random();
+        msg.reply(`🔄 **REROLL COMPLETE!** 🎉\nNew winner: ${newWinner}`);
+      } catch {
+        return m.reply('❌ Could not find that message — check the ID.');
+      }
+      break;
+    }
+
     case 'help': {
       const embed = new EmbedBuilder()
         .setColor('#6A5ACD')
@@ -554,6 +635,14 @@ client.on('messageCreate', async m => {
             value: `
 \`-balance [@user]\` → Check your messages & earnings
 \`-earningslb\` → View the server leaderboard
+`,
+            inline: false
+          },
+          {
+            name: '🎁 • GIVEAWAYS',
+            value: `
+\`-giveaway <prize> | <time> | <rules> | <host>\` → Start giveaway
+\`-reroll <message_id>\` → Pick new winner
 `,
             inline: false
           },
